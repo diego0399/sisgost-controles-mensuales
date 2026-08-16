@@ -1,0 +1,29 @@
+@startuml actividades-control
+title Ciclo de vida de un control mensual
+start
+:El sistema programa el control del período\n(fecha límite = 3.er día hábil del mes siguiente,\nsegún catálogo de feriados);
+:Control «Pendiente» asignado al soporte\nresponsable de la Dirección/Unidad;
+if (¿Hubo actividad en el mes?) then (sí)
+  :El técnico completa el formulario digital\n(secciones, checklist, tablas, evidencias);
+  :Validación: obligatorios, checklist completo,\nmínimos de tabla y evidencia;
+  if (¿Entrega dentro del plazo?) then (sí)
+    :Estado «Entregado»;
+  else (no)
+    :Estado «Entregado tarde»;
+  endif
+  :Se genera el documento formal\ny el evento de trazabilidad;
+  if (¿Revisión del Encargado?) then (aprueba)
+    :Estado «Cerrado»;
+  else (observa)
+    :Estado «Observado» (vuelve al técnico);
+  endif
+else (no)
+  :El técnico emite la carta de justificación\n(motivo + texto, formato institucional);
+  :Estado «Justificado»;
+  :Carta con tres firmas en el\nGenerador de documentos;
+endif
+if (¿Venció el plazo sin entrega ni carta?) then (sí)
+  :Estado «Vencido» + alerta en el panel;
+endif
+stop
+@enduml

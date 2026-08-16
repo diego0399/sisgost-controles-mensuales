@@ -1,0 +1,40 @@
+@startuml arquitectura
+title SISGOST — Controles Mensuales · Arquitectura del prototipo
+skinparam componentStyle rectangle
+
+node "Navegador" {
+  package "Angular 21 (standalone, zoneless)" {
+    [Rutas + guards\n(auth / rol)] as ROUTER
+    [Shell (menú por rol)] as SHELL
+    [Pantallas (features)] as FEAT
+    [Visor de documentos\n(hoja tipo PDF + @media print)] as VISOR
+    [Servicios de negocio\n(Data / Deadline / BusinessDay /\nHoliday / Integration)] as SRV
+  }
+  folder "Persistencia local" {
+    [localStorage\nsisgost.controles.v1] as LS
+    [sessionStorage\n(sesión simulada)] as SS
+  }
+}
+
+cloud "Simulado (sin backend)" {
+  [assets/data/*.json\n(semilla)] as JSON
+  [SISGOST — Gestión de Equipos\n(cola de eventos simulada)] as GE
+}
+
+ROUTER --> SHELL
+SHELL --> FEAT
+FEAT --> SRV
+FEAT --> VISOR
+SRV --> LS
+SRV --> JSON : fetch inicial
+SRV --> SS
+GE ..> SRV : eventos-integracion.json\n(entrega aceptada / descargo)
+
+note bottom of GE
+  Regla de integración:
+  entrega aceptada por el Usuario Final
+  → equipo activo en la Dirección/Unidad
+  → crece el inventario operativo.
+  Descargo → el equipo sale del inventario activo.
+end note
+@enduml

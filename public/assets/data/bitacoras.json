@@ -1,0 +1,3511 @@
+[
+ {
+  "id": "BIT-2026-0001",
+  "fecha": "2026-07-24",
+  "direccion": "DIR-USU",
+  "unidad": "Atención al público",
+  "responsable": "Julio Alberto Rivera",
+  "estado": "Enviada",
+  "horaEnvio": "16:26",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "15:00",
+    "actividad": "Seguimiento de tiquetes GLPI",
+    "area": "DTI",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": "",
+  "documento": "DOC-2026-0309"
+ },
+ {
+  "id": "BIT-2026-0002",
+  "fecha": "2026-07-24",
+  "direccion": "DIR-SMI",
+  "unidad": "Atención al público",
+  "responsable": "Luis Adalberto Martínez",
+  "estado": "Enviada",
+  "horaEnvio": "16:38",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "15:00",
+    "actividad": "Seguimiento de tiquetes GLPI",
+    "area": "DTI",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": "",
+  "documento": "DOC-2026-0310"
+ },
+ {
+  "id": "BIT-2026-0003",
+  "fecha": "2026-07-24",
+  "direccion": "DIR-SAN",
+  "unidad": "Atención al público",
+  "responsable": "Karla Beatriz Ramírez",
+  "estado": "Enviada",
+  "horaEnvio": "16:44",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "15:00",
+    "actividad": "Seguimiento de tiquetes GLPI",
+    "area": "DTI",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": "",
+  "documento": "DOC-2026-0311"
+ },
+ {
+  "id": "BIT-2026-0004",
+  "fecha": "2026-07-24",
+  "direccion": "DIR-SSA",
+  "unidad": "Atención al público",
+  "responsable": "Karla Beatriz Ramírez",
+  "estado": "Enviada",
+  "horaEnvio": "16:51",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Presenta falla",
+    "descripcionFalla": "El audio del tomaturno no reproduce el llamado de turnos.",
+    "accionRealizada": "Se reinició el servicio de audio y se verificó el volumen del amplificador.",
+    "estadoFinal": "Resuelto",
+    "evidencia": "foto-tomaturno.jpg"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "15:00",
+    "actividad": "Seguimiento de tiquetes GLPI",
+    "area": "DTI",
+    "resultado": "Al día",
+    "observaciones": ""
+   },
+   {
+    "hora": "09:10",
+    "actividad": "Atención de falla en audio de tomaturno",
+    "area": "Sala de atención",
+    "resultado": "Resuelto",
+    "observaciones": "Servicio restablecido a las 09:25."
+   }
+  ],
+  "observaciones": "",
+  "documento": "DOC-2026-0312"
+ },
+ {
+  "id": "BIT-2026-0005",
+  "fecha": "2026-07-27",
+  "direccion": "DIR-USU",
+  "unidad": "Atención al público",
+  "responsable": "Julio Alberto Rivera",
+  "estado": "Enviada",
+  "horaEnvio": "16:12",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "15:00",
+    "actividad": "Seguimiento de tiquetes GLPI",
+    "area": "DTI",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": "",
+  "documento": "DOC-2026-0313"
+ },
+ {
+  "id": "BIT-2026-0006",
+  "fecha": "2026-07-27",
+  "direccion": "DIR-SMI",
+  "unidad": "Atención al público",
+  "responsable": "Luis Adalberto Martínez",
+  "estado": "Enviada tarde",
+  "horaEnvio": "17:18",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "15:00",
+    "actividad": "Seguimiento de tiquetes GLPI",
+    "area": "DTI",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": "La bitácora diaria fue enviada fuera del horario establecido.",
+  "documento": "DOC-2026-0314"
+ },
+ {
+  "id": "BIT-2026-0007",
+  "fecha": "2026-07-27",
+  "direccion": "DIR-SAN",
+  "unidad": "Atención al público",
+  "responsable": "Karla Beatriz Ramírez",
+  "estado": "Enviada",
+  "horaEnvio": "16:38",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "15:00",
+    "actividad": "Seguimiento de tiquetes GLPI",
+    "area": "DTI",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": "",
+  "documento": "DOC-2026-0315"
+ },
+ {
+  "id": "BIT-2026-0008",
+  "fecha": "2026-07-27",
+  "direccion": "DIR-SSA",
+  "unidad": "Atención al público",
+  "responsable": "Karla Beatriz Ramírez",
+  "estado": "Enviada",
+  "horaEnvio": "16:44",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "15:00",
+    "actividad": "Seguimiento de tiquetes GLPI",
+    "area": "DTI",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": "",
+  "documento": "DOC-2026-0316"
+ },
+ {
+  "id": "BIT-2026-0009",
+  "fecha": "2026-07-28",
+  "direccion": "DIR-USU",
+  "unidad": "Atención al público",
+  "responsable": "Julio Alberto Rivera",
+  "estado": "Enviada",
+  "horaEnvio": "16:51",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "15:00",
+    "actividad": "Seguimiento de tiquetes GLPI",
+    "area": "DTI",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": "",
+  "documento": "DOC-2026-0317"
+ },
+ {
+  "id": "BIT-2026-0010",
+  "fecha": "2026-07-28",
+  "direccion": "DIR-SMI",
+  "unidad": "Atención al público",
+  "responsable": "Luis Adalberto Martínez",
+  "estado": "Enviada",
+  "horaEnvio": "16:12",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "15:00",
+    "actividad": "Seguimiento de tiquetes GLPI",
+    "area": "DTI",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": "",
+  "documento": "DOC-2026-0318"
+ },
+ {
+  "id": "BIT-2026-0011",
+  "fecha": "2026-07-28",
+  "direccion": "DIR-SAN",
+  "unidad": "Atención al público",
+  "responsable": "Karla Beatriz Ramírez",
+  "estado": "Enviada",
+  "horaEnvio": "16:26",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "15:00",
+    "actividad": "Seguimiento de tiquetes GLPI",
+    "area": "DTI",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": "",
+  "documento": "DOC-2026-0319"
+ },
+ {
+  "id": "BIT-2026-0012",
+  "fecha": "2026-07-28",
+  "direccion": "DIR-SSA",
+  "unidad": "Atención al público",
+  "responsable": "Karla Beatriz Ramírez",
+  "estado": "Enviada",
+  "horaEnvio": "16:38",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "15:00",
+    "actividad": "Seguimiento de tiquetes GLPI",
+    "area": "DTI",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": "",
+  "documento": "DOC-2026-0320"
+ },
+ {
+  "id": "BIT-2026-0013",
+  "fecha": "2026-07-29",
+  "direccion": "DIR-USU",
+  "unidad": "Atención al público",
+  "responsable": "Julio Alberto Rivera",
+  "estado": "Enviada",
+  "horaEnvio": "16:44",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Presenta falla",
+    "descripcionFalla": "El audio del tomaturno no reproduce el llamado de turnos.",
+    "accionRealizada": "Se reinició el servicio de audio y se verificó el volumen del amplificador.",
+    "estadoFinal": "Resuelto",
+    "evidencia": "foto-tomaturno.jpg"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "15:00",
+    "actividad": "Seguimiento de tiquetes GLPI",
+    "area": "DTI",
+    "resultado": "Al día",
+    "observaciones": ""
+   },
+   {
+    "hora": "09:10",
+    "actividad": "Atención de falla en audio de tomaturno",
+    "area": "Sala de atención",
+    "resultado": "Resuelto",
+    "observaciones": "Servicio restablecido a las 09:25."
+   }
+  ],
+  "observaciones": "",
+  "documento": "DOC-2026-0321"
+ },
+ {
+  "id": "BIT-2026-0014",
+  "fecha": "2026-07-29",
+  "direccion": "DIR-SMI",
+  "unidad": "Atención al público",
+  "responsable": "Luis Adalberto Martínez",
+  "estado": "Enviada",
+  "horaEnvio": "16:51",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "15:00",
+    "actividad": "Seguimiento de tiquetes GLPI",
+    "area": "DTI",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": "",
+  "documento": "DOC-2026-0322"
+ },
+ {
+  "id": "BIT-2026-0015",
+  "fecha": "2026-07-29",
+  "direccion": "DIR-SAN",
+  "unidad": "Atención al público",
+  "responsable": "Karla Beatriz Ramírez",
+  "estado": "Enviada",
+  "horaEnvio": "16:12",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "15:00",
+    "actividad": "Seguimiento de tiquetes GLPI",
+    "area": "DTI",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": "",
+  "documento": "DOC-2026-0323"
+ },
+ {
+  "id": "BIT-2026-0016",
+  "fecha": "2026-07-29",
+  "direccion": "DIR-SSA",
+  "unidad": "Atención al público",
+  "responsable": "Karla Beatriz Ramírez",
+  "estado": "Enviada",
+  "horaEnvio": "16:26",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "15:00",
+    "actividad": "Seguimiento de tiquetes GLPI",
+    "area": "DTI",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": "",
+  "documento": "DOC-2026-0324"
+ },
+ {
+  "id": "BIT-2026-0017",
+  "fecha": "2026-07-30",
+  "direccion": "DIR-USU",
+  "unidad": "Atención al público",
+  "responsable": "Julio Alberto Rivera",
+  "estado": "Enviada",
+  "horaEnvio": "16:38",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "15:00",
+    "actividad": "Seguimiento de tiquetes GLPI",
+    "area": "DTI",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": "",
+  "documento": "DOC-2026-0325"
+ },
+ {
+  "id": "BIT-2026-0018",
+  "fecha": "2026-07-30",
+  "direccion": "DIR-SMI",
+  "unidad": "Atención al público",
+  "responsable": "Luis Adalberto Martínez",
+  "estado": "Enviada",
+  "horaEnvio": "16:44",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "15:00",
+    "actividad": "Seguimiento de tiquetes GLPI",
+    "area": "DTI",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": "",
+  "documento": "DOC-2026-0326"
+ },
+ {
+  "id": "BIT-2026-0019",
+  "fecha": "2026-07-30",
+  "direccion": "DIR-SAN",
+  "unidad": "Atención al público",
+  "responsable": "Karla Beatriz Ramírez",
+  "estado": "Enviada tarde",
+  "horaEnvio": "17:31",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "15:00",
+    "actividad": "Seguimiento de tiquetes GLPI",
+    "area": "DTI",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": "La bitácora diaria fue enviada fuera del horario establecido.",
+  "documento": "DOC-2026-0327"
+ },
+ {
+  "id": "BIT-2026-0020",
+  "fecha": "2026-07-30",
+  "direccion": "DIR-SSA",
+  "unidad": "Atención al público",
+  "responsable": "Karla Beatriz Ramírez",
+  "estado": "Enviada",
+  "horaEnvio": "16:12",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "15:00",
+    "actividad": "Seguimiento de tiquetes GLPI",
+    "area": "DTI",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": "",
+  "documento": "DOC-2026-0328"
+ },
+ {
+  "id": "BIT-2026-0021",
+  "fecha": "2026-07-31",
+  "direccion": "DIR-USU",
+  "unidad": "Atención al público",
+  "responsable": "Julio Alberto Rivera",
+  "estado": "Enviada",
+  "horaEnvio": "16:26",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "15:00",
+    "actividad": "Seguimiento de tiquetes GLPI",
+    "area": "DTI",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": "",
+  "documento": "DOC-2026-0329"
+ },
+ {
+  "id": "BIT-2026-0022",
+  "fecha": "2026-07-31",
+  "direccion": "DIR-SMI",
+  "unidad": "Atención al público",
+  "responsable": "Luis Adalberto Martínez",
+  "estado": "Enviada",
+  "horaEnvio": "16:38",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Presenta falla",
+    "descripcionFalla": "El audio del tomaturno no reproduce el llamado de turnos.",
+    "accionRealizada": "Se reinició el servicio de audio y se verificó el volumen del amplificador.",
+    "estadoFinal": "Resuelto",
+    "evidencia": "foto-tomaturno.jpg"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "15:00",
+    "actividad": "Seguimiento de tiquetes GLPI",
+    "area": "DTI",
+    "resultado": "Al día",
+    "observaciones": ""
+   },
+   {
+    "hora": "09:10",
+    "actividad": "Atención de falla en audio de tomaturno",
+    "area": "Sala de atención",
+    "resultado": "Resuelto",
+    "observaciones": "Servicio restablecido a las 09:25."
+   }
+  ],
+  "observaciones": "",
+  "documento": "DOC-2026-0330"
+ },
+ {
+  "id": "BIT-2026-0023",
+  "fecha": "2026-07-31",
+  "direccion": "DIR-SAN",
+  "unidad": "Atención al público",
+  "responsable": "Karla Beatriz Ramírez",
+  "estado": "Enviada",
+  "horaEnvio": "16:44",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "15:00",
+    "actividad": "Seguimiento de tiquetes GLPI",
+    "area": "DTI",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": "",
+  "documento": "DOC-2026-0331"
+ },
+ {
+  "id": "BIT-2026-0024",
+  "fecha": "2026-07-31",
+  "direccion": "DIR-SSA",
+  "unidad": "Atención al público",
+  "responsable": "Karla Beatriz Ramírez",
+  "estado": "Enviada",
+  "horaEnvio": "16:51",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "15:00",
+    "actividad": "Seguimiento de tiquetes GLPI",
+    "area": "DTI",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": "",
+  "documento": "DOC-2026-0332"
+ },
+ {
+  "id": "BIT-2026-0025",
+  "fecha": "2026-08-07",
+  "direccion": "DIR-USU",
+  "unidad": "Atención al público",
+  "responsable": "Julio Alberto Rivera",
+  "estado": "Enviada",
+  "horaEnvio": "16:12",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "15:00",
+    "actividad": "Seguimiento de tiquetes GLPI",
+    "area": "DTI",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": "",
+  "documento": "DOC-2026-0333"
+ },
+ {
+  "id": "BIT-2026-0026",
+  "fecha": "2026-08-07",
+  "direccion": "DIR-SMI",
+  "unidad": "Atención al público",
+  "responsable": "Luis Adalberto Martínez",
+  "estado": "Enviada",
+  "horaEnvio": "16:26",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "15:00",
+    "actividad": "Seguimiento de tiquetes GLPI",
+    "area": "DTI",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": "",
+  "documento": "DOC-2026-0334"
+ },
+ {
+  "id": "BIT-2026-0027",
+  "fecha": "2026-08-07",
+  "direccion": "DIR-SAN",
+  "unidad": "Atención al público",
+  "responsable": "Karla Beatriz Ramírez",
+  "estado": "Enviada",
+  "horaEnvio": "16:38",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "15:00",
+    "actividad": "Seguimiento de tiquetes GLPI",
+    "area": "DTI",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": "",
+  "documento": "DOC-2026-0335"
+ },
+ {
+  "id": "BIT-2026-0028",
+  "fecha": "2026-08-07",
+  "direccion": "DIR-SSA",
+  "unidad": "Atención al público",
+  "responsable": "Karla Beatriz Ramírez",
+  "estado": "Enviada",
+  "horaEnvio": "16:44",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "15:00",
+    "actividad": "Seguimiento de tiquetes GLPI",
+    "area": "DTI",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": "",
+  "documento": "DOC-2026-0336"
+ },
+ {
+  "id": "BIT-2026-0029",
+  "fecha": "2026-08-10",
+  "direccion": "DIR-USU",
+  "unidad": "Atención al público",
+  "responsable": "Julio Alberto Rivera",
+  "estado": "Enviada",
+  "horaEnvio": "16:51",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "15:00",
+    "actividad": "Seguimiento de tiquetes GLPI",
+    "area": "DTI",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": "",
+  "documento": "DOC-2026-0337"
+ },
+ {
+  "id": "BIT-2026-0030",
+  "fecha": "2026-08-10",
+  "direccion": "DIR-SMI",
+  "unidad": "Atención al público",
+  "responsable": "Luis Adalberto Martínez",
+  "estado": "Enviada",
+  "horaEnvio": "16:12",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "15:00",
+    "actividad": "Seguimiento de tiquetes GLPI",
+    "area": "DTI",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": "",
+  "documento": "DOC-2026-0338"
+ },
+ {
+  "id": "BIT-2026-0031",
+  "fecha": "2026-08-10",
+  "direccion": "DIR-SAN",
+  "unidad": "Atención al público",
+  "responsable": "Karla Beatriz Ramírez",
+  "estado": "Enviada",
+  "horaEnvio": "16:26",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Presenta falla",
+    "descripcionFalla": "El audio del tomaturno no reproduce el llamado de turnos.",
+    "accionRealizada": "Se reinició el servicio de audio y se verificó el volumen del amplificador.",
+    "estadoFinal": "Resuelto",
+    "evidencia": "foto-tomaturno.jpg"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "15:00",
+    "actividad": "Seguimiento de tiquetes GLPI",
+    "area": "DTI",
+    "resultado": "Al día",
+    "observaciones": ""
+   },
+   {
+    "hora": "09:10",
+    "actividad": "Atención de falla en audio de tomaturno",
+    "area": "Sala de atención",
+    "resultado": "Resuelto",
+    "observaciones": "Servicio restablecido a las 09:25."
+   }
+  ],
+  "observaciones": "",
+  "documento": "DOC-2026-0339"
+ },
+ {
+  "id": "BIT-2026-0032",
+  "fecha": "2026-08-10",
+  "direccion": "DIR-SSA",
+  "unidad": "Atención al público",
+  "responsable": "Karla Beatriz Ramírez",
+  "estado": "Enviada tarde",
+  "horaEnvio": "17:44",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "15:00",
+    "actividad": "Seguimiento de tiquetes GLPI",
+    "area": "DTI",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": "La bitácora diaria fue enviada fuera del horario establecido.",
+  "documento": "DOC-2026-0340"
+ },
+ {
+  "id": "BIT-2026-0033",
+  "fecha": "2026-08-11",
+  "direccion": "DIR-USU",
+  "unidad": "Atención al público",
+  "responsable": "Julio Alberto Rivera",
+  "estado": "Enviada",
+  "horaEnvio": "16:44",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "15:00",
+    "actividad": "Seguimiento de tiquetes GLPI",
+    "area": "DTI",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": "",
+  "documento": "DOC-2026-0341"
+ },
+ {
+  "id": "BIT-2026-0034",
+  "fecha": "2026-08-11",
+  "direccion": "DIR-SMI",
+  "unidad": "Atención al público",
+  "responsable": "Luis Adalberto Martínez",
+  "estado": "Enviada",
+  "horaEnvio": "16:51",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "15:00",
+    "actividad": "Seguimiento de tiquetes GLPI",
+    "area": "DTI",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": "",
+  "documento": "DOC-2026-0342"
+ },
+ {
+  "id": "BIT-2026-0035",
+  "fecha": "2026-08-11",
+  "direccion": "DIR-SAN",
+  "unidad": "Atención al público",
+  "responsable": "Karla Beatriz Ramírez",
+  "estado": "Vencida",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "15:00",
+    "actividad": "Seguimiento de tiquetes GLPI",
+    "area": "DTI",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": "La bitácora no fue enviada antes de las 5:00 p. m. del día correspondiente."
+ },
+ {
+  "id": "BIT-2026-0036",
+  "fecha": "2026-08-11",
+  "direccion": "DIR-SSA",
+  "unidad": "Atención al público",
+  "responsable": "Karla Beatriz Ramírez",
+  "estado": "Enviada",
+  "horaEnvio": "16:26",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "15:00",
+    "actividad": "Seguimiento de tiquetes GLPI",
+    "area": "DTI",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": "",
+  "documento": "DOC-2026-0343"
+ },
+ {
+  "id": "BIT-2026-0037",
+  "fecha": "2026-08-12",
+  "direccion": "DIR-USU",
+  "unidad": "Atención al público",
+  "responsable": "Julio Alberto Rivera",
+  "estado": "Enviada",
+  "horaEnvio": "16:38",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "15:00",
+    "actividad": "Seguimiento de tiquetes GLPI",
+    "area": "DTI",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": "",
+  "documento": "DOC-2026-0344"
+ },
+ {
+  "id": "BIT-2026-0038",
+  "fecha": "2026-08-12",
+  "direccion": "DIR-SMI",
+  "unidad": "Atención al público",
+  "responsable": "Luis Adalberto Martínez",
+  "estado": "Enviada",
+  "horaEnvio": "16:44",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "15:00",
+    "actividad": "Seguimiento de tiquetes GLPI",
+    "area": "DTI",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": "",
+  "documento": "DOC-2026-0345"
+ },
+ {
+  "id": "BIT-2026-0039",
+  "fecha": "2026-08-12",
+  "direccion": "DIR-SAN",
+  "unidad": "Atención al público",
+  "responsable": "Karla Beatriz Ramírez",
+  "estado": "Enviada",
+  "horaEnvio": "16:51",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "15:00",
+    "actividad": "Seguimiento de tiquetes GLPI",
+    "area": "DTI",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": "",
+  "documento": "DOC-2026-0346"
+ },
+ {
+  "id": "BIT-2026-0040",
+  "fecha": "2026-08-12",
+  "direccion": "DIR-SSA",
+  "unidad": "Atención al público",
+  "responsable": "Karla Beatriz Ramírez",
+  "estado": "Enviada",
+  "horaEnvio": "16:12",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Presenta falla",
+    "descripcionFalla": "El audio del tomaturno no reproduce el llamado de turnos.",
+    "accionRealizada": "Se reinició el servicio de audio y se verificó el volumen del amplificador.",
+    "estadoFinal": "Resuelto",
+    "evidencia": "foto-tomaturno.jpg"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "15:00",
+    "actividad": "Seguimiento de tiquetes GLPI",
+    "area": "DTI",
+    "resultado": "Al día",
+    "observaciones": ""
+   },
+   {
+    "hora": "09:10",
+    "actividad": "Atención de falla en audio de tomaturno",
+    "area": "Sala de atención",
+    "resultado": "Resuelto",
+    "observaciones": "Servicio restablecido a las 09:25."
+   }
+  ],
+  "observaciones": "",
+  "documento": "DOC-2026-0347"
+ },
+ {
+  "id": "BIT-2026-0041",
+  "fecha": "2026-08-13",
+  "direccion": "DIR-USU",
+  "unidad": "Atención al público",
+  "responsable": "Julio Alberto Rivera",
+  "estado": "Enviada",
+  "horaEnvio": "16:26",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "15:00",
+    "actividad": "Seguimiento de tiquetes GLPI",
+    "area": "DTI",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": "",
+  "documento": "DOC-2026-0348"
+ },
+ {
+  "id": "BIT-2026-0042",
+  "fecha": "2026-08-13",
+  "direccion": "DIR-SMI",
+  "unidad": "Atención al público",
+  "responsable": "Luis Adalberto Martínez",
+  "estado": "Enviada",
+  "horaEnvio": "16:38",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "15:00",
+    "actividad": "Seguimiento de tiquetes GLPI",
+    "area": "DTI",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": "",
+  "documento": "DOC-2026-0349"
+ },
+ {
+  "id": "BIT-2026-0043",
+  "fecha": "2026-08-13",
+  "direccion": "DIR-SAN",
+  "unidad": "Atención al público",
+  "responsable": "Karla Beatriz Ramírez",
+  "estado": "Enviada",
+  "horaEnvio": "16:44",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "15:00",
+    "actividad": "Seguimiento de tiquetes GLPI",
+    "area": "DTI",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": "",
+  "documento": "DOC-2026-0350"
+ },
+ {
+  "id": "BIT-2026-0044",
+  "fecha": "2026-08-13",
+  "direccion": "DIR-SSA",
+  "unidad": "Atención al público",
+  "responsable": "Karla Beatriz Ramírez",
+  "estado": "Enviada",
+  "horaEnvio": "16:51",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "15:00",
+    "actividad": "Seguimiento de tiquetes GLPI",
+    "area": "DTI",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": "",
+  "documento": "DOC-2026-0351"
+ },
+ {
+  "id": "BIT-2026-0045",
+  "fecha": "2026-08-14",
+  "direccion": "DIR-USU",
+  "unidad": "Atención al público",
+  "responsable": "Julio Alberto Rivera",
+  "estado": "Enviada tarde",
+  "horaEnvio": "17:17",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "15:00",
+    "actividad": "Seguimiento de tiquetes GLPI",
+    "area": "DTI",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": "La bitácora diaria fue enviada fuera del horario establecido.",
+  "documento": "DOC-2026-0352"
+ },
+ {
+  "id": "BIT-2026-0046",
+  "fecha": "2026-08-14",
+  "direccion": "DIR-SMI",
+  "unidad": "Atención al público",
+  "responsable": "Luis Adalberto Martínez",
+  "estado": "Enviada",
+  "horaEnvio": "16:26",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "15:00",
+    "actividad": "Seguimiento de tiquetes GLPI",
+    "area": "DTI",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": "",
+  "documento": "DOC-2026-0353"
+ },
+ {
+  "id": "BIT-2026-0047",
+  "fecha": "2026-08-14",
+  "direccion": "DIR-SAN",
+  "unidad": "Atención al público",
+  "responsable": "Karla Beatriz Ramírez",
+  "estado": "Enviada",
+  "horaEnvio": "16:38",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "15:00",
+    "actividad": "Seguimiento de tiquetes GLPI",
+    "area": "DTI",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": "",
+  "documento": "DOC-2026-0354"
+ },
+ {
+  "id": "BIT-2026-0048",
+  "fecha": "2026-08-14",
+  "direccion": "DIR-SSA",
+  "unidad": "Atención al público",
+  "responsable": "Karla Beatriz Ramírez",
+  "estado": "Enviada",
+  "horaEnvio": "16:44",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "15:00",
+    "actividad": "Seguimiento de tiquetes GLPI",
+    "area": "DTI",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": "",
+  "documento": "DOC-2026-0355"
+ }
+]

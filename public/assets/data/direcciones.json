@@ -1,0 +1,37 @@
+[
+  {
+    "id": "DIR-USU",
+    "nombre": "Oficina Departamental de Usulután",
+    "corta": "USU",
+    "unidades": ["RPRH", "IGCN", "DTI"],
+    "activa": true
+  },
+  {
+    "id": "DIR-SMI",
+    "nombre": "Oficina Departamental de San Miguel",
+    "corta": "SMI",
+    "unidades": ["RPRH", "IGCN"],
+    "activa": true
+  },
+  {
+    "id": "DIR-SAN",
+    "nombre": "Oficina Departamental de Santa Ana",
+    "corta": "SAN",
+    "unidades": ["RPRH", "IGCN"],
+    "activa": true
+  },
+  {
+    "id": "DIR-SSA",
+    "nombre": "Oficina Central de San Salvador",
+    "corta": "SSA",
+    "unidades": ["RPRH", "DTI", "Atención al público"],
+    "activa": true
+  },
+  {
+    "id": "DIR-LUN",
+    "nombre": "Oficina Departamental de La Unión",
+    "corta": "LUN",
+    "unidades": ["RPRH"],
+    "activa": true
+  }
+]

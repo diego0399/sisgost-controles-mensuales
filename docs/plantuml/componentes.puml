@@ -1,0 +1,56 @@
+@startuml componentes
+title SISGOST — Controles Mensuales · Componentes
+skinparam componentStyle rectangle
+
+package "features (pantallas lazy)" {
+  [Panel ejecutivo]
+  [Calendario]
+  [Historial anual]
+  [Controles / Completar control]
+  [Bitácora / Completar bitácora]
+  [Justificaciones]
+  [Inventario operativo]
+  [Generador de documentos]
+  [Trazabilidad]
+  [Administración\n(usuarios, catálogo,\ndistribución, feriados)]
+}
+
+package "shared" {
+  [ui-documento] as DOC
+  [ui-visor-documento] as VISOR
+  [ui-icon / ui-badge / ui-modal / ui-help] as UI
+}
+
+package "core/services" {
+  [DataService] as DATA
+  [HolidayService] as HOL
+  [BusinessDayService] as BDS
+  [ControlDeadlineService] as CDS
+  [EquipmentIntegrationService] as INT
+  [AuthService] as AUTH
+  [ToastService] as TOAST
+}
+
+database "assets/data/*.json\n+ localStorage" as STORE
+
+[Controles / Completar control] --> DATA
+[Bitácora / Completar bitácora] --> DATA
+[Panel ejecutivo] --> DATA
+[Panel ejecutivo] --> CDS
+[Calendario] --> HOL
+[Calendario] --> CDS
+[Inventario operativo] --> INT
+[Generador de documentos] --> DOC
+[Historial anual] --> DOC
+DOC --> VISOR
+DOC --> DATA
+INT --> DATA
+DATA --> CDS
+CDS --> BDS
+BDS --> HOL
+DATA --> STORE
+HOL --> STORE
+[Administración\n(usuarios, catálogo,\ndistribución, feriados)] --> HOL
+[Controles / Completar control] ..> UI
+[Bitácora / Completar bitácora] ..> UI
+@enduml

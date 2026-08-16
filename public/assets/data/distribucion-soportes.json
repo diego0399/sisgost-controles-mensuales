@@ -1,0 +1,62 @@
+[
+  {
+    "id": "DIS-0001",
+    "usuario": "jrivera",
+    "tecnico": "Julio Alberto Rivera",
+    "direccion": "DIR-USU",
+    "unidad": "Todas las unidades",
+    "fechaInicio": "2024-03-01",
+    "estado": "Activa",
+    "observaciones": "Responsable único de la oficina departamental."
+  },
+  {
+    "id": "DIS-0002",
+    "usuario": "lmartinez",
+    "tecnico": "Luis Adalberto Martínez",
+    "direccion": "DIR-SMI",
+    "unidad": "Todas las unidades",
+    "fechaInicio": "2025-01-15",
+    "estado": "Activa",
+    "observaciones": ""
+  },
+  {
+    "id": "DIS-0003",
+    "usuario": "kramirez",
+    "tecnico": "Karla Beatriz Ramírez",
+    "direccion": "DIR-SAN",
+    "unidad": "Todas las unidades",
+    "fechaInicio": "2026-03-01",
+    "estado": "Activa",
+    "observaciones": "Asume la oficina tras el traslado de Luis Martínez a San Miguel."
+  },
+  {
+    "id": "DIS-0004",
+    "usuario": "kramirez",
+    "tecnico": "Karla Beatriz Ramírez",
+    "direccion": "DIR-SSA",
+    "unidad": "Atención al público",
+    "fechaInicio": "2026-01-05",
+    "estado": "Activa",
+    "observaciones": "Cobertura compartida con el equipo central."
+  },
+  {
+    "id": "DIS-0005",
+    "usuario": "lmartinez",
+    "tecnico": "Luis Adalberto Martínez",
+    "direccion": "DIR-SAN",
+    "unidad": "Todas las unidades",
+    "fechaInicio": "2025-01-15",
+    "estado": "Finalizada",
+    "observaciones": "Finalizada el 28/02/2026 por redistribución de carga."
+  },
+  {
+    "id": "DIS-0006",
+    "usuario": "lmartinez",
+    "tecnico": "Luis Adalberto Martínez",
+    "direccion": "DIR-LUN",
+    "unidad": "RPRH",
+    "fechaInicio": "2025-01-15",
+    "estado": "Finalizada",
+    "observaciones": "Finalizada el 31/05/2026. La oficina quedó pendiente de reasignación de soporte."
+  }
+]

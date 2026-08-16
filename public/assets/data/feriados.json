@@ -1,0 +1,17 @@
+[
+  { "fecha": "2026-01-01", "nombre": "Año Nuevo", "ambito": "Nacional" },
+  { "fecha": "2026-04-02", "nombre": "Jueves Santo", "ambito": "Nacional" },
+  { "fecha": "2026-04-03", "nombre": "Viernes Santo", "ambito": "Nacional" },
+  { "fecha": "2026-04-04", "nombre": "Sábado Santo", "ambito": "Nacional" },
+  { "fecha": "2026-05-01", "nombre": "Día Internacional del Trabajo", "ambito": "Nacional" },
+  { "fecha": "2026-05-10", "nombre": "Día de la Madre", "ambito": "Nacional" },
+  { "fecha": "2026-06-17", "nombre": "Día del Padre", "ambito": "Nacional" },
+  { "fecha": "2026-08-03", "nombre": "Fiestas Agostinas", "ambito": "San Salvador" },
+  { "fecha": "2026-08-04", "nombre": "Fiestas Agostinas", "ambito": "San Salvador" },
+  { "fecha": "2026-08-05", "nombre": "Fiestas Agostinas", "ambito": "San Salvador" },
+  { "fecha": "2026-08-06", "nombre": "Celebración del Divino Salvador del Mundo", "ambito": "Nacional" },
+  { "fecha": "2026-09-15", "nombre": "Día de la Independencia", "ambito": "Nacional" },
+  { "fecha": "2026-11-02", "nombre": "Día de los Difuntos", "ambito": "Nacional" },
+  { "fecha": "2026-12-25", "nombre": "Navidad", "ambito": "Nacional" },
+  { "fecha": "2027-01-01", "nombre": "Año Nuevo", "ambito": "Nacional" }
+]

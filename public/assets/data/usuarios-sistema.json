@@ -1,0 +1,50 @@
+[
+  {
+    "usuario": "admin",
+    "nombre": "María Elena Portillo",
+    "iniciales": "MP",
+    "rol": "Administrador",
+    "clave": "admin",
+    "cargo": "Administración del sistema SISGOST"
+  },
+  {
+    "usuario": "cgonzalez",
+    "nombre": "Carlos Armando González",
+    "iniciales": "CG",
+    "rol": "Encargado de Soporte",
+    "clave": "enc-soporte",
+    "cargo": "Coordinador de Soporte Técnico"
+  },
+  {
+    "usuario": "jrivera",
+    "nombre": "Julio Alberto Rivera",
+    "iniciales": "JR",
+    "rol": "Técnico de Soporte",
+    "clave": "tec-soporte",
+    "cargo": "Soporte Técnico de Oficina Departamental"
+  },
+  {
+    "usuario": "lmartinez",
+    "nombre": "Luis Adalberto Martínez",
+    "iniciales": "LM",
+    "rol": "Técnico de Soporte",
+    "clave": "tec-soporte",
+    "cargo": "Soporte Técnico de Oficina Departamental"
+  },
+  {
+    "usuario": "kramirez",
+    "nombre": "Karla Beatriz Ramírez",
+    "iniciales": "KR",
+    "rol": "Técnico de Soporte",
+    "clave": "tec-soporte",
+    "cargo": "Soporte Técnico de Oficina Departamental"
+  },
+  {
+    "usuario": "ymoreno",
+    "nombre": "Yancy Claribel Moreno",
+    "iniciales": "YM",
+    "rol": "Jefatura (consulta)",
+    "clave": "jefatura",
+    "cargo": "Jefe del Departamento de Soporte Técnico"
+  }
+]

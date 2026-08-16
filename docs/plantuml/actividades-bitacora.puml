@@ -1,0 +1,23 @@
+@startuml actividades-bitacora
+title Bitácora diaria del Técnico de Soporte
+start
+:Día hábil: el sistema crea la bitácora «Pendiente»\nde cada Dirección con soporte asignado;
+:Revisión del equipo de atención al público\n(9 elementos: tomaturno, kioskos, pantallas,\nimpresoras, red, periféricos…);
+if (¿Algún elemento presenta falla?) then (sí)
+  :Registrar descripción, acción realizada,\nestado final y evidencia si aplica;
+endif
+:Registrar actividades del día\n(hora, actividad, área, resultado);
+:Validación: revisión completa\ny al menos una actividad;
+if (¿Envío antes de las 5:00 p. m.?) then (sí)
+  :Estado «Enviada»;
+else (no)
+  if (¿Se envió el mismo día, tarde?) then (sí)
+    :Estado «Enviada tarde»;
+  else (el día terminó sin envío)
+    :Estado «Vencida»;
+    stop
+  endif
+endif
+:Documento formal + trazabilidad;
+stop
+@enduml

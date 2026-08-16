@@ -1,0 +1,92 @@
+[
+ {
+  "id": "JUS-2026-0001",
+  "codigoControl": "GLPI",
+  "anio": 2026,
+  "mes": 4,
+  "direccion": "DIR-LUN",
+  "responsable": "Luis Adalberto Martínez",
+  "motivo": "Sin actividad mensual asociada al control",
+  "texto": "Se informa que en el mes de abril de 2026 no se registraron tiquetes GLPI aplicables en la Oficina Departamental de La Unión, debido a que no hubo ningún incidente reportado por las áreas; por tanto, no se generó reporte mensual de incidentes.",
+  "fecha": "2026-05-05",
+  "estado": "Aceptada",
+  "firmas": [
+   {
+    "nombre": "Luis Adalberto Martínez",
+    "cargo": "Soporte Técnico de Oficina Departamental",
+    "estado": "Registrada"
+   },
+   {
+    "nombre": "Carlos Armando González",
+    "cargo": "Coordinador de Soporte Técnico",
+    "estado": "Registrada"
+   },
+   {
+    "nombre": "Yancy Claribel Moreno",
+    "cargo": "Jefe del Departamento de Soporte Técnico",
+    "estado": "Registrada"
+   }
+  ],
+  "documento": "DOC-2026-0144"
+ },
+ {
+  "id": "JUS-2026-0002",
+  "codigoControl": "GLPI",
+  "anio": 2026,
+  "mes": 6,
+  "direccion": "DIR-SAN",
+  "responsable": "Karla Beatriz Ramírez",
+  "motivo": "Sin actividad mensual asociada al control",
+  "texto": "Se informa que en el mes de junio de 2026 no se registraron tiquetes GLPI aplicables en la Oficina Departamental de Santa Ana, debido a que no hubo ningún incidente reportado por las áreas; por tanto, no se generó reporte mensual de incidentes.",
+  "fecha": "2026-07-02",
+  "estado": "Aceptada",
+  "firmas": [
+   {
+    "nombre": "Karla Beatriz Ramírez",
+    "cargo": "Soporte Técnico de Oficina Departamental",
+    "estado": "Registrada"
+   },
+   {
+    "nombre": "Carlos Armando González",
+    "cargo": "Coordinador de Soporte Técnico",
+    "estado": "Registrada"
+   },
+   {
+    "nombre": "Yancy Claribel Moreno",
+    "cargo": "Jefe del Departamento de Soporte Técnico",
+    "estado": "Registrada"
+   }
+  ],
+  "documento": "DOC-2026-0227"
+ },
+ {
+  "id": "JUS-2026-0003",
+  "codigoControl": "F0386",
+  "anio": 2026,
+  "mes": 7,
+  "direccion": "DIR-USU",
+  "responsable": "Julio Alberto Rivera",
+  "motivo": "No hubo traslado de cintas en el mes",
+  "texto": "Se informa que en el mes de julio de 2026 no se realizó el control F0386 Control para el traslado de cintas de respaldo, debido a que en la Oficina Departamental de Usulután no hubo visita del técnico del Departamento de Operaciones. Sin embargo, los respaldos fueron realizados a disco.",
+  "fecha": "2026-08-10",
+  "estado": "Emitida",
+  "firmas": [
+   {
+    "nombre": "Julio Alberto Rivera",
+    "cargo": "Soporte Técnico de Oficina Departamental de Usulután",
+    "estado": "Registrada"
+   },
+   {
+    "nombre": "Carlos Armando González",
+    "cargo": "Coordinador de Soporte Técnico",
+    "estado": "Registrada"
+   },
+   {
+    "nombre": "Jorge Luis Loucel",
+    "cargo": "Jefe del Departamento de Operaciones Informáticas",
+    "estado": "Pendiente"
+   }
+  ],
+  "documento": "DOC-2026-0308"
+ }
+]

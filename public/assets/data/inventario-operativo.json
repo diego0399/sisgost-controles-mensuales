@@ -1,0 +1,110 @@
+[
+  {
+    "inventario": "2201-00-101-5890", "tipo": "Desktop", "marca": "HP", "modelo": "ProDesk 400 G9", "serie": "MXL2340KJT",
+    "nombreEquipo": "USU-W10ACAMPOS", "usuarioFinal": "Adriana María Campos", "carne": "4291",
+    "direccion": "DIR-USU", "unidad": "IGCN", "tecnicoConfiguracion": "Samuel Cruz", "soporteResponsable": "Julio Alberto Rivera",
+    "fechaAceptacion": "2025-11-12", "expedienteUnico": "EXP-2025-0102", "estado": "Activo en Dirección/Unidad", "garantia": "Vigente hasta 11/2027", "ultimoControl": "F0174 · Julio 2026"
+  },
+  {
+    "inventario": "2201-00-101-5425", "tipo": "Desktop", "marca": "HP", "modelo": "ProDesk 400 G7", "serie": "MXL1120HRD",
+    "nombreEquipo": "USU-W10AGONZALE", "usuarioFinal": "Ana Graciela González", "carne": "2771",
+    "direccion": "DIR-USU", "unidad": "IGCN", "tecnicoConfiguracion": "Samuel Cruz", "soporteResponsable": "Julio Alberto Rivera",
+    "fechaAceptacion": "2024-06-20", "expedienteUnico": "EXP-2024-0061", "estado": "Activo en Dirección/Unidad", "garantia": "Sin garantía de proveedor", "ultimoControl": "F0174 · Marzo 2026"
+  },
+  {
+    "inventario": "2201-00-101-5400", "tipo": "Desktop", "marca": "HP", "modelo": "ProDesk 400 G7", "serie": "MXL1120HRE",
+    "nombreEquipo": "USU-W10ACASTRO", "usuarioFinal": "Ana Guadalupe Castro", "carne": "3702",
+    "direccion": "DIR-USU", "unidad": "RPRH", "tecnicoConfiguracion": "Samuel Cruz", "soporteResponsable": "Julio Alberto Rivera",
+    "fechaAceptacion": "2024-06-20", "expedienteUnico": "EXP-2024-0062", "estado": "Activo en Dirección/Unidad", "garantia": "Sin garantía de proveedor", "ultimoControl": "F0382 · Julio 2026"
+  },
+  {
+    "inventario": "2201-00-101-6599", "tipo": "Desktop", "marca": "HP", "modelo": "ProDesk 400 G9", "serie": "MXL2340KJV",
+    "nombreEquipo": "USU-W11ACRUZ", "usuarioFinal": "Ana Raquel Cruz", "carne": "3339",
+    "direccion": "DIR-USU", "unidad": "RPRH", "tecnicoConfiguracion": "Andrea Marroquín", "soporteResponsable": "Julio Alberto Rivera",
+    "fechaAceptacion": "2026-02-10", "expedienteUnico": "EXP-2026-0014", "estado": "Activo en Dirección/Unidad", "garantia": "Vigente hasta 02/2028", "ultimoControl": "F0174 · Junio 2026"
+  },
+  {
+    "inventario": "2201-00-101-6858", "tipo": "Desktop", "marca": "HP", "modelo": "ProDesk 400 G9", "serie": "MXL2340KKA",
+    "nombreEquipo": "PC-US34CR74-01", "usuarioFinal": "César Arnoldo Ramos", "carne": "3474",
+    "direccion": "DIR-USU", "unidad": "IGCN", "tecnicoConfiguracion": "Samuel Cruz", "soporteResponsable": "Julio Alberto Rivera",
+    "fechaAceptacion": "2026-07-18", "expedienteUnico": "EXP-2026-0071", "estado": "Activo en Dirección/Unidad", "garantia": "Vigente hasta 07/2028", "ultimoControl": "F0302 · Julio 2026"
+  },
+  {
+    "inventario": "2201-00-101-5721", "tipo": "Desktop", "marca": "DELL", "modelo": "OptiPlex 3090", "serie": "8CE38E04",
+    "nombreEquipo": "USU-W10DLOPEZ", "usuarioFinal": "Dalila Concepción López", "carne": "2511",
+    "direccion": "DIR-USU", "unidad": "RPRH", "tecnicoConfiguracion": "Samuel Cruz", "soporteResponsable": "Julio Alberto Rivera",
+    "fechaAceptacion": "2023-09-02", "expedienteUnico": "EXP-2023-0155", "estado": "Pendiente de revisión", "garantia": "Sin garantía de proveedor", "ultimoControl": "F0288 · Julio 2026"
+  },
+  {
+    "inventario": "2201-00-101-5407", "tipo": "Desktop", "marca": "HP", "modelo": "ProDesk 400 G7", "serie": "MXL1120HRF",
+    "nombreEquipo": "USU-W10EGONZALE", "usuarioFinal": "Edith Gertrudis González", "carne": "1426",
+    "direccion": "DIR-USU", "unidad": "RPRH", "tecnicoConfiguracion": "Samuel Cruz", "soporteResponsable": "Julio Alberto Rivera",
+    "fechaAceptacion": "2024-06-20", "expedienteUnico": "EXP-2024-0063", "estado": "Activo en Dirección/Unidad", "garantia": "Sin garantía de proveedor", "ultimoControl": "F0382 · Julio 2026"
+  },
+  {
+    "inventario": "2201-00-101-5421", "tipo": "Desktop", "marca": "HP", "modelo": "ProDesk 400 G7", "serie": "MXL1120HRG",
+    "nombreEquipo": "USU-W11PUBLICO1", "usuarioFinal": "Consulta al público", "carne": "—",
+    "direccion": "DIR-USU", "unidad": "RPRH", "tecnicoConfiguracion": "Samuel Cruz", "soporteResponsable": "Julio Alberto Rivera",
+    "fechaAceptacion": "2024-06-20", "expedienteUnico": "EXP-2024-0064", "estado": "Activo en Dirección/Unidad", "garantia": "Sin garantía de proveedor", "ultimoControl": "F0174 · Julio 2026"
+  },
+  {
+    "inventario": "2201-00-1041-0010", "tipo": "Kiosko", "marca": "HP", "modelo": "260 G9", "serie": "8CE38E10",
+    "nombreEquipo": "USU-W10KIOSKO", "usuarioFinal": "Atención al público", "carne": "—",
+    "direccion": "DIR-USU", "unidad": "RPRH", "tecnicoConfiguracion": "Andrea Marroquín", "soporteResponsable": "Julio Alberto Rivera",
+    "fechaAceptacion": "2025-04-08", "expedienteUnico": "EXP-2025-0033", "estado": "Activo en Dirección/Unidad", "garantia": "Vigente hasta 04/2027", "ultimoControl": "Bitácora diaria"
+  },
+  {
+    "inventario": "2201-00-101-6271", "tipo": "Desktop", "marca": "DELL", "modelo": "OptiPlex 7010", "serie": "20881E30",
+    "nombreEquipo": "USU-W11RMOREIRA", "usuarioFinal": "Rosa Evelyn Moreira", "carne": "2943",
+    "direccion": "DIR-USU", "unidad": "RPRH", "tecnicoConfiguracion": "Samuel Cruz", "soporteResponsable": "Julio Alberto Rivera",
+    "fechaAceptacion": "2025-10-30", "expedienteUnico": "EXP-2025-0096", "estado": "En garantía", "garantia": "Vigente hasta 10/2027 · caso abierto", "ultimoControl": "F0288 · Junio 2026"
+  },
+  {
+    "inventario": "2201-00-103-0732", "tipo": "Impresor láser", "marca": "LEXMARK", "modelo": "MS622", "serie": "451936LL",
+    "nombreEquipo": "USU-RPRH-CALIFICACION2", "usuarioFinal": "Dalila Concepción López", "carne": "2511",
+    "direccion": "DIR-USU", "unidad": "RPRH", "tecnicoConfiguracion": "Samuel Cruz", "soporteResponsable": "Julio Alberto Rivera",
+    "fechaAceptacion": "2023-05-11", "expedienteUnico": "EXP-2023-0089", "estado": "Activo en Dirección/Unidad", "garantia": "Sin garantía de proveedor", "ultimoControl": "F0178 · Junio 2026"
+  },
+  {
+    "inventario": "2201-00-102-0547", "tipo": "Impresor matricial", "marca": "EPSON", "modelo": "LQ 590", "serie": "S3YE012208",
+    "nombreEquipo": "—", "usuarioFinal": "Ana Lucía Hernández", "carne": "1385",
+    "direccion": "DIR-USU", "unidad": "RPRH", "tecnicoConfiguracion": "Samuel Cruz", "soporteResponsable": "Julio Alberto Rivera",
+    "fechaAceptacion": "2022-08-19", "expedienteUnico": "EXP-2022-0140", "estado": "Activo en Dirección/Unidad", "garantia": "Sin garantía de proveedor", "ultimoControl": "F0177 · Febrero 2026"
+  },
+  {
+    "inventario": "2201-00-101-4998", "tipo": "Desktop", "marca": "DELL", "modelo": "Vostro 260", "serie": "7VJQW1S",
+    "nombreEquipo": "USU-W7COMODIN", "usuarioFinal": "Equipo comodín", "carne": "—",
+    "direccion": "DIR-USU", "unidad": "DTI", "tecnicoConfiguracion": "Samuel Cruz", "soporteResponsable": "Julio Alberto Rivera",
+    "fechaAceptacion": "2019-03-27", "expedienteUnico": "EXP-2019-0031", "estado": "Descargado", "garantia": "Sin garantía de proveedor", "ultimoControl": "Descargo · Mayo 2026"
+  },
+  {
+    "inventario": "2201-00-101-7015", "tipo": "Laptop", "marca": "HP", "modelo": "ProBook 450 G10", "serie": "5CD3341ABC",
+    "nombreEquipo": "SMI-W11JCORTEZ", "usuarioFinal": "Jorge Luis Cortez", "carne": "3278",
+    "direccion": "DIR-SMI", "unidad": "RPRH", "tecnicoConfiguracion": "Andrea Marroquín", "soporteResponsable": "Luis Adalberto Martínez",
+    "fechaAceptacion": "2026-05-22", "expedienteUnico": "EXP-2026-0048", "estado": "Activo en Dirección/Unidad", "garantia": "Vigente hasta 05/2028", "ultimoControl": "F0422 · Julio 2026"
+  },
+  {
+    "inventario": "2201-00-101-7020", "tipo": "Desktop", "marca": "HP", "modelo": "ProDesk 400 G9", "serie": "MXL2340KLM",
+    "nombreEquipo": "SMI-W11MFLORES", "usuarioFinal": "Marta Alicia Flores", "carne": "4102",
+    "direccion": "DIR-SMI", "unidad": "IGCN", "tecnicoConfiguracion": "Samuel Cruz", "soporteResponsable": "Luis Adalberto Martínez",
+    "fechaAceptacion": "2026-06-15", "expedienteUnico": "EXP-2026-0057", "estado": "Activo en Dirección/Unidad", "garantia": "Vigente hasta 06/2028", "ultimoControl": "F0422 · Julio 2026"
+  },
+  {
+    "inventario": "2201-00-101-6903", "tipo": "Desktop", "marca": "DELL", "modelo": "OptiPlex 7010", "serie": "20881E44",
+    "nombreEquipo": "SAN-W11RPENA", "usuarioFinal": "Ricardo Antonio Peña", "carne": "3550",
+    "direccion": "DIR-SAN", "unidad": "RPRH", "tecnicoConfiguracion": "Andrea Marroquín", "soporteResponsable": "Karla Beatriz Ramírez",
+    "fechaAceptacion": "2026-04-14", "expedienteUnico": "EXP-2026-0039", "estado": "Activo en Dirección/Unidad", "garantia": "Vigente hasta 04/2028", "ultimoControl": "F0174 · Julio 2026"
+  },
+  {
+    "inventario": "2201-00-101-6910", "tipo": "Desktop", "marca": "HP", "modelo": "ProDesk 400 G9", "serie": "MXL2340KNP",
+    "nombreEquipo": "SSA-W11PUBLICO1", "usuarioFinal": "Consulta al público", "carne": "—",
+    "direccion": "DIR-SSA", "unidad": "Atención al público", "tecnicoConfiguracion": "Samuel Cruz", "soporteResponsable": "Karla Beatriz Ramírez",
+    "fechaAceptacion": "2026-03-19", "expedienteUnico": "EXP-2026-0030", "estado": "Activo en Dirección/Unidad", "garantia": "Vigente hasta 03/2028", "ultimoControl": "Bitácora diaria"
+  },
+  {
+    "inventario": "2201-00-101-6911", "tipo": "Kiosko", "marca": "HP", "modelo": "260 G9", "serie": "8CE38E77",
+    "nombreEquipo": "SSA-KIOSKO2", "usuarioFinal": "Atención al público", "carne": "—",
+    "direccion": "DIR-SSA", "unidad": "Atención al público", "tecnicoConfiguracion": "Andrea Marroquín", "soporteResponsable": "Karla Beatriz Ramírez",
+    "fechaAceptacion": "2026-03-19", "expedienteUnico": "EXP-2026-0031", "estado": "Activo en Dirección/Unidad", "garantia": "Vigente hasta 03/2028", "ultimoControl": "Bitácora diaria"
+  }
+]

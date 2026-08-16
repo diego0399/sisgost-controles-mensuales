@@ -1,0 +1,67 @@
+[
+  {
+    "id": "EVI-0001",
+    "tipo": "Entrega aceptada",
+    "fecha": "2026-08-13",
+    "expedienteUnico": "EXP-2026-0084",
+    "aplicado": false,
+    "equipo": {
+      "inventario": "2201-00-101-7102", "tipo": "Laptop", "marca": "HP", "modelo": "ProBook 450 G10", "serie": "5CD3341XYZ",
+      "nombreEquipo": "USU-W11NTBMLUNA", "usuarioFinal": "Merany Vanessa Luna", "carne": "3264",
+      "direccion": "DIR-USU", "unidad": "RPRH", "tecnicoConfiguracion": "Samuel Cruz", "soporteResponsable": "Julio Alberto Rivera",
+      "fechaAceptacion": "2026-08-13", "expedienteUnico": "EXP-2026-0084", "estado": "Activo en Dirección/Unidad", "garantia": "Vigente hasta 08/2028"
+    }
+  },
+  {
+    "id": "EVI-0002",
+    "tipo": "Descargo de equipo",
+    "fecha": "2026-08-14",
+    "expedienteUnico": "EXP-2022-0140",
+    "aplicado": false,
+    "equipo": {
+      "inventario": "2201-00-102-0547", "tipo": "Impresor matricial", "marca": "EPSON", "modelo": "LQ 590", "serie": "S3YE012208",
+      "nombreEquipo": "—", "usuarioFinal": "Ana Lucía Hernández", "carne": "1385",
+      "direccion": "DIR-USU", "unidad": "RPRH", "tecnicoConfiguracion": "Samuel Cruz", "soporteResponsable": "Julio Alberto Rivera",
+      "fechaAceptacion": "2022-08-19", "expedienteUnico": "EXP-2022-0140", "estado": "Descargado", "garantia": "Sin garantía de proveedor"
+    }
+  },
+  {
+    "id": "EVI-0003",
+    "tipo": "Entrega aceptada",
+    "fecha": "2026-07-18",
+    "expedienteUnico": "EXP-2026-0071",
+    "aplicado": true,
+    "equipo": {
+      "inventario": "2201-00-101-6858", "tipo": "Desktop", "marca": "HP", "modelo": "ProDesk 400 G9", "serie": "MXL2340KKA",
+      "nombreEquipo": "PC-US34CR74-01", "usuarioFinal": "César Arnoldo Ramos", "carne": "3474",
+      "direccion": "DIR-USU", "unidad": "IGCN", "tecnicoConfiguracion": "Samuel Cruz", "soporteResponsable": "Julio Alberto Rivera",
+      "fechaAceptacion": "2026-07-18", "expedienteUnico": "EXP-2026-0071", "estado": "Activo en Dirección/Unidad", "garantia": "Vigente hasta 07/2028"
+    }
+  },
+  {
+    "id": "EVI-0004",
+    "tipo": "Entrega aceptada",
+    "fecha": "2026-06-15",
+    "expedienteUnico": "EXP-2026-0057",
+    "aplicado": true,
+    "equipo": {
+      "inventario": "2201-00-101-7020", "tipo": "Desktop", "marca": "HP", "modelo": "ProDesk 400 G9", "serie": "MXL2340KLM",
+      "nombreEquipo": "SMI-W11MFLORES", "usuarioFinal": "Marta Alicia Flores", "carne": "4102",
+      "direccion": "DIR-SMI", "unidad": "IGCN", "tecnicoConfiguracion": "Samuel Cruz", "soporteResponsable": "Luis Adalberto Martínez",
+      "fechaAceptacion": "2026-06-15", "expedienteUnico": "EXP-2026-0057", "estado": "Activo en Dirección/Unidad", "garantia": "Vigente hasta 06/2028"
+    }
+  },
+  {
+    "id": "EVI-0005",
+    "tipo": "Descargo de equipo",
+    "fecha": "2026-05-06",
+    "expedienteUnico": "EXP-2019-0031",
+    "aplicado": true,
+    "equipo": {
+      "inventario": "2201-00-101-4998", "tipo": "Desktop", "marca": "DELL", "modelo": "Vostro 260", "serie": "7VJQW1S",
+      "nombreEquipo": "USU-W7COMODIN", "usuarioFinal": "Equipo comodín", "carne": "—",
+      "direccion": "DIR-USU", "unidad": "DTI", "tecnicoConfiguracion": "Samuel Cruz", "soporteResponsable": "Julio Alberto Rivera",
+      "fechaAceptacion": "2019-03-27", "expedienteUnico": "EXP-2019-0031", "estado": "Descargado", "garantia": "Sin garantía de proveedor"
+    }
+  }
+]

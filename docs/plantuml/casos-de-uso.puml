@@ -1,0 +1,62 @@
+@startuml casos-de-uso
+title SISGOST — Controles Mensuales · Casos de uso
+left to right direction
+skinparam actorStyle awesome
+
+actor "Técnico de Soporte" as TEC
+actor "Encargado de Soporte" as ENC
+actor "Administrador" as ADM
+actor "Jefatura (consulta)" as JEF
+actor "SISGOST — Gestión de Equipos" as GE <<sistema>>
+
+rectangle "SISGOST — Controles Mensuales" {
+  usecase "Consultar panel ejecutivo" as UC1
+  usecase "Consultar calendario de controles\n(3 días hábiles y feriados)" as UC2
+  usecase "Completar control mensual\n(formulario por secciones)" as UC3
+  usecase "Entregar control\n(genera documento formal)" as UC4
+  usecase "Justificar control sin actividad\n(carta institucional)" as UC5
+  usecase "Completar y enviar bitácora diaria\n(antes de las 5:00 p. m.)" as UC6
+  usecase "Consultar historial anual" as UC7
+  usecase "Generar reporte mensual consolidado" as UC8
+  usecase "Revisar entrega\n(cerrar u observar)" as UC9
+  usecase "Administrar distribución de soportes" as UC10
+  usecase "Administrar catálogo de controles" as UC11
+  usecase "Administrar feriados" as UC12
+  usecase "Consultar inventario operativo" as UC13
+  usecase "Aplicar evento de integración" as UC14
+  usecase "Consultar trazabilidad" as UC15
+  usecase "Ver / imprimir / descargar documento" as UC16
+}
+
+TEC --> UC1
+TEC --> UC2
+TEC --> UC3
+TEC --> UC4
+TEC --> UC5
+TEC --> UC6
+TEC --> UC13
+TEC --> UC16
+
+ENC --> UC1
+ENC --> UC7
+ENC --> UC8
+ENC --> UC9
+ENC --> UC10
+ENC --> UC14
+ENC --> UC15
+ENC --> UC16
+
+ADM --> UC10
+ADM --> UC11
+ADM --> UC12
+
+JEF --> UC1
+JEF --> UC7
+JEF --> UC15
+JEF --> UC16
+
+GE ..> UC14 : "entrega aceptada /\ndescargo de equipo"
+UC4 ..> UC16 : <<include>>
+UC5 ..> UC16 : <<include>>
+UC6 ..> UC16 : <<include>>
+@enduml

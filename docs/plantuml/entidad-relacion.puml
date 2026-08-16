@@ -1,0 +1,145 @@
+@startuml entidad-relacion
+title SISGOST — Controles Mensuales · Modelo entidad-relación
+hide circle
+skinparam linetype ortho
+
+entity DIRECCION {
+  * id : texto <<PK>>
+  --
+  nombre
+  corta
+  unidades[]
+  activa
+}
+
+entity USUARIO_SISTEMA {
+  * usuario : texto <<PK>>
+  --
+  nombre
+  rol / clave
+  cargo
+}
+
+entity DISTRIBUCION_SOPORTE {
+  * id <<PK>>
+  --
+  usuario <<FK>>
+  direccion <<FK>>
+  unidad
+  fechaInicio
+  estado
+}
+
+entity FERIADO {
+  * fecha + nombre <<PK>>
+  --
+  ambito (Nacional / San Salvador)
+}
+
+entity CONTROL_CATALOGO {
+  * codigo <<PK>>
+  --
+  nombre, version
+  frecuencia
+  aplicaA
+  requiereEvidencia
+  requiereFirma
+  permiteJustificacion
+  plantilla (secciones)
+}
+
+entity CONTROL_MES {
+  * id <<PK>>
+  --
+  codigo <<FK>>
+  anio, mes, semana?
+  direccion <<FK>>
+  responsable
+  estado
+  fechaLimite
+  fechaEntrega?
+  avance
+  secciones (respuestas)
+  evidencias[]
+}
+
+entity BITACORA_DIARIA {
+  * id <<PK>>
+  --
+  fecha
+  direccion <<FK>>
+  responsable
+  estado
+  horaEnvio?
+  revision[9]
+  actividades[]
+}
+
+entity JUSTIFICACION {
+  * id <<PK>>
+  --
+  codigoControl <<FK>>
+  anio, mes
+  direccion <<FK>>
+  motivo, texto
+  estado
+  firmas[3]
+}
+
+entity EQUIPO_OPERATIVO {
+  * inventario <<PK>>
+  --
+  tipo, marca, modelo, serie
+  usuarioFinal
+  direccion <<FK>>, unidad
+  soporteResponsable
+  fechaAceptacion
+  expedienteUnico
+  estado
+  garantia
+}
+
+entity EVENTO_INTEGRACION {
+  * id <<PK>>
+  --
+  tipo (entrega / descargo)
+  expedienteUnico
+  equipo
+  aplicado
+}
+
+entity DOCUMENTO_GENERADO {
+  * id <<PK>>
+  --
+  tipo
+  nombre, codigo
+  fecha, hora
+  direccion, mes, anio
+  hash
+  referencia <<FK polimórfica>>
+}
+
+entity EVENTO_TRAZABILIDAD {
+  * id <<PK>>
+  --
+  fecha, hora
+  usuario, rol
+  accion
+  estadoAnterior / estadoNuevo
+  documento?
+}
+
+DIRECCION ||--o{ DISTRIBUCION_SOPORTE
+USUARIO_SISTEMA ||--o{ DISTRIBUCION_SOPORTE
+DIRECCION ||--o{ CONTROL_MES
+CONTROL_CATALOGO ||--o{ CONTROL_MES
+DIRECCION ||--o{ BITACORA_DIARIA
+DIRECCION ||--o{ EQUIPO_OPERATIVO
+CONTROL_MES |o--o| JUSTIFICACION
+CONTROL_MES |o--o| DOCUMENTO_GENERADO
+BITACORA_DIARIA |o--o| DOCUMENTO_GENERADO
+JUSTIFICACION |o--o| DOCUMENTO_GENERADO
+EVENTO_INTEGRACION }o--|| EQUIPO_OPERATIVO : actualiza
+FERIADO .. CONTROL_MES : "define los días hábiles\nde la fecha límite"
+DOCUMENTO_GENERADO ||--o{ EVENTO_TRAZABILIDAD
+@enduml
