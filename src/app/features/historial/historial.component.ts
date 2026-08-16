@@ -110,7 +110,7 @@ import { MESES, formateaFecha, nombreMes } from '../../core/models/models';
                   <tr>
                     <td><b>{{ c.codigo }}</b></td>
                     <td>{{ c.semana ? 'Semana ' + c.semana : nombreMesCorto(c.mes) }}</td>
-                    <td>{{ data.cortaDireccion(c.direccion) }}</td>
+                    <td>{{ data.cortaDireccion(c.direccion) }} <span class="muted">/ {{ c.unidad }}</span></td>
                     <td>{{ c.responsable }}</td>
                     <td class="mono">{{ formatea(c.fechaLimite) }}</td>
                     <td class="mono">{{ c.fechaEntrega ? formatea(c.fechaEntrega) : '—' }}</td>
@@ -131,6 +131,22 @@ import { MESES, formateaFecha, nombreMes } from '../../core/models/models';
               </tbody>
             </table>
           </div>
+
+          @if (fDireccion() && noAplican().length) {
+            <div class="divider"></div>
+            <div class="sec-title">Controles que no aplican a esta Dirección</div>
+            <p class="muted" style="font-size: 12.5px; margin-bottom: 8px;">
+              Según la configuración «Aplica a» del catálogo, estos controles no se trabajan aquí.
+              Es un estado informativo: no se cuentan como pendientes ni vencen.
+            </p>
+            <div class="row" style="gap: 6px;">
+              @for (n of noAplican(); track n.codigo + n.unidad) {
+                <span class="badge" [title]="n.motivo">
+                  {{ n.codigo }} · {{ n.unidad }} — No aplica
+                </span>
+              }
+            </div>
+          }
         </div>
       </div>
 
@@ -181,6 +197,26 @@ export class HistorialComponent {
     [...new Set(this.visibles().map((c) => c.responsable))].sort());
 
   protected readonly delMes = computed(() => this.visibles().filter((c) => c.mes === this.mesSel()));
+
+  /**
+   * Controles activos que NO aplican a la Dirección filtrada. Se muestran como «No aplica»
+   * —informativo— para que la ausencia de un control no se lea como un olvido.
+   */
+  protected readonly noAplican = computed(() => {
+    const dir = this.fDireccion();
+    if (!dir) return [];
+    const unidades = this.data.direccionDe(dir)?.unidades ?? [];
+    const salida: { codigo: string; unidad: string; motivo: string }[] = [];
+    for (const u of unidades) {
+      for (const c of this.data.controlesNoAplicablesDe(dir, u)) {
+        salida.push({
+          codigo: c.codigo, unidad: u,
+          motivo: `${c.nombre} — ${c.aplicacion.observaciones || 'No configurado para esta Dirección/Unidad.'}`
+        });
+      }
+    }
+    return salida;
+  });
 
   protected readonly filtrados = computed(() => this.delMes()
     .filter((c) => !this.fDireccion() || c.direccion === this.fDireccion())

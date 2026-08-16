@@ -22,6 +22,9 @@ entity usuario_sistema {
   nombre : varchar
   clave_rol : varchar <<FK rol>>
   cargo : varchar
+  unidad : varchar
+  estado : varchar
+  modulo_controles : boolean
 }
 entity rol {
   * clave : varchar <<PK>>
@@ -29,14 +32,18 @@ entity rol {
   nombre : varchar
 }
 entity distribucion_soporte {
-  * id_distribucion : serial <<PK>>
+  * id_distribucion : varchar <<PK>>
   --
-  usuario : varchar <<FK>>
   id_direccion : varchar <<FK>>
-  id_unidad : int <<FK, null = todas>>
-  fecha_inicio : date
-  estado : varchar
-  observaciones : text
+  id_unidad : int <<FK>>
+  usuario : varchar <<FK>>
+  asignado_por : varchar
+  fecha : date
+  hora : time
+  activo : boolean
+  desactivada_por : varchar <<null>>
+  fecha_desactivacion : date <<null>>
+  observacion : text
 }
 entity feriado {
   * id_feriado : serial <<PK>>
@@ -51,11 +58,34 @@ entity control_catalogo {
   nombre : varchar
   version : varchar
   frecuencia : varchar
+  modo_aplicacion : varchar
+  id_area : varchar <<FK, null>>
+  observaciones_aplicacion : text
   requiere_evidencia : boolean
   requiere_firma : boolean
   permite_justificacion : boolean
   activo : boolean
   plantilla : jsonb
+}
+entity area_tecnica {
+  * id_area : varchar <<PK>>
+  --
+  nombre : varchar
+  descripcion : text
+}
+entity control_aplicacion {
+  * id_aplicacion : serial <<PK>>
+  --
+  codigo : varchar <<FK control_catalogo>>
+  id_direccion : varchar <<FK, null>>
+  id_unidad : int <<FK, null>>
+}
+entity area_par {
+  * id_area_par : serial <<PK>>
+  --
+  id_area : varchar <<FK>>
+  id_direccion : varchar <<FK>>
+  id_unidad : int <<FK>>
 }
 entity control_mes {
   * id_control : varchar <<PK>>
@@ -75,6 +105,16 @@ entity control_mes {
   observaciones : text
   id_justificacion : varchar <<FK, null>>
   id_documento : varchar <<FK, null>>
+}
+entity control_equipo {
+  * id_control_equipo : serial <<PK>>
+  --
+  id_control : varchar <<FK>>
+  inventario : varchar <<FK>>
+  seccion : varchar
+  estado : varchar
+  verificaciones : jsonb
+  observacion : text
 }
 entity evidencia_control {
   * id_evidencia : serial <<PK>>
@@ -139,25 +179,35 @@ entity firma_justificacion {
   estado : varchar
 }
 entity equipo_operativo {
-  * inventario : varchar <<PK>>
+  * id_ciclo : varchar <<PK>>
   --
+  inventario : varchar
+  estado_ciclo : varchar
   tipo, marca, modelo, serie : varchar
   nombre_equipo : varchar
   usuario_final : varchar
   id_direccion : varchar <<FK>>
   id_unidad : int <<FK>>
+  tecnico_configuracion : varchar
   soporte_responsable : varchar
   fecha_aceptacion : date
+  expediente : varchar
   expediente_unico : varchar
   estado : varchar
   garantia : varchar
+  origen : varchar
+  fecha_descargo : date <<null>>
 }
 entity evento_integracion {
   * id_evento : varchar <<PK>>
   --
   tipo : varchar
   fecha : date
+  modulo_origen : varchar
+  modulo_destino : varchar
+  expediente : varchar
   expediente_unico : varchar
+  detalle : text
   inventario : varchar <<FK>>
   aplicado : boolean
 }
@@ -171,6 +221,7 @@ entity documento_generado {
   hora : time
   generado_por : varchar
   id_direccion : varchar <<FK, null>>
+  id_unidad : int <<FK, null>>
   mes : int
   anio : int
   hash : varchar
@@ -190,6 +241,9 @@ entity evento_trazabilidad {
   accion : varchar
   estado_anterior : varchar <<null>>
   estado_nuevo : varchar <<null>>
+  modulo_origen : varchar <<null>>
+  modulo_destino : varchar <<null>>
+  inventario : varchar <<FK, null>>
   observacion : text
   id_documento : varchar <<FK, null>>
 }
@@ -199,9 +253,14 @@ rol ||--o{ usuario_sistema
 direccion ||--o{ distribucion_soporte
 usuario_sistema ||--o{ distribucion_soporte
 control_catalogo ||--o{ control_mes
+control_catalogo ||--o{ control_aplicacion
+area_tecnica ||--o{ area_par
+area_tecnica |o--o{ control_catalogo
 direccion ||--o{ control_mes
 usuario_sistema ||--o{ control_mes
 control_mes ||--o{ evidencia_control
+control_mes ||--o{ control_equipo
+equipo_operativo ||--o{ control_equipo
 direccion ||--o{ bitacora_diaria
 bitacora_diaria ||--o{ bitacora_revision
 bitacora_diaria ||--o{ bitacora_actividad

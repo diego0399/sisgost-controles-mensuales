@@ -27,6 +27,8 @@ package "core/services" {
   [BusinessDayService] as BDS
   [ControlDeadlineService] as CDS
   [EquipmentIntegrationService] as INT
+  [SupportDistributionService
+<<compartido con Gestión de Equipos>>] as SDS
   [AuthService] as AUTH
   [ToastService] as TOAST
 }
@@ -45,12 +47,18 @@ database "assets/data/*.json\n+ localStorage" as STORE
 DOC --> VISOR
 DOC --> DATA
 INT --> DATA
+DATA --> SDS
 DATA --> CDS
 CDS --> BDS
 BDS --> HOL
 DATA --> STORE
+SDS --> STORE
 HOL --> STORE
 [Administración\n(usuarios, catálogo,\ndistribución, feriados)] --> HOL
 [Controles / Completar control] ..> UI
 [Bitácora / Completar bitácora] ..> UI
+
+cloud "SISGOST — Gestión de Equipos" as GE
+GE ..> INT : eventos de aceptación y descargo
+SDS ..> GE : filtra el Técnico de Configuración
 @enduml

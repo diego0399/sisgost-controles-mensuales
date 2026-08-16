@@ -61,7 +61,7 @@ import { formateaFecha, nombreMes } from '../../core/models/models';
                   <tr>
                     <td><b>{{ j.codigoControl }}</b></td>
                     <td>{{ nombreMes(j.mes) }} {{ j.anio }}</td>
-                    <td>{{ data.cortaDireccion(j.direccion) }}</td>
+                    <td>{{ data.cortaDireccion(j.direccion) }} <span class="muted">/ {{ j.unidad }}</span></td>
                     <td>{{ j.responsable }}</td>
                     <td style="max-width: 260px;">{{ j.motivo }}</td>
                     <td class="mono">{{ formatea(j.fecha) }}</td>

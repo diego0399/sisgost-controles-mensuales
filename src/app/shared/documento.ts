@@ -71,11 +71,18 @@ export class DocumentoComponent {
   protected readonly subtitulo = computed(() => {
     const d = this.doc();
     if (!d) return '';
-    const dir = d.direccion === 'Todas' ? 'Todas las Direcciones/Unidades' : this.data.nombreDireccion(d.direccion);
+    const dir = d.direccion === 'Todas'
+      ? 'Todas las Direcciones/Unidades'
+      : this.data.dirUnidad(d.direccion, d.unidad ?? '');
     return `${dir} · ${nombreMes(d.mes)} ${d.anio}`;
   });
 
   protected formatea(iso: string): string { return formateaFecha(iso); }
+
+  /** Cargo institucional del responsable, tomado del directorio compartido. */
+  private cargoDe(nombre: string): string {
+    return this.data.usuarios().find((u) => u.nombre === nombre)?.cargo ?? 'Técnico de Soporte Técnico';
+  }
 
   // ------------------------------------------------------------------ armado de secciones
 
@@ -93,7 +100,7 @@ export class DocumentoComponent {
     return {
       titulo: 'Datos generales',
       campos: [
-        { etiqueta: 'Dirección/Unidad', valor: `${this.data.nombreDireccion(direccion)} — ${unidad}` },
+        { etiqueta: 'Dirección/Unidad', valor: this.data.dirUnidad(direccion, unidad) },
         { etiqueta: 'Responsable', valor: responsable },
         ...extra
       ]
@@ -140,6 +147,27 @@ export class DocumentoComponent {
           s.texto = 'Sin registros en el período. El detalle consta en las observaciones del control.';
         }
       }
+      // Equipos relacionados: se imprimen con los datos vivos del inventario operativo.
+      if (p.equipos) {
+        const revisados = r?.equipos?.filter((e) => e.incluido) ?? [];
+        if (revisados.length) {
+          s.columnas = ['N° de inventario', 'Equipo', 'Usuario final', 'Verificaciones aplicadas', 'Observación', 'Estado'];
+          s.filas = revisados.map((e) => {
+            const eq = this.data.equipoDe(e.inventario);
+            return [
+              e.inventario,
+              eq ? `${eq.nombreEquipo || eq.tipo} · ${eq.marca} ${eq.modelo}` : '—',
+              eq?.usuarioFinal ?? '—',
+              e.verificaciones.join(' · ') || '—',
+              e.observacion || '—',
+              e.estado
+            ];
+          });
+          s.nota = 'Equipos activos de la Dirección/Unidad según el inventario operativo, proveniente de las entregas aceptadas en SISGOST — Gestión de Equipos.';
+        } else {
+          s.texto = 'No se registraron equipos revisados en el período.';
+        }
+      }
       salida.push(s);
     }
     if (c.observaciones) salida.push({ titulo: 'Observaciones del proceso', texto: c.observaciones });
@@ -176,7 +204,7 @@ export class DocumentoComponent {
   private seccionesJustificacion(j: Justificacion): SeccionDoc[] {
     const cat = this.data.catalogoDe(j.codigoControl);
     return [
-      this.seccionDatos(j.direccion, 'Todas las unidades', j.responsable, [
+      this.seccionDatos(j.direccion, j.unidad || 'Todas las unidades', j.responsable, [
         { etiqueta: 'Control justificado', valor: `${j.codigoControl} — ${cat?.nombre ?? ''}` },
         { etiqueta: 'Período', valor: `${nombreMes(j.mes)} ${j.anio}` },
         { etiqueta: 'Motivo', valor: j.motivo },
@@ -217,12 +245,26 @@ export class DocumentoComponent {
       },
       {
         titulo: 'Detalle de controles del período',
-        columnas: ['Control', 'Dirección', 'Período', 'Fecha límite', 'Entrega', 'Estado'],
+        columnas: ['Control', 'Dirección/Unidad', 'Responsable', 'Período', 'Fecha límite', 'Entrega', 'Estado'],
         filas: delPeriodo.map((c) => [
-          c.codigo, this.data.cortaDireccion(c.direccion),
+          c.codigo, `${this.data.cortaDireccion(c.direccion)} · ${c.unidad}`, c.responsable,
           c.semana ? `Semana ${c.semana}` : nombreMes(c.mes),
           formateaFecha(c.fechaLimite), c.fechaEntrega ? formateaFecha(c.fechaEntrega) : '—', c.estado
         ])
+      },
+      {
+        titulo: 'Inventario operativo relacionado',
+        ...(equipos.length
+          ? {
+              columnas: ['N° de inventario', 'Equipo', 'Dirección/Unidad', 'Usuario final', 'Soporte responsable', 'Estado'],
+              filas: equipos.map((e) => [
+                e.inventario, `${e.nombreEquipo || e.tipo} · ${e.marca} ${e.modelo}`,
+                `${this.data.cortaDireccion(e.direccion)} · ${e.unidad}`, e.usuarioFinal,
+                e.soporteResponsable || 'Sin asignar', e.estado
+              ]),
+              nota: 'Equipos activos provenientes de las entregas aceptadas en SISGOST — Gestión de Equipos.'
+            }
+          : { texto: 'Sin equipos activos en el inventario operativo del período.' })
       },
       {
         titulo: 'Justificaciones emitidas',
@@ -269,14 +311,15 @@ export class DocumentoComponent {
     const c = this.control();
     if (c) {
       const revisado = ['Cerrado', 'Observado'].includes(c.estado);
+      const enc = this.data.usuarios().find((x) => x.clave === 'enc-soporte');
       return [
-        { rotulo: 'Técnico de Soporte responsable', nombre: c.responsable, rol: 'Soporte Técnico de Oficina Departamental', estado: 'Capturada', fecha: c.fechaEntrega ? formateaFecha(c.fechaEntrega) : undefined, hora: c.horaEntrega },
-        { rotulo: 'Revisión del Encargado de Soporte', nombre: 'Carlos Armando González', rol: 'Coordinador de Soporte Técnico', estado: revisado ? 'Capturada' : 'Pendiente' }
+        { rotulo: 'Técnico de Soporte responsable', nombre: c.responsable, rol: this.cargoDe(c.responsable), estado: 'Capturada', fecha: c.fechaEntrega ? formateaFecha(c.fechaEntrega) : undefined, hora: c.horaEntrega },
+        { rotulo: 'Revisión del Encargado de Soporte', nombre: enc?.nombre ?? 'Encargado de Soporte', rol: enc?.cargo ?? 'Coordinador de Soporte Técnico', estado: revisado ? 'Capturada' : 'Pendiente' }
       ];
     }
     const b = this.bitacora();
     if (b) {
-      return [{ rotulo: 'Técnico de Soporte responsable', nombre: b.responsable, rol: 'Soporte Técnico de Oficina Departamental', estado: 'Capturada', fecha: formateaFecha(b.fecha), hora: b.horaEnvio }];
+      return [{ rotulo: 'Técnico de Soporte responsable', nombre: b.responsable, rol: this.cargoDe(b.responsable), estado: 'Capturada', fecha: formateaFecha(b.fecha), hora: b.horaEnvio }];
     }
     return [{ rotulo: 'Generado por', nombre: d.generadoPor, estado: 'Capturada', fecha: formateaFecha(d.fecha), hora: d.hora }];
   });

@@ -12,28 +12,41 @@ que tienen asignadas.
 
 ```bash
 npm install
-ng serve        # http://localhost:4200
+ng serve        # http://localhost:4300
 npm run build
 ```
+
+El puerto está fijado en `angular.json` para que los dos módulos del ecosistema puedan correr a
+la vez: **Gestión de Equipos en el 4200** y **Controles Mensuales en el 4300**. El enlace entre
+módulos se configura en `src/app/core/config/modulos.ts`.
 
 Sin backend, sin base de datos, sin Firebase y sin API real: datos simulados en
 `public/assets/data/*.json` y persistencia de sesión en `localStorage`
 (clave `sisgost.controles.v1`; el catálogo de feriados usa `sisgost.controles.feriados.v1`).
-El botón **Restablecer datos de demostración** (Administración) vuelve a la semilla.
+La acción **Restablecer datos de demostración** (Administración, solo Administrador) vuelve a la
+semilla tras confirmación.
 
 ## Usuarios de demostración
 
-| Usuario | Rol | Alcance |
+Son **los mismos usuarios de SISGOST — Gestión de Equipos**, con la misma identidad y el mismo
+rol: no existe un directorio paralelo.
+
+| Usuario | Rol | Alcance en este módulo |
 |---|---|---|
-| `admin` | Administrador | Catálogos, feriados, usuarios y distribución |
+| `sadmin` | Administrador del sistema | Catálogos, feriados, usuarios y distribución |
+| `demo.admin` | Administrador del sistema | Usuario de demostración: restablece los datos |
 | `cgonzalez` | Encargado de Soporte | Consulta todo, asigna responsables, revisa entregas |
-| `jrivera` | Técnico de Soporte | Oficina Departamental de Usulután |
-| `lmartinez` | Técnico de Soporte | Oficina Departamental de San Miguel |
-| `kramirez` | Técnico de Soporte | Santa Ana y Oficina Central de San Salvador |
+| `wcarranza` | Técnico de Soporte | Registro de la Propiedad, Registro de Comercio, RPRH y Gerencia de Tecnología |
+| `mmartinez` | Técnico de Soporte | Registro de la Propiedad, Dirección de Registro, IGN e ISPI |
+| `dportillo` | Técnico de Soporte | Registro de la Propiedad, Dirección de Registro, IGN, RPRH y Gerencia de Tecnología |
 | `ymoreno` | Jefatura (consulta) | Solo visualización de reportes y estados |
 
+Los usuarios de **Hardware** (`scruz`, `bmejia`, …) existen en el directorio compartido pero no
+operan controles mensuales: aparecen en Administración marcados como «Solo Gestión de Equipos».
+
 La contraseña es libre (prototipo). **Dirección/Unidad no es un rol del sistema**: es el dato
-organizacional al que pertenecen los controles.
+organizacional al que pertenecen los controles, y quién atiende cada una lo decide la
+distribución de soportes.
 
 ## Reglas institucionales implementadas
 
@@ -47,12 +60,37 @@ organizacional al que pertenecen los controles.
 - **Justificación cuando no hay actividad.** Un control sin actividad mensual (GLPI sin
   tiquetes, F0386 sin traslado de cintas…) no queda vacío: se cierra con carta de justificación
   basada en `Formatos_nuevos_2025_.docx`, con las tres firmas del formato.
-- **Integración con Gestión de Equipos.** Una entrega aceptada por el Usuario Final incorpora
-  el equipo al inventario operativo de su Dirección/Unidad; un descargo lo retira
-  (`EquipmentIntegrationService`, eventos simulados).
+- **Integración automática con Gestión de Equipos.** Una entrega aceptada por el Usuario Final
+  incorpora el equipo al inventario operativo de su Dirección/Unidad y un descargo lo retira,
+  **sin confirmación manual**: el módulo se sincroniza al cargar (`EquipmentIntegrationService`,
+  `syncOperationalInventory()`) y la pantalla solo muestra los movimientos ya sincronizados.
+  Ver «Un solo ecosistema» abajo.
+- **Un control no registra equipos ajenos.** Los controles que trabajan con equipos (F0422,
+  F0174, F0288, VULN) solo ofrecen los equipos **activos de su Dirección/Unidad**, tomados del
+  inventario operativo; y un Técnico de Soporte solo completa controles de las Direcciones/Unidades
+  que la distribución le asigna.
 - **Documentos formales.** Todo control entregado, bitácora enviada, carta y reporte
   consolidado se abre en un visor tipo PDF con encabezado institucional, secciones numeradas,
   firmas y pie de página; la impresión saca solo la hoja.
+
+## Aplicación configurable de los controles («Aplica a»)
+
+No todos los controles se trabajan en todas las Direcciones/Unidades, así que **dónde aplica cada
+control se configura** en Administración → Catálogo de controles → **Editar aplicación**, con
+cuatro modos:
+
+| Modo | Ejemplo |
+|---|---|
+| Todas las direcciones | **F0422** — cada Dirección/Unidad puede tener equipos activos |
+| Direcciones específicas | **VULN** — solo las Direcciones incluidas en el ciclo de escaneo |
+| Unidades específicas | **F0174** — solo las unidades con equipos de usuario |
+| Área técnica específica | **F0234** → CSOD/Cuarto de servidores; **F0386** → área responsable de respaldos |
+
+Consecuencias en todo el sistema: el calendario **solo programa** cada control donde aplica; un
+control que no aplica no figura como pendiente ni vence —queda como **No aplica**, informativo—;
+el panel ejecutivo cuenta «controles aplicables del mes» y avisa cuando una Dirección/Unidad
+**tiene controles aplicables pero no tiene Técnico de Soporte asignado**; y los controles que
+trabajan con equipos solo se programan donde hay inventario operativo activo.
 
 ## Catálogo de controles modelado
 
@@ -64,6 +102,48 @@ F0387 (sincronización de hora, **semanal**), F0422 (inventario de equipos), F01
 justificable), VULN (vulnerabilidades), F0206 (servidores), F0204 (TELCO) y SEGTIC
 (verificación ISO/IEC 27001). Cada control define su **plantilla de formulario digital**
 (secciones, campos, checklists y tablas) que el stepper de «Completar control» dibuja.
+
+## Un solo ecosistema: integración con Gestión de Equipos
+
+Los dos prototipos son aplicaciones Angular independientes que **comparten los datos base**. No
+hay usuarios, Direcciones/Unidades ni equipos duplicados con otro nombre.
+
+| Dato | Dónde se administra | Quién lo consume |
+|---|---|---|
+| Usuarios y roles | Directorio compartido (`usuarios-sistema.json`) | Ambos módulos |
+| Direcciones y unidades | Catálogo organizacional | Ambos módulos |
+| **Distribución de soportes** | **Controles Mensuales** (Administración → Distribución de soportes) | Ambos módulos |
+| Equipos | Gestión de Equipos (preparación → configuración → entrega → aceptación) | Controles Mensuales, como inventario operativo |
+
+Flujo del equipo:
+
+```text
+Gestión de Equipos → aceptación del Usuario Final
+   → equipo activo en la Dirección/Unidad solicitante
+   → se incorpora AUTOMÁTICAMENTE al inventario operativo de Controles Mensuales
+   → controles asociados (F0422, F0174, F0288, VULN) y bitácora diaria
+
+Gestión de Equipos → descargo
+   → el equipo deja de estar activo
+   → sale AUTOMÁTICAMENTE del inventario operativo activo de Controles Mensuales
+```
+
+Nada de esto se confirma a mano: no hay botones de «incorporar al inventario» ni de «aplicar
+descargo». `EquipmentIntegrationService` sincroniza al cargar (`syncOperationalInventory()`), es
+idempotente —un evento ya procesado no duplica el equipo ni repite el movimiento— y si un equipo
+vuelve a entregarse en otra Dirección/Unidad, el registro anterior se conserva como **Histórico**
+y se abre un ciclo operativo nuevo. La pantalla muestra **Últimos movimientos sincronizados desde
+Gestión de Equipos**, y la tabla lista por defecto solo los equipos activos, con opción de ver
+descargados e históricos.
+
+Efecto de la distribución en el otro módulo: en **Gestión de Equipos**, al crear el expediente
+único solo se ofrecen como **Técnico de Configuración** los técnicos responsables de la
+Dirección/Unidad del requerimiento —los que están aquí—. El registro es único
+(`SupportDistributionService`, el mismo servicio en los dos proyectos) y la pantalla de
+distribución de Gestión de Equipos quedó en modo consulta, con enlace a esta.
+
+Cada movimiento entre módulos queda en **Trazabilidad** con módulo origen, módulo destino,
+Dirección/Unidad, equipo, estado anterior y estado nuevo (filtro «Solo integración entre módulos»).
 
 ## Documentación
 

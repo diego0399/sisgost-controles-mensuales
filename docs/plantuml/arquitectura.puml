@@ -28,13 +28,21 @@ FEAT --> VISOR
 SRV --> LS
 SRV --> JSON : fetch inicial
 SRV --> SS
+SRV --> SDS
+SDS --> JSON : distribucion-soportes.json
+SDS ..> GE : filtra el Técnico de Configuración
+SHELL --> GE : enlace «Ir a Gestión de Equipos»
 GE ..> SRV : eventos-integracion.json\n(entrega aceptada / descargo)
 
 note bottom of GE
-  Regla de integración:
-  entrega aceptada por el Usuario Final
-  → equipo activo en la Dirección/Unidad
-  → crece el inventario operativo.
-  Descargo → el equipo sale del inventario activo.
+  Un solo ecosistema, dos despliegues:
+  · datos base compartidos (usuarios, Direcciones/Unidades,
+    distribución de soportes y equipos);
+  · entrega aceptada por el Usuario Final
+    → equipo activo en la Dirección/Unidad
+    → crece el inventario operativo;
+  · descargo → el equipo sale del inventario activo;
+  · la distribución que se administra aquí decide allá
+    quién puede ser Técnico de Configuración.
 end note
 @enduml

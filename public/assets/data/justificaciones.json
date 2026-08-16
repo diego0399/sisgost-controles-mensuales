@@ -4,20 +4,21 @@
   "codigoControl": "GLPI",
   "anio": 2026,
   "mes": 4,
-  "direccion": "DIR-LUN",
-  "responsable": "Luis Adalberto Martínez",
+  "direccion": "DIR-REGS",
+  "unidad": "Archivo Registral",
+  "responsable": "Wendy Carranza",
   "motivo": "Sin actividad mensual asociada al control",
-  "texto": "Se informa que en el mes de abril de 2026 no se registraron tiquetes GLPI aplicables en la Oficina Departamental de La Unión, debido a que no hubo ningún incidente reportado por las áreas; por tanto, no se generó reporte mensual de incidentes.",
+  "texto": "Se informa que en el mes de abril de 2026 no se registraron tiquetes GLPI aplicables en Dirección de Registros / Archivo Registral, debido a que no hubo ningún incidente reportado por los usuarios de la unidad; por tanto, no se generó reporte mensual de incidentes.",
   "fecha": "2026-05-05",
   "estado": "Aceptada",
   "firmas": [
    {
-    "nombre": "Luis Adalberto Martínez",
-    "cargo": "Soporte Técnico de Oficina Departamental",
+    "nombre": "Wendy Carranza",
+    "cargo": "Técnico de Soporte Técnico",
     "estado": "Registrada"
    },
    {
-    "nombre": "Carlos Armando González",
+    "nombre": "Carlos González",
     "cargo": "Coordinador de Soporte Técnico",
     "estado": "Registrada"
    },
@@ -27,27 +28,28 @@
     "estado": "Registrada"
    }
   ],
-  "documento": "DOC-2026-0144"
+  "documento": "DOC-2026-0185"
  },
  {
   "id": "JUS-2026-0002",
   "codigoControl": "GLPI",
   "anio": 2026,
   "mes": 6,
-  "direccion": "DIR-SAN",
-  "responsable": "Karla Beatriz Ramírez",
+  "direccion": "DIR-ISPI",
+  "unidad": "ISPI",
+  "responsable": "Mateo Martínez",
   "motivo": "Sin actividad mensual asociada al control",
-  "texto": "Se informa que en el mes de junio de 2026 no se registraron tiquetes GLPI aplicables en la Oficina Departamental de Santa Ana, debido a que no hubo ningún incidente reportado por las áreas; por tanto, no se generó reporte mensual de incidentes.",
+  "texto": "Se informa que en el mes de junio de 2026 no se registraron tiquetes GLPI aplicables en Dirección del ISPI / ISPI, debido a que no hubo ningún incidente reportado por los usuarios de la unidad; por tanto, no se generó reporte mensual de incidentes.",
   "fecha": "2026-07-02",
   "estado": "Aceptada",
   "firmas": [
    {
-    "nombre": "Karla Beatriz Ramírez",
-    "cargo": "Soporte Técnico de Oficina Departamental",
+    "nombre": "Mateo Martínez",
+    "cargo": "Técnico de Soporte Técnico",
     "estado": "Registrada"
    },
    {
-    "nombre": "Carlos Armando González",
+    "nombre": "Carlos González",
     "cargo": "Coordinador de Soporte Técnico",
     "estado": "Registrada"
    },
@@ -57,27 +59,28 @@
     "estado": "Registrada"
    }
   ],
-  "documento": "DOC-2026-0227"
+  "documento": "DOC-2026-0295"
  },
  {
   "id": "JUS-2026-0003",
   "codigoControl": "F0386",
   "anio": 2026,
   "mes": 7,
-  "direccion": "DIR-USU",
-  "responsable": "Julio Alberto Rivera",
+  "direccion": "DIR-GTEC",
+  "unidad": "Gerencia de Tecnología",
+  "responsable": "Wendy Carranza",
   "motivo": "No hubo traslado de cintas en el mes",
-  "texto": "Se informa que en el mes de julio de 2026 no se realizó el control F0386 Control para el traslado de cintas de respaldo, debido a que en la Oficina Departamental de Usulután no hubo visita del técnico del Departamento de Operaciones. Sin embargo, los respaldos fueron realizados a disco.",
+  "texto": "Se informa que en el mes de julio de 2026 no se realizó el control F0386 Control para el traslado de cintas de respaldo, debido a que en la Gerencia de Tecnología no hubo visita del técnico del Departamento de Operaciones. Sin embargo, los respaldos fueron realizados a disco.",
   "fecha": "2026-08-10",
   "estado": "Emitida",
   "firmas": [
    {
-    "nombre": "Julio Alberto Rivera",
-    "cargo": "Soporte Técnico de Oficina Departamental de Usulután",
+    "nombre": "Wendy Carranza",
+    "cargo": "Técnico de Soporte Técnico",
     "estado": "Registrada"
    },
    {
-    "nombre": "Carlos Armando González",
+    "nombre": "Carlos González",
     "cargo": "Coordinador de Soporte Técnico",
     "estado": "Registrada"
    },
@@ -87,6 +90,6 @@
     "estado": "Pendiente"
    }
   ],
-  "documento": "DOC-2026-0308"
+  "documento": "DOC-2026-0384"
  }
 ]

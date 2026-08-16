@@ -132,7 +132,7 @@ interface Dia {
                       <td class="mono">{{ formatea(c.fechaLimite) }}</td>
                       <td><b>{{ c.codigo }}</b></td>
                       <td>{{ c.semana ? 'Semana ' + c.semana + ' de ' : '' }}{{ periodo(c.mes) }}</td>
-                      <td>{{ data.cortaDireccion(c.direccion) }}</td>
+                      <td>{{ data.cortaDireccion(c.direccion) }} <span class="muted">/ {{ c.unidad }}</span></td>
                       <td>{{ c.responsable }}</td>
                       <td><ui-badge [estado]="c.estado" /></td>
                       <td><a class="btn btn-ghost btn-sm" [routerLink]="['/controles', c.id]">Abrir</a></td>

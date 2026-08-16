@@ -9,7 +9,7 @@ import { BadgeComponent, HelpTipComponent, ModalComponent } from '../../shared/u
 import { DocumentoComponent } from '../../shared/documento';
 import { IconComponent } from '../../shared/icon';
 import {
-  ControlMes, EvidenciaControl, RespuestaSeccion, SeccionPlantilla,
+  ControlMes, EvidenciaControl, RespuestaEquipo, RespuestaSeccion, SeccionPlantilla,
   formateaFecha, isoLocal, nombreMes
 } from '../../core/models/models';
 
@@ -19,6 +19,8 @@ interface SeccionEdit {
   campos: Record<string, string>;
   items: Record<string, { estado: string; medicion: string; nota: string }>;
   filas: string[][];
+  /** Revisión por equipo, indexada por número de inventario (solo secciones de equipos). */
+  equipos: Record<string, RespuestaEquipo>;
 }
 
 /**
@@ -53,6 +55,18 @@ interface SeccionEdit {
     .resumen-check { color: var(--ok); }
     .ev-item { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px dashed var(--line); font-size: 13px; }
     .ev-item:last-child { border-bottom: 0; }
+    /* Equipos del inventario operativo dentro del formulario */
+    .eq-card { border: 1px solid var(--line); border-radius: 10px; padding: 11px 13px; margin-bottom: 9px; }
+    .eq-card.on { border-color: var(--navy-400, #7ba3d8); background: var(--surface-2, #f8fafc); }
+    .eq-check { display: flex; gap: 10px; align-items: flex-start; font-size: 13px; cursor: pointer; }
+    .eq-check input { margin-top: 3px; }
+    .eq-verif { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 9px; }
+    .chip-check {
+      display: inline-flex; align-items: center; gap: 5px;
+      border: 1px solid var(--line-strong); background: var(--surface); color: var(--tx-2);
+      font-family: inherit; font-size: 11.5px; padding: 5px 10px; border-radius: 20px; cursor: pointer;
+    }
+    .chip-check.on { background: var(--navy-800); border-color: var(--navy-800); color: #fff; font-weight: 600; }
   `,
   template: `
     @if (control(); as c) {
@@ -63,7 +77,7 @@ interface SeccionEdit {
             <h1>{{ c.codigo }} — {{ catalogo()?.nombre }}</h1>
             <p class="page-sub">
               {{ c.semana ? 'Semana ' + c.semana + ' de ' : '' }}{{ nombreMes(c.mes) }} {{ c.anio }} ·
-              {{ data.nombreDireccion(c.direccion) }} ·
+              {{ data.dirUnidad(c.direccion, c.unidad) }} ·
               Fecha límite <b>{{ formatea(c.fechaLimite) }}</b>
               @if (editable()) {
                 ·
@@ -82,6 +96,13 @@ interface SeccionEdit {
           <div class="alert warn" style="margin-bottom: 16px;">
             <span class="alert-ico">!</span>
             <span><b>Control observado por el Encargado de Soporte.</b> {{ c.observaciones }}</span>
+          </div>
+        }
+
+        @if (bloqueo()) {
+          <div class="alert danger" style="margin-bottom: 16px;">
+            <span class="alert-ico">!</span>
+            <span><b>Control fuera de su distribución.</b> {{ bloqueo() }}</span>
           </div>
         }
 
@@ -126,6 +147,25 @@ interface SeccionEdit {
                           </span>
                         </div>
                       }
+                    </div>
+                  }
+                  @if (s.equipos?.length) {
+                    <div class="table-wrap" style="margin: 8px 0;">
+                      <table class="tbl">
+                        <thead><tr><th>N° de inventario</th><th>Equipo</th><th>Usuario final</th><th>Verificaciones</th><th>Observación</th><th>Estado</th></tr></thead>
+                        <tbody>
+                          @for (e of s.equipos; track e.inventario) {
+                            <tr>
+                              <td class="mono">{{ e.inventario }}</td>
+                              <td>{{ data.equipoDe(e.inventario)?.nombreEquipo || '—' }}</td>
+                              <td>{{ data.equipoDe(e.inventario)?.usuarioFinal || '—' }}</td>
+                              <td>{{ e.verificaciones.join(' · ') || '—' }}</td>
+                              <td>{{ e.observacion || '—' }}</td>
+                              <td><ui-badge [estado]="e.estado" /></td>
+                            </tr>
+                          }
+                        </tbody>
+                      </table>
                     </div>
                   }
                   @if (s.filas?.length) {
@@ -220,7 +260,8 @@ interface SeccionEdit {
                 <dl class="dl">
                   <div><dt>Control</dt><dd>{{ c.codigo }} — {{ catalogo()?.nombre }}</dd></div>
                   <div><dt>Período</dt><dd>{{ c.semana ? 'Semana ' + c.semana + ' de ' : '' }}{{ nombreMes(c.mes) }} {{ c.anio }}</dd></div>
-                  <div><dt>Dirección/Unidad</dt><dd>{{ data.nombreDireccion(c.direccion) }}</dd></div>
+                  <div><dt>Dirección/Unidad</dt><dd>{{ data.dirUnidad(c.direccion, c.unidad) }}</dd></div>
+                  <div><dt>Código del formato</dt><dd class="mono">{{ c.codigo }} · {{ catalogo()?.version }}</dd></div>
                   <div><dt>Responsable</dt><dd>{{ auth.usuario()?.nombre }}</dd></div>
                   <div><dt>Fecha límite</dt><dd class="mono">{{ formatea(c.fechaLimite) }}</dd></div>
                   <div><dt>Entrega prevista</dt><dd>
@@ -234,6 +275,7 @@ interface SeccionEdit {
                     @if (s.plantilla.campos?.length) { {{ camposLlenos(s) }} de {{ s.plantilla.campos?.length }} campo(s) completado(s). }
                     @if (s.plantilla.items?.length) { {{ itemsMarcados(s) }} de {{ s.plantilla.items?.length }} ítem(s) marcado(s). }
                     @if (s.plantilla.tabla) { {{ s.filas.length }} registro(s) en la tabla. }
+                    @if (s.plantilla.equipos) { {{ equiposRevisados(s) }} de {{ equiposActivos().length }} equipo(s) del inventario operativo revisado(s). }
                   </p>
                 }
               }
@@ -281,6 +323,65 @@ interface SeccionEdit {
                       </div>
                     }
                   </div>
+                }
+
+                @if (s.plantilla.equipos; as pe) {
+                  <div class="alert" style="margin-bottom: 12px;">
+                    <span class="alert-ico">i</span>
+                    <span>
+                      Estos son los <b>{{ equiposActivos().length }} equipo(s) activo(s)</b> de
+                      {{ data.dirUnidad(c.direccion, c.unidad) }} según el inventario operativo.
+                      No aparecen equipos de otras Direcciones/Unidades: el inventario proviene de las entregas
+                      aceptadas en Gestión de Equipos.
+                      @if (pe.minimo === 0) { Deben revisarse todos. }
+                      @else { Debe revisarse al menos {{ pe.minimo }}. }
+                    </span>
+                  </div>
+                  <div class="row-between" style="margin-bottom: 10px;">
+                    <span class="muted">{{ equiposRevisados(s) }} de {{ equiposActivos().length }} equipo(s) marcado(s)</span>
+                    <button class="btn btn-outline btn-sm" type="button" (click)="todosLosEquipos(s)">Marcar todos como revisados</button>
+                  </div>
+                  @for (eq of equiposActivos(); track eq.inventario) {
+                    <div class="eq-card" [class.on]="s.equipos[eq.inventario].incluido">
+                      <div class="row-between" style="gap: 12px; align-items: flex-start;">
+                        <label class="eq-check">
+                          <input type="checkbox" [checked]="s.equipos[eq.inventario].incluido" (change)="alterna(s, eq.inventario)" />
+                          <span>
+                            <b>{{ eq.nombreEquipo || eq.tipo }}</b>
+                            <span class="mono muted"> · {{ eq.inventario }}</span>
+                            <div class="muted" style="font-size: 12px;">
+                              {{ eq.tipo }} {{ eq.marca }} {{ eq.modelo }} · usuario final: {{ eq.usuarioFinal }} ·
+                              estado operativo: {{ eq.estado }}
+                            </div>
+                          </span>
+                        </label>
+                        <select class="control" style="width: 200px;" [(ngModel)]="s.equipos[eq.inventario].estado"
+                          [disabled]="!s.equipos[eq.inventario].incluido">
+                          <option value="">Estado…</option>
+                          @for (op of pe.estados; track op) { <option [value]="op">{{ op }}</option> }
+                        </select>
+                      </div>
+                      @if (s.equipos[eq.inventario].incluido) {
+                        <div class="eq-verif">
+                          @for (v of pe.verificaciones; track v) {
+                            <button type="button" class="chip-check"
+                              [class.on]="s.equipos[eq.inventario].verificaciones.includes(v)"
+                              (click)="alternaVerificacion(s, eq.inventario, v)">
+                              @if (s.equipos[eq.inventario].verificaciones.includes(v)) { <ui-icon name="check" [size]="11" /> }
+                              {{ v }}
+                            </button>
+                          }
+                        </div>
+                        <input class="control" style="margin-top: 8px;" placeholder="Observación del equipo (opcional)…"
+                          [(ngModel)]="s.equipos[eq.inventario].observacion" />
+                      }
+                    </div>
+                  } @empty {
+                    <p class="muted">
+                      Esta Dirección/Unidad no tiene equipos activos en el inventario operativo. Los equipos entran
+                      cuando el Usuario Final acepta la entrega en Gestión de Equipos.
+                    </p>
+                  }
                 }
 
                 @if (s.plantilla.tabla; as t) {
@@ -417,6 +518,7 @@ export class CompletarControlComponent {
       if (!c || !cat) { this.modelo = []; this.idCargado = ''; return; }
       if (c.id === this.idCargado) return;
       this.idCargado = c.id;
+      const activos = this.data.equiposDeControl(c);
       this.modelo = cat.plantilla.map((p) => {
         const r = c.secciones.find((s) => s.titulo === p.titulo);
         const campos: Record<string, string> = {};
@@ -426,7 +528,19 @@ export class CompletarControlComponent {
           const ri = r?.items?.find((x) => x.id === item.id);
           items[item.id] = { estado: ri?.estado ?? '', medicion: ri?.medicion ?? '', nota: ri?.nota ?? '' };
         }
-        return { plantilla: p, campos, items, filas: (r?.filas ?? []).map((f) => [...f]) };
+        // La lista de equipos NO se teclea: son los activos de la Dirección/Unidad del control.
+        const equipos: Record<string, RespuestaEquipo> = {};
+        if (p.equipos) {
+          for (const eq of activos) {
+            const re = r?.equipos?.find((x) => x.inventario === eq.inventario);
+            equipos[eq.inventario] = {
+              inventario: eq.inventario, incluido: re?.incluido ?? false,
+              estado: re?.estado ?? '', verificaciones: [...(re?.verificaciones ?? [])],
+              observacion: re?.observacion ?? ''
+            };
+          }
+        }
+        return { plantilla: p, campos, items, equipos, filas: (r?.filas ?? []).map((f) => [...f]) };
       });
       this.evidencias = c.evidencias.map((e) => ({ ...e }));
       this.paso.set(0);
@@ -441,8 +555,17 @@ export class CompletarControlComponent {
     const u = this.auth.usuario();
     if (!c || !u || u.clave === 'jefatura') return false;
     if (!['Programado', 'Pendiente', 'En proceso'].includes(c.estado)) return false;
-    if (u.clave === 'tec-soporte') return this.data.direccionesDe(u.usuario).includes(c.direccion);
-    return true;
+    // Un técnico no completa controles de una Dirección/Unidad que no tiene asignada.
+    return this.data.atiende(u, c.direccion, c.unidad);
+  });
+
+  /** Motivo por el que el formulario está bloqueado para el usuario conectado. */
+  protected readonly bloqueo = computed(() => {
+    const c = this.control();
+    const u = this.auth.usuario();
+    if (!c || !u || this.editable()) return '';
+    if (u.clave === 'tec-soporte' && !this.data.atiende(u, c.direccion, c.unidad)) return this.data.MSG_FUERA_DE_DISTRIBUCION;
+    return '';
   });
 
   protected puedeRevisar(): boolean {
@@ -511,8 +634,47 @@ export class CompletarControlComponent {
         id: i.id, estado: s.items[i.id]?.estado ?? '',
         medicion: s.items[i.id]?.medicion || undefined, nota: s.items[i.id]?.nota || undefined
       })),
-      filas: s.filas.filter((f) => f.some((x) => x.trim()))
+      filas: s.filas.filter((f) => f.some((x) => x.trim())),
+      equipos: s.plantilla.equipos ? Object.values(s.equipos).filter((e) => e.incluido) : undefined
     }));
+  }
+
+  // ------------------------------------------------------------------ equipos del inventario operativo
+
+  /** Equipos activos de la Dirección/Unidad del control: la única lista admitida. */
+  protected readonly equiposActivos = computed(() => {
+    const c = this.control();
+    return c ? this.data.equiposDeControl(c) : [];
+  });
+
+  protected alterna(s: SeccionEdit, inventario: string): void {
+    const e = s.equipos[inventario];
+    if (!e) return;
+    e.incluido = !e.incluido;
+    if (e.incluido && !e.estado) e.estado = s.plantilla.equipos?.estados[0] ?? '';
+  }
+
+  protected alternaVerificacion(s: SeccionEdit, inventario: string, v: string): void {
+    const e = s.equipos[inventario];
+    if (!e) return;
+    e.verificaciones = e.verificaciones.includes(v)
+      ? e.verificaciones.filter((x) => x !== v)
+      : [...e.verificaciones, v];
+    if (!e.incluido) this.alterna(s, inventario);
+  }
+
+  protected todosLosEquipos(s: SeccionEdit): void {
+    for (const eq of this.equiposActivos()) {
+      const e = s.equipos[eq.inventario];
+      if (!e) continue;
+      e.incluido = true;
+      if (!e.estado) e.estado = s.plantilla.equipos?.estados[0] ?? '';
+      if (!e.verificaciones.length) e.verificaciones = [...(s.plantilla.equipos?.verificaciones ?? [])];
+    }
+  }
+
+  protected equiposRevisados(s: SeccionEdit): number {
+    return Object.values(s.equipos).filter((e) => e.incluido).length;
   }
 
   protected guardar(silencioso = false): void {

@@ -1,21 +1,34 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
-import { DataService } from '../../core/services/data.service';
+import { DataService, MODULO_CONTROLES, MODULO_EQUIPOS } from '../../core/services/data.service';
 import { EquipmentIntegrationService } from '../../core/services/equipment-integration.service';
-import { ToastService } from '../../core/services/toast.service';
 import { BadgeComponent, HelpTipComponent, ModalComponent } from '../../shared/ui';
 import { IconComponent } from '../../shared/icon';
-import { EquipoOperativo, formateaFecha } from '../../core/models/models';
+import { EquipoOperativo, formateaFecha, nombreMes } from '../../core/models/models';
 
 /**
  * Inventario operativo por Dirección/Unidad: los equipos activos que alimentan controles como
  * F0422, mantenimiento preventivo y vulnerabilidades. Crece con las entregas aceptadas en
- * Gestión de Equipos y disminuye con los descargos (integración simulada).
+ * Gestión de Equipos y disminuye con los descargos, **automáticamente**: esta pantalla no tiene
+ * acciones manuales de incorporación ni de descargo, solo muestra lo ya sincronizado.
  */
 @Component({
   selector: 'app-inventario',
-  imports: [FormsModule, BadgeComponent, HelpTipComponent, ModalComponent, IconComponent],
+  imports: [FormsModule, RouterLink, BadgeComponent, HelpTipComponent, ModalComponent, IconComponent],
+  styles: `
+    /* Tres filtros en una línea: sin anchos fijos se estiran y recortan el texto. */
+    .filtros { display: flex; flex-wrap: wrap; gap: 8px; justify-content: flex-end; }
+    .filtros .control { width: 210px; }
+    .sync { border-left: 3px solid var(--ok, #1f7a4d); }
+    .mov {
+      display: grid; grid-template-columns: 20px 1fr auto; gap: 12px; align-items: start;
+      padding: 10px 0; border-bottom: 1px dashed var(--line);
+    }
+    .mov:last-child { border-bottom: 0; }
+    .ver-hist { display: flex; align-items: center; gap: 7px; font-size: 12.5px; color: var(--tx-2); white-space: nowrap; }
+  `,
   template: `
     <div class="page">
       <div class="page-head">
@@ -29,53 +42,72 @@ import { EquipoOperativo, formateaFecha } from '../../core/models/models';
         </div>
       </div>
 
-      @if (integracion.pendientes().length && auth.puedeOperar()) {
-        <div class="card" style="margin-bottom: 18px; border-color: var(--gold-500);">
-          <div class="card-head">
-            <div>
-              <h3>Eventos pendientes de Gestión de Equipos</h3>
-              <p class="sub">Integración simulada: aplique cada evento para actualizar el inventario operativo</p>
-            </div>
+      <!-- Movimientos ya sincronizados: informativos, sin acciones manuales. -->
+      <div class="card sync" style="margin-bottom: 18px;">
+        <div class="card-head">
+          <div>
+            <h3>Últimos movimientos sincronizados desde Gestión de Equipos</h3>
+            <p class="sub">
+              {{ MODULO_EQUIPOS }} → {{ MODULO_CONTROLES }} · el inventario operativo se actualiza
+              automáticamente: no hay nada que confirmar
+            </p>
           </div>
-          <div class="card-body">
-            @for (e of integracion.pendientes(); track e.id) {
-              <div class="row-between" style="padding: 10px 0; border-bottom: 1px dashed var(--line); gap: 12px;">
-                <div style="display: flex; gap: 12px; align-items: center;">
-                  <ui-icon [name]="e.tipo === 'Entrega aceptada' ? 'arrow-down' : 'arrow-up'" [size]="18"
-                    [style.color]="e.tipo === 'Entrega aceptada' ? 'var(--ok)' : 'var(--danger)'" />
-                  <div>
-                    <b>{{ e.tipo }}</b> · {{ formatea(e.fecha) }} · <span class="mono">{{ e.expedienteUnico }}</span>
-                    <div class="muted" style="font-size: 12.5px;">
-                      {{ e.equipo.tipo }} {{ e.equipo.marca }} {{ e.equipo.modelo }} · Inv. {{ e.equipo.inventario }} ·
-                      {{ data.nombreDireccion(e.equipo.direccion) }} ({{ e.equipo.unidad }})
-                      @if (e.tipo === 'Entrega aceptada') { · usuario final: {{ e.equipo.usuarioFinal }} }
-                    </div>
-                  </div>
-                </div>
-                <button class="btn btn-primary btn-sm" type="button" (click)="aplicar(e.id, e.tipo)">
-                  {{ e.tipo === 'Entrega aceptada' ? 'Incorporar al inventario' : 'Aplicar descargo' }}
-                </button>
-              </div>
-            }
-          </div>
+          <a class="btn btn-ghost btn-sm" routerLink="/trazabilidad">Ver trazabilidad completa</a>
         </div>
-      }
+        <div class="card-body">
+          @for (e of integracion.ultimos(5); track e.id) {
+            <div class="mov">
+              <ui-icon [name]="e.tipo === 'Entrega aceptada' ? 'arrow-down' : 'arrow-up'" [size]="18"
+                [style.color]="e.tipo === 'Entrega aceptada' ? 'var(--ok)' : 'var(--danger)'" />
+              <div>
+                <div>
+                  <b>{{ e.tipo }}</b> · {{ formatea(e.fecha) }} ·
+                  <span class="mono">{{ e.expedienteUnico || e.expediente }}</span>
+                </div>
+                <div class="muted" style="font-size: 12.5px;">
+                  {{ e.equipo.tipo }} {{ e.equipo.marca }} {{ e.equipo.modelo }} · Inv. {{ e.equipo.inventario }}
+                  @if (e.tipo === 'Entrega aceptada') { · usuario final: {{ e.equipo.usuarioFinal }} }
+                </div>
+                <div class="muted" style="font-size: 12.5px;">
+                  @if (e.tipo === 'Entrega aceptada') {
+                    Equipo incorporado automáticamente al inventario operativo de
+                    {{ data.dirUnidad(e.equipo.direccion, e.equipo.unidad) }}.
+                  } @else {
+                    Equipo retirado automáticamente del inventario operativo de
+                    {{ data.dirUnidad(e.equipo.direccion, e.equipo.unidad) }}.
+                  }
+                </div>
+              </div>
+              <span class="badge ok plain">Sincronizado</span>
+            </div>
+          } @empty {
+            <p class="muted">Todavía no hay movimientos sincronizados desde Gestión de Equipos.</p>
+          }
+        </div>
+      </div>
 
       <div class="grid grid-4" style="margin-bottom: 18px;">
         <div class="kpi"><div class="kpi-label">Equipos activos</div><div class="kpi-value">{{ cuenta('Activo en Dirección/Unidad') }}</div><div class="kpi-hint">en inventario operativo</div></div>
         <div class="kpi"><div class="kpi-label">En garantía / revisión</div><div class="kpi-value">{{ cuenta('En garantía') + cuenta('Pendiente de revisión') }}</div><div class="kpi-hint">requieren seguimiento</div></div>
-        <div class="kpi"><div class="kpi-label">Descargados</div><div class="kpi-value">{{ cuenta('Descargado') }}</div><div class="kpi-hint">fuera del inventario activo</div></div>
-        <div class="kpi"><div class="kpi-label">Eventos aplicados</div><div class="kpi-value">{{ integracion.aplicados().length }}</div><div class="kpi-hint">desde Gestión de Equipos</div></div>
+        <div class="kpi"><div class="kpi-label">Descargados e históricos</div><div class="kpi-value">{{ cuenta('Descargado') + cuenta('Histórico') }}</div><div class="kpi-hint">fuera del inventario activo</div></div>
+        <div class="kpi"><div class="kpi-label">Movimientos sincronizados</div><div class="kpi-value">{{ integracion.totalSincronizados() }}</div><div class="kpi-hint">{{ integracion.aceptaciones() }} aceptaciones · {{ integracion.descargos() }} descargos</div></div>
       </div>
 
       <div class="card">
         <div class="card-head">
           <div>
             <h3>Equipos por Dirección/Unidad</h3>
-            <p class="sub">{{ filtrados().length }} equipos</p>
+            <p class="sub">
+              {{ filtrados().length }} equipos ·
+              {{ verHistorico() ? 'incluye descargados e históricos' : 'solo equipos activos' }}
+            </p>
           </div>
-          <div class="row">
-            <input class="control" style="width: 220px;" placeholder="Buscar inventario, usuario, equipo…" [(ngModel)]="busca" />
+          <div class="filtros">
+            <label class="ver-hist">
+              <input type="checkbox" [checked]="verHistorico()" (change)="alternarHistorico()" />
+              Ver descargados e históricos
+            </label>
+            <input class="control" placeholder="Buscar inventario o usuario…" [(ngModel)]="busca" />
             <select class="control" [(ngModel)]="fDireccion">
               <option value="">Todas las direcciones</option>
               @for (d of data.direcciones(); track d.id) { <option [value]="d.id">{{ d.corta }} — {{ d.nombre }}</option> }
@@ -91,7 +123,7 @@ import { EquipoOperativo, formateaFecha } from '../../core/models/models';
             <table class="tbl">
               <thead><tr><th>N° inventario</th><th>Equipo</th><th>Usuario final</th><th>Dirección/Unidad</th><th>Soporte responsable</th><th>Aceptación</th><th>Garantía</th><th>Último control</th><th>Estado</th><th></th></tr></thead>
               <tbody>
-                @for (e of filtrados(); track e.inventario) {
+                @for (e of filtrados(); track e.ciclo) {
                   <tr>
                     <td class="mono">{{ e.inventario }}</td>
                     <td><b>{{ e.nombreEquipo }}</b><div class="muted" style="font-size: 11.5px;">{{ e.tipo }} · {{ e.marca }} {{ e.modelo }}</div></td>
@@ -101,7 +133,7 @@ import { EquipoOperativo, formateaFecha } from '../../core/models/models';
                     <td class="mono">{{ formatea(e.fechaAceptacion) }}</td>
                     <td style="max-width: 160px;">{{ e.garantia }}</td>
                     <td>
-                      @if (e.ultimoControl) { {{ e.ultimoControl }} }
+                      @if (ultimoControl(e.inventario); as uc) { {{ uc }} }
                       @else { <span class="badge warn">Sin control asociado</span> }
                     </td>
                     <td><ui-badge [estado]="e.estado" /></td>
@@ -123,17 +155,73 @@ import { EquipoOperativo, formateaFecha } from '../../core/models/models';
             <div><dt>Serie</dt><dd class="mono">{{ e.serie }}</dd></div>
             <div><dt>Usuario final</dt><dd>{{ e.usuarioFinal }}@if (e.carne !== '—') { (carné {{ e.carne }}) }</dd></div>
             <div><dt>Dirección/Unidad</dt><dd>{{ data.nombreDireccion(e.direccion) }} — {{ e.unidad }}</dd></div>
-            <div><dt>Técnico de configuración</dt><dd>{{ e.tecnicoConfiguracion }}</dd></div>
-            <div><dt>Soporte responsable</dt><dd>{{ e.soporteResponsable }}</dd></div>
+            <div><dt>Técnico de configuración</dt><dd>{{ e.tecnicoConfiguracion || '—' }}</dd></div>
+            <div><dt>Soporte responsable</dt><dd>
+              @if (e.soporteResponsable) { {{ e.soporteResponsable }} }
+              @else { <span class="badge danger">Sin soporte responsable</span> }
+            </dd></div>
             <div><dt>Fecha de aceptación</dt><dd class="mono">{{ formatea(e.fechaAceptacion) }}</dd></div>
-            <div><dt>Expediente único</dt><dd class="mono">{{ e.expedienteUnico }}</dd></div>
+            <div><dt>Expediente</dt><dd class="mono">{{ e.expediente || '—' }}</dd></div>
+            <div><dt>Expediente único</dt><dd class="mono">{{ e.expedienteUnico || '—' }}</dd></div>
             <div><dt>Garantía</dt><dd>{{ e.garantia }}</dd></div>
-            <div><dt>Último control asociado</dt><dd>{{ e.ultimoControl ?? 'Sin control asociado' }}</dd></div>
-            <div><dt>Estado</dt><dd><ui-badge [estado]="e.estado" /></dd></div>
+            <div><dt>Estado operativo</dt><dd><ui-badge [estado]="e.estado" /></dd></div>
+            @if (e.fechaDescargo) {
+              <div><dt>Fecha de descargo</dt><dd class="mono">{{ formatea(e.fechaDescargo) }}</dd></div>
+              <div><dt>Motivo del descargo</dt><dd>{{ e.motivoDescargo }}</dd></div>
+              <div><dt>Acción posterior</dt><dd>{{ e.accionPosterior }}</dd></div>
+            }
           </dl>
+
+          @if (ciclosPrevios().length) {
+            <div class="sec-title">Ciclos operativos anteriores</div>
+            <div class="table-wrap">
+              <table class="tbl">
+                <thead><tr><th>Dirección/Unidad</th><th>Usuario final</th><th>Aceptación</th><th>Expediente</th><th>Estado</th></tr></thead>
+                <tbody>
+                  @for (p of ciclosPrevios(); track p.ciclo) {
+                    <tr>
+                      <td>{{ data.dirUnidad(p.direccion, p.unidad) }}</td>
+                      <td>{{ p.usuarioFinal }}</td>
+                      <td class="mono">{{ formatea(p.fechaAceptacion) }}</td>
+                      <td class="mono">{{ p.expedienteUnico || p.expediente }}</td>
+                      <td><ui-badge [estado]="p.estado" /></td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          }
+
+          <div class="sec-title">Historial de controles del equipo</div>
+          @if (historial().length) {
+            <div class="table-wrap">
+              <table class="tbl">
+                <thead><tr><th>Control</th><th>Período</th><th>Dirección/Unidad</th><th>Responsable</th><th>Estado</th></tr></thead>
+                <tbody>
+                  @for (c of historial(); track c.id) {
+                    <tr>
+                      <td><b>{{ c.codigo }}</b></td>
+                      <td>{{ mes(c.mes) }} {{ c.anio }}</td>
+                      <td>{{ data.cortaDireccion(c.direccion) }} · {{ c.unidad }}</td>
+                      <td>{{ c.responsable }}</td>
+                      <td><ui-badge [estado]="c.estado" /></td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          } @else {
+            <p class="muted">Este equipo todavía no aparece en ningún control (F0422, mantenimiento preventivo o vulnerabilidades).</p>
+          }
+
           <div class="alert" style="margin-top: 14px;">
             <span class="alert-ico">i</span>
-            <span>El equipo fue incorporado al inventario operativo de la Dirección/Unidad posterior a la aceptación del Usuario Final en Gestión de Equipos ({{ e.expedienteUnico }}).</span>
+            <span>Registro proveniente de <b>{{ e.origen }}</b>: el equipo se incorporó
+              <b>automáticamente</b> al inventario operativo tras la aceptación del Usuario
+              Final{{ e.expedienteUnico ? ' (' + e.expedienteUnico + ')' : '' }}, y saldrá igual de
+              automático cuando allí se registre su descargo. Su Dirección/Unidad y su soporte
+              responsable no se editan aquí: cambian en Gestión de Equipos y en la distribución de
+              soportes.</span>
           </div>
         </ui-modal>
       }
@@ -144,43 +232,57 @@ export class InventarioComponent {
   protected readonly data = inject(DataService);
   protected readonly auth = inject(AuthService);
   protected readonly integracion = inject(EquipmentIntegrationService);
-  private readonly toast = inject(ToastService);
 
   protected readonly busca = signal('');
   protected readonly fDireccion = signal('');
   protected readonly fEstado = signal('');
+  /** Por defecto la tabla muestra solo los equipos activos (regla del inventario operativo). */
+  protected readonly verHistorico = signal(false);
   protected readonly detalle = signal<EquipoOperativo | null>(null);
 
   protected readonly estados = ['Activo en Dirección/Unidad', 'Descargado', 'En garantía',
-    'Pendiente de revisión', 'Reingresado a Hardware', 'No disponible'];
+    'Pendiente de revisión', 'Reingresado a Hardware', 'No disponible', 'Histórico'];
+  protected readonly MODULO_EQUIPOS = MODULO_EQUIPOS;
+  protected readonly MODULO_CONTROLES = MODULO_CONTROLES;
 
-  private readonly visibles = computed(() => {
-    const u = this.auth.usuario();
-    if (u?.clave !== 'tec-soporte') return this.data.inventario();
-    const propias = this.data.direccionesDe(u.usuario);
-    return this.data.inventario().filter((e) => propias.includes(e.direccion));
+  /** El Técnico de Soporte solo ve los equipos de las Direcciones/Unidades que atiende. */
+  private readonly visibles = computed(() => this.data.inventarioVisible(this.auth.usuario()));
+
+  /** Historial de controles del equipo abierto en el detalle. */
+  protected readonly historial = computed(() => {
+    const e = this.detalle();
+    return e ? this.data.controlesDeEquipo(e.inventario) : [];
   });
 
   protected readonly filtrados = computed(() => {
     const q = this.busca().toLowerCase();
+    const fuera = ['Descargado', 'Histórico', 'Reingresado a Hardware', 'No disponible'];
     return this.visibles()
+      .filter((e) => this.verHistorico() || this.fEstado() || !fuera.includes(e.estado))
       .filter((e) => !this.fDireccion() || e.direccion === this.fDireccion())
       .filter((e) => !this.fEstado() || e.estado === this.fEstado())
       .filter((e) => !q || [e.inventario, e.nombreEquipo, e.usuarioFinal, e.marca, e.modelo].join(' ').toLowerCase().includes(q))
       .sort((a, b) => a.direccion.localeCompare(b.direccion) || a.nombreEquipo.localeCompare(b.nombreEquipo));
   });
 
+  protected alternarHistorico(): void { this.verHistorico.update((v) => !v); }
+
   protected cuenta(estado: string): number { return this.visibles().filter((e) => e.estado === estado).length; }
 
-  protected aplicar(id: string, tipo: string): void {
-    this.integracion.aplicar(id, this.auth.usuario()!);
-    this.toast.ok(
-      tipo === 'Entrega aceptada' ? 'Equipo incorporado' : 'Descargo aplicado',
-      tipo === 'Entrega aceptada'
-        ? 'El equipo fue incorporado al inventario operativo de la Dirección/Unidad posterior a la aceptación del Usuario Final.'
-        : 'El equipo dejó de estar activo en la Dirección/Unidad; el cambio quedó en trazabilidad.'
-    );
+  /** Ciclos operativos anteriores del mismo número de inventario (historial del equipo). */
+  protected readonly ciclosPrevios = computed(() => {
+    const e = this.detalle();
+    return e ? this.data.ciclosDe(e.inventario).filter((x) => x.ciclo !== e.ciclo) : [];
+  });
+
+  /** Último control en el que el equipo fue revisado (o su descargo). */
+  protected ultimoControl(inventario: string): string {
+    const c = this.data.controlesDeEquipo(inventario)[0];
+    if (c) return `${c.codigo} · ${nombreMes(c.mes)} ${c.anio}`;
+    return this.data.equipoDe(inventario)?.ultimoControl ?? '';
   }
+
+  protected mes(m: number): string { return nombreMes(m); }
 
   protected formatea(iso: string): string { return formateaFecha(iso); }
 }

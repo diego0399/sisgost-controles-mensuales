@@ -146,7 +146,7 @@ import { HelpTipComponent } from '../../shared/ui';
               </label>
               <select id="usuario" class="control" [(ngModel)]="usuarioSel">
                 <option value="" disabled>Seleccione su usuario…</option>
-                @for (u of data.usuarios(); track u.usuario) {
+                @for (u of data.usuariosDelModulo(); track u.usuario) {
                   <option [value]="u.usuario">{{ u.nombre }} — {{ u.rol }}</option>
                 }
               </select>
@@ -169,6 +169,8 @@ import { HelpTipComponent } from '../../shared/ui';
           <span>
             El <b>Técnico de Soporte</b> ve y completa los controles de sus Direcciones/Unidades asignadas;
             el <b>Encargado de Soporte</b> consulta todo, asigna responsables y revisa entregas.
+            Los usuarios son los mismos de <b>SISGOST — Gestión de Equipos</b>; el usuario
+            <span class="mono">demo.admin</span> restablece los datos de demostración desde Administración.
           </span>
         </div>
       </div>

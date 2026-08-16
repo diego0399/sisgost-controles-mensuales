@@ -6,6 +6,10 @@
  * GLPI, vulnerabilidades), su frecuencia observada (semanal en F0389 y F0387, mensual en el resto,
  * eventual cuando dependen de actividad) y la carta de justificación de `Formatos_nuevos_2025_.docx`
  * con sus tres firmas.
+ *
+ * Los datos base —usuarios, roles, Direcciones/Unidades, distribución de soportes y equipos—
+ * son los MISMOS de SISGOST — Gestión de Equipos: ambos módulos son un solo ecosistema y este
+ * módulo no inventa identidades ni organización propia.
  */
 
 // ---------------------------------------------------------------------------- Organización
@@ -13,16 +17,22 @@
 /** Dirección u oficina atendida. NO es un rol del sistema: es dato organizacional. */
 export interface Direccion {
   id: string;
+  /** Nombre institucional; es el mismo texto que usa Gestión de Equipos en sus requerimientos. */
   nombre: string;
-  /** Abreviatura para tablas y chips («USU», «CSOD»). */
+  /** Abreviatura para tablas y chips («REGS», «RPRH»). */
   corta: string;
-  /** Unidades o áreas internas atendidas (RPRH, IGCN, DTI…). */
+  /** Unidades o áreas internas atendidas (Registro de la Propiedad, IGN, RPRH…). */
   unidades: string[];
   /** Direcciones sin soporte asignado generan alerta en el panel ejecutivo. */
   activa: boolean;
 }
 
-export type ClaveRol = 'admin' | 'enc-soporte' | 'tec-soporte' | 'jefatura';
+/**
+ * Roles del ecosistema SISGOST. Hardware no opera controles mensuales, pero sus usuarios existen
+ * en el directorio compartido: por eso sus claves están en el tipo y el acceso se decide con
+ * `moduloControles`.
+ */
+export type ClaveRol = 'admin' | 'enc-soporte' | 'tec-soporte' | 'jefatura' | 'enc-hardware' | 'tec-hardware';
 
 export interface UsuarioSistema {
   usuario: string;
@@ -30,19 +40,37 @@ export interface UsuarioSistema {
   iniciales: string;
   rol: string;
   clave: ClaveRol;
+  /** Unidad organizativa a la que pertenece (Soporte, Hardware, DTI…). */
+  unidad: string;
   cargo: string;
+  estado: 'Activo' | 'Inactivo';
+  /** false = usuario del ecosistema que opera solo en Gestión de Equipos. */
+  moduloControles: boolean;
 }
 
-/** Asignación de un Técnico de Soporte a una Dirección/Unidad. */
+/**
+ * Asignación de un Técnico de Soporte a una Dirección/Unidad. **Registro compartido**: se
+ * administra desde este módulo (Administración → Distribución de soportes) y Gestión de Equipos
+ * lo consume para ofrecer únicamente los técnicos responsables de la Dirección/Unidad del
+ * requerimiento como Técnico de Configuración.
+ *
+ * Nunca se borra una asignación: se desactiva, porque los equipos aceptados mientras estuvo
+ * vigente siguen apuntando a ella en su historial.
+ */
 export interface DistribucionSoporte {
   id: string;
-  usuario: string;
-  tecnico: string;
   direccion: string;
   unidad: string;
-  fechaInicio: string;
-  estado: 'Activa' | 'Finalizada';
-  observaciones: string;
+  /** Técnico de Soporte responsable, en formato «Nombre — Rol». */
+  tecnico: string;
+  /** Encargado de Soporte o Administrador que registró la distribución. */
+  asignadoPor: string;
+  fecha: string;
+  hora: string;
+  activo: boolean;
+  observacion: string;
+  desactivadaPor?: string;
+  fechaDesactivacion?: string;
 }
 
 // ---------------------------------------------------------------------------- Calendario
@@ -86,6 +114,21 @@ export interface TablaPlantilla {
   minimo: number;
 }
 
+/**
+ * Sección que trabaja sobre los equipos ACTIVOS de la Dirección/Unidad atendida. La lista no se
+ * teclea: sale del inventario operativo, que a su vez proviene de las entregas aceptadas en
+ * Gestión de Equipos. Así ningún control puede registrar un equipo de otra Dirección/Unidad.
+ */
+export interface EquiposPlantilla {
+  /** Casillas de verificación aplicables a cada equipo. */
+  verificaciones: string[];
+  /** Estados admitidos por equipo (el primero es el estado conforme). */
+  estados: string[];
+  /** Mínimo de equipos que deben revisarse; 0 = todos los equipos activos. */
+  minimo: number;
+  ayuda?: string;
+}
+
 /** Sección de un formulario digital; el «stepper» de completar control recorre estas secciones. */
 export interface SeccionPlantilla {
   titulo: string;
@@ -93,6 +136,43 @@ export interface SeccionPlantilla {
   campos?: CampoPlantilla[];
   items?: ItemPlantilla[];
   tabla?: TablaPlantilla;
+  equipos?: EquiposPlantilla;
+}
+
+/**
+ * Área técnica responsable de un control. No todos los controles se trabajan por Dirección:
+ * el cuarto de servidores, los respaldos o la infraestructura de red pertenecen a un área, y el
+ * área resuelve a las Direcciones/Unidades concretas donde el control se ejecuta.
+ */
+export interface AreaTecnica {
+  id: string;
+  nombre: string;
+  descripcion: string;
+  /** Direcciones/Unidades donde el área tiene presencia física. */
+  pares: { direccion: string; unidad: string }[];
+}
+
+export type ModoAplicacion =
+  | 'Todas las direcciones'
+  | 'Direcciones específicas'
+  | 'Unidades específicas'
+  | 'Área técnica específica';
+
+/**
+ * Dónde aplica un control. Es configurable desde el catálogo porque **no todos los controles se
+ * trabajan en todas las Direcciones/Unidades**: el calendario solo programa un control en las
+ * Direcciones/Unidades que resultan de esta configuración.
+ */
+export interface AplicacionControl {
+  modo: ModoAplicacion;
+  /** Ids de Dirección (modo «Direcciones específicas»). */
+  direcciones: string[];
+  /** Pares Dirección/Unidad (modo «Unidades específicas»). */
+  unidades: { direccion: string; unidad: string }[];
+  /** Id del área técnica (modo «Área técnica específica»). */
+  area: string;
+  /** Motivo institucional de la aplicación; se muestra en el catálogo. */
+  observaciones: string;
 }
 
 export interface ControlCatalogo {
@@ -100,8 +180,8 @@ export interface ControlCatalogo {
   nombre: string;
   version: string;
   frecuencia: Frecuencia;
-  /** A qué direcciones aplica: lista de ids o «Todas». */
-  aplicaA: string[] | 'Todas';
+  /** Dónde aplica el control; editable desde Administración → Catálogo de controles. */
+  aplicacion: AplicacionControl;
   requiereEvidencia: boolean;
   requiereFirma: boolean;
   permiteJustificacion: boolean;
@@ -119,11 +199,23 @@ export type EstadoControl =
 
 export interface RespuestaCampo { id: string; valor: string; }
 export interface RespuestaItem { id: string; estado: string; medicion?: string; nota?: string; }
+
+/** Revisión de un equipo del inventario operativo dentro de un control. */
+export interface RespuestaEquipo {
+  /** Número de inventario: el mismo que usa Gestión de Equipos. */
+  inventario: string;
+  incluido: boolean;
+  estado: string;
+  verificaciones: string[];
+  observacion: string;
+}
+
 export interface RespuestaSeccion {
   titulo: string;
   campos?: RespuestaCampo[];
   items?: RespuestaItem[];
   filas?: string[][];
+  equipos?: RespuestaEquipo[];
 }
 
 export interface EvidenciaControl { nombre: string; descripcion: string; fecha: string; }
@@ -205,6 +297,7 @@ export interface Justificacion {
   anio: number;
   mes: number;
   direccion: string;
+  unidad: string;
   responsable: string;
   motivo: string;
   /** Cuerpo de la carta («Se informa que en el mes de … no se realizó …, debido a que …»). */
@@ -219,10 +312,27 @@ export interface Justificacion {
 
 export type EstadoEquipoOperativo =
   | 'Activo en Dirección/Unidad' | 'Descargado' | 'En garantía'
-  | 'Pendiente de revisión' | 'Reingresado a Hardware' | 'No disponible';
+  | 'Pendiente de revisión' | 'Reingresado a Hardware' | 'No disponible'
+  /** Ciclo cerrado: el equipo volvió a entregarse y su registro anterior queda de historia. */
+  | 'Histórico';
 
-/** Equipo activo en una Dirección/Unidad; entra desde Gestión de Equipos al aceptarse la entrega. */
+/** Estados que siguen contando como inventario activo de la Dirección/Unidad. */
+export const ESTADOS_ACTIVOS: EstadoEquipoOperativo[] = [
+  'Activo en Dirección/Unidad', 'En garantía', 'Pendiente de revisión'
+];
+
+/**
+ * Equipo activo en una Dirección/Unidad. Entra desde Gestión de Equipos cuando el Usuario Final
+ * acepta la entrega y sale cuando allí se registra su descargo; los datos son los mismos que
+ * maneja ese módulo (número de inventario, expediente único, técnico de configuración).
+ */
 export interface EquipoOperativo {
+  /**
+   * Identificador del **ciclo operativo**: un mismo número de inventario puede tener varios
+   * registros a lo largo del tiempo (se descarga y vuelve a entregarse en otra Dirección/Unidad).
+   * El ciclo anterior queda como «Histórico» y nunca se sobrescribe.
+   */
+  ciclo: string;
   inventario: string;
   tipo: string;
   marca: string;
@@ -231,15 +341,23 @@ export interface EquipoOperativo {
   nombreEquipo: string;
   usuarioFinal: string;
   carne: string;
+  correoInstitucional: string;
   direccion: string;
   unidad: string;
   tecnicoConfiguracion: string;
   soporteResponsable: string;
   fechaAceptacion: string;
+  /** Solicitud/requerimiento que originó el proceso en Gestión de Equipos. */
+  expediente: string;
   expedienteUnico: string;
   estado: EstadoEquipoOperativo;
   garantia: string;
+  /** Módulo del que proviene el registro. */
+  origen: string;
   ultimoControl?: string;
+  fechaDescargo?: string;
+  motivoDescargo?: string;
+  accionPosterior?: string;
 }
 
 /** Evento simulado que emite Gestión de Equipos hacia este módulo. */
@@ -247,7 +365,11 @@ export interface EventoIntegracion {
   id: string;
   tipo: 'Entrega aceptada' | 'Descargo de equipo';
   fecha: string;
+  moduloOrigen: string;
+  moduloDestino: string;
+  expediente: string;
   expedienteUnico: string;
+  detalle: string;
   equipo: EquipoOperativo;
   aplicado: boolean;
 }
@@ -263,6 +385,7 @@ export interface DocumentoGenerado {
   hora: string;
   generadoPor: string;
   direccion: string;
+  unidad?: string;
   mes: number;
   anio: number;
   hash: string;
@@ -271,6 +394,10 @@ export interface DocumentoGenerado {
   referencia: string;
 }
 
+/**
+ * Evento de trazabilidad. Los eventos de integración entre módulos guardan además el módulo
+ * origen y destino y el equipo afectado, para poder auditar el flujo completo del ecosistema.
+ */
 export interface EventoTrazabilidad {
   id: string;
   fecha: string;
@@ -278,6 +405,7 @@ export interface EventoTrazabilidad {
   usuario: string;
   rol: string;
   direccion?: string;
+  unidad?: string;
   tipoControl?: string;
   mes?: number;
   anio?: number;
@@ -286,6 +414,14 @@ export interface EventoTrazabilidad {
   estadoNuevo?: string;
   observacion?: string;
   documento?: string;
+  moduloOrigen?: string;
+  moduloDestino?: string;
+  /** Número de inventario del equipo afectado, en eventos de integración. */
+  inventario?: string;
+  /** Descripción del equipo y su usuario final, en eventos de integración. */
+  equipo?: string;
+  usuarioFinal?: string;
+  expedienteUnico?: string;
 }
 
 // ---------------------------------------------------------------------------- Utilidades

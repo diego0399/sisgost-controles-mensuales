@@ -1,457 +1,1385 @@
 [
-  {
-    "codigo": "F0234",
-    "nombre": "Control de ingreso a los cuartos de servidores del CNR",
-    "version": "V2",
-    "frecuencia": "Mensual",
-    "aplicaA": "Todas",
-    "requiereEvidencia": true,
-    "requiereFirma": true,
-    "permiteJustificacion": false,
-    "activo": true,
-    "descripcion": "Bitácora mensual de ingresos al cuarto de servidores de la oficina: quién ingresó, cuándo y con qué motivo. Si no hubo ingresos, el control se entrega con la tabla vacía y la observación correspondiente.",
-    "plantilla": [
-      {
-        "titulo": "Registros de ingreso del mes",
-        "descripcion": "Un registro por cada ingreso al cuarto de servidores. Un mes sin ingresos se entrega sin filas, dejándolo constar en las observaciones.",
-        "tabla": { "columnas": ["Fecha", "Hora de entrada", "Hora de salida", "Nombre de quien ingresa", "Cargo o institución", "Motivo del ingreso"], "minimo": 0 }
-      },
-      {
-        "titulo": "Verificación de cierre",
-        "items": [
-          { "id": "libro", "nombre": "Libro de acceso al centro de cómputo actualizado", "estados": ["Verificado", "Pendiente", "No aplica"] },
-          { "id": "remision", "nombre": "Bitácora remitida al Gerente de Infraestructura y al Oficial de Seguridad Informática", "estados": ["Verificado", "Pendiente", "No aplica"] }
-        ]
-      },
-      {
-        "titulo": "Observaciones",
-        "campos": [ { "id": "obs", "etiqueta": "Observaciones del mes", "tipo": "area" } ]
-      }
-    ]
+ {
+  "codigo": "F0234",
+  "nombre": "Control de ingreso a los cuartos de servidores del CNR",
+  "version": "V2",
+  "frecuencia": "Mensual",
+  "aplicacion": {
+   "modo": "Área técnica específica",
+   "direcciones": [],
+   "unidades": [],
+   "area": "AREA-CSOD",
+   "observaciones": "No todas las Direcciones tienen cuarto de servidores: el control se lleva donde existe CSOD."
   },
-  {
-    "codigo": "F0389",
-    "nombre": "Control de condiciones de infraestructura del cuarto de servidores (CSOD)",
-    "version": "V2",
-    "frecuencia": "Semanal",
-    "aplicaA": "Todas",
-    "requiereEvidencia": true,
-    "requiereFirma": true,
-    "permiteJustificacion": true,
-    "activo": true,
-    "descripcion": "Revisión de lunes a viernes de las condiciones del cuarto de servidores, pozos y área de telecomunicaciones, con mediciones de temperatura, carga de UPS y revisión semanal de limpieza y planta eléctrica.",
-    "plantilla": [
-      {
-        "titulo": "Estado de la infraestructura",
-        "descripcion": "Revisión diaria consolidada de la semana. Ante un ítem en mal estado, describa la observación y el número de reporte.",
-        "items": [
-          { "id": "gabinete-tel", "nombre": "Gabinete de telecomunicaciones" },
-          { "id": "aire", "nombre": "Aire acondicionado", "medicion": "Temperatura (°F)" },
-          { "id": "tomas", "nombre": "Tomacorrientes de energía alterna" },
-          { "id": "iluminacion", "nombre": "Iluminación" },
-          { "id": "techo", "nombre": "Techo / cielo falso" },
-          { "id": "pared", "nombre": "Pared / piso" },
-          { "id": "gabinete-srv", "nombre": "Gabinetes de servidores" },
-          { "id": "ups", "nombre": "UPS", "medicion": "Carga (%)" },
-          { "id": "alarma", "nombre": "Alarma contra incendios" },
-          { "id": "deshumificador", "nombre": "Deshumidificadores", "medicion": "Humedad (%)" },
-          { "id": "switches", "nombre": "Switches" },
-          { "id": "sensores", "nombre": "Sensores de temperatura", "medicion": "Temperatura (°C)" },
-          { "id": "cables", "nombre": "Cables y conexiones eléctricas" },
-          { "id": "librera", "nombre": "Librera de respaldo" },
-          { "id": "acceso", "nombre": "Sistema de acceso digital (con huella)" },
-          { "id": "objetos", "nombre": "Objetos extraños en el lugar", "estados": ["Sin hallazgos", "Con hallazgos", "No aplica"] }
-        ]
-      },
-      {
-        "titulo": "Revisión semanal",
-        "items": [
-          { "id": "limpieza", "nombre": "Limpieza en cuarto de servidores", "estados": ["Realizada", "No realizada", "No aplica"] },
-          { "id": "planta", "nombre": "Planta eléctrica (prueba semanal)", "estados": ["Realizada", "No realizada", "No aplica"], "medicion": "Combustible (%)" },
-          { "id": "extintor", "nombre": "Extintor (carga y vencimiento vigentes)", "estados": ["Verificado", "Observado", "No aplica"], "medicion": "Carga (%)" }
-        ]
-      },
-      {
-        "titulo": "Observaciones generales",
-        "campos": [
-          { "id": "obs", "etiqueta": "Observaciones de la semana", "tipo": "area" },
-          { "id": "justifica-dia", "etiqueta": "Días no revisados y su justificación (si aplica)", "tipo": "area", "ayuda": "El formato exige justificar los días en que el control no se realizó (por ejemplo, ausencia por consulta médica)." }
-        ]
-      }
+  "requiereEvidencia": true,
+  "requiereFirma": true,
+  "permiteJustificacion": false,
+  "activo": true,
+  "descripcion": "Bitácora mensual de ingresos al cuarto de servidores de la oficina: quién ingresó, cuándo y con qué motivo. Si no hubo ingresos, el control se entrega con la tabla vacía y la observación correspondiente.",
+  "plantilla": [
+   {
+    "titulo": "Registros de ingreso del mes",
+    "descripcion": "Un registro por cada ingreso al cuarto de servidores. Un mes sin ingresos se entrega sin filas, dejándolo constar en las observaciones.",
+    "tabla": {
+     "columnas": [
+      "Fecha",
+      "Hora de entrada",
+      "Hora de salida",
+      "Nombre de quien ingresa",
+      "Cargo o institución",
+      "Motivo del ingreso"
+     ],
+     "minimo": 0
+    }
+   },
+   {
+    "titulo": "Verificación de cierre",
+    "items": [
+     {
+      "id": "libro",
+      "nombre": "Libro de acceso al centro de cómputo actualizado",
+      "estados": [
+       "Verificado",
+       "Pendiente",
+       "No aplica"
+      ]
+     },
+     {
+      "id": "remision",
+      "nombre": "Bitácora remitida al Gerente de Infraestructura y al Oficial de Seguridad Informática",
+      "estados": [
+       "Verificado",
+       "Pendiente",
+       "No aplica"
+      ]
+     }
     ]
+   },
+   {
+    "titulo": "Observaciones",
+    "campos": [
+     {
+      "id": "obs",
+      "etiqueta": "Observaciones del mes",
+      "tipo": "area"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "codigo": "F0389",
+  "nombre": "Control de condiciones de infraestructura del cuarto de servidores (CSOD)",
+  "version": "V2",
+  "frecuencia": "Semanal",
+  "aplicacion": {
+   "modo": "Área técnica específica",
+   "direcciones": [],
+   "unidades": [],
+   "area": "AREA-CSOD",
+   "observaciones": "Revisión semanal de las condiciones del cuarto de servidores; solo aplica donde hay CSOD."
   },
-  {
-    "codigo": "F0382",
-    "nombre": "Check list de verificación de políticas y controles de seguridad de TIC",
-    "version": "V3",
-    "frecuencia": "Mensual",
-    "aplicaA": "Todas",
-    "requiereEvidencia": false,
-    "requiereFirma": true,
-    "permiteJustificacion": false,
-    "activo": true,
-    "descripcion": "Verificación por equipo de los nueve ítems de seguridad TIC: antivirus, bloqueo de USB, credenciales en navegadores, estándar de nombres, sesiones autorizadas, accesos restringidos y orden del cableado.",
-    "plantilla": [
-      {
-        "titulo": "Ítems de verificación aplicados",
-        "descripcion": "Los nueve ítems del formato se verifican en cada equipo de la muestra.",
-        "items": [
-          { "id": "i1", "nombre": "Ítem 1 — Antivirus instalado y actualizado", "estados": ["Aplicado", "Con incumplimientos", "No aplica"] },
-          { "id": "i2", "nombre": "Ítem 2 — No reconoce USB externa (lectura/escritura)", "estados": ["Aplicado", "Con incumplimientos", "No aplica"] },
-          { "id": "i3", "nombre": "Ítem 3 — No almacena usuarios y claves en los navegadores", "estados": ["Aplicado", "Con incumplimientos", "No aplica"] },
-          { "id": "i4", "nombre": "Ítem 4 — Nombre de equipo conforme a estándares", "estados": ["Aplicado", "Con incumplimientos", "No aplica"] },
-          { "id": "i5", "nombre": "Ítem 5 — Sesiones de usuarios autorizados en cada equipo", "estados": ["Aplicado", "Con incumplimientos", "No aplica"] },
-          { "id": "i6", "nombre": "Ítem 6 — Acceso restringido a directorios internos de C", "estados": ["Aplicado", "Con incumplimientos", "No aplica"] },
-          { "id": "i7", "nombre": "Ítem 7 — Solo sitios autorizados en equipos de consulta al público", "estados": ["Aplicado", "Con incumplimientos", "No aplica"] },
-          { "id": "i8", "nombre": "Ítem 8 — Usuario de red de consulta al público según Dpto./Área", "estados": ["Aplicado", "Con incumplimientos", "No aplica"] },
-          { "id": "i9", "nombre": "Ítem 9 — Cables de red y eléctricos ordenados", "estados": ["Aplicado", "Con incumplimientos", "No aplica"] }
-        ]
-      },
-      {
-        "titulo": "Equipos verificados",
-        "tabla": { "columnas": ["N° de inventario", "Nombre del usuario", "Nombre del equipo", "Ítems incumplidos", "Acción correctiva", "Estado final"], "minimo": 1 }
-      },
-      {
-        "titulo": "Observaciones",
-        "campos": [ { "id": "obs", "etiqueta": "Observaciones y acciones correctivas pendientes", "tipo": "area" } ]
-      }
+  "requiereEvidencia": true,
+  "requiereFirma": true,
+  "permiteJustificacion": true,
+  "activo": true,
+  "descripcion": "Revisión de lunes a viernes de las condiciones del cuarto de servidores, pozos y área de telecomunicaciones, con mediciones de temperatura, carga de UPS y revisión semanal de limpieza y planta eléctrica.",
+  "plantilla": [
+   {
+    "titulo": "Estado de la infraestructura",
+    "descripcion": "Revisión diaria consolidada de la semana. Ante un ítem en mal estado, describa la observación y el número de reporte.",
+    "items": [
+     {
+      "id": "gabinete-tel",
+      "nombre": "Gabinete de telecomunicaciones"
+     },
+     {
+      "id": "aire",
+      "nombre": "Aire acondicionado",
+      "medicion": "Temperatura (°F)"
+     },
+     {
+      "id": "tomas",
+      "nombre": "Tomacorrientes de energía alterna"
+     },
+     {
+      "id": "iluminacion",
+      "nombre": "Iluminación"
+     },
+     {
+      "id": "techo",
+      "nombre": "Techo / cielo falso"
+     },
+     {
+      "id": "pared",
+      "nombre": "Pared / piso"
+     },
+     {
+      "id": "gabinete-srv",
+      "nombre": "Gabinetes de servidores"
+     },
+     {
+      "id": "ups",
+      "nombre": "UPS",
+      "medicion": "Carga (%)"
+     },
+     {
+      "id": "alarma",
+      "nombre": "Alarma contra incendios"
+     },
+     {
+      "id": "deshumificador",
+      "nombre": "Deshumidificadores",
+      "medicion": "Humedad (%)"
+     },
+     {
+      "id": "switches",
+      "nombre": "Switches"
+     },
+     {
+      "id": "sensores",
+      "nombre": "Sensores de temperatura",
+      "medicion": "Temperatura (°C)"
+     },
+     {
+      "id": "cables",
+      "nombre": "Cables y conexiones eléctricas"
+     },
+     {
+      "id": "librera",
+      "nombre": "Librera de respaldo"
+     },
+     {
+      "id": "acceso",
+      "nombre": "Sistema de acceso digital (con huella)"
+     },
+     {
+      "id": "objetos",
+      "nombre": "Objetos extraños en el lugar",
+      "estados": [
+       "Sin hallazgos",
+       "Con hallazgos",
+       "No aplica"
+      ]
+     }
     ]
+   },
+   {
+    "titulo": "Revisión semanal",
+    "items": [
+     {
+      "id": "limpieza",
+      "nombre": "Limpieza en cuarto de servidores",
+      "estados": [
+       "Realizada",
+       "No realizada",
+       "No aplica"
+      ]
+     },
+     {
+      "id": "planta",
+      "nombre": "Planta eléctrica (prueba semanal)",
+      "estados": [
+       "Realizada",
+       "No realizada",
+       "No aplica"
+      ],
+      "medicion": "Combustible (%)"
+     },
+     {
+      "id": "extintor",
+      "nombre": "Extintor (carga y vencimiento vigentes)",
+      "estados": [
+       "Verificado",
+       "Observado",
+       "No aplica"
+      ],
+      "medicion": "Carga (%)"
+     }
+    ]
+   },
+   {
+    "titulo": "Observaciones generales",
+    "campos": [
+     {
+      "id": "obs",
+      "etiqueta": "Observaciones de la semana",
+      "tipo": "area"
+     },
+     {
+      "id": "justifica-dia",
+      "etiqueta": "Días no revisados y su justificación (si aplica)",
+      "tipo": "area",
+      "ayuda": "El formato exige justificar los días en que el control no se realizó (por ejemplo, ausencia por consulta médica)."
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "codigo": "F0382",
+  "nombre": "Check list de verificación de políticas y controles de seguridad de TIC",
+  "version": "V3",
+  "frecuencia": "Mensual",
+  "aplicacion": {
+   "modo": "Unidades específicas",
+   "direcciones": [],
+   "unidades": [
+    {
+     "direccion": "DIR-REGS",
+     "unidad": "Registro de la Propiedad"
+    },
+    {
+     "direccion": "DIR-REGS",
+     "unidad": "Registro de Comercio"
+    },
+    {
+     "direccion": "DIR-REG",
+     "unidad": "Dirección de Registro"
+    },
+    {
+     "direccion": "DIR-RPRH",
+     "unidad": "RPRH"
+    },
+    {
+     "direccion": "DIR-IGN",
+     "unidad": "IGN"
+    },
+    {
+     "direccion": "DIR-GTEC",
+     "unidad": "Gerencia de Tecnología"
+    }
+   ],
+   "area": "",
+   "observaciones": "Verificación de políticas de seguridad de TIC en las unidades con equipos de usuario y atención al público."
   },
-  {
-    "codigo": "F0384",
-    "nombre": "Control interno para el inventario de cintas de respaldo",
-    "version": "V1",
-    "frecuencia": "Mensual",
-    "aplicaA": "Todas",
-    "requiereEvidencia": false,
-    "requiereFirma": true,
-    "permiteJustificacion": false,
-    "activo": true,
-    "descripcion": "Inventario actualizado de cintas de respaldo de la oficina: identificación, tipo de respaldo, servidor de origen y ubicación (slot en librera, caja fuerte o resguardo externo).",
-    "plantilla": [
-      {
-        "titulo": "Inventario de cintas",
-        "tabla": { "columnas": ["Nombre de cinta (fecha y hora)", "ID", "Tipo de backup", "Servidor", "Ubicación", "Observaciones"], "minimo": 1 }
-      },
-      {
-        "titulo": "Verificaciones del mes",
-        "items": [
-          { "id": "etiquetado", "nombre": "Etiquetado estandarizado según normativa", "estados": ["Verificado", "Observado", "No aplica"] },
-          { "id": "sos", "nombre": "Cinta SOS identificada en librera", "estados": ["Verificado", "Observado", "No aplica"] },
-          { "id": "danadas", "nombre": "Registro de cintas dañadas actualizado", "estados": ["Verificado", "Observado", "No aplica"] }
-        ]
-      },
-      {
-        "titulo": "Observaciones",
-        "campos": [ { "id": "obs", "etiqueta": "Observaciones del inventario", "tipo": "area" } ]
-      }
+  "requiereEvidencia": false,
+  "requiereFirma": true,
+  "permiteJustificacion": false,
+  "activo": true,
+  "descripcion": "Verificación por equipo de los nueve ítems de seguridad TIC: antivirus, bloqueo de USB, credenciales en navegadores, estándar de nombres, sesiones autorizadas, accesos restringidos y orden del cableado.",
+  "plantilla": [
+   {
+    "titulo": "Ítems de verificación aplicados",
+    "descripcion": "Los nueve ítems del formato se verifican en cada equipo de la muestra.",
+    "items": [
+     {
+      "id": "i1",
+      "nombre": "Ítem 1 — Antivirus instalado y actualizado",
+      "estados": [
+       "Aplicado",
+       "Con incumplimientos",
+       "No aplica"
+      ]
+     },
+     {
+      "id": "i2",
+      "nombre": "Ítem 2 — No reconoce USB externa (lectura/escritura)",
+      "estados": [
+       "Aplicado",
+       "Con incumplimientos",
+       "No aplica"
+      ]
+     },
+     {
+      "id": "i3",
+      "nombre": "Ítem 3 — No almacena usuarios y claves en los navegadores",
+      "estados": [
+       "Aplicado",
+       "Con incumplimientos",
+       "No aplica"
+      ]
+     },
+     {
+      "id": "i4",
+      "nombre": "Ítem 4 — Nombre de equipo conforme a estándares",
+      "estados": [
+       "Aplicado",
+       "Con incumplimientos",
+       "No aplica"
+      ]
+     },
+     {
+      "id": "i5",
+      "nombre": "Ítem 5 — Sesiones de usuarios autorizados en cada equipo",
+      "estados": [
+       "Aplicado",
+       "Con incumplimientos",
+       "No aplica"
+      ]
+     },
+     {
+      "id": "i6",
+      "nombre": "Ítem 6 — Acceso restringido a directorios internos de C",
+      "estados": [
+       "Aplicado",
+       "Con incumplimientos",
+       "No aplica"
+      ]
+     },
+     {
+      "id": "i7",
+      "nombre": "Ítem 7 — Solo sitios autorizados en equipos de consulta al público",
+      "estados": [
+       "Aplicado",
+       "Con incumplimientos",
+       "No aplica"
+      ]
+     },
+     {
+      "id": "i8",
+      "nombre": "Ítem 8 — Usuario de red de consulta al público según Dpto./Área",
+      "estados": [
+       "Aplicado",
+       "Con incumplimientos",
+       "No aplica"
+      ]
+     },
+     {
+      "id": "i9",
+      "nombre": "Ítem 9 — Cables de red y eléctricos ordenados",
+      "estados": [
+       "Aplicado",
+       "Con incumplimientos",
+       "No aplica"
+      ]
+     }
     ]
+   },
+   {
+    "titulo": "Equipos verificados",
+    "tabla": {
+     "columnas": [
+      "N° de inventario",
+      "Nombre del usuario",
+      "Nombre del equipo",
+      "Ítems incumplidos",
+      "Acción correctiva",
+      "Estado final"
+     ],
+     "minimo": 1
+    }
+   },
+   {
+    "titulo": "Observaciones",
+    "campos": [
+     {
+      "id": "obs",
+      "etiqueta": "Observaciones y acciones correctivas pendientes",
+      "tipo": "area"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "codigo": "F0384",
+  "nombre": "Control interno para el inventario de cintas de respaldo",
+  "version": "V1",
+  "frecuencia": "Mensual",
+  "aplicacion": {
+   "modo": "Área técnica específica",
+   "direcciones": [],
+   "unidades": [],
+   "area": "AREA-RESP",
+   "observaciones": "Solo se realiza donde existe gestión de cintas de respaldo."
   },
-  {
-    "codigo": "F0386",
-    "nombre": "Control para el traslado de cintas de respaldo",
-    "version": "V1",
-    "frecuencia": "Eventual",
-    "aplicaA": "Todas",
-    "requiereEvidencia": true,
-    "requiereFirma": true,
-    "permiteJustificacion": true,
-    "activo": true,
-    "descripcion": "Registro del traslado de cintas de respaldo hacia el Departamento de Operaciones. Solo se ejecuta cuando hay visita del técnico de Operaciones; un mes sin traslado se cierra con carta de justificación.",
-    "plantilla": [
-      {
-        "titulo": "Datos del traslado",
-        "campos": [
-          { "id": "fecha", "etiqueta": "Fecha del traslado", "tipo": "fecha", "obligatorio": true },
-          { "id": "recibe", "etiqueta": "Técnico de Operaciones que recibe", "tipo": "texto", "obligatorio": true },
-          { "id": "medio", "etiqueta": "Medio de traslado", "tipo": "opcion", "opciones": ["Visita programada", "Valija institucional", "Entrega en oficina central"] }
-        ]
-      },
-      {
-        "titulo": "Cintas trasladadas",
-        "tabla": { "columnas": ["Nombre de cinta", "ID", "Tipo de backup", "Destino", "Observaciones"], "minimo": 1 }
-      },
-      {
-        "titulo": "Observaciones",
-        "campos": [ { "id": "obs", "etiqueta": "Observaciones del traslado", "tipo": "area" } ]
-      }
+  "requiereEvidencia": false,
+  "requiereFirma": true,
+  "permiteJustificacion": false,
+  "activo": true,
+  "descripcion": "Inventario actualizado de cintas de respaldo de la oficina: identificación, tipo de respaldo, servidor de origen y ubicación (slot en librera, caja fuerte o resguardo externo).",
+  "plantilla": [
+   {
+    "titulo": "Inventario de cintas",
+    "tabla": {
+     "columnas": [
+      "Nombre de cinta (fecha y hora)",
+      "ID",
+      "Tipo de backup",
+      "Servidor",
+      "Ubicación",
+      "Observaciones"
+     ],
+     "minimo": 1
+    }
+   },
+   {
+    "titulo": "Verificaciones del mes",
+    "items": [
+     {
+      "id": "etiquetado",
+      "nombre": "Etiquetado estandarizado según normativa",
+      "estados": [
+       "Verificado",
+       "Observado",
+       "No aplica"
+      ]
+     },
+     {
+      "id": "sos",
+      "nombre": "Cinta SOS identificada en librera",
+      "estados": [
+       "Verificado",
+       "Observado",
+       "No aplica"
+      ]
+     },
+     {
+      "id": "danadas",
+      "nombre": "Registro de cintas dañadas actualizado",
+      "estados": [
+       "Verificado",
+       "Observado",
+       "No aplica"
+      ]
+     }
     ]
+   },
+   {
+    "titulo": "Observaciones",
+    "campos": [
+     {
+      "id": "obs",
+      "etiqueta": "Observaciones del inventario",
+      "tipo": "area"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "codigo": "F0386",
+  "nombre": "Control para el traslado de cintas de respaldo",
+  "version": "V1",
+  "frecuencia": "Eventual",
+  "aplicacion": {
+   "modo": "Área técnica específica",
+   "direcciones": [],
+   "unidades": [],
+   "area": "AREA-RESP",
+   "observaciones": "Solo se realiza donde existe gestión de cintas de respaldo y visita del Departamento de Operaciones."
   },
-  {
-    "codigo": "F0387",
-    "nombre": "Verificación de sincronización de hora de equipos con IP",
-    "version": "V1",
-    "frecuencia": "Semanal",
-    "aplicaA": "Todas",
-    "requiereEvidencia": false,
-    "requiereFirma": true,
-    "permiteJustificacion": false,
-    "activo": true,
-    "descripcion": "Verificación semanal de que computadoras, impresores multifuncionales, teléfonos IP y reloj marcador están sincronizados con la hora de referencia.",
-    "plantilla": [
-      {
-        "titulo": "Datos generales",
-        "campos": [
-          { "id": "fecha", "etiqueta": "Fecha de la verificación", "tipo": "fecha", "obligatorio": true },
-          { "id": "hora-ref", "etiqueta": "Hora de referencia", "tipo": "hora", "obligatorio": true }
-        ]
-      },
-      {
-        "titulo": "Equipos verificados",
-        "descripcion": "Computadoras y multifuncionales se identifican por IP; teléfonos por extensión; el reloj marcador por número de inventario.",
-        "tabla": { "columnas": ["Equipo", "IP / extensión / inventario", "¿Hora sincronizada?", "Hora observada"], "minimo": 3 }
-      },
-      {
-        "titulo": "Observaciones",
-        "campos": [ { "id": "obs", "etiqueta": "Observaciones y recomendaciones", "tipo": "area" } ]
-      }
+  "requiereEvidencia": true,
+  "requiereFirma": true,
+  "permiteJustificacion": true,
+  "activo": true,
+  "descripcion": "Registro del traslado de cintas de respaldo hacia el Departamento de Operaciones. Solo se ejecuta cuando hay visita del técnico de Operaciones; un mes sin traslado se cierra con carta de justificación.",
+  "plantilla": [
+   {
+    "titulo": "Traslado del período",
+    "campos": [
+     {
+      "id": "hubo",
+      "etiqueta": "¿Hubo traslado de cintas en el período?",
+      "tipo": "opcion",
+      "opciones": [
+       "Sí",
+       "No"
+      ],
+      "obligatorio": true,
+      "ayuda": "Si la respuesta es «No», el control se cierra con carta de justificación en lugar de quedar vacío."
+     },
+     {
+      "id": "fecha",
+      "etiqueta": "Fecha del traslado",
+      "tipo": "fecha",
+      "obligatorio": true
+     },
+     {
+      "id": "responsable",
+      "etiqueta": "Técnico de Operaciones que recibe",
+      "tipo": "texto",
+      "obligatorio": true
+     },
+     {
+      "id": "cantidad",
+      "etiqueta": "Cantidad de cintas trasladadas",
+      "tipo": "numero",
+      "obligatorio": true
+     },
+     {
+      "id": "destino",
+      "etiqueta": "Destino del traslado",
+      "tipo": "opcion",
+      "opciones": [
+       "Resguardo externo — oficina central",
+       "Caja fuerte institucional",
+       "Departamento de Operaciones Informáticas"
+      ],
+      "obligatorio": true
+     },
+     {
+      "id": "medio",
+      "etiqueta": "Medio de traslado",
+      "tipo": "opcion",
+      "opciones": [
+       "Visita programada",
+       "Valija institucional",
+       "Entrega en oficina central"
+      ]
+     }
     ]
+   },
+   {
+    "titulo": "Cintas trasladadas",
+    "tabla": {
+     "columnas": [
+      "Nombre de cinta",
+      "ID",
+      "Tipo de backup",
+      "Destino",
+      "Observaciones"
+     ],
+     "minimo": 1
+    }
+   },
+   {
+    "titulo": "Observaciones",
+    "campos": [
+     {
+      "id": "obs",
+      "etiqueta": "Observaciones del traslado",
+      "tipo": "area"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "codigo": "F0387",
+  "nombre": "Verificación de sincronización de hora de equipos con IP",
+  "version": "V1",
+  "frecuencia": "Semanal",
+  "aplicacion": {
+   "modo": "Unidades específicas",
+   "direcciones": [],
+   "unidades": [
+    {
+     "direccion": "DIR-GTEC",
+     "unidad": "Gerencia de Tecnología"
+    },
+    {
+     "direccion": "DIR-REGS",
+     "unidad": "Registro de la Propiedad"
+    }
+   ],
+   "area": "",
+   "observaciones": "Verificación de sincronización de hora en las unidades con equipos y dispositivos con IP administrada."
   },
-  {
-    "codigo": "F0422",
-    "nombre": "Control de inventario de equipos informáticos",
-    "version": "V1",
-    "frecuencia": "Mensual",
-    "aplicaA": "Todas",
-    "requiereEvidencia": false,
-    "requiereFirma": true,
-    "permiteJustificacion": false,
-    "activo": true,
-    "descripcion": "Actualización mensual del inventario de equipo informático de la Dirección/Unidad: PC, impresores, escáneres y equipo de telecomunicaciones. Se alimenta del inventario operativo conectado con Gestión de Equipos.",
-    "plantilla": [
-      {
-        "titulo": "Hojas del inventario",
-        "items": [
-          { "id": "pcs", "nombre": "Hoja de PC y laptops actualizada", "estados": ["Actualizada", "Sin cambios en el mes", "Pendiente"] },
-          { "id": "imp", "nombre": "Hoja de impresores, escáneres y plotter actualizada", "estados": ["Actualizada", "Sin cambios en el mes", "Pendiente"] },
-          { "id": "telco", "nombre": "Hoja de equipo de telecomunicaciones actualizada", "estados": ["Actualizada", "Sin cambios en el mes", "Pendiente"] }
-        ]
-      },
-      {
-        "titulo": "Movimientos del mes",
-        "descripcion": "Altas, bajas y cambios respecto del mes anterior. Los ingresos por aceptación de entrega llegan desde Gestión de Equipos al inventario operativo.",
-        "tabla": { "columnas": ["Equipo", "N° de inventario", "Movimiento", "Detalle"], "minimo": 0 }
-      },
-      {
-        "titulo": "Observaciones",
-        "campos": [ { "id": "obs", "etiqueta": "Observaciones del levantamiento", "tipo": "area" } ]
-      }
+  "requiereEvidencia": false,
+  "requiereFirma": true,
+  "permiteJustificacion": false,
+  "activo": true,
+  "descripcion": "Verificación semanal de que computadoras, impresores multifuncionales, teléfonos IP y reloj marcador están sincronizados con la hora de referencia.",
+  "plantilla": [
+   {
+    "titulo": "Datos generales",
+    "campos": [
+     {
+      "id": "fecha",
+      "etiqueta": "Fecha de la verificación",
+      "tipo": "fecha",
+      "obligatorio": true
+     },
+     {
+      "id": "hora-ref",
+      "etiqueta": "Hora de referencia",
+      "tipo": "hora",
+      "obligatorio": true
+     }
     ]
+   },
+   {
+    "titulo": "Equipos verificados",
+    "descripcion": "Computadoras y multifuncionales se identifican por IP; teléfonos por extensión; el reloj marcador por número de inventario.",
+    "tabla": {
+     "columnas": [
+      "Equipo",
+      "IP / extensión / inventario",
+      "¿Hora sincronizada?",
+      "Hora observada"
+     ],
+     "minimo": 3
+    }
+   },
+   {
+    "titulo": "Observaciones",
+    "campos": [
+     {
+      "id": "obs",
+      "etiqueta": "Observaciones y recomendaciones",
+      "tipo": "area"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "codigo": "F0422",
+  "nombre": "Control de inventario de equipos informáticos",
+  "version": "V1",
+  "frecuencia": "Mensual",
+  "aplicacion": {
+   "modo": "Todas las direcciones",
+   "direcciones": [],
+   "unidades": [],
+   "area": "",
+   "observaciones": "Cada Dirección/Unidad puede tener equipos activos asignados en el inventario operativo."
   },
-  {
-    "codigo": "F0174",
-    "nombre": "Mantenimiento preventivo de computadoras",
-    "version": "V8",
-    "frecuencia": "Mensual",
-    "aplicaA": "Todas",
-    "requiereEvidencia": true,
-    "requiereFirma": true,
-    "permiteJustificacion": true,
-    "activo": true,
-    "descripcion": "Programa mensual de mantenimiento preventivo según calendario anual: desconexión y desensamble, sopleteado, limpieza de memorias y conectores, y verificación final de funcionamiento.",
-    "plantilla": [
-      {
-        "titulo": "Equipos atendidos en el mes",
-        "tabla": { "columnas": ["Nombre de equipo", "N° de inventario", "Usuario", "Fecha", "Tipo de servicio"], "minimo": 1 }
-      },
-      {
-        "titulo": "Actividades del mantenimiento",
-        "descripcion": "Checklist estándar del formato F0174 aplicado a los equipos del mes.",
-        "items": [
-          { "id": "desconexion", "nombre": "Desconexión de periféricos y desensamble del CPU", "estados": ["Realizada", "Parcial", "No aplica"] },
-          { "id": "sopleteado", "nombre": "Sopleteado de CPU y limpieza de placa, bahías y fuente de poder", "estados": ["Realizada", "Parcial", "No aplica"] },
-          { "id": "ram", "nombre": "Limpieza de bancos y módulos de memoria RAM", "estados": ["Realizada", "Parcial", "No aplica"] },
-          { "id": "conectores", "nombre": "Revisión y limpieza de conectores y accesorios (mouse, teclado, monitor)", "estados": ["Realizada", "Parcial", "No aplica"] },
-          { "id": "verificacion", "nombre": "Conexión y verificación del buen funcionamiento del equipo", "estados": ["Realizada", "Parcial", "No aplica"] }
-        ]
-      },
-      {
-        "titulo": "Estado final",
-        "campos": [
-          { "id": "estado-final", "etiqueta": "Estado final en que quedan los equipos", "tipo": "area", "obligatorio": true },
-          { "id": "obs", "etiqueta": "Observaciones", "tipo": "area" }
-        ]
-      }
+  "requiereEvidencia": false,
+  "requiereFirma": true,
+  "permiteJustificacion": false,
+  "activo": true,
+  "descripcion": "Actualización mensual del inventario de equipo informático de la Dirección/Unidad: PC, impresores, escáneres y equipo de telecomunicaciones. Se alimenta del inventario operativo conectado con Gestión de Equipos.",
+  "plantilla": [
+   {
+    "titulo": "Equipos activos de la Dirección/Unidad",
+    "descripcion": "Lista tomada del inventario operativo: son los equipos que Gestión de Equipos dejó activos en esta Dirección/Unidad tras la aceptación del Usuario Final. No se teclean a mano.",
+    "equipos": {
+     "verificaciones": [
+      "Existe físicamente",
+      "Usuario asignado correcto",
+      "Estado operativo verificado",
+      "Requiere actualización"
+     ],
+     "estados": [
+      "Verificado",
+      "Con hallazgo",
+      "No ubicado"
+     ],
+     "minimo": 0,
+     "ayuda": "Deben revisarse todos los equipos activos de la Dirección/Unidad."
+    }
+   },
+   {
+    "titulo": "Hojas del inventario",
+    "items": [
+     {
+      "id": "pcs",
+      "nombre": "Hoja de PC y laptops actualizada",
+      "estados": [
+       "Actualizada",
+       "Sin cambios en el mes",
+       "Pendiente"
+      ]
+     },
+     {
+      "id": "imp",
+      "nombre": "Hoja de impresores, escáneres y plotter actualizada",
+      "estados": [
+       "Actualizada",
+       "Sin cambios en el mes",
+       "Pendiente"
+      ]
+     },
+     {
+      "id": "telco",
+      "nombre": "Hoja de equipo de telecomunicaciones actualizada",
+      "estados": [
+       "Actualizada",
+       "Sin cambios en el mes",
+       "Pendiente"
+      ]
+     }
     ]
+   },
+   {
+    "titulo": "Movimientos del mes",
+    "descripcion": "Altas, bajas y cambios respecto del mes anterior. Los ingresos por aceptación de entrega llegan desde Gestión de Equipos al inventario operativo.",
+    "tabla": {
+     "columnas": [
+      "Equipo",
+      "N° de inventario",
+      "Movimiento",
+      "Detalle"
+     ],
+     "minimo": 0
+    }
+   },
+   {
+    "titulo": "Observaciones",
+    "campos": [
+     {
+      "id": "obs",
+      "etiqueta": "Observaciones del levantamiento",
+      "tipo": "area"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "codigo": "F0174",
+  "nombre": "Mantenimiento preventivo de computadoras",
+  "version": "V8",
+  "frecuencia": "Mensual",
+  "aplicacion": {
+   "modo": "Unidades específicas",
+   "direcciones": [],
+   "unidades": [
+    {
+     "direccion": "DIR-REGS",
+     "unidad": "Registro de la Propiedad"
+    },
+    {
+     "direccion": "DIR-REGS",
+     "unidad": "Registro de Comercio"
+    },
+    {
+     "direccion": "DIR-REG",
+     "unidad": "Dirección de Registro"
+    },
+    {
+     "direccion": "DIR-RPRH",
+     "unidad": "RPRH"
+    },
+    {
+     "direccion": "DIR-IGN",
+     "unidad": "IGN"
+    },
+    {
+     "direccion": "DIR-ISPI",
+     "unidad": "ISPI"
+    }
+   ],
+   "area": "",
+   "observaciones": "Mantenimiento preventivo según el calendario anual de las unidades con equipos de usuario."
   },
-  {
-    "codigo": "F0288",
-    "nombre": "Mantenimiento correctivo de computadoras",
-    "version": "V8",
-    "frecuencia": "Eventual",
-    "aplicaA": "Todas",
-    "requiereEvidencia": true,
-    "requiereFirma": true,
-    "permiteJustificacion": true,
-    "activo": true,
-    "descripcion": "Atenciones correctivas del mes: verificación de fallas, configuración básica, reemplazo de accesorios y restauración. Un mes sin correctivos se cierra con carta de justificación.",
-    "plantilla": [
-      {
-        "titulo": "Atenciones correctivas del mes",
-        "tabla": { "columnas": ["Nombre de equipo", "N° de inventario", "Usuario", "Falla verificada", "Acción realizada", "Estado final"], "minimo": 1 }
-      },
-      {
-        "titulo": "Observaciones",
-        "campos": [ { "id": "obs", "etiqueta": "Observaciones de las atenciones", "tipo": "area" } ]
-      }
+  "requiereEvidencia": true,
+  "requiereFirma": true,
+  "permiteJustificacion": true,
+  "activo": true,
+  "descripcion": "Programa mensual de mantenimiento preventivo según calendario anual: desconexión y desensamble, sopleteado, limpieza de memorias y conectores, y verificación final de funcionamiento.",
+  "plantilla": [
+   {
+    "titulo": "Equipos con mantenimiento en el mes",
+    "descripcion": "Seleccione del inventario operativo los equipos a los que se dio mantenimiento preventivo según el calendario anual.",
+    "equipos": {
+     "verificaciones": [
+      "Desconexión y desensamble",
+      "Sopleteado interno",
+      "Limpieza de RAM y conectores",
+      "Verificación de funcionamiento"
+     ],
+     "estados": [
+      "Mantenimiento realizado",
+      "Reprogramado",
+      "No aplica"
+     ],
+     "minimo": 1
+    }
+   },
+   {
+    "titulo": "Actividades del mantenimiento",
+    "descripcion": "Checklist estándar del formato F0174 aplicado a los equipos del mes.",
+    "items": [
+     {
+      "id": "desconexion",
+      "nombre": "Desconexión de periféricos y desensamble del CPU",
+      "estados": [
+       "Realizada",
+       "Parcial",
+       "No aplica"
+      ]
+     },
+     {
+      "id": "sopleteado",
+      "nombre": "Sopleteado de CPU y limpieza de placa, bahías y fuente de poder",
+      "estados": [
+       "Realizada",
+       "Parcial",
+       "No aplica"
+      ]
+     },
+     {
+      "id": "ram",
+      "nombre": "Limpieza de bancos y módulos de memoria RAM",
+      "estados": [
+       "Realizada",
+       "Parcial",
+       "No aplica"
+      ]
+     },
+     {
+      "id": "conectores",
+      "nombre": "Revisión y limpieza de conectores y accesorios (mouse, teclado, monitor)",
+      "estados": [
+       "Realizada",
+       "Parcial",
+       "No aplica"
+      ]
+     },
+     {
+      "id": "verificacion",
+      "nombre": "Conexión y verificación del buen funcionamiento del equipo",
+      "estados": [
+       "Realizada",
+       "Parcial",
+       "No aplica"
+      ]
+     }
     ]
+   },
+   {
+    "titulo": "Estado final",
+    "campos": [
+     {
+      "id": "estado-final",
+      "etiqueta": "Estado final en que quedan los equipos",
+      "tipo": "area",
+      "obligatorio": true
+     },
+     {
+      "id": "obs",
+      "etiqueta": "Observaciones",
+      "tipo": "area"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "codigo": "F0288",
+  "nombre": "Mantenimiento correctivo de computadoras",
+  "version": "V8",
+  "frecuencia": "Eventual",
+  "aplicacion": {
+   "modo": "Todas las direcciones",
+   "direcciones": [],
+   "unidades": [],
+   "area": "",
+   "observaciones": "El mantenimiento correctivo puede ocurrir en cualquier Dirección/Unidad atendida; sin atenciones, se justifica."
   },
-  {
-    "codigo": "GLPI",
-    "nombre": "Revisión y reporte de tiquetes GLPI",
-    "version": "—",
-    "frecuencia": "Mensual",
-    "aplicaA": "Todas",
-    "requiereEvidencia": false,
-    "requiereFirma": true,
-    "permiteJustificacion": true,
-    "activo": true,
-    "descripcion": "Resumen mensual de incidentes registrados en el sistema GLPI: fallos de sistemas, usuarios afectados y resolución. Un mes sin incidentes se cierra con carta de justificación.",
-    "plantilla": [
-      {
-        "titulo": "Tiquetes del mes",
-        "tabla": { "columnas": ["N° de tiquete", "Fecha", "Sistema afectado", "Descripción del incidente", "Usuarios afectados", "Estado"], "minimo": 1 }
-      },
-      {
-        "titulo": "Observaciones",
-        "campos": [ { "id": "obs", "etiqueta": "Observaciones y seguimiento", "tipo": "area" } ]
-      }
+  "requiereEvidencia": true,
+  "requiereFirma": true,
+  "permiteJustificacion": true,
+  "activo": true,
+  "descripcion": "Atenciones correctivas del mes: verificación de fallas, configuración básica, reemplazo de accesorios y restauración. Un mes sin correctivos se cierra con carta de justificación.",
+  "plantilla": [
+   {
+    "titulo": "Equipos atendidos",
+    "descripcion": "Equipos activos de la Dirección/Unidad que recibieron atención correctiva en el período.",
+    "equipos": {
+     "verificaciones": [
+      "Falla verificada",
+      "Reemplazo de accesorio",
+      "Restauración de configuración",
+      "Prueba con el usuario"
+     ],
+     "estados": [
+      "Atendido",
+      "Escalado a Hardware",
+      "Pendiente"
+     ],
+     "minimo": 1
+    }
+   },
+   {
+    "titulo": "Detalle de las atenciones",
+    "tabla": {
+     "columnas": [
+      "Nombre de equipo",
+      "N° de inventario",
+      "Usuario",
+      "Falla verificada",
+      "Acción realizada",
+      "Estado final"
+     ],
+     "minimo": 1
+    }
+   },
+   {
+    "titulo": "Observaciones",
+    "campos": [
+     {
+      "id": "obs",
+      "etiqueta": "Observaciones de las atenciones",
+      "tipo": "area"
+     }
     ]
+   }
+  ]
+ },
+ {
+  "codigo": "GLPI",
+  "nombre": "Revisión y reporte de tiquetes GLPI",
+  "version": "—",
+  "frecuencia": "Mensual",
+  "aplicacion": {
+   "modo": "Todas las direcciones",
+   "direcciones": [],
+   "unidades": [],
+   "area": "",
+   "observaciones": "Direcciones/Unidades atendidas por Soporte Técnico: se revisan los tiquetes del mes o se justifica si no hubo actividad."
   },
-  {
-    "codigo": "VULN",
-    "nombre": "Análisis de vulnerabilidades de equipos",
-    "version": "—",
-    "frecuencia": "Mensual",
-    "aplicaA": "Todas",
-    "requiereEvidencia": false,
-    "requiereFirma": true,
-    "permiteJustificacion": false,
-    "activo": true,
-    "descripcion": "Seguimiento mensual del reporte de vulnerabilidades por equipo (CVE): severidad, productos afectados y acción de remediación aplicada.",
-    "plantilla": [
-      {
-        "titulo": "Vulnerabilidades por equipo",
-        "tabla": { "columnas": ["Nombre de equipo", "Críticas", "Altas", "Productos afectados", "Acción de remediación", "Estado"], "minimo": 1 }
-      },
-      {
-        "titulo": "Observaciones",
-        "campos": [ { "id": "obs", "etiqueta": "Observaciones y equipos pendientes de remediación", "tipo": "area" } ]
-      }
+  "requiereEvidencia": false,
+  "requiereFirma": true,
+  "permiteJustificacion": true,
+  "activo": true,
+  "descripcion": "Resumen mensual de incidentes registrados en el sistema GLPI: fallos de sistemas, usuarios afectados y resolución. Un mes sin incidentes se cierra con carta de justificación.",
+  "plantilla": [
+   {
+    "titulo": "Resumen del mes",
+    "descripcion": "Cifras del período tomadas del sistema GLPI. Si el mes cerró sin tiquetes, el control se cierra con carta de justificación.",
+    "campos": [
+     {
+      "id": "revisados",
+      "etiqueta": "Tiquetes revisados",
+      "tipo": "numero",
+      "obligatorio": true
+     },
+     {
+      "id": "cerrados",
+      "etiqueta": "Tiquetes cerrados",
+      "tipo": "numero",
+      "obligatorio": true
+     },
+     {
+      "id": "pendientes",
+      "etiqueta": "Tiquetes pendientes",
+      "tipo": "numero",
+      "obligatorio": true
+     },
+     {
+      "id": "periodo",
+      "etiqueta": "Fecha de corte de la consulta",
+      "tipo": "fecha",
+      "obligatorio": true
+     }
     ]
+   },
+   {
+    "titulo": "Tiquetes del mes",
+    "tabla": {
+     "columnas": [
+      "N° de tiquete",
+      "Fecha",
+      "Sistema afectado",
+      "Descripción del incidente",
+      "Usuarios afectados",
+      "Estado"
+     ],
+     "minimo": 1
+    }
+   },
+   {
+    "titulo": "Observaciones",
+    "campos": [
+     {
+      "id": "obs",
+      "etiqueta": "Observaciones y seguimiento",
+      "tipo": "area"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "codigo": "VULN",
+  "nombre": "Análisis de vulnerabilidades de equipos",
+  "version": "—",
+  "frecuencia": "Mensual",
+  "aplicacion": {
+   "modo": "Direcciones específicas",
+   "direcciones": [
+    "DIR-REGS",
+    "DIR-REG",
+    "DIR-GTEC"
+   ],
+   "unidades": [],
+   "area": "",
+   "observaciones": "Análisis mensual de vulnerabilidades en las Direcciones incluidas en el ciclo de escaneo."
   },
-  {
-    "codigo": "F0206",
-    "nombre": "Control de mantenimiento de servidores",
-    "version": "V2",
-    "frecuencia": "Programado",
-    "aplicaA": "Todas",
-    "requiereEvidencia": true,
-    "requiereFirma": true,
-    "permiteJustificacion": false,
-    "activo": true,
-    "descripcion": "Mantenimiento programado de servidores ejecutado por la Gerencia de Infraestructura; el Técnico de Soporte de la oficina recibe a satisfacción y resguarda el reporte.",
-    "plantilla": [
-      {
-        "titulo": "Datos del mantenimiento",
-        "campos": [
-          { "id": "servidor", "etiqueta": "Nombre del servidor", "tipo": "texto", "obligatorio": true },
-          { "id": "inventario", "etiqueta": "N° de inventario", "tipo": "texto", "obligatorio": true },
-          { "id": "fecha", "etiqueta": "Fecha del mantenimiento", "tipo": "fecha", "obligatorio": true },
-          { "id": "ejecuta", "etiqueta": "Técnico que ejecuta (Gerencia de Infraestructura)", "tipo": "texto", "obligatorio": true }
-        ]
-      },
-      {
-        "titulo": "Verificación y revisión",
-        "items": [
-          { "id": "previa", "nombre": "Verificación de servicios y red antes del mantenimiento", "estados": ["Realizada", "Parcial", "No aplica"] },
-          { "id": "externa", "nombre": "Revisión física externa (cableado, conectores, limpieza)", "estados": ["Realizada", "Parcial", "No aplica"] },
-          { "id": "interna", "nombre": "Revisión física interna (ventiladores, tarjetas, fuente)", "estados": ["Realizada", "Parcial", "No aplica"] },
-          { "id": "arranque", "nombre": "Arranque, visor de eventos y diagnóstico de virus", "estados": ["Realizada", "Parcial", "No aplica"] },
-          { "id": "servicios", "nombre": "Servicios del servidor levantados y probados", "estados": ["Realizada", "Parcial", "No aplica"] }
-        ]
-      },
-      {
-        "titulo": "Condiciones y recepción",
-        "campos": [
-          { "id": "inicial", "etiqueta": "Condiciones iniciales del equipo", "tipo": "area", "obligatorio": true },
-          { "id": "final", "etiqueta": "Condiciones finales del equipo", "tipo": "area", "obligatorio": true },
-          { "id": "recibe", "etiqueta": "Nombre de quien recibe a satisfacción", "tipo": "texto", "obligatorio": true }
-        ]
-      }
+  "requiereEvidencia": false,
+  "requiereFirma": true,
+  "permiteJustificacion": false,
+  "activo": true,
+  "descripcion": "Seguimiento mensual del reporte de vulnerabilidades por equipo (CVE): severidad, productos afectados y acción de remediación aplicada.",
+  "plantilla": [
+   {
+    "titulo": "Equipos analizados",
+    "descripcion": "Equipos activos de la Dirección/Unidad incluidos en el análisis de vulnerabilidades del mes.",
+    "equipos": {
+     "verificaciones": [
+      "Análisis ejecutado",
+      "Parches aplicados",
+      "Reinicio verificado"
+     ],
+     "estados": [
+      "Sin vulnerabilidades críticas",
+      "En remediación",
+      "Crítico pendiente"
+     ],
+     "minimo": 1
+    }
+   },
+   {
+    "titulo": "Vulnerabilidades por equipo",
+    "tabla": {
+     "columnas": [
+      "Nombre de equipo",
+      "Críticas",
+      "Altas",
+      "Productos afectados",
+      "Acción de remediación",
+      "Estado"
+     ],
+     "minimo": 1
+    }
+   },
+   {
+    "titulo": "Observaciones",
+    "campos": [
+     {
+      "id": "obs",
+      "etiqueta": "Observaciones y equipos pendientes de remediación",
+      "tipo": "area"
+     }
     ]
+   }
+  ]
+ },
+ {
+  "codigo": "F0206",
+  "nombre": "Control de mantenimiento de servidores",
+  "version": "V2",
+  "frecuencia": "Programado",
+  "aplicacion": {
+   "modo": "Área técnica específica",
+   "direcciones": [],
+   "unidades": [],
+   "area": "AREA-INFRA",
+   "observaciones": "Mantenimiento de servidores ejecutado por la Gerencia de Infraestructura y recibido por el técnico de la oficina."
   },
-  {
-    "codigo": "F0204",
-    "nombre": "Control de mantenimiento de equipo de TELCO",
-    "version": "V2",
-    "frecuencia": "Programado",
-    "aplicaA": "Todas",
-    "requiereEvidencia": true,
-    "requiereFirma": true,
-    "permiteJustificacion": false,
-    "activo": true,
-    "descripcion": "Mantenimiento programado de switches y equipo de telecomunicaciones: verificación de puertos trunk antes y después, limpieza interna y pruebas de comunicación.",
-    "plantilla": [
-      {
-        "titulo": "Datos del mantenimiento",
-        "campos": [
-          { "id": "inventario", "etiqueta": "N° de inventario del switch", "tipo": "texto", "obligatorio": true },
-          { "id": "fecha", "etiqueta": "Fecha del mantenimiento", "tipo": "fecha", "obligatorio": true },
-          { "id": "ejecuta", "etiqueta": "Técnico que ejecuta", "tipo": "texto", "obligatorio": true }
-        ]
-      },
-      {
-        "titulo": "Verificación y mantenimiento",
-        "items": [
-          { "id": "trunk-antes", "nombre": "Estatus de puertos trunk verificado antes del mantenimiento", "estados": ["UP", "DOWN", "No aplica"] },
-          { "id": "fisica", "nombre": "Revisión física de hardware y cableado de energía", "estados": ["Realizada", "Parcial", "No aplica"] },
-          { "id": "limpieza", "nombre": "Limpieza interna y externa (contactos, fuente, tarjetas)", "estados": ["Realizada", "Parcial", "No aplica"] },
-          { "id": "trunk-despues", "nombre": "Pruebas de comunicación después del mantenimiento", "estados": ["UP", "DOWN", "No aplica"] }
-        ]
-      },
-      {
-        "titulo": "Condiciones y recepción",
-        "campos": [
-          { "id": "inicial", "etiqueta": "Condiciones iniciales del equipo", "tipo": "area", "obligatorio": true },
-          { "id": "final", "etiqueta": "Condiciones finales del equipo", "tipo": "area", "obligatorio": true },
-          { "id": "recibe", "etiqueta": "Nombre de quien recibe a satisfacción", "tipo": "texto", "obligatorio": true }
-        ]
-      }
+  "requiereEvidencia": true,
+  "requiereFirma": true,
+  "permiteJustificacion": false,
+  "activo": true,
+  "descripcion": "Mantenimiento programado de servidores ejecutado por la Gerencia de Infraestructura; el Técnico de Soporte de la oficina recibe a satisfacción y resguarda el reporte.",
+  "plantilla": [
+   {
+    "titulo": "Datos del mantenimiento",
+    "campos": [
+     {
+      "id": "servidor",
+      "etiqueta": "Nombre del servidor",
+      "tipo": "texto",
+      "obligatorio": true
+     },
+     {
+      "id": "inventario",
+      "etiqueta": "N° de inventario",
+      "tipo": "texto",
+      "obligatorio": true
+     },
+     {
+      "id": "fecha",
+      "etiqueta": "Fecha del mantenimiento",
+      "tipo": "fecha",
+      "obligatorio": true
+     },
+     {
+      "id": "ejecuta",
+      "etiqueta": "Técnico que ejecuta (Gerencia de Infraestructura)",
+      "tipo": "texto",
+      "obligatorio": true
+     }
     ]
+   },
+   {
+    "titulo": "Verificación y revisión",
+    "items": [
+     {
+      "id": "previa",
+      "nombre": "Verificación de servicios y red antes del mantenimiento",
+      "estados": [
+       "Realizada",
+       "Parcial",
+       "No aplica"
+      ]
+     },
+     {
+      "id": "externa",
+      "nombre": "Revisión física externa (cableado, conectores, limpieza)",
+      "estados": [
+       "Realizada",
+       "Parcial",
+       "No aplica"
+      ]
+     },
+     {
+      "id": "interna",
+      "nombre": "Revisión física interna (ventiladores, tarjetas, fuente)",
+      "estados": [
+       "Realizada",
+       "Parcial",
+       "No aplica"
+      ]
+     },
+     {
+      "id": "arranque",
+      "nombre": "Arranque, visor de eventos y diagnóstico de virus",
+      "estados": [
+       "Realizada",
+       "Parcial",
+       "No aplica"
+      ]
+     },
+     {
+      "id": "servicios",
+      "nombre": "Servicios del servidor levantados y probados",
+      "estados": [
+       "Realizada",
+       "Parcial",
+       "No aplica"
+      ]
+     }
+    ]
+   },
+   {
+    "titulo": "Condiciones y recepción",
+    "campos": [
+     {
+      "id": "inicial",
+      "etiqueta": "Condiciones iniciales del equipo",
+      "tipo": "area",
+      "obligatorio": true
+     },
+     {
+      "id": "final",
+      "etiqueta": "Condiciones finales del equipo",
+      "tipo": "area",
+      "obligatorio": true
+     },
+     {
+      "id": "recibe",
+      "etiqueta": "Nombre de quien recibe a satisfacción",
+      "tipo": "texto",
+      "obligatorio": true
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "codigo": "F0204",
+  "nombre": "Control de mantenimiento de equipo de TELCO",
+  "version": "V2",
+  "frecuencia": "Programado",
+  "aplicacion": {
+   "modo": "Área técnica específica",
+   "direcciones": [],
+   "unidades": [],
+   "area": "AREA-INFRA",
+   "observaciones": "Mantenimiento de equipo de telecomunicaciones ejecutado por la Gerencia de Infraestructura."
   },
-  {
-    "codigo": "SEGTIC",
-    "nombre": "Verificación de cumplimiento a controles de seguridad informática",
-    "version": "ISO/IEC 27001",
-    "frecuencia": "Programado",
-    "aplicaA": "Todas",
-    "requiereEvidencia": false,
-    "requiereFirma": true,
-    "permiteJustificacion": false,
-    "activo": true,
-    "descripcion": "Lista de chequeo del Departamento de Seguridad TIC basada en la norma ISO/IEC 27001 (Anexo A): evidencia documental de los controles operativos de la oficina.",
-    "plantilla": [
-      {
-        "titulo": "Controles documentales verificados",
-        "items": [
-          { "id": "ingreso", "nombre": "Evidencia digital del control de ingreso a cuarto de servidores", "estados": ["Cumple", "No cumple", "No aplica"] },
-          { "id": "condiciones", "nombre": "Evidencia digital del control de condiciones de cuarto de servidores", "estados": ["Cumple", "No cumple", "No aplica"] },
-          { "id": "limpieza", "nombre": "Evidencia digital del control de limpieza de cuarto de servidores", "estados": ["Cumple", "No cumple", "No aplica"] },
-          { "id": "cintas", "nombre": "Evidencia digital de recepción, entrega e histórico de cintas de respaldo", "estados": ["Cumple", "No cumple", "No aplica"] },
-          { "id": "etiquetado", "nombre": "Etiquetado estandarizado de cintas según normativa", "estados": ["Cumple", "No cumple", "No aplica"] },
-          { "id": "incidentes", "nombre": "Registro de incidentes en el sistema de información web vigente", "estados": ["Cumple", "No cumple", "No aplica"] },
-          { "id": "hora", "nombre": "Evidencia digital del control de sincronización de hora", "estados": ["Cumple", "No cumple", "No aplica"] },
-          { "id": "inventario", "nombre": "Evidencia digital del control de inventario de equipos", "estados": ["Cumple", "No cumple", "No aplica"] }
-        ]
-      },
-      {
-        "titulo": "Hallazgos",
-        "campos": [
-          { "id": "hallazgos", "etiqueta": "Hallazgos generales", "tipo": "area" },
-          { "id": "entrevistado", "etiqueta": "Personal entrevistado / cargo", "tipo": "texto", "obligatorio": true }
-        ]
-      }
+  "requiereEvidencia": true,
+  "requiereFirma": true,
+  "permiteJustificacion": false,
+  "activo": true,
+  "descripcion": "Mantenimiento programado de switches y equipo de telecomunicaciones: verificación de puertos trunk antes y después, limpieza interna y pruebas de comunicación.",
+  "plantilla": [
+   {
+    "titulo": "Datos del mantenimiento",
+    "campos": [
+     {
+      "id": "inventario",
+      "etiqueta": "N° de inventario del switch",
+      "tipo": "texto",
+      "obligatorio": true
+     },
+     {
+      "id": "fecha",
+      "etiqueta": "Fecha del mantenimiento",
+      "tipo": "fecha",
+      "obligatorio": true
+     },
+     {
+      "id": "ejecuta",
+      "etiqueta": "Técnico que ejecuta",
+      "tipo": "texto",
+      "obligatorio": true
+     }
     ]
-  }
+   },
+   {
+    "titulo": "Verificación y mantenimiento",
+    "items": [
+     {
+      "id": "trunk-antes",
+      "nombre": "Estatus de puertos trunk verificado antes del mantenimiento",
+      "estados": [
+       "UP",
+       "DOWN",
+       "No aplica"
+      ]
+     },
+     {
+      "id": "fisica",
+      "nombre": "Revisión física de hardware y cableado de energía",
+      "estados": [
+       "Realizada",
+       "Parcial",
+       "No aplica"
+      ]
+     },
+     {
+      "id": "limpieza",
+      "nombre": "Limpieza interna y externa (contactos, fuente, tarjetas)",
+      "estados": [
+       "Realizada",
+       "Parcial",
+       "No aplica"
+      ]
+     },
+     {
+      "id": "trunk-despues",
+      "nombre": "Pruebas de comunicación después del mantenimiento",
+      "estados": [
+       "UP",
+       "DOWN",
+       "No aplica"
+      ]
+     }
+    ]
+   },
+   {
+    "titulo": "Condiciones y recepción",
+    "campos": [
+     {
+      "id": "inicial",
+      "etiqueta": "Condiciones iniciales del equipo",
+      "tipo": "area",
+      "obligatorio": true
+     },
+     {
+      "id": "final",
+      "etiqueta": "Condiciones finales del equipo",
+      "tipo": "area",
+      "obligatorio": true
+     },
+     {
+      "id": "recibe",
+      "etiqueta": "Nombre de quien recibe a satisfacción",
+      "tipo": "texto",
+      "obligatorio": true
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "codigo": "SEGTIC",
+  "nombre": "Verificación de cumplimiento a controles de seguridad informática",
+  "version": "ISO/IEC 27001",
+  "frecuencia": "Programado",
+  "aplicacion": {
+   "modo": "Área técnica específica",
+   "direcciones": [],
+   "unidades": [],
+   "area": "AREA-SEG",
+   "observaciones": "Verificación documental del cumplimiento de los controles de seguridad informática."
+  },
+  "requiereEvidencia": false,
+  "requiereFirma": true,
+  "permiteJustificacion": false,
+  "activo": true,
+  "descripcion": "Lista de chequeo del Departamento de Seguridad TIC basada en la norma ISO/IEC 27001 (Anexo A): evidencia documental de los controles operativos de la oficina.",
+  "plantilla": [
+   {
+    "titulo": "Controles documentales verificados",
+    "items": [
+     {
+      "id": "ingreso",
+      "nombre": "Evidencia digital del control de ingreso a cuarto de servidores",
+      "estados": [
+       "Cumple",
+       "No cumple",
+       "No aplica"
+      ]
+     },
+     {
+      "id": "condiciones",
+      "nombre": "Evidencia digital del control de condiciones de cuarto de servidores",
+      "estados": [
+       "Cumple",
+       "No cumple",
+       "No aplica"
+      ]
+     },
+     {
+      "id": "limpieza",
+      "nombre": "Evidencia digital del control de limpieza de cuarto de servidores",
+      "estados": [
+       "Cumple",
+       "No cumple",
+       "No aplica"
+      ]
+     },
+     {
+      "id": "cintas",
+      "nombre": "Evidencia digital de recepción, entrega e histórico de cintas de respaldo",
+      "estados": [
+       "Cumple",
+       "No cumple",
+       "No aplica"
+      ]
+     },
+     {
+      "id": "etiquetado",
+      "nombre": "Etiquetado estandarizado de cintas según normativa",
+      "estados": [
+       "Cumple",
+       "No cumple",
+       "No aplica"
+      ]
+     },
+     {
+      "id": "incidentes",
+      "nombre": "Registro de incidentes en el sistema de información web vigente",
+      "estados": [
+       "Cumple",
+       "No cumple",
+       "No aplica"
+      ]
+     },
+     {
+      "id": "hora",
+      "nombre": "Evidencia digital del control de sincronización de hora",
+      "estados": [
+       "Cumple",
+       "No cumple",
+       "No aplica"
+      ]
+     },
+     {
+      "id": "inventario",
+      "nombre": "Evidencia digital del control de inventario de equipos",
+      "estados": [
+       "Cumple",
+       "No cumple",
+       "No aplica"
+      ]
+     }
+    ]
+   },
+   {
+    "titulo": "Hallazgos",
+    "campos": [
+     {
+      "id": "hallazgos",
+      "etiqueta": "Hallazgos generales",
+      "tipo": "area"
+     },
+     {
+      "id": "entrevistado",
+      "etiqueta": "Personal entrevistado / cargo",
+      "tipo": "texto",
+      "obligatorio": true
+     }
+    ]
+   }
+  ]
+ }
 ]

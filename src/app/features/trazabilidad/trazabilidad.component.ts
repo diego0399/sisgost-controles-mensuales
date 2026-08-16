@@ -14,6 +14,12 @@ import { MESES, formateaFecha } from '../../core/models/models';
 @Component({
   selector: 'app-trazabilidad',
   imports: [FormsModule, HelpTipComponent, DocumentoComponent],
+  styles: `
+    .tl-mod { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px; }
+    /* Cinco filtros: con anchos fijos se acomodan en dos líneas en vez de estirarse. */
+    .filtros { display: flex; flex-wrap: wrap; gap: 8px; justify-content: flex-end; }
+    .filtros .control { width: 195px; }
+  `,
   template: `
     <div class="page">
       <div class="page-head">
@@ -33,8 +39,8 @@ import { MESES, formateaFecha } from '../../core/models/models';
             <h3>Eventos del sistema</h3>
             <p class="sub">Ordenados del más reciente al más antiguo</p>
           </div>
-          <div class="row">
-            <input class="control" style="width: 220px;" placeholder="Buscar acción, usuario, control…" [(ngModel)]="busca" />
+          <div class="filtros">
+            <input class="control" placeholder="Buscar acción o usuario…" [(ngModel)]="busca" />
             <select class="control" [(ngModel)]="fDireccion">
               <option value="">Todas las direcciones</option>
               @for (d of data.direcciones(); track d.id) { <option [value]="d.id">{{ d.corta }}</option> }
@@ -47,6 +53,10 @@ import { MESES, formateaFecha } from '../../core/models/models';
               <option value="">Todas las acciones</option>
               @for (a of acciones(); track a) { <option [value]="a">{{ a }}</option> }
             </select>
+            <select class="control" [(ngModel)]="fModulo">
+              <option value="">Todos los eventos</option>
+              <option value="integracion">Solo integración entre módulos</option>
+            </select>
           </div>
         </div>
         <div class="card-body">
@@ -57,12 +67,20 @@ import { MESES, formateaFecha } from '../../core/models/models';
                 <div class="tl-what">
                   {{ e.accion }}
                   @if (e.tipoControl) { — {{ e.tipoControl }} }
-                  @if (e.direccion) { · {{ data.cortaDireccion(e.direccion) }} }
+                  @if (e.direccion) { · {{ data.cortaDireccion(e.direccion) }}@if (e.unidad) { / {{ e.unidad }} } }
                 </div>
                 <div class="tl-who">
                   {{ e.usuario }} ({{ e.rol }})
                   @if (e.estadoAnterior || e.estadoNuevo) { · {{ e.estadoAnterior || '—' }} → <b>{{ e.estadoNuevo || '—' }}</b> }
                 </div>
+                @if (e.moduloDestino || e.inventario) {
+                  <div class="tl-mod">
+                    @if (e.moduloDestino) {
+                      <span class="badge info plain">{{ corto(e.moduloOrigen) }} → {{ corto(e.moduloDestino) }}</span>
+                    }
+                    @if (e.inventario) { <span class="badge plain mono">Inv. {{ e.inventario }}</span> }
+                  </div>
+                }
                 @if (e.observacion) { <div class="tl-note">{{ e.observacion }}</div> }
                 @if (e.documento) {
                   <div style="margin-top: 6px;">
@@ -97,6 +115,7 @@ export class TrazabilidadComponent {
   protected readonly fDireccion = signal('');
   protected readonly fMes = signal(0);
   protected readonly fAccion = signal('');
+  protected readonly fModulo = signal('');
   protected readonly verDoc = signal('');
   protected readonly limite = signal(60);
 
@@ -113,15 +132,19 @@ export class TrazabilidadComponent {
       .filter((e) => !this.fDireccion() || e.direccion === this.fDireccion())
       .filter((e) => !this.fMes() || Number(e.fecha.split('-')[1]) === this.fMes())
       .filter((e) => !this.fAccion() || e.accion === this.fAccion())
-      .filter((e) => !q || [e.accion, e.usuario, e.tipoControl ?? '', e.observacion ?? ''].join(' ').toLowerCase().includes(q));
+      .filter((e) => this.fModulo() !== 'integracion' || !!e.moduloDestino)
+      .filter((e) => !q || [e.accion, e.usuario, e.tipoControl ?? '', e.observacion ?? '', e.inventario ?? ''].join(' ').toLowerCase().includes(q));
   });
+
+  /** Abrevia el nombre del módulo para el chip de integración. */
+  protected corto(modulo?: string): string { return (modulo ?? '').replace('SISGOST — ', ''); }
 
   protected readonly pagina = computed(() => this.filtrados().slice(0, this.limite()));
 
   protected readonly acciones = computed(() => [...new Set(this.visibles().map((e) => e.accion))].sort());
 
   protected esHito(accion: string): boolean {
-    return /(justificado|vencid|agregado desde|descargado desde|sin soporte)/i.test(accion);
+    return /(justificado|vencid|aceptado en gestión|agregado al inventario|descargado desde|retirado del inventario|distribución|sin soporte|técnico de configuración)/i.test(accion);
   }
 
   protected formatea(iso: string): string { return formateaFecha(iso); }

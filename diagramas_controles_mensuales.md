@@ -5,7 +5,8 @@ Las fuentes PlantUML están en `docs/plantuml/`. Se renderizan con cualquier vis
 
 | Diagrama | Archivo | Qué muestra |
 |---|---|---|
-| Casos de uso | `docs/plantuml/casos-de-uso.puml` | Los cuatro roles (más Gestión de Equipos como actor de sistema) y los 16 casos de uso del módulo. |
+| Casos de uso | `docs/plantuml/casos-de-uso.puml` | Los cuatro roles (más Gestión de Equipos como actor de sistema) y los 19 casos de uso del módulo. |
+| **Integración entre módulos** | `docs/plantuml/integracion-modulos.puml` | Qué datos comparten los dos módulos, cómo la distribución de soportes filtra el Técnico de Configuración en Gestión de Equipos y cómo el equipo aceptado llega al inventario operativo. |
 | Actividades — control | `docs/plantuml/actividades-control.puml` | El ciclo de vida completo de un control: programación con plazo hábil, completado, entrega a tiempo/tarde, justificación, revisión del Encargado y vencimiento. |
 | Actividades — bitácora | `docs/plantuml/actividades-bitacora.puml` | La bitácora diaria: revisión obligatoria de atención al público, tratamiento de fallas y el corte de las 5:00 p. m. |
 | Componentes | `docs/plantuml/componentes.puml` | Pantallas lazy, componentes compartidos (visor y armador de documentos) y la cadena de servicios `Holiday → BusinessDay → Deadline → Data`. |
@@ -20,11 +21,18 @@ SISGOST — Gestión de Equipos                SISGOST — Controles Mensuales
 ────────────────────────────                ──────────────────────────────
 Entrega aceptada por Usuario Final   ───►   Equipo activo en Dirección/Unidad
                                             (crece el inventario operativo,
-                                             alimenta F0422 / F0174 / VULN)
+                                             alimenta F0422 / F0174 / F0288 / VULN)
 
 Descargo del equipo                  ───►   Equipo sale del inventario activo
                                             (estado «Descargado»)
+
+Técnico de Configuración elegible    ◄───   Distribución de soportes
+en el expediente único                      (se administra en este módulo)
+
+Usuarios, roles, Direcciones/Unidades ◄──►  Mismos registros, sin duplicar
 ```
 
-Ambos efectos llegan como eventos (`EquipmentIntegrationService`) y quedan en trazabilidad;
-la lógica de Gestión de Equipos no se duplica en este módulo.
+Los movimientos de equipos llegan como eventos (`EquipmentIntegrationService`) y quedan en
+trazabilidad con módulo origen y destino; la lógica de Gestión de Equipos no se duplica aquí.
+La distribución de soportes es un **registro único** que los dos módulos leen a través del
+mismo `SupportDistributionService`.

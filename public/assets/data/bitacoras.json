@@ -2,9 +2,9 @@
  {
   "id": "BIT-2026-0001",
   "fecha": "2026-07-24",
-  "direccion": "DIR-USU",
-  "unidad": "Atención al público",
-  "responsable": "Julio Alberto Rivera",
+  "direccion": "DIR-REGS",
+  "unidad": "Registro de la Propiedad",
+  "responsable": "Wendy Carranza",
   "estado": "Enviada",
   "horaEnvio": "16:26",
   "revision": [
@@ -63,20 +63,20 @@
    {
     "hora": "15:00",
     "actividad": "Seguimiento de tiquetes GLPI",
-    "area": "DTI",
+    "area": "Soporte",
     "resultado": "Al día",
     "observaciones": ""
    }
   ],
   "observaciones": "",
-  "documento": "DOC-2026-0309"
+  "documento": "DOC-2026-0385"
  },
  {
   "id": "BIT-2026-0002",
   "fecha": "2026-07-24",
-  "direccion": "DIR-SMI",
-  "unidad": "Atención al público",
-  "responsable": "Luis Adalberto Martínez",
+  "direccion": "DIR-REGS",
+  "unidad": "Registro de Comercio",
+  "responsable": "Wendy Carranza",
   "estado": "Enviada",
   "horaEnvio": "16:38",
   "revision": [
@@ -135,20 +135,20 @@
    {
     "hora": "15:00",
     "actividad": "Seguimiento de tiquetes GLPI",
-    "area": "DTI",
+    "area": "Soporte",
     "resultado": "Al día",
     "observaciones": ""
    }
   ],
   "observaciones": "",
-  "documento": "DOC-2026-0310"
+  "documento": "DOC-2026-0386"
  },
  {
   "id": "BIT-2026-0003",
   "fecha": "2026-07-24",
-  "direccion": "DIR-SAN",
-  "unidad": "Atención al público",
-  "responsable": "Karla Beatriz Ramírez",
+  "direccion": "DIR-REG",
+  "unidad": "Dirección de Registro",
+  "responsable": "Mateo Martínez",
   "estado": "Enviada",
   "horaEnvio": "16:44",
   "revision": [
@@ -207,20 +207,20 @@
    {
     "hora": "15:00",
     "actividad": "Seguimiento de tiquetes GLPI",
-    "area": "DTI",
+    "area": "Soporte",
     "resultado": "Al día",
     "observaciones": ""
    }
   ],
   "observaciones": "",
-  "documento": "DOC-2026-0311"
+  "documento": "DOC-2026-0387"
  },
  {
   "id": "BIT-2026-0004",
   "fecha": "2026-07-24",
-  "direccion": "DIR-SSA",
-  "unidad": "Atención al público",
-  "responsable": "Karla Beatriz Ramírez",
+  "direccion": "DIR-IGN",
+  "unidad": "IGN",
+  "responsable": "Mateo Martínez",
   "estado": "Enviada",
   "horaEnvio": "16:51",
   "revision": [
@@ -283,7 +283,7 @@
    {
     "hora": "15:00",
     "actividad": "Seguimiento de tiquetes GLPI",
-    "area": "DTI",
+    "area": "Soporte",
     "resultado": "Al día",
     "observaciones": ""
    },
@@ -296,14 +296,14 @@
    }
   ],
   "observaciones": "",
-  "documento": "DOC-2026-0312"
+  "documento": "DOC-2026-0388"
  },
  {
   "id": "BIT-2026-0005",
   "fecha": "2026-07-27",
-  "direccion": "DIR-USU",
-  "unidad": "Atención al público",
-  "responsable": "Julio Alberto Rivera",
+  "direccion": "DIR-REGS",
+  "unidad": "Registro de la Propiedad",
+  "responsable": "Wendy Carranza",
   "estado": "Enviada",
   "horaEnvio": "16:12",
   "revision": [
@@ -362,20 +362,20 @@
    {
     "hora": "15:00",
     "actividad": "Seguimiento de tiquetes GLPI",
-    "area": "DTI",
+    "area": "Soporte",
     "resultado": "Al día",
     "observaciones": ""
    }
   ],
   "observaciones": "",
-  "documento": "DOC-2026-0313"
+  "documento": "DOC-2026-0389"
  },
  {
   "id": "BIT-2026-0006",
   "fecha": "2026-07-27",
-  "direccion": "DIR-SMI",
-  "unidad": "Atención al público",
-  "responsable": "Luis Adalberto Martínez",
+  "direccion": "DIR-REGS",
+  "unidad": "Registro de Comercio",
+  "responsable": "Wendy Carranza",
   "estado": "Enviada tarde",
   "horaEnvio": "17:18",
   "revision": [
@@ -434,20 +434,20 @@
    {
     "hora": "15:00",
     "actividad": "Seguimiento de tiquetes GLPI",
-    "area": "DTI",
+    "area": "Soporte",
     "resultado": "Al día",
     "observaciones": ""
    }
   ],
   "observaciones": "La bitácora diaria fue enviada fuera del horario establecido.",
-  "documento": "DOC-2026-0314"
+  "documento": "DOC-2026-0390"
  },
  {
   "id": "BIT-2026-0007",
   "fecha": "2026-07-27",
-  "direccion": "DIR-SAN",
-  "unidad": "Atención al público",
-  "responsable": "Karla Beatriz Ramírez",
+  "direccion": "DIR-REG",
+  "unidad": "Dirección de Registro",
+  "responsable": "Mateo Martínez",
   "estado": "Enviada",
   "horaEnvio": "16:38",
   "revision": [
@@ -506,20 +506,20 @@
    {
     "hora": "15:00",
     "actividad": "Seguimiento de tiquetes GLPI",
-    "area": "DTI",
+    "area": "Soporte",
     "resultado": "Al día",
     "observaciones": ""
    }
   ],
   "observaciones": "",
-  "documento": "DOC-2026-0315"
+  "documento": "DOC-2026-0391"
  },
  {
   "id": "BIT-2026-0008",
   "fecha": "2026-07-27",
-  "direccion": "DIR-SSA",
-  "unidad": "Atención al público",
-  "responsable": "Karla Beatriz Ramírez",
+  "direccion": "DIR-IGN",
+  "unidad": "IGN",
+  "responsable": "Mateo Martínez",
   "estado": "Enviada",
   "horaEnvio": "16:44",
   "revision": [
@@ -578,20 +578,20 @@
    {
     "hora": "15:00",
     "actividad": "Seguimiento de tiquetes GLPI",
-    "area": "DTI",
+    "area": "Soporte",
     "resultado": "Al día",
     "observaciones": ""
    }
   ],
   "observaciones": "",
-  "documento": "DOC-2026-0316"
+  "documento": "DOC-2026-0392"
  },
  {
   "id": "BIT-2026-0009",
   "fecha": "2026-07-28",
-  "direccion": "DIR-USU",
-  "unidad": "Atención al público",
-  "responsable": "Julio Alberto Rivera",
+  "direccion": "DIR-REGS",
+  "unidad": "Registro de la Propiedad",
+  "responsable": "Wendy Carranza",
   "estado": "Enviada",
   "horaEnvio": "16:51",
   "revision": [
@@ -650,20 +650,20 @@
    {
     "hora": "15:00",
     "actividad": "Seguimiento de tiquetes GLPI",
-    "area": "DTI",
+    "area": "Soporte",
     "resultado": "Al día",
     "observaciones": ""
    }
   ],
   "observaciones": "",
-  "documento": "DOC-2026-0317"
+  "documento": "DOC-2026-0393"
  },
  {
   "id": "BIT-2026-0010",
   "fecha": "2026-07-28",
-  "direccion": "DIR-SMI",
-  "unidad": "Atención al público",
-  "responsable": "Luis Adalberto Martínez",
+  "direccion": "DIR-REGS",
+  "unidad": "Registro de Comercio",
+  "responsable": "Wendy Carranza",
   "estado": "Enviada",
   "horaEnvio": "16:12",
   "revision": [
@@ -722,20 +722,20 @@
    {
     "hora": "15:00",
     "actividad": "Seguimiento de tiquetes GLPI",
-    "area": "DTI",
+    "area": "Soporte",
     "resultado": "Al día",
     "observaciones": ""
    }
   ],
   "observaciones": "",
-  "documento": "DOC-2026-0318"
+  "documento": "DOC-2026-0394"
  },
  {
   "id": "BIT-2026-0011",
   "fecha": "2026-07-28",
-  "direccion": "DIR-SAN",
-  "unidad": "Atención al público",
-  "responsable": "Karla Beatriz Ramírez",
+  "direccion": "DIR-REG",
+  "unidad": "Dirección de Registro",
+  "responsable": "Mateo Martínez",
   "estado": "Enviada",
   "horaEnvio": "16:26",
   "revision": [
@@ -794,20 +794,20 @@
    {
     "hora": "15:00",
     "actividad": "Seguimiento de tiquetes GLPI",
-    "area": "DTI",
+    "area": "Soporte",
     "resultado": "Al día",
     "observaciones": ""
    }
   ],
   "observaciones": "",
-  "documento": "DOC-2026-0319"
+  "documento": "DOC-2026-0395"
  },
  {
   "id": "BIT-2026-0012",
   "fecha": "2026-07-28",
-  "direccion": "DIR-SSA",
-  "unidad": "Atención al público",
-  "responsable": "Karla Beatriz Ramírez",
+  "direccion": "DIR-IGN",
+  "unidad": "IGN",
+  "responsable": "Mateo Martínez",
   "estado": "Enviada",
   "horaEnvio": "16:38",
   "revision": [
@@ -866,20 +866,20 @@
    {
     "hora": "15:00",
     "actividad": "Seguimiento de tiquetes GLPI",
-    "area": "DTI",
+    "area": "Soporte",
     "resultado": "Al día",
     "observaciones": ""
    }
   ],
   "observaciones": "",
-  "documento": "DOC-2026-0320"
+  "documento": "DOC-2026-0396"
  },
  {
   "id": "BIT-2026-0013",
   "fecha": "2026-07-29",
-  "direccion": "DIR-USU",
-  "unidad": "Atención al público",
-  "responsable": "Julio Alberto Rivera",
+  "direccion": "DIR-REGS",
+  "unidad": "Registro de la Propiedad",
+  "responsable": "Wendy Carranza",
   "estado": "Enviada",
   "horaEnvio": "16:44",
   "revision": [
@@ -942,7 +942,7 @@
    {
     "hora": "15:00",
     "actividad": "Seguimiento de tiquetes GLPI",
-    "area": "DTI",
+    "area": "Soporte",
     "resultado": "Al día",
     "observaciones": ""
    },
@@ -955,14 +955,14 @@
    }
   ],
   "observaciones": "",
-  "documento": "DOC-2026-0321"
+  "documento": "DOC-2026-0397"
  },
  {
   "id": "BIT-2026-0014",
   "fecha": "2026-07-29",
-  "direccion": "DIR-SMI",
-  "unidad": "Atención al público",
-  "responsable": "Luis Adalberto Martínez",
+  "direccion": "DIR-REGS",
+  "unidad": "Registro de Comercio",
+  "responsable": "Wendy Carranza",
   "estado": "Enviada",
   "horaEnvio": "16:51",
   "revision": [
@@ -1021,20 +1021,20 @@
    {
     "hora": "15:00",
     "actividad": "Seguimiento de tiquetes GLPI",
-    "area": "DTI",
+    "area": "Soporte",
     "resultado": "Al día",
     "observaciones": ""
    }
   ],
   "observaciones": "",
-  "documento": "DOC-2026-0322"
+  "documento": "DOC-2026-0398"
  },
  {
   "id": "BIT-2026-0015",
   "fecha": "2026-07-29",
-  "direccion": "DIR-SAN",
-  "unidad": "Atención al público",
-  "responsable": "Karla Beatriz Ramírez",
+  "direccion": "DIR-REG",
+  "unidad": "Dirección de Registro",
+  "responsable": "Mateo Martínez",
   "estado": "Enviada",
   "horaEnvio": "16:12",
   "revision": [
@@ -1093,20 +1093,20 @@
    {
     "hora": "15:00",
     "actividad": "Seguimiento de tiquetes GLPI",
-    "area": "DTI",
+    "area": "Soporte",
     "resultado": "Al día",
     "observaciones": ""
    }
   ],
   "observaciones": "",
-  "documento": "DOC-2026-0323"
+  "documento": "DOC-2026-0399"
  },
  {
   "id": "BIT-2026-0016",
   "fecha": "2026-07-29",
-  "direccion": "DIR-SSA",
-  "unidad": "Atención al público",
-  "responsable": "Karla Beatriz Ramírez",
+  "direccion": "DIR-IGN",
+  "unidad": "IGN",
+  "responsable": "Mateo Martínez",
   "estado": "Enviada",
   "horaEnvio": "16:26",
   "revision": [
@@ -1165,20 +1165,20 @@
    {
     "hora": "15:00",
     "actividad": "Seguimiento de tiquetes GLPI",
-    "area": "DTI",
+    "area": "Soporte",
     "resultado": "Al día",
     "observaciones": ""
    }
   ],
   "observaciones": "",
-  "documento": "DOC-2026-0324"
+  "documento": "DOC-2026-0400"
  },
  {
   "id": "BIT-2026-0017",
   "fecha": "2026-07-30",
-  "direccion": "DIR-USU",
-  "unidad": "Atención al público",
-  "responsable": "Julio Alberto Rivera",
+  "direccion": "DIR-REGS",
+  "unidad": "Registro de la Propiedad",
+  "responsable": "Wendy Carranza",
   "estado": "Enviada",
   "horaEnvio": "16:38",
   "revision": [
@@ -1237,20 +1237,20 @@
    {
     "hora": "15:00",
     "actividad": "Seguimiento de tiquetes GLPI",
-    "area": "DTI",
+    "area": "Soporte",
     "resultado": "Al día",
     "observaciones": ""
    }
   ],
   "observaciones": "",
-  "documento": "DOC-2026-0325"
+  "documento": "DOC-2026-0401"
  },
  {
   "id": "BIT-2026-0018",
   "fecha": "2026-07-30",
-  "direccion": "DIR-SMI",
-  "unidad": "Atención al público",
-  "responsable": "Luis Adalberto Martínez",
+  "direccion": "DIR-REGS",
+  "unidad": "Registro de Comercio",
+  "responsable": "Wendy Carranza",
   "estado": "Enviada",
   "horaEnvio": "16:44",
   "revision": [
@@ -1309,20 +1309,20 @@
    {
     "hora": "15:00",
     "actividad": "Seguimiento de tiquetes GLPI",
-    "area": "DTI",
+    "area": "Soporte",
     "resultado": "Al día",
     "observaciones": ""
    }
   ],
   "observaciones": "",
-  "documento": "DOC-2026-0326"
+  "documento": "DOC-2026-0402"
  },
  {
   "id": "BIT-2026-0019",
   "fecha": "2026-07-30",
-  "direccion": "DIR-SAN",
-  "unidad": "Atención al público",
-  "responsable": "Karla Beatriz Ramírez",
+  "direccion": "DIR-REG",
+  "unidad": "Dirección de Registro",
+  "responsable": "Mateo Martínez",
   "estado": "Enviada tarde",
   "horaEnvio": "17:31",
   "revision": [
@@ -1381,20 +1381,20 @@
    {
     "hora": "15:00",
     "actividad": "Seguimiento de tiquetes GLPI",
-    "area": "DTI",
+    "area": "Soporte",
     "resultado": "Al día",
     "observaciones": ""
    }
   ],
   "observaciones": "La bitácora diaria fue enviada fuera del horario establecido.",
-  "documento": "DOC-2026-0327"
+  "documento": "DOC-2026-0403"
  },
  {
   "id": "BIT-2026-0020",
   "fecha": "2026-07-30",
-  "direccion": "DIR-SSA",
-  "unidad": "Atención al público",
-  "responsable": "Karla Beatriz Ramírez",
+  "direccion": "DIR-IGN",
+  "unidad": "IGN",
+  "responsable": "Mateo Martínez",
   "estado": "Enviada",
   "horaEnvio": "16:12",
   "revision": [
@@ -1453,20 +1453,20 @@
    {
     "hora": "15:00",
     "actividad": "Seguimiento de tiquetes GLPI",
-    "area": "DTI",
+    "area": "Soporte",
     "resultado": "Al día",
     "observaciones": ""
    }
   ],
   "observaciones": "",
-  "documento": "DOC-2026-0328"
+  "documento": "DOC-2026-0404"
  },
  {
   "id": "BIT-2026-0021",
   "fecha": "2026-07-31",
-  "direccion": "DIR-USU",
-  "unidad": "Atención al público",
-  "responsable": "Julio Alberto Rivera",
+  "direccion": "DIR-REGS",
+  "unidad": "Registro de la Propiedad",
+  "responsable": "Wendy Carranza",
   "estado": "Enviada",
   "horaEnvio": "16:26",
   "revision": [
@@ -1525,20 +1525,20 @@
    {
     "hora": "15:00",
     "actividad": "Seguimiento de tiquetes GLPI",
-    "area": "DTI",
+    "area": "Soporte",
     "resultado": "Al día",
     "observaciones": ""
    }
   ],
   "observaciones": "",
-  "documento": "DOC-2026-0329"
+  "documento": "DOC-2026-0405"
  },
  {
   "id": "BIT-2026-0022",
   "fecha": "2026-07-31",
-  "direccion": "DIR-SMI",
-  "unidad": "Atención al público",
-  "responsable": "Luis Adalberto Martínez",
+  "direccion": "DIR-REGS",
+  "unidad": "Registro de Comercio",
+  "responsable": "Wendy Carranza",
   "estado": "Enviada",
   "horaEnvio": "16:38",
   "revision": [
@@ -1601,7 +1601,7 @@
    {
     "hora": "15:00",
     "actividad": "Seguimiento de tiquetes GLPI",
-    "area": "DTI",
+    "area": "Soporte",
     "resultado": "Al día",
     "observaciones": ""
    },
@@ -1614,14 +1614,14 @@
    }
   ],
   "observaciones": "",
-  "documento": "DOC-2026-0330"
+  "documento": "DOC-2026-0406"
  },
  {
   "id": "BIT-2026-0023",
   "fecha": "2026-07-31",
-  "direccion": "DIR-SAN",
-  "unidad": "Atención al público",
-  "responsable": "Karla Beatriz Ramírez",
+  "direccion": "DIR-REG",
+  "unidad": "Dirección de Registro",
+  "responsable": "Mateo Martínez",
   "estado": "Enviada",
   "horaEnvio": "16:44",
   "revision": [
@@ -1680,20 +1680,20 @@
    {
     "hora": "15:00",
     "actividad": "Seguimiento de tiquetes GLPI",
-    "area": "DTI",
+    "area": "Soporte",
     "resultado": "Al día",
     "observaciones": ""
    }
   ],
   "observaciones": "",
-  "documento": "DOC-2026-0331"
+  "documento": "DOC-2026-0407"
  },
  {
   "id": "BIT-2026-0024",
   "fecha": "2026-07-31",
-  "direccion": "DIR-SSA",
-  "unidad": "Atención al público",
-  "responsable": "Karla Beatriz Ramírez",
+  "direccion": "DIR-IGN",
+  "unidad": "IGN",
+  "responsable": "Mateo Martínez",
   "estado": "Enviada",
   "horaEnvio": "16:51",
   "revision": [
@@ -1752,20 +1752,20 @@
    {
     "hora": "15:00",
     "actividad": "Seguimiento de tiquetes GLPI",
-    "area": "DTI",
+    "area": "Soporte",
     "resultado": "Al día",
     "observaciones": ""
    }
   ],
   "observaciones": "",
-  "documento": "DOC-2026-0332"
+  "documento": "DOC-2026-0408"
  },
  {
   "id": "BIT-2026-0025",
   "fecha": "2026-08-07",
-  "direccion": "DIR-USU",
-  "unidad": "Atención al público",
-  "responsable": "Julio Alberto Rivera",
+  "direccion": "DIR-REGS",
+  "unidad": "Registro de la Propiedad",
+  "responsable": "Wendy Carranza",
   "estado": "Enviada",
   "horaEnvio": "16:12",
   "revision": [
@@ -1824,20 +1824,20 @@
    {
     "hora": "15:00",
     "actividad": "Seguimiento de tiquetes GLPI",
-    "area": "DTI",
+    "area": "Soporte",
     "resultado": "Al día",
     "observaciones": ""
    }
   ],
   "observaciones": "",
-  "documento": "DOC-2026-0333"
+  "documento": "DOC-2026-0409"
  },
  {
   "id": "BIT-2026-0026",
   "fecha": "2026-08-07",
-  "direccion": "DIR-SMI",
-  "unidad": "Atención al público",
-  "responsable": "Luis Adalberto Martínez",
+  "direccion": "DIR-REGS",
+  "unidad": "Registro de Comercio",
+  "responsable": "Wendy Carranza",
   "estado": "Enviada",
   "horaEnvio": "16:26",
   "revision": [
@@ -1896,20 +1896,20 @@
    {
     "hora": "15:00",
     "actividad": "Seguimiento de tiquetes GLPI",
-    "area": "DTI",
+    "area": "Soporte",
     "resultado": "Al día",
     "observaciones": ""
    }
   ],
   "observaciones": "",
-  "documento": "DOC-2026-0334"
+  "documento": "DOC-2026-0410"
  },
  {
   "id": "BIT-2026-0027",
   "fecha": "2026-08-07",
-  "direccion": "DIR-SAN",
-  "unidad": "Atención al público",
-  "responsable": "Karla Beatriz Ramírez",
+  "direccion": "DIR-REG",
+  "unidad": "Dirección de Registro",
+  "responsable": "Mateo Martínez",
   "estado": "Enviada",
   "horaEnvio": "16:38",
   "revision": [
@@ -1968,20 +1968,20 @@
    {
     "hora": "15:00",
     "actividad": "Seguimiento de tiquetes GLPI",
-    "area": "DTI",
+    "area": "Soporte",
     "resultado": "Al día",
     "observaciones": ""
    }
   ],
   "observaciones": "",
-  "documento": "DOC-2026-0335"
+  "documento": "DOC-2026-0411"
  },
  {
   "id": "BIT-2026-0028",
   "fecha": "2026-08-07",
-  "direccion": "DIR-SSA",
-  "unidad": "Atención al público",
-  "responsable": "Karla Beatriz Ramírez",
+  "direccion": "DIR-IGN",
+  "unidad": "IGN",
+  "responsable": "Mateo Martínez",
   "estado": "Enviada",
   "horaEnvio": "16:44",
   "revision": [
@@ -2040,20 +2040,20 @@
    {
     "hora": "15:00",
     "actividad": "Seguimiento de tiquetes GLPI",
-    "area": "DTI",
+    "area": "Soporte",
     "resultado": "Al día",
     "observaciones": ""
    }
   ],
   "observaciones": "",
-  "documento": "DOC-2026-0336"
+  "documento": "DOC-2026-0412"
  },
  {
   "id": "BIT-2026-0029",
   "fecha": "2026-08-10",
-  "direccion": "DIR-USU",
-  "unidad": "Atención al público",
-  "responsable": "Julio Alberto Rivera",
+  "direccion": "DIR-REGS",
+  "unidad": "Registro de la Propiedad",
+  "responsable": "Wendy Carranza",
   "estado": "Enviada",
   "horaEnvio": "16:51",
   "revision": [
@@ -2112,20 +2112,20 @@
    {
     "hora": "15:00",
     "actividad": "Seguimiento de tiquetes GLPI",
-    "area": "DTI",
+    "area": "Soporte",
     "resultado": "Al día",
     "observaciones": ""
    }
   ],
   "observaciones": "",
-  "documento": "DOC-2026-0337"
+  "documento": "DOC-2026-0413"
  },
  {
   "id": "BIT-2026-0030",
   "fecha": "2026-08-10",
-  "direccion": "DIR-SMI",
-  "unidad": "Atención al público",
-  "responsable": "Luis Adalberto Martínez",
+  "direccion": "DIR-REGS",
+  "unidad": "Registro de Comercio",
+  "responsable": "Wendy Carranza",
   "estado": "Enviada",
   "horaEnvio": "16:12",
   "revision": [
@@ -2184,20 +2184,20 @@
    {
     "hora": "15:00",
     "actividad": "Seguimiento de tiquetes GLPI",
-    "area": "DTI",
+    "area": "Soporte",
     "resultado": "Al día",
     "observaciones": ""
    }
   ],
   "observaciones": "",
-  "documento": "DOC-2026-0338"
+  "documento": "DOC-2026-0414"
  },
  {
   "id": "BIT-2026-0031",
   "fecha": "2026-08-10",
-  "direccion": "DIR-SAN",
-  "unidad": "Atención al público",
-  "responsable": "Karla Beatriz Ramírez",
+  "direccion": "DIR-REG",
+  "unidad": "Dirección de Registro",
+  "responsable": "Mateo Martínez",
   "estado": "Enviada",
   "horaEnvio": "16:26",
   "revision": [
@@ -2260,7 +2260,7 @@
    {
     "hora": "15:00",
     "actividad": "Seguimiento de tiquetes GLPI",
-    "area": "DTI",
+    "area": "Soporte",
     "resultado": "Al día",
     "observaciones": ""
    },
@@ -2273,14 +2273,14 @@
    }
   ],
   "observaciones": "",
-  "documento": "DOC-2026-0339"
+  "documento": "DOC-2026-0415"
  },
  {
   "id": "BIT-2026-0032",
   "fecha": "2026-08-10",
-  "direccion": "DIR-SSA",
-  "unidad": "Atención al público",
-  "responsable": "Karla Beatriz Ramírez",
+  "direccion": "DIR-IGN",
+  "unidad": "IGN",
+  "responsable": "Mateo Martínez",
   "estado": "Enviada tarde",
   "horaEnvio": "17:44",
   "revision": [
@@ -2339,20 +2339,20 @@
    {
     "hora": "15:00",
     "actividad": "Seguimiento de tiquetes GLPI",
-    "area": "DTI",
+    "area": "Soporte",
     "resultado": "Al día",
     "observaciones": ""
    }
   ],
   "observaciones": "La bitácora diaria fue enviada fuera del horario establecido.",
-  "documento": "DOC-2026-0340"
+  "documento": "DOC-2026-0416"
  },
  {
   "id": "BIT-2026-0033",
   "fecha": "2026-08-11",
-  "direccion": "DIR-USU",
-  "unidad": "Atención al público",
-  "responsable": "Julio Alberto Rivera",
+  "direccion": "DIR-REGS",
+  "unidad": "Registro de la Propiedad",
+  "responsable": "Wendy Carranza",
   "estado": "Enviada",
   "horaEnvio": "16:44",
   "revision": [
@@ -2411,20 +2411,20 @@
    {
     "hora": "15:00",
     "actividad": "Seguimiento de tiquetes GLPI",
-    "area": "DTI",
+    "area": "Soporte",
     "resultado": "Al día",
     "observaciones": ""
    }
   ],
   "observaciones": "",
-  "documento": "DOC-2026-0341"
+  "documento": "DOC-2026-0417"
  },
  {
   "id": "BIT-2026-0034",
   "fecha": "2026-08-11",
-  "direccion": "DIR-SMI",
-  "unidad": "Atención al público",
-  "responsable": "Luis Adalberto Martínez",
+  "direccion": "DIR-REGS",
+  "unidad": "Registro de Comercio",
+  "responsable": "Wendy Carranza",
   "estado": "Enviada",
   "horaEnvio": "16:51",
   "revision": [
@@ -2483,20 +2483,92 @@
    {
     "hora": "15:00",
     "actividad": "Seguimiento de tiquetes GLPI",
-    "area": "DTI",
+    "area": "Soporte",
     "resultado": "Al día",
     "observaciones": ""
    }
   ],
   "observaciones": "",
-  "documento": "DOC-2026-0342"
+  "documento": "DOC-2026-0418"
  },
  {
   "id": "BIT-2026-0035",
   "fecha": "2026-08-11",
-  "direccion": "DIR-SAN",
-  "unidad": "Atención al público",
-  "responsable": "Karla Beatriz Ramírez",
+  "direccion": "DIR-REG",
+  "unidad": "Dirección de Registro",
+  "responsable": "Mateo Martínez",
+  "estado": "Enviada",
+  "horaEnvio": "16:12",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "15:00",
+    "actividad": "Seguimiento de tiquetes GLPI",
+    "area": "Soporte",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": "",
+  "documento": "DOC-2026-0419"
+ },
+ {
+  "id": "BIT-2026-0036",
+  "fecha": "2026-08-11",
+  "direccion": "DIR-IGN",
+  "unidad": "IGN",
+  "responsable": "Mateo Martínez",
   "estado": "Vencida",
   "revision": [
    {
@@ -2554,7 +2626,7 @@
    {
     "hora": "15:00",
     "actividad": "Seguimiento de tiquetes GLPI",
-    "area": "DTI",
+    "area": "Soporte",
     "resultado": "Al día",
     "observaciones": ""
    }
@@ -2562,83 +2634,11 @@
   "observaciones": "La bitácora no fue enviada antes de las 5:00 p. m. del día correspondiente."
  },
  {
-  "id": "BIT-2026-0036",
-  "fecha": "2026-08-11",
-  "direccion": "DIR-SSA",
-  "unidad": "Atención al público",
-  "responsable": "Karla Beatriz Ramírez",
-  "estado": "Enviada",
-  "horaEnvio": "16:26",
-  "revision": [
-   {
-    "elemento": "Equipos de técnicos",
-    "estado": "Funciona correctamente"
-   },
-   {
-    "elemento": "Equipos de consulta",
-    "estado": "Funciona correctamente"
-   },
-   {
-    "elemento": "Pantallas informativas",
-    "estado": "Funciona correctamente"
-   },
-   {
-    "elemento": "Kioskos de autoconsulta",
-    "estado": "Funciona correctamente"
-   },
-   {
-    "elemento": "Audio de tomaturno",
-    "estado": "Funciona correctamente"
-   },
-   {
-    "elemento": "Sistema de tomaturno",
-    "estado": "Funciona correctamente"
-   },
-   {
-    "elemento": "Impresoras de atención al público",
-    "estado": "Funciona correctamente"
-   },
-   {
-    "elemento": "Red y conectividad básica",
-    "estado": "Funciona correctamente"
-   },
-   {
-    "elemento": "Periféricos relevantes",
-    "estado": "Funciona correctamente"
-   }
-  ],
-  "actividades": [
-   {
-    "hora": "08:15",
-    "actividad": "Verificación de arranque de equipos de atención al público",
-    "area": "Salas de atención",
-    "resultado": "Sin novedades",
-    "observaciones": ""
-   },
-   {
-    "hora": "10:30",
-    "actividad": "Atención a usuarios y soporte en sitio",
-    "area": "Ventanillas",
-    "resultado": "Atendido",
-    "observaciones": ""
-   },
-   {
-    "hora": "15:00",
-    "actividad": "Seguimiento de tiquetes GLPI",
-    "area": "DTI",
-    "resultado": "Al día",
-    "observaciones": ""
-   }
-  ],
-  "observaciones": "",
-  "documento": "DOC-2026-0343"
- },
- {
   "id": "BIT-2026-0037",
   "fecha": "2026-08-12",
-  "direccion": "DIR-USU",
-  "unidad": "Atención al público",
-  "responsable": "Julio Alberto Rivera",
+  "direccion": "DIR-REGS",
+  "unidad": "Registro de la Propiedad",
+  "responsable": "Wendy Carranza",
   "estado": "Enviada",
   "horaEnvio": "16:38",
   "revision": [
@@ -2697,20 +2697,20 @@
    {
     "hora": "15:00",
     "actividad": "Seguimiento de tiquetes GLPI",
-    "area": "DTI",
+    "area": "Soporte",
     "resultado": "Al día",
     "observaciones": ""
    }
   ],
   "observaciones": "",
-  "documento": "DOC-2026-0344"
+  "documento": "DOC-2026-0420"
  },
  {
   "id": "BIT-2026-0038",
   "fecha": "2026-08-12",
-  "direccion": "DIR-SMI",
-  "unidad": "Atención al público",
-  "responsable": "Luis Adalberto Martínez",
+  "direccion": "DIR-REGS",
+  "unidad": "Registro de Comercio",
+  "responsable": "Wendy Carranza",
   "estado": "Enviada",
   "horaEnvio": "16:44",
   "revision": [
@@ -2769,20 +2769,20 @@
    {
     "hora": "15:00",
     "actividad": "Seguimiento de tiquetes GLPI",
-    "area": "DTI",
+    "area": "Soporte",
     "resultado": "Al día",
     "observaciones": ""
    }
   ],
   "observaciones": "",
-  "documento": "DOC-2026-0345"
+  "documento": "DOC-2026-0421"
  },
  {
   "id": "BIT-2026-0039",
   "fecha": "2026-08-12",
-  "direccion": "DIR-SAN",
-  "unidad": "Atención al público",
-  "responsable": "Karla Beatriz Ramírez",
+  "direccion": "DIR-REG",
+  "unidad": "Dirección de Registro",
+  "responsable": "Mateo Martínez",
   "estado": "Enviada",
   "horaEnvio": "16:51",
   "revision": [
@@ -2841,20 +2841,20 @@
    {
     "hora": "15:00",
     "actividad": "Seguimiento de tiquetes GLPI",
-    "area": "DTI",
+    "area": "Soporte",
     "resultado": "Al día",
     "observaciones": ""
    }
   ],
   "observaciones": "",
-  "documento": "DOC-2026-0346"
+  "documento": "DOC-2026-0422"
  },
  {
   "id": "BIT-2026-0040",
   "fecha": "2026-08-12",
-  "direccion": "DIR-SSA",
-  "unidad": "Atención al público",
-  "responsable": "Karla Beatriz Ramírez",
+  "direccion": "DIR-IGN",
+  "unidad": "IGN",
+  "responsable": "Mateo Martínez",
   "estado": "Enviada",
   "horaEnvio": "16:12",
   "revision": [
@@ -2917,7 +2917,7 @@
    {
     "hora": "15:00",
     "actividad": "Seguimiento de tiquetes GLPI",
-    "area": "DTI",
+    "area": "Soporte",
     "resultado": "Al día",
     "observaciones": ""
    },
@@ -2930,14 +2930,14 @@
    }
   ],
   "observaciones": "",
-  "documento": "DOC-2026-0347"
+  "documento": "DOC-2026-0423"
  },
  {
   "id": "BIT-2026-0041",
   "fecha": "2026-08-13",
-  "direccion": "DIR-USU",
-  "unidad": "Atención al público",
-  "responsable": "Julio Alberto Rivera",
+  "direccion": "DIR-REGS",
+  "unidad": "Registro de la Propiedad",
+  "responsable": "Wendy Carranza",
   "estado": "Enviada",
   "horaEnvio": "16:26",
   "revision": [
@@ -2996,20 +2996,20 @@
    {
     "hora": "15:00",
     "actividad": "Seguimiento de tiquetes GLPI",
-    "area": "DTI",
+    "area": "Soporte",
     "resultado": "Al día",
     "observaciones": ""
    }
   ],
   "observaciones": "",
-  "documento": "DOC-2026-0348"
+  "documento": "DOC-2026-0424"
  },
  {
   "id": "BIT-2026-0042",
   "fecha": "2026-08-13",
-  "direccion": "DIR-SMI",
-  "unidad": "Atención al público",
-  "responsable": "Luis Adalberto Martínez",
+  "direccion": "DIR-REGS",
+  "unidad": "Registro de Comercio",
+  "responsable": "Wendy Carranza",
   "estado": "Enviada",
   "horaEnvio": "16:38",
   "revision": [
@@ -3068,20 +3068,20 @@
    {
     "hora": "15:00",
     "actividad": "Seguimiento de tiquetes GLPI",
-    "area": "DTI",
+    "area": "Soporte",
     "resultado": "Al día",
     "observaciones": ""
    }
   ],
   "observaciones": "",
-  "documento": "DOC-2026-0349"
+  "documento": "DOC-2026-0425"
  },
  {
   "id": "BIT-2026-0043",
   "fecha": "2026-08-13",
-  "direccion": "DIR-SAN",
-  "unidad": "Atención al público",
-  "responsable": "Karla Beatriz Ramírez",
+  "direccion": "DIR-REG",
+  "unidad": "Dirección de Registro",
+  "responsable": "Mateo Martínez",
   "estado": "Enviada",
   "horaEnvio": "16:44",
   "revision": [
@@ -3140,20 +3140,20 @@
    {
     "hora": "15:00",
     "actividad": "Seguimiento de tiquetes GLPI",
-    "area": "DTI",
+    "area": "Soporte",
     "resultado": "Al día",
     "observaciones": ""
    }
   ],
   "observaciones": "",
-  "documento": "DOC-2026-0350"
+  "documento": "DOC-2026-0426"
  },
  {
   "id": "BIT-2026-0044",
   "fecha": "2026-08-13",
-  "direccion": "DIR-SSA",
-  "unidad": "Atención al público",
-  "responsable": "Karla Beatriz Ramírez",
+  "direccion": "DIR-IGN",
+  "unidad": "IGN",
+  "responsable": "Mateo Martínez",
   "estado": "Enviada",
   "horaEnvio": "16:51",
   "revision": [
@@ -3212,20 +3212,20 @@
    {
     "hora": "15:00",
     "actividad": "Seguimiento de tiquetes GLPI",
-    "area": "DTI",
+    "area": "Soporte",
     "resultado": "Al día",
     "observaciones": ""
    }
   ],
   "observaciones": "",
-  "documento": "DOC-2026-0351"
+  "documento": "DOC-2026-0427"
  },
  {
   "id": "BIT-2026-0045",
   "fecha": "2026-08-14",
-  "direccion": "DIR-USU",
-  "unidad": "Atención al público",
-  "responsable": "Julio Alberto Rivera",
+  "direccion": "DIR-REGS",
+  "unidad": "Registro de la Propiedad",
+  "responsable": "Wendy Carranza",
   "estado": "Enviada tarde",
   "horaEnvio": "17:17",
   "revision": [
@@ -3284,20 +3284,20 @@
    {
     "hora": "15:00",
     "actividad": "Seguimiento de tiquetes GLPI",
-    "area": "DTI",
+    "area": "Soporte",
     "resultado": "Al día",
     "observaciones": ""
    }
   ],
   "observaciones": "La bitácora diaria fue enviada fuera del horario establecido.",
-  "documento": "DOC-2026-0352"
+  "documento": "DOC-2026-0428"
  },
  {
   "id": "BIT-2026-0046",
   "fecha": "2026-08-14",
-  "direccion": "DIR-SMI",
-  "unidad": "Atención al público",
-  "responsable": "Luis Adalberto Martínez",
+  "direccion": "DIR-REGS",
+  "unidad": "Registro de Comercio",
+  "responsable": "Wendy Carranza",
   "estado": "Enviada",
   "horaEnvio": "16:26",
   "revision": [
@@ -3356,20 +3356,20 @@
    {
     "hora": "15:00",
     "actividad": "Seguimiento de tiquetes GLPI",
-    "area": "DTI",
+    "area": "Soporte",
     "resultado": "Al día",
     "observaciones": ""
    }
   ],
   "observaciones": "",
-  "documento": "DOC-2026-0353"
+  "documento": "DOC-2026-0429"
  },
  {
   "id": "BIT-2026-0047",
   "fecha": "2026-08-14",
-  "direccion": "DIR-SAN",
-  "unidad": "Atención al público",
-  "responsable": "Karla Beatriz Ramírez",
+  "direccion": "DIR-REG",
+  "unidad": "Dirección de Registro",
+  "responsable": "Mateo Martínez",
   "estado": "Enviada",
   "horaEnvio": "16:38",
   "revision": [
@@ -3428,20 +3428,20 @@
    {
     "hora": "15:00",
     "actividad": "Seguimiento de tiquetes GLPI",
-    "area": "DTI",
+    "area": "Soporte",
     "resultado": "Al día",
     "observaciones": ""
    }
   ],
   "observaciones": "",
-  "documento": "DOC-2026-0354"
+  "documento": "DOC-2026-0430"
  },
  {
   "id": "BIT-2026-0048",
   "fecha": "2026-08-14",
-  "direccion": "DIR-SSA",
-  "unidad": "Atención al público",
-  "responsable": "Karla Beatriz Ramírez",
+  "direccion": "DIR-IGN",
+  "unidad": "IGN",
+  "responsable": "Mateo Martínez",
   "estado": "Enviada",
   "horaEnvio": "16:44",
   "revision": [
@@ -3500,12 +3500,12 @@
    {
     "hora": "15:00",
     "actividad": "Seguimiento de tiquetes GLPI",
-    "area": "DTI",
+    "area": "Soporte",
     "resultado": "Al día",
     "observaciones": ""
    }
   ],
   "observaciones": "",
-  "documento": "DOC-2026-0355"
+  "documento": "DOC-2026-0431"
  }
 ]

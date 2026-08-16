@@ -5,6 +5,11 @@ Soporte Técnico del CNR. La contraseña es libre: seleccione su usuario y presi
 **Ingresar a SISGOST**. El selector **Ver como** de la barra superior permite cambiar de rol
 durante una demostración.
 
+Los usuarios son los mismos de **SISGOST — Gestión de Equipos**. El botón **Ir a Gestión de
+Equipos** (barra lateral, barra superior y panel ejecutivo) abre el módulo hermano: los dos
+forman un solo sistema y comparten usuarios, Direcciones/Unidades, equipos y la distribución de
+soportes.
+
 ---
 
 ## 1. Panel ejecutivo
@@ -14,10 +19,14 @@ La fotografía del mes en curso:
 - **Indicadores**: controles del mes, entregados (y cuántos fuera de plazo), pendientes,
   vencidos del año, cartas de justificación emitidas, bitácoras de hoy (enviadas y
   pendientes) y controles próximos a vencer.
-- **Alertas accionables**: dirección sin soporte asignado, controles vencidos sin
-  justificación, bitácoras del día sin enviar, controles que vencen dentro de 3 días hábiles
-  y equipos activos sin control asociado. Cada alerta lleva a la pantalla donde se resuelve.
-- **Avance por Dirección/Unidad**: entregados/pendientes y barra de avance del período.
+- **Alertas accionables**: Dirección/Unidad sin soporte asignado, movimientos de Gestión de
+  Equipos por aplicar, controles vencidos sin justificación, bitácoras del día sin enviar,
+  controles que vencen dentro de 3 días hábiles y equipos activos sin control asociado. Cada
+  alerta lleva a la pantalla donde se resuelve.
+- **Tarjeta de SISGOST — Gestión de Equipos**: cuántos equipos activos alimentan hoy el
+  inventario operativo, cuántos movimientos esperan aplicarse y el acceso al otro módulo.
+- **Avance por Dirección/Unidad**: soporte responsable, equipos activos, entregados/pendientes
+  y barra de avance del período.
 
 ## 2. Calendario de controles
 
@@ -40,13 +49,20 @@ El Encargado puede **generar el reporte mensual consolidado** para presentarlo a
 ## 4. Controles mensuales
 
 Lista de controles del período con fecha límite, **días hábiles restantes**, avance y estado.
-El Técnico de Soporte solo ve sus Direcciones asignadas.
+El Técnico de Soporte solo ve —y solo puede completar— las Direcciones/Unidades que la
+distribución de soportes le asigna; si abre un control ajeno, el sistema lo advierte y no deja
+editarlo.
 
 ### Completar un control
 
 1. Abra el control con **Completar**. El formulario es un *stepper* por secciones construido
    desde el formato institucional (checklists con estados y mediciones, tablas dinámicas con
    **Agregar registro**, campos de fecha/hora/observación).
+   Los controles que trabajan con equipos —**F0422**, mantenimiento **F0174**, correctivo
+   **F0288** y **vulnerabilidades**— abren con la lista de **equipos activos de la
+   Dirección/Unidad** tomada del inventario operativo: se marcan los revisados, sus
+   verificaciones (existe físicamente, usuario asignado correcto, estado operativo…), el estado
+   y una observación. No aparecen equipos de otras Direcciones/Unidades ni se teclean a mano.
 2. **Guardar avance** conserva el borrador; el avance se refleja en la lista.
 3. Si el control exige **evidencia**, adjúntela en el paso «Evidencias».
 4. En **Resumen y entrega** el sistema valida obligatorios, checklist completo, mínimos de
@@ -89,9 +105,19 @@ Todas las cartas emitidas, con su motivo, período, responsable, avance de firma
 ## 7. Inventario operativo
 
 Los equipos activos por Dirección/Unidad que alimentan F0422, el mantenimiento preventivo y
-el análisis de vulnerabilidades. El panel **Eventos pendientes de Gestión de Equipos** simula
-la integración: **Incorporar al inventario** aplica una entrega aceptada por el Usuario Final
-y **Aplicar descargo** retira un equipo descargado. Todo queda en trazabilidad.
+el análisis de vulnerabilidades. El inventario se mantiene **solo**: cuando el Usuario Final
+acepta la conformidad en Gestión de Equipos el equipo entra automáticamente, y cuando Soporte
+registra el descargo sale automáticamente del inventario activo. **No hay nada que confirmar**:
+el panel **Últimos movimientos sincronizados desde Gestión de Equipos** muestra lo que ya se
+aplicó, y todo queda en trazabilidad.
+
+La tabla lista por defecto **solo los equipos activos**; la casilla «Ver descargados e históricos»
+muestra también los que salieron y los ciclos anteriores de un equipo que volvió a entregarse en
+otra Dirección/Unidad.
+
+**Detalle** de un equipo muestra sus datos (inventario, serie, usuario final, técnico de
+configuración, soporte responsable, expediente único, garantía) y su **historial de controles**:
+en qué F0422, mantenimientos o análisis de vulnerabilidades ha aparecido.
 
 ## 8. Generador de documentos
 
@@ -105,16 +131,30 @@ Encargado genera desde aquí el **reporte mensual consolidado** por Dirección o
 
 Línea de tiempo auditada: control programado/iniciado/entregado/vencido/justificado, bitácoras
 enviadas o vencidas, documentos generados y descargados, equipos agregados o descargados desde
-Gestión de Equipos y cambios de responsable. Filtrable por dirección, mes y acción.
+Gestión de Equipos y cambios de distribución. Filtrable por Dirección, mes, acción y
+**solo integración entre módulos**. Los eventos de integración muestran el módulo origen y
+destino y el número de inventario afectado.
 
 ## 10. Administración
 
-- **Usuarios y direcciones** (Administrador): roles del sistema y estructura organizacional;
-  botón para restablecer la semilla de demostración.
+- **Usuarios y direcciones** (Administrador): directorio compartido con Gestión de Equipos
+  —los usuarios de Hardware aparecen marcados como «Solo Gestión de Equipos»— y la estructura
+  organizacional con sus equipos activos y su soporte responsable. Aquí está
+  **Restablecer datos de demostración**: pide confirmación, enumera lo que repone y devuelve el
+  prototipo a su estado inicial sin romper la navegación.
 - **Catálogo de controles** (Administrador edita, Encargado consulta): frecuencia, evidencia,
-  firma, justificación y estado de cada control.
-- **Distribución de soportes**: qué técnico responde por cada Dirección/Unidad; asignar y
-  finalizar asignaciones. Una dirección sin soporte activo genera la alerta del panel.
+  firma, justificación, estado y —sobre todo— **Aplica a**: en qué Direcciones, Unidades o área
+  técnica se trabaja cada control. Con **Editar aplicación** se elige el modo (todas, Direcciones
+  específicas, Unidades específicas o área técnica), se marcan las que corresponden y se escribe el
+  motivo; el sistema muestra en qué Direcciones/Unidades quedaría antes de guardar y no permite
+  guardar una aplicación vacía. Lo que se configure aquí decide qué controles aparecen en el
+  calendario de cada Dirección/Unidad: donde el control no aplica, queda como **No aplica** y no
+  cuenta como pendiente ni vence.
+- **Distribución de soportes**: qué técnico responde por cada Dirección/Unidad. Permite asignar
+  y desactivar asignaciones y consultarlas **por Dirección/Unidad** o **por soporte**. Una
+  Dirección/Unidad sin soporte activo genera la alerta del panel. **Esta pantalla gobierna
+  también a Gestión de Equipos**: allí solo pueden recibir equipos para configurar los técnicos
+  responsables de la Dirección/Unidad del requerimiento.
 - **Feriados** (Administrador): catálogo editable nacional y de San Salvador, con la tabla de
   **fechas límite resultantes** del año para ver el efecto de cada cambio.
 
@@ -128,3 +168,9 @@ Gestión de Equipos y cambios de responsable. Filtrable por dirección, mes y ac
 - «No se registró actividad mensual asociada a este control; se generó carta de justificación.»
 - «El equipo fue incorporado al inventario operativo de la Dirección/Unidad posterior a la
   aceptación del Usuario Final.»
+- «Este control pertenece a una Dirección/Unidad que no está asignada al técnico en la
+  distribución de soportes.»
+- «Los datos de demostración fueron restablecidos correctamente.»
+- «Debe seleccionar al menos una Dirección, Unidad o área donde aplica este control.»
+- «La aplicación del control fue actualizada correctamente.»
+- «La Dirección/Unidad tiene controles aplicables, pero no posee Técnico de Soporte asignado.»

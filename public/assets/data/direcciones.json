@@ -1,37 +1,44 @@
 [
-  {
-    "id": "DIR-USU",
-    "nombre": "Oficina Departamental de Usulután",
-    "corta": "USU",
-    "unidades": ["RPRH", "IGCN", "DTI"],
-    "activa": true
-  },
-  {
-    "id": "DIR-SMI",
-    "nombre": "Oficina Departamental de San Miguel",
-    "corta": "SMI",
-    "unidades": ["RPRH", "IGCN"],
-    "activa": true
-  },
-  {
-    "id": "DIR-SAN",
-    "nombre": "Oficina Departamental de Santa Ana",
-    "corta": "SAN",
-    "unidades": ["RPRH", "IGCN"],
-    "activa": true
-  },
-  {
-    "id": "DIR-SSA",
-    "nombre": "Oficina Central de San Salvador",
-    "corta": "SSA",
-    "unidades": ["RPRH", "DTI", "Atención al público"],
-    "activa": true
-  },
-  {
-    "id": "DIR-LUN",
-    "nombre": "Oficina Departamental de La Unión",
-    "corta": "LUN",
-    "unidades": ["RPRH"],
-    "activa": true
-  }
+ {
+  "id": "DIR-REGS",
+  "nombre": "Dirección de Registros",
+  "corta": "REGS",
+  "unidades": ["Registro de la Propiedad", "Registro de Comercio", "Archivo Registral"],
+  "activa": true
+ },
+ {
+  "id": "DIR-REG",
+  "nombre": "Dirección de Registro",
+  "corta": "REG",
+  "unidades": ["Dirección de Registro"],
+  "activa": true
+ },
+ {
+  "id": "DIR-RPRH",
+  "nombre": "Dirección del RPRH",
+  "corta": "RPRH",
+  "unidades": ["RPRH"],
+  "activa": true
+ },
+ {
+  "id": "DIR-IGN",
+  "nombre": "Dirección del IGN",
+  "corta": "IGN",
+  "unidades": ["IGN"],
+  "activa": true
+ },
+ {
+  "id": "DIR-ISPI",
+  "nombre": "Dirección del ISPI",
+  "corta": "ISPI",
+  "unidades": ["ISPI"],
+  "activa": true
+ },
+ {
+  "id": "DIR-GTEC",
+  "nombre": "Gerencia de Tecnología",
+  "corta": "GTEC",
+  "unidades": ["Gerencia de Tecnología"],
+  "activa": true
+ }
 ]

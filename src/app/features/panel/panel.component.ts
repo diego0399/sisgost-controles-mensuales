@@ -7,6 +7,7 @@ import { ControlDeadlineService } from '../../core/services/control-deadline.ser
 import { BadgeComponent } from '../../shared/ui';
 import { IconComponent } from '../../shared/icon';
 import { MESES, formateaFecha, isoLocal, nombreMes } from '../../core/models/models';
+import { URL_GESTION_EQUIPOS } from '../../core/config/modulos';
 
 interface Alerta { tipo: 'danger' | 'warn' | 'ok'; titulo: string; texto: string; ruta: string; }
 
@@ -17,6 +18,16 @@ interface Alerta { tipo: 'danger' | 'warn' | 'ok'; titulo: string; texto: string
 @Component({
   selector: 'app-panel',
   imports: [RouterLink, BadgeComponent, IconComponent],
+  styles: `
+    .dos-col { grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr); }
+    @media (max-width: 1100px) { .dos-col { grid-template-columns: 1fr; } }
+    .modulo-card { border-left: 3px solid var(--gold-500); }
+    .mod-ico {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 42px; height: 42px; border-radius: 10px; flex: none;
+      background: var(--navy-50, #eef3fa); color: var(--navy-800);
+    }
+  `,
   template: `
     <div class="page">
       <div class="page-head">
@@ -32,7 +43,11 @@ interface Alerta { tipo: 'danger' | 'warn' | 'ok'; titulo: string; texto: string
       </div>
 
       <div class="grid grid-5">
-        <div class="kpi"><div class="kpi-label">Controles del mes</div><div class="kpi-value">{{ delMes().length }}</div><div class="kpi-hint">{{ mesActual }}</div></div>
+        <div class="kpi">
+          <div class="kpi-label">Controles aplicables del mes</div>
+          <div class="kpi-value">{{ delMes().length }}</div>
+          <div class="kpi-hint">{{ mesActual }} · {{ noAplicables() }} no aplicables</div>
+        </div>
         <div class="kpi"><div class="kpi-label">Entregados</div><div class="kpi-value">{{ cuenta(['Entregado', 'Entregado tarde', 'Cerrado']) }}</div><div class="kpi-hint">{{ cuenta(['Entregado tarde']) }} fuera de plazo</div></div>
         <div class="kpi"><div class="kpi-label">Pendientes</div><div class="kpi-value">{{ cuenta(['Programado', 'Pendiente', 'En proceso']) }}</div><div class="kpi-hint">{{ cuenta(['En proceso']) }} en proceso</div></div>
         <div class="kpi"><div class="kpi-label">Vencidos</div><div class="kpi-value">{{ vencidosTotales() }}</div><div class="kpi-hint">de todo el año</div></div>
@@ -57,7 +72,32 @@ interface Alerta { tipo: 'danger' | 'warn' | 'ok'; titulo: string; texto: string
         </div>
       }
 
-      <div class="grid grid-2" style="margin-top: 26px; align-items: start;">
+      <!-- Acceso al módulo hermano del ecosistema SISGOST -->
+      <div class="card modulo-card" style="margin-top: 26px;">
+        <div class="card-body row-between" style="gap: 18px; flex-wrap: wrap;">
+          <div class="row" style="gap: 14px; align-items: flex-start;">
+            <span class="mod-ico"><ui-icon name="box" [size]="22" /></span>
+            <div>
+              <h3 style="margin: 0 0 3px; font-size: 15px;">SISGOST — Gestión de Equipos</h3>
+              <p class="muted" style="margin: 0; max-width: 620px;">
+                Consulta preparación, asignación, configuración, aceptación, garantía y descargo de equipos.
+                Los equipos que aquel módulo deja aceptados alimentan el inventario operativo de este:
+                <b>{{ equiposActivos() }}</b> equipo(s) activo(s) en {{ data.pares().length }} Direcciones/Unidades,
+                <b>{{ integracionPendiente().length }}</b> movimiento(s) por aplicar.
+              </p>
+            </div>
+          </div>
+          <div class="row">
+            <a class="btn btn-outline btn-sm" routerLink="/inventario">Ver inventario operativo</a>
+            <a class="btn btn-primary btn-sm" [href]="urlEquipos">
+              <ui-icon name="external" [size]="13" /> Ir a Gestión de Equipos
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- La tabla de avance lleva seis columnas: necesita más ancho que la tarjeta de al lado. -->
+      <div class="grid dos-col" style="margin-top: 18px; align-items: start;">
         <div class="card">
           <div class="card-head">
             <div>
@@ -69,12 +109,13 @@ interface Alerta { tipo: 'danger' | 'warn' | 'ok'; titulo: string; texto: string
           <div class="card-body">
             <div class="table-wrap">
               <table class="tbl">
-                <thead><tr><th>Dirección</th><th>Soporte responsable</th><th>Entregados</th><th>Pendientes</th><th>Avance</th></tr></thead>
+                <thead><tr><th>Dirección/Unidad</th><th>Soporte responsable</th><th>Equipos</th><th>Entregados</th><th>Pendientes</th><th>Avance</th></tr></thead>
                 <tbody>
                   @for (f of porDireccion(); track f.id) {
                     <tr>
                       <td><b>{{ f.corta }}</b> · {{ f.nombre }}</td>
                       <td>@if (f.soporte) { {{ f.soporte }} } @else { <span class="badge danger">Sin asignar</span> }</td>
+                      <td>{{ f.equipos }}</td>
                       <td>{{ f.entregados }} / {{ f.total }}</td>
                       <td>{{ f.pendientes }}</td>
                       <td style="min-width: 120px;">
@@ -129,6 +170,8 @@ export class PanelComponent {
   private readonly habiles = inject(BusinessDayService);
   private readonly plazos = inject(ControlDeadlineService);
 
+  protected readonly urlEquipos = URL_GESTION_EQUIPOS;
+
   private readonly hoy = isoLocal(new Date());
   protected readonly esHabilHoy = this.habiles.esHabil(this.hoy);
   protected readonly mesActual = `${nombreMes(new Date().getMonth() + 1)} ${new Date().getFullYear()}`;
@@ -169,17 +212,19 @@ export class PanelComponent {
   protected restan(limite: string): number { return Math.max(this.habiles.habilesHasta(limite), 0); }
   protected formatea(iso: string): string { return formateaFecha(iso); }
 
+  /** Avance por Dirección/Unidad: el par completo, que es como se distribuye el soporte. */
   protected readonly porDireccion = computed(() => {
     const delMes = this.delMes();
-    const dirs = this.auth.esTecnico()
-      ? this.data.direcciones().filter((d) => this.data.direccionesDe(this.auth.usuario()!.usuario).includes(d.id))
-      : this.data.direcciones().filter((d) => d.activa);
-    return dirs.map((d) => {
-      const propios = delMes.filter((c) => c.direccion === d.id);
+    const u = this.auth.usuario();
+    const pares = this.auth.esTecnico() && u ? this.data.paresDe(u.usuario) : this.data.pares();
+    return pares.map((p) => {
+      const propios = delMes.filter((c) => c.direccion === p.direccion && c.unidad === p.unidad);
       const entregados = propios.filter((c) => ['Entregado', 'Entregado tarde', 'Cerrado', 'Justificado'].includes(c.estado)).length;
       return {
-        id: d.id, corta: d.corta, nombre: d.nombre,
-        soporte: this.data.soporteDe(d.id)?.tecnico ?? '',
+        id: `${p.direccion}|${p.unidad}`,
+        corta: this.data.cortaDireccion(p.direccion), nombre: p.unidad,
+        soporte: this.data.tecnicosDe(p.direccion, p.unidad).map((t) => this.data.soportes.soloNombre(t)).join(' · '),
+        equipos: this.data.equiposActivosDe(p.direccion, p.unidad).length,
         total: propios.length, entregados,
         pendientes: propios.filter((c) => ['Programado', 'Pendiente', 'En proceso'].includes(c.estado)).length,
         pct: propios.length ? Math.round((entregados / propios.length) * 100) : 0
@@ -187,10 +232,43 @@ export class PanelComponent {
     });
   });
 
+  /** Eventos de Gestión de Equipos aún sin aplicar al inventario operativo. */
+  protected readonly integracionPendiente = computed(() => this.data.eventosIntegracion().filter((e) => !e.aplicado));
+
+  protected readonly equiposActivos = computed(() => this.data.inventarioVisible(this.auth.usuario())
+    .filter((e) => e.estado === 'Activo en Dirección/Unidad').length);
+
+  /**
+   * Combinaciones control × Dirección/Unidad que **no aplican** este mes. Es informativo: no
+   * cuentan como pendientes ni como vencidos, porque ese control no se trabaja ahí.
+   */
+  protected readonly noAplicables = computed(() => {
+    const u = this.auth.usuario();
+    const pares = this.auth.esTecnico() && u ? this.data.paresDe(u.usuario) : this.data.pares();
+    const mensuales = this.data.catalogo().filter((c) => c.activo && (c.frecuencia === 'Mensual' || c.frecuencia === 'Semanal'));
+    let n = 0;
+    for (const c of mensuales) {
+      for (const p of pares) if (!this.data.aplicaEn(c.codigo, p.direccion, p.unidad)) n++;
+    }
+    return n;
+  });
+
   protected readonly alertas = computed<Alerta[]>(() => {
     const lista: Alerta[] = [];
-    for (const d of this.data.direccionesSinSoporte()) {
-      lista.push({ tipo: 'danger', titulo: 'Dirección sin soporte asignado', texto: `${d.nombre} no tiene Técnico de Soporte responsable: sus controles del período no tienen quién los entregue.`, ruta: '/distribucion' });
+    for (const p of this.data.paresAplicablesSinSoporte()) {
+      const equipos = this.data.equiposActivosDe(p.direccion, p.unidad).length;
+      lista.push({
+        tipo: 'danger', titulo: 'Dirección/Unidad sin soporte asignado',
+        texto: `${this.data.dirUnidad(p.direccion, p.unidad)} tiene ${p.controles} control(es) aplicables, pero no posee Técnico de Soporte asignado${equipos ? `; además, ${equipos} equipo(s) activo(s) quedan sin responsable` : ''}.`,
+        ruta: '/distribucion'
+      });
+    }
+    if (this.integracionPendiente().length) {
+      lista.push({
+        tipo: 'warn', titulo: 'Movimientos de Gestión de Equipos por aplicar',
+        texto: `${this.integracionPendiente().length} evento(s) de aceptación o descargo esperan incorporarse al inventario operativo.`,
+        ruta: '/inventario'
+      });
     }
     const vencidosSinJustificar = this.visibles().filter((c) => c.estado === 'Vencido');
     if (vencidosSinJustificar.length) {
@@ -202,9 +280,10 @@ export class PanelComponent {
     if (this.proximos().length) {
       lista.push({ tipo: 'warn', titulo: 'Controles por vencer', texto: `${this.proximos().length} control(es) vencen dentro de los próximos 3 días hábiles.`, ruta: '/controles' });
     }
-    const sinControl = this.data.inventario().filter((e) => e.estado === 'Activo en Dirección/Unidad' && !e.ultimoControl);
+    const sinControl = this.data.inventarioVisible(this.auth.usuario())
+      .filter((e) => e.estado === 'Activo en Dirección/Unidad' && !this.data.controlesDeEquipo(e.inventario).length);
     if (sinControl.length) {
-      lista.push({ tipo: 'warn', titulo: 'Equipos activos sin control asociado', texto: `${sinControl.length} equipo(s) del inventario operativo no registran ningún control.`, ruta: '/inventario' });
+      lista.push({ tipo: 'warn', titulo: 'Equipos activos sin control asociado', texto: `${sinControl.length} equipo(s) del inventario operativo no aparecen en ningún control del año.`, ruta: '/inventario' });
     }
     return lista;
   });

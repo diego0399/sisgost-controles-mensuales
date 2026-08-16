@@ -70,7 +70,7 @@ import { MESES, formateaFecha, isoLocal, nombreMes } from '../../core/models/mod
                       <div class="muted" style="font-size: 11.5px; max-width: 260px;">{{ data.catalogoDe(c.codigo)?.nombre }}</div>
                     </td>
                     <td>{{ c.semana ? 'Semana ' + c.semana + ' de ' : '' }}{{ nombreMes(c.mes) }}</td>
-                    <td>{{ data.cortaDireccion(c.direccion) }}</td>
+                    <td>{{ data.cortaDireccion(c.direccion) }} <span class="muted">/ {{ c.unidad }}</span></td>
                     <td>{{ c.responsable }}</td>
                     <td class="mono">{{ formatea(c.fechaLimite) }}</td>
                     <td>
@@ -134,8 +134,14 @@ export class ControlesComponent {
     return this.data.direcciones();
   });
 
+  /**
+   * Solo controles del período, de las Direcciones/Unidades del usuario, **activos en el catálogo**
+   * y que aplican a esa Dirección/Unidad: un control que no aplica no se lista ni cuenta.
+   */
   protected readonly filtrados = computed(() => this.data.controlesVisibles(this.auth.usuario())
     .filter((c) => c.anio === this.anio() && c.mes === this.mes())
+    .filter((c) => this.data.catalogoDe(c.codigo)?.activo !== false)
+    .filter((c) => this.data.aplicaEn(c.codigo, c.direccion, c.unidad))
     .filter((c) => !this.fDireccion() || c.direccion === this.fDireccion())
     .filter((c) => !this.fEstado() || c.estado === this.fEstado())
     .sort((a, b) => a.codigo.localeCompare(b.codigo) || (a.semana ?? 0) - (b.semana ?? 0) || a.direccion.localeCompare(b.direccion)));
@@ -148,12 +154,11 @@ export class ControlesComponent {
     return ['Programado', 'Pendiente', 'En proceso'].includes(estado);
   }
 
-  /** El técnico opera solo sus direcciones; jefatura nunca opera. */
-  protected puedeOperar(c: { direccion: string }): boolean {
+  /** El técnico opera solo sus Direcciones/Unidades; jefatura nunca opera. */
+  protected puedeOperar(c: { direccion: string; unidad: string }): boolean {
     const u = this.auth.usuario();
     if (!u || u.clave === 'jefatura') return false;
-    if (u.clave === 'tec-soporte') return this.data.direccionesDe(u.usuario).includes(c.direccion);
-    return true;
+    return this.data.atiende(u, c.direccion, c.unidad);
   }
 
   protected restan(limite: string): number { return this.habiles.habilesHasta(limite, isoLocal(new Date())); }

@@ -7,6 +7,7 @@ import { DataService } from '../services/data.service';
 import { ToastService } from '../services/toast.service';
 import { IconComponent } from '../../shared/icon';
 import { NAVEGACION, NavGrupo } from '../config/permisos';
+import { MODULOS, URL_GESTION_EQUIPOS } from '../config/modulos';
 
 /**
  * Layout principal: barra lateral con el menú por rol y barra superior con el usuario
@@ -26,6 +27,21 @@ import { NAVEGACION, NavGrupo } from '../config/permisos';
         </div>
       </div>
       <div class="brand-rule"></div>
+
+      <!-- Selector de módulo del ecosistema SISGOST -->
+      <div class="mod-sel">
+        <div class="mod-title">SISGOST</div>
+        @for (m of modulos; track m.clave) {
+          @if (m.actual) {
+            <div class="mod-a on"><ui-icon [name]="m.icono" /><span>{{ m.nombre }}</span></div>
+          } @else {
+            <a class="mod-a" [href]="m.url" [title]="'Ir a ' + m.nombre + ' — ' + m.descripcion">
+              <ui-icon [name]="m.icono" /><span>Ir a {{ m.nombre }}</span>
+              <ui-icon name="external" [size]="12" />
+            </a>
+          }
+        }
+      </div>
 
       <nav>
         @for (g of grupos(); track g.titulo) {
@@ -57,10 +73,13 @@ import { NAVEGACION, NavGrupo } from '../config/permisos';
         </div>
 
         <div class="tb-right">
+          <a class="btn btn-outline btn-sm" [href]="urlEquipos" title="Abrir el módulo SISGOST — Gestión de Equipos">
+            <ui-icon name="box" [size]="13" /> Ir a Gestión de Equipos
+          </a>
           <div class="ver-como">
             <label for="vercomo">Ver como</label>
             <select id="vercomo" (change)="cambiarUsuario($event)">
-              @for (u of data.usuarios(); track u.usuario) {
+              @for (u of data.usuariosDelModulo(); track u.usuario) {
                 <option [value]="u.usuario" [selected]="u.usuario === auth.usuario()?.usuario">{{ u.rol }} · {{ u.nombre }}</option>
               }
             </select>
@@ -89,6 +108,10 @@ export class ShellComponent {
   protected readonly data = inject(DataService);
   private readonly toast = inject(ToastService);
   private readonly router = inject(Router);
+
+  /** Módulos del ecosistema: el enlace a Gestión de Equipos vive en la barra lateral y la superior. */
+  protected readonly modulos = MODULOS;
+  protected readonly urlEquipos = URL_GESTION_EQUIPOS;
 
   /** Menú por rol (tabla en core/config/permisos.ts, compartida con el guard de rutas). */
   protected readonly grupos = computed<NavGrupo[]>(() => {

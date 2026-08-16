@@ -12,22 +12,24 @@ entity DIRECCION {
   activa
 }
 
-entity USUARIO_SISTEMA {
+entity USUARIO_SISTEMA <<compartida>> {
   * usuario : texto <<PK>>
   --
   nombre
   rol / clave
-  cargo
+  cargo, unidad, estado
+  moduloControles
 }
 
-entity DISTRIBUCION_SOPORTE {
+entity DISTRIBUCION_SOPORTE <<compartida>> {
   * id <<PK>>
   --
-  usuario <<FK>>
-  direccion <<FK>>
-  unidad
-  fechaInicio
-  estado
+  direccion, unidad
+  tecnico  <<FK usuario>>
+  asignadoPor, fecha, hora
+  activo
+  desactivadaPor?, fechaDesactivacion?
+  observacion
 }
 
 entity FERIADO {
@@ -41,11 +43,19 @@ entity CONTROL_CATALOGO {
   --
   nombre, version
   frecuencia
-  aplicaA
+  aplicacion (modo, direcciones,
+    unidades, area, observaciones)
   requiereEvidencia
   requiereFirma
   permiteJustificacion
   plantilla (secciones)
+}
+
+entity AREA_TECNICA {
+  * id <<PK>>
+  --
+  nombre, descripcion
+  pares Dirección/Unidad
 }
 
 entity CONTROL_MES {
@@ -60,6 +70,7 @@ entity CONTROL_MES {
   fechaEntrega?
   avance
   secciones (respuestas)
+  equipos revisados[]
   evidencias[]
 }
 
@@ -86,24 +97,29 @@ entity JUSTIFICACION {
   firmas[3]
 }
 
-entity EQUIPO_OPERATIVO {
-  * inventario <<PK>>
+entity EQUIPO_OPERATIVO <<compartida>> {
+  * ciclo <<PK>>
+  --
+  inventario
   --
   tipo, marca, modelo, serie
   usuarioFinal
   direccion <<FK>>, unidad
   soporteResponsable
   fechaAceptacion
-  expedienteUnico
+  expediente, expedienteUnico
   estado
   garantia
+  origen
 }
 
 entity EVENTO_INTEGRACION {
   * id <<PK>>
   --
   tipo (entrega / descargo)
-  expedienteUnico
+  moduloOrigen, moduloDestino
+  expediente, expedienteUnico
+  detalle
   equipo
   aplicado
 }
@@ -126,6 +142,8 @@ entity EVENTO_TRAZABILIDAD {
   usuario, rol
   accion
   estadoAnterior / estadoNuevo
+  moduloOrigen / moduloDestino
+  inventario?
   documento?
 }
 
@@ -133,6 +151,7 @@ DIRECCION ||--o{ DISTRIBUCION_SOPORTE
 USUARIO_SISTEMA ||--o{ DISTRIBUCION_SOPORTE
 DIRECCION ||--o{ CONTROL_MES
 CONTROL_CATALOGO ||--o{ CONTROL_MES
+AREA_TECNICA |o--o{ CONTROL_CATALOGO : "aplica a (modo área técnica)"
 DIRECCION ||--o{ BITACORA_DIARIA
 DIRECCION ||--o{ EQUIPO_OPERATIVO
 CONTROL_MES |o--o| JUSTIFICACION
@@ -140,6 +159,8 @@ CONTROL_MES |o--o| DOCUMENTO_GENERADO
 BITACORA_DIARIA |o--o| DOCUMENTO_GENERADO
 JUSTIFICACION |o--o| DOCUMENTO_GENERADO
 EVENTO_INTEGRACION }o--|| EQUIPO_OPERATIVO : actualiza
+EQUIPO_OPERATIVO }o--o{ CONTROL_MES : "revisado en\n(RespuestaEquipo)"
+DISTRIBUCION_SOPORTE .. CONTROL_MES : "define el responsable"
 FERIADO .. CONTROL_MES : "define los días hábiles\nde la fecha límite"
 DOCUMENTO_GENERADO ||--o{ EVENTO_TRAZABILIDAD
 @enduml

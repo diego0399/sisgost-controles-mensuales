@@ -19,29 +19,31 @@ export interface NavGrupo {
  * queda reservada al Administrador, salvo el catálogo y la distribución, que el
  * Encargado de Soporte necesita consultar para asignar responsables.
  */
+const OPERAN: ClaveRol[] = ['admin', 'enc-soporte', 'tec-soporte', 'jefatura'];
+
 export const NAVEGACION: NavGrupo[] = [
   {
     titulo: 'Seguimiento',
     items: [
-      { ruta: '/panel', titulo: 'Panel ejecutivo', icono: 'panel' },
-      { ruta: '/calendario', titulo: 'Calendario de controles', icono: 'calendar' },
-      { ruta: '/historial', titulo: 'Historial anual', icono: 'archive' }
+      { ruta: '/panel', titulo: 'Panel ejecutivo', icono: 'panel', roles: OPERAN },
+      { ruta: '/calendario', titulo: 'Calendario de controles', icono: 'calendar', roles: OPERAN },
+      { ruta: '/historial', titulo: 'Historial anual', icono: 'archive', roles: OPERAN }
     ]
   },
   {
     titulo: 'Operación',
     items: [
-      { ruta: '/controles', titulo: 'Controles mensuales', icono: 'clipboard' },
-      { ruta: '/bitacora', titulo: 'Bitácora diaria', icono: 'sun' },
-      { ruta: '/justificaciones', titulo: 'Justificaciones', icono: 'mail' },
-      { ruta: '/inventario', titulo: 'Inventario operativo', icono: 'box' }
+      { ruta: '/controles', titulo: 'Controles mensuales', icono: 'clipboard', roles: OPERAN },
+      { ruta: '/bitacora', titulo: 'Bitácora diaria', icono: 'sun', roles: OPERAN },
+      { ruta: '/justificaciones', titulo: 'Justificaciones', icono: 'mail', roles: OPERAN },
+      { ruta: '/inventario', titulo: 'Inventario operativo', icono: 'box', roles: OPERAN }
     ]
   },
   {
     titulo: 'Documentación',
     items: [
-      { ruta: '/documentos', titulo: 'Generador de documentos', icono: 'file' },
-      { ruta: '/trazabilidad', titulo: 'Trazabilidad', icono: 'clock' }
+      { ruta: '/documentos', titulo: 'Generador de documentos', icono: 'file', roles: OPERAN },
+      { ruta: '/trazabilidad', titulo: 'Trazabilidad', icono: 'clock', roles: OPERAN }
     ]
   },
   {

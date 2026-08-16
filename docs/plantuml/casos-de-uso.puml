@@ -23,9 +23,13 @@ rectangle "SISGOST — Controles Mensuales" {
   usecase "Administrar catálogo de controles" as UC11
   usecase "Administrar feriados" as UC12
   usecase "Consultar inventario operativo" as UC13
-  usecase "Aplicar evento de integración" as UC14
+  usecase "Sincronización automática del\ninventario operativo" as UC14
   usecase "Consultar trazabilidad" as UC15
   usecase "Ver / imprimir / descargar documento" as UC16
+  usecase "Revisar equipos del inventario\nen un control (F0422, F0174, VULN)" as UC17
+  usecase "Restablecer datos de demostración" as UC18
+  usecase "Configurar aplicación del control\n(dónde aplica)" as UC20
+  usecase "Ir a SISGOST — Gestión de Equipos" as UC19
 }
 
 TEC --> UC1
@@ -35,6 +39,8 @@ TEC --> UC4
 TEC --> UC5
 TEC --> UC6
 TEC --> UC13
+TEC --> UC17
+TEC --> UC19
 TEC --> UC16
 
 ENC --> UC1
@@ -42,20 +48,24 @@ ENC --> UC7
 ENC --> UC8
 ENC --> UC9
 ENC --> UC10
-ENC --> UC14
 ENC --> UC15
 ENC --> UC16
 
 ADM --> UC10
 ADM --> UC11
 ADM --> UC12
+ADM --> UC18
+ADM --> UC20
+ADM --> UC19
 
 JEF --> UC1
 JEF --> UC7
 JEF --> UC15
 JEF --> UC16
 
-GE ..> UC14 : "entrega aceptada /\ndescargo de equipo"
+GE ..> UC14 : "entrega aceptada / descargo\n(se aplica sin acción del usuario)"
+UC14 ..> UC13 : <<include>>
+UC20 ..> UC3 : "decide en qué Direcciones/Unidades\nse programa el control"
 UC4 ..> UC16 : <<include>>
 UC5 ..> UC16 : <<include>>
 UC6 ..> UC16 : <<include>>

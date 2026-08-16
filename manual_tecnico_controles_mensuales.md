@@ -12,7 +12,7 @@
 
 ```bash
 npm install
-ng serve
+ng serve        # puerto 4300 (Gestión de Equipos usa el 4200)
 npm run build   # presupuesto: initial 500 kB / estilos por componente 4 kB
 ```
 
@@ -22,6 +22,7 @@ npm run build   # presupuesto: initial 500 kB / estilos por componente 4 kB
 src/app/
 ├── core/
 │   ├── config/permisos.ts            # menú y permisos por rol (shell + guard comparten tabla)
+│   ├── config/modulos.ts             # enlaces entre los módulos del ecosistema
 │   ├── guards/{auth,role}.guard.ts
 │   ├── layout/shell.component.ts     # layout con menú lateral (estilos en styles.css)
 │   ├── models/models.ts              # todo el modelo de datos del módulo
@@ -30,6 +31,7 @@ src/app/
 │       ├── business-day.service.ts   # días hábiles: L–V menos feriados
 │       ├── control-deadline.service.ts # 3.er día hábil del mes siguiente; límites semanales
 │       ├── equipment-integration.service.ts # eventos simulados de Gestión de Equipos
+│       ├── support-distribution.service.ts   # COMPARTIDO: distribución de soportes (existe igual en el otro módulo)
 │       ├── data.service.ts           # almacén único + todas las reglas de negocio
 │       ├── auth.service.ts           # sesión simulada (sessionStorage)
 │       └── toast.service.ts
@@ -76,10 +78,39 @@ Validaciones (regla 30 del requerimiento):
 | No cerrar bitácora sin revisar atención al público | `validarBitacora`: 9 elementos marcados; fallas con descripción, acción y estado final |
 | Bitácora después de las 17:00 | `enviarBitacora` marca `Enviada tarde` |
 | Control vencido sin estado claro | reconciliación a `Vencido` + alerta del panel |
-| Dirección sin soporte responsable | `direccionesSinSoporte` (computed) + alerta |
+| Dirección/Unidad sin soporte responsable | `paresSinSoporte` (computed) + alerta |
 | Equipo activo sin Dirección/Unidad | la semilla lo garantiza; la batería de casos lo verifica |
+| No programar un control donde no aplica | `paresAplicables(codigo)` desde la configuración del catálogo |
+| No guardar una aplicación vacía | `validarAplicacion`; y `actualizarCatalogo` no activa un control sin ella |
+| No registrar en un control un equipo de otra Dirección/Unidad | `validarEntrega` compara contra `equiposDeControl(c)` |
+| El técnico no completa controles de una Dirección/Unidad ajena | `atiende(u, dir, unidad)` bloquea `entregarControl`, `justificarControl` y `enviarBitacora` |
 
 Todo cambio de estado pasa por `registrarEvento` (trazabilidad) y `persistir()`.
+
+## 4.1 Aplicación de los controles («Aplica a»)
+
+`ControlCatalogo.aplicacion` (`AplicacionControl`) decide **dónde se trabaja cada control**, con
+cuatro modos: `Todas las direcciones`, `Direcciones específicas`, `Unidades específicas` y
+`Área técnica específica` (las áreas viven en `areas-tecnicas.json` y resuelven a pares
+Dirección/Unidad reales: CSOD, respaldos, infraestructura, seguridad informática).
+
+`DataService.paresAplicables(codigo)` traduce esa configuración a los pares donde el control se
+programa; si el control trabaja con equipos (`requiereEquipos`), además exige inventario operativo
+activo en el par. De ahí salen:
+
+- el **calendario y la semilla**: un control solo se programa donde aplica —el generador de la
+  semilla usa el mismo algoritmo, así que los 432 controles del set cumplen la configuración—;
+- el **listado de controles**: filtra por control activo y por aplicación;
+- el **historial anual**: los controles que no aplican se muestran como **No aplica**, informativo,
+  nunca como pendientes ni vencidos (`controlesNoAplicablesDe`);
+- el **panel ejecutivo**: cuenta «controles aplicables del mes» y los «no aplicables», y alerta
+  cuando una Dirección/Unidad tiene controles aplicables pero no tiene soporte responsable
+  (`paresAplicablesSinSoporte`).
+
+La edición vive en Administración → Catálogo de controles → **Editar aplicación**
+(`actualizarAplicacion`), con vista previa de en qué Direcciones/Unidades quedaría, validación de
+aplicación vacía y traza del cambio. El catálogo se persiste en el *snapshot* porque su
+configuración es editable.
 
 ## 5. Formularios digitales dirigidos por datos
 
@@ -104,14 +135,67 @@ de acciones se excluye con `display: none`.
 
 ## 7. Integración con Gestión de Equipos
 
-`EquipmentIntegrationService` expone `pendientes`/`aplicados` y `aplicar(id, usuario)`.
-Los eventos (`eventos-integracion.json`) simulan la cola del otro módulo:
+### 7.1 Datos base compartidos
 
-- **Entrega aceptada** → el equipo entra al inventario operativo de su Dirección/Unidad.
-- **Descargo de equipo** → el equipo pasa a `Descargado` (sale del inventario activo).
+Los dos módulos son proyectos Angular distintos que trabajan sobre los **mismos datos base**:
+`usuarios-sistema.json` (misma identidad, mismo `usuario`, mismo rol), el catálogo de
+Direcciones/Unidades, los equipos y `distribucion-soportes.json`. `UsuarioSistema.moduloControles`
+distingue quién opera aquí (Soporte, Jefatura, Administración) de quién opera solo allá (Hardware).
 
-No se duplica lógica de Gestión de Equipos: solo se consumen sus efectos, y cada aplicación
-queda en trazabilidad («Equipo agregado/descargado desde Gestión de Equipos»).
+### 7.2 `SupportDistributionService` — servicio compartido
+
+El **mismo archivo** existe en `src/app/core/services/support-distribution.service.ts` de los dos
+proyectos y es dueño de la señal `registros`. Ofrece `deDireccionUnidad`, `tecnicosDe`,
+`deTecnico`, `atiende`, `responsableDe`, `pares` y las escrituras planas (`agregar`, `modificar`,
+`desactivar`). Las reglas de cada módulo quedan en su propio `DataService`:
+
+| Módulo | Uso |
+|---|---|
+| Controles Mensuales | **Administra** la distribución; asigna controles y bitácoras, filtra el inventario operativo y decide qué ve cada técnico |
+| Gestión de Equipos | **Consume**: `atiendeDireccionUnidad` y `soporteResponsableDe` delegan aquí, y `bloqueoExpedienteUnico` impide elegir un Técnico de Configuración que no atienda la Dirección/Unidad del requerimiento |
+
+La pantalla de distribución de Gestión de Equipos quedó en **modo consulta**
+(`puedeGestionar = computed(() => false)`) con un aviso y enlace a este módulo: dos pantallas que
+editaran el mismo registro serían dos verdades.
+
+### 7.3 Movimientos de equipos: sincronización automática
+
+No hay acción manual. `DataService.sincronizarInventario()` corre **al cargar el módulo**, antes
+de reconciliar vencidos, y aplica todos los eventos de `eventos-integracion.json` que aún no lo
+estaban. `EquipmentIntegrationService` solo expone la lectura (`sincronizados`, `ultimos(n)`,
+contadores) y `syncOperationalInventory()` para forzar una pasada:
+
+| Evento | Efecto |
+|---|---|
+| `onEquipmentAccepted` | El equipo entra al inventario operativo de su Dirección/Unidad, con el soporte responsable resuelto por la distribución (no a mano). |
+| `onEquipmentDischarged` | El equipo pasa a `Descargado` y sale del inventario activo. |
+
+Garantías de la sincronización:
+
+- **Idempotente.** Un evento con `aplicado: true` se salta; una aceptación cuyo `ciclo` ya existe
+  no duplica el equipo; un descargo sin ficha activa no repite el movimiento.
+- **Historial.** Si el equipo vuelve a entregarse teniendo un ciclo abierto, ese ciclo pasa a
+  `Histórico` y se crea un registro operativo nuevo: `EquipoOperativo.ciclo` es la clave, no el
+  número de inventario.
+- **Trazabilidad completa.** Cada movimiento deja un evento con fecha, hora, módulo origen y
+  destino, equipo, número de inventario, Dirección/Unidad, usuario final, expediente único,
+  estado anterior, estado nuevo y observación.
+
+No se duplica lógica de Gestión de Equipos: solo se consumen sus efectos.
+
+### 7.4 Equipos dentro de los formularios
+
+`SeccionPlantilla.equipos` (`EquiposPlantilla`) declara que una sección trabaja sobre el
+inventario operativo. `CompletarControlComponent` la dibuja con la lista de
+`data.equiposDeControl(c)` —los equipos **activos de la Dirección/Unidad del control**— y guarda
+`RespuestaEquipo[]`. `validarEntrega` rechaza cualquier inventario que no esté en esa lista.
+Lo usan F0422 (todos los equipos), F0174, F0288 y VULN (al menos uno).
+
+### 7.5 Enlace entre módulos
+
+`core/config/modulos.ts` guarda la URL del módulo hermano (4200 ↔ 4300). El enlace aparece en el
+selector de módulo de la barra lateral, en la barra superior y en la tarjeta del panel ejecutivo.
+Si el otro módulo no está levantado, el enlace simplemente no abre: son dos despliegues distintos.
 
 ## 8. Roles y permisos
 
@@ -128,9 +212,25 @@ queda en trazabilidad («Equipo agregado/descargado desde Gestión de Equipos»)
 ## 9. Semilla de datos
 
 Generada por script (no a mano) para que cada `fechaLimite` salga del mismo algoritmo de
-días hábiles que usa la aplicación: 352 controles de enero a agosto de 2026 (mensuales,
-semanales F0389/F0387, eventuales y programados) con estados realistas —entregados, tardíos,
-vencidos, justificados, observado y abiertos—, 48 bitácoras de los últimos 12 días hábiles,
-3 cartas de justificación con el texto real de `Formatos_nuevos_2025_.docx`, ~355 documentos
-y ~470 eventos de trazabilidad. La Oficina Departamental de La Unión queda sin soporte
-asignado a propósito, para alimentar la alerta del panel.
+días hábiles que usa la aplicación, y sobre la organización compartida con Gestión de Equipos:
+**416 controles** de enero a agosto de 2026 (mensuales, semanales F0389/F0387, eventuales y
+programados) con estados realistas —entregados, tardíos, vencidos, justificados, observado y
+abiertos—, **48 bitácoras** de los últimos 12 días hábiles, 3 cartas de justificación con el
+texto real de `Formatos_nuevos_2025_.docx`, ~417 documentos y ~560 eventos de trazabilidad.
+
+El **inventario operativo (23 equipos)** se deriva de Gestión de Equipos: los tres equipos que
+aquel módulo ya tiene aceptados se copian con su mismo número de inventario, expediente y técnico
+de configuración; el resto es la flota histórica de las mismas Direcciones/Unidades, con el
+soporte responsable resuelto por la distribución compartida.
+
+La unidad **Dirección de Registros / Archivo Registral** queda sin soporte asignado a propósito
+(su asignación se desactivó el 31/07/2026): así el panel muestra la alerta de Dirección/Unidad sin
+responsable y de equipos activos sin soporte.
+
+## 10. Restablecimiento de la demostración
+
+`DataService.restablecerDemostracion()` borra `sisgost.controles.v1` y recarga: vuelven a la
+semilla los controles, bitácoras, justificaciones, documentos, trazabilidad, inventario operativo
+y la distribución de soportes. La acción vive en Administración, exige confirmación
+(«Esta acción restablecerá los datos de demostración del módulo Controles Mensuales. ¿Desea
+continuar?»), enumera lo que repone y no toca la estructura ni la navegación del sistema.

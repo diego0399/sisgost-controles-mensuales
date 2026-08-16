@@ -1,0 +1,64 @@
+@startuml integracion-modulos
+title SISGOST · Integración entre módulos (datos compartidos y flujo del equipo)
+skinparam componentStyle rectangle
+skinparam linetype ortho
+
+package "Datos base compartidos" as BASE {
+  [usuarios-sistema.json\n(mismos usuarios y roles)] as USR
+  [direcciones / unidades] as DIR
+  [distribucion-soportes.json] as DIS
+  [SupportDistributionService\n(mismo servicio en los dos proyectos)] as SRV
+}
+
+package "SISGOST — Gestión de Equipos\n(localhost:4200)" as GE {
+  [Requerimiento\nDirección/Unidad] as REQ
+  [Expediente único\nTécnico de Configuración] as EXP
+  [Preparación F0288 /\nConfiguración F0302] as CFG
+  [Entrega y aceptación\ndel Usuario Final] as ACE
+  [Descargo] as DES
+  [Distribución de soportes\n(solo consulta)] as DGE
+}
+
+package "SISGOST — Controles Mensuales\n(localhost:4300)" as CM {
+  [Distribución de soportes\n(administración)] as DCM
+  [Inventario operativo] as INV
+  [Controles con equipos\nF0422 · F0174 · F0288 · VULN] as CTL
+  [Bitácora diaria] as BIT
+  [Trazabilidad] as TRZ
+}
+
+DCM --> DIS : administra
+DIS --> SRV
+SRV --> DGE : consulta
+SRV --> EXP : **filtra** los técnicos elegibles\ncomo Técnico de Configuración
+SRV --> CTL : responsable del control
+SRV --> BIT : responsable de la bitácora
+SRV --> INV : soporte responsable del equipo
+USR --> GE
+USR --> CM
+DIR --> GE
+DIR --> CM
+
+REQ --> EXP
+EXP --> CFG
+CFG --> ACE
+ACE --> INV : **entrega aceptada**\nse incorpora AUTOMÁTICAMENTE\n(sin confirmación manual)
+ACE ..> DES
+DES --> INV : **descargo**\nsale AUTOMÁTICAMENTE del\ninventario activo
+INV --> CTL : equipos activos de la\nDirección/Unidad
+CTL --> TRZ
+INV --> TRZ : módulo origen → módulo destino,\nequipo, estado anterior y nuevo
+
+note right of INV
+  syncOperationalInventory() corre al cargar:
+  idempotente (no duplica equipos ni repite
+  movimientos) y conserva los ciclos anteriores
+  como «Histórico».
+end note
+
+note bottom of SRV
+  Regla: un Técnico de Soporte solo puede recibir
+  equipos para configurar en las Direcciones/Unidades
+  donde la distribución lo declara responsable.
+end note
+@enduml

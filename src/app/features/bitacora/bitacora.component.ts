@@ -39,7 +39,7 @@ import { formateaFecha, isoLocal } from '../../core/models/models';
             <div class="card">
               <div class="card-pad">
                 <div class="row-between" style="margin-bottom: 6px;">
-                  <b>{{ data.cortaDireccion(b.direccion) }} · {{ data.nombreDireccion(b.direccion) }}</b>
+                  <b>{{ data.cortaDireccion(b.direccion) }} · {{ data.nombreDireccion(b.direccion) }} / {{ b.unidad }}</b>
                   <ui-badge [estado]="b.estado" />
                 </div>
                 <p class="muted" style="font-size: 12.5px; margin-bottom: 12px;">
@@ -80,7 +80,7 @@ import { formateaFecha, isoLocal } from '../../core/models/models';
                 @for (b of filtradas(); track b.id) {
                   <tr>
                     <td class="mono">{{ formatea(b.fecha) }}</td>
-                    <td>{{ data.cortaDireccion(b.direccion) }}</td>
+                    <td>{{ data.cortaDireccion(b.direccion) }} <span class="muted">/ {{ b.unidad }}</span></td>
                     <td>{{ b.responsable }}</td>
                     <td class="mono">{{ b.horaEnvio ?? '—' }}</td>
                     <td>

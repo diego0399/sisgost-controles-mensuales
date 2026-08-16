@@ -80,7 +80,7 @@ import { MESES, formateaFecha, nombreMes } from '../../core/models/models';
                     <td style="max-width: 300px;"><b>{{ d.nombre }}</b></td>
                     <td>{{ d.tipo }}</td>
                     <td>{{ nombreMes(d.mes) }} {{ d.anio }}</td>
-                    <td>{{ d.direccion === 'Todas' ? 'Todas' : data.cortaDireccion(d.direccion) }}</td>
+                    <td>{{ d.direccion === 'Todas' ? 'Todas' : data.cortaDireccion(d.direccion) }}@if (d.unidad) { <span class="muted"> / {{ d.unidad }}</span> }</td>
                     <td>{{ d.generadoPor }}</td>
                     <td class="mono">{{ formatea(d.fecha) }} · {{ d.hora }}</td>
                     <td class="mono">{{ d.hash }}</td>
