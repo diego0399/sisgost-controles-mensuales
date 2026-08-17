@@ -52,9 +52,21 @@ export class ControlDeadlineService {
   }
 
   /**
-   * Último período **cerrado**: el mes más reciente cuyo plazo de entrega ya venció. Es el
-   * período que el Encargado de Soporte revisa —medir la operatividad de un mes cuyo plazo
-   * todavía corre castigaría a Direcciones que están dentro de su plazo—.
+   * **Período activo**: el año y el mes de la fecha actual del sistema. Es el período que todas
+   * las pantallas cargan al abrirse —controles, vista por Dirección, detalle, calendario,
+   * historial y panel—, porque es el mes que el personal está trabajando. El plazo de entrega
+   * puede seguir corriendo (agosto se entrega en los primeros días hábiles de septiembre): el mes
+   * seleccionado es agosto, no julio.
+   */
+  periodoActivo(hoy = isoLocal(new Date())): { anio: number; mes: number } {
+    const [anio, mes] = hoy.split('-').map(Number);
+    return { anio, mes };
+  }
+
+  /**
+   * Último período **cerrado**: el mes más reciente cuyo plazo de entrega ya venció. No es el
+   * período que se muestra por defecto (eso es `periodoActivo`), pero sigue siendo útil para
+   * comparar resultados de meses ya vencidos.
    */
   ultimoPeriodoCerrado(hoy = isoLocal(new Date())): { anio: number; mes: number } {
     const f = new Date(hoy);

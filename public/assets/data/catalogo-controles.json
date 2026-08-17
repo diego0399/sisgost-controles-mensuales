@@ -71,7 +71,7 @@
   "codigo": "F0389",
   "nombre": "Control de condiciones de infraestructura del cuarto de servidores (CSOD)",
   "version": "V2",
-  "frecuencia": "Semanal",
+  "frecuencia": "Semanal con entrega mensual consolidada",
   "aplicacion": {
    "modo": "Área técnica específica",
    "direcciones": [],
@@ -83,11 +83,43 @@
   "requiereFirma": true,
   "permiteJustificacion": true,
   "activo": true,
-  "descripcion": "Revisión de lunes a viernes de las condiciones del cuarto de servidores, pozos y área de telecomunicaciones, con mediciones de temperatura, carga de UPS y revisión semanal de limpieza y planta eléctrica.",
+  "descripcion": "Revisión de las condiciones del cuarto de servidores, pozos y área de telecomunicaciones, con mediciones de temperatura, carga de UPS y prueba de planta eléctrica. Se llena semana a semana y se entrega en un solo documento mensual consolidado.",
   "plantilla": [
    {
-    "titulo": "Estado de la infraestructura",
-    "descripcion": "Revisión diaria consolidada de la semana. Ante un ítem en mal estado, describa la observación y el número de reporte.",
+    "titulo": "Semana 1",
+    "semana": 1,
+    "descripcion": "Condiciones del cuarto de servidores, pozos y área de telecomunicaciones revisadas durante la semana.",
+    "campos": [
+     {
+      "id": "estado",
+      "etiqueta": "Estado de la semana",
+      "tipo": "opcion",
+      "opciones": [
+       "Semana completada",
+       "Semana observada",
+       "Semana no aplica"
+      ],
+      "obligatorio": true,
+      "ayuda": "Una semana marcada «Semana no aplica» no exige los demás datos, pero debe quedar declarada."
+     },
+     {
+      "id": "fecha",
+      "etiqueta": "Fecha de la revisión",
+      "tipo": "fecha",
+      "obligatorio": true
+     },
+     {
+      "id": "responsable",
+      "etiqueta": "Responsable de la revisión",
+      "tipo": "texto",
+      "obligatorio": true
+     },
+     {
+      "id": "observaciones",
+      "etiqueta": "Observaciones de la semana",
+      "tipo": "area"
+     }
+    ],
     "items": [
      {
       "id": "gabinete-tel",
@@ -103,18 +135,6 @@
       "nombre": "Tomacorrientes de energía alterna"
      },
      {
-      "id": "iluminacion",
-      "nombre": "Iluminación"
-     },
-     {
-      "id": "techo",
-      "nombre": "Techo / cielo falso"
-     },
-     {
-      "id": "pared",
-      "nombre": "Pared / piso"
-     },
-     {
       "id": "gabinete-srv",
       "nombre": "Gabinetes de servidores"
      },
@@ -128,15 +148,6 @@
       "nombre": "Alarma contra incendios"
      },
      {
-      "id": "deshumificador",
-      "nombre": "Deshumidificadores",
-      "medicion": "Humedad (%)"
-     },
-     {
-      "id": "switches",
-      "nombre": "Switches"
-     },
-     {
       "id": "sensores",
       "nombre": "Sensores de temperatura",
       "medicion": "Temperatura (°C)"
@@ -145,28 +156,6 @@
       "id": "cables",
       "nombre": "Cables y conexiones eléctricas"
      },
-     {
-      "id": "librera",
-      "nombre": "Librera de respaldo"
-     },
-     {
-      "id": "acceso",
-      "nombre": "Sistema de acceso digital (con huella)"
-     },
-     {
-      "id": "objetos",
-      "nombre": "Objetos extraños en el lugar",
-      "estados": [
-       "Sin hallazgos",
-       "Con hallazgos",
-       "No aplica"
-      ]
-     }
-    ]
-   },
-   {
-    "titulo": "Revisión semanal",
-    "items": [
      {
       "id": "limpieza",
       "nombre": "Limpieza en cuarto de servidores",
@@ -185,6 +174,409 @@
        "No aplica"
       ],
       "medicion": "Combustible (%)"
+     }
+    ]
+   },
+   {
+    "titulo": "Semana 2",
+    "semana": 2,
+    "descripcion": "Condiciones del cuarto de servidores, pozos y área de telecomunicaciones revisadas durante la semana.",
+    "campos": [
+     {
+      "id": "estado",
+      "etiqueta": "Estado de la semana",
+      "tipo": "opcion",
+      "opciones": [
+       "Semana completada",
+       "Semana observada",
+       "Semana no aplica"
+      ],
+      "obligatorio": true,
+      "ayuda": "Una semana marcada «Semana no aplica» no exige los demás datos, pero debe quedar declarada."
+     },
+     {
+      "id": "fecha",
+      "etiqueta": "Fecha de la revisión",
+      "tipo": "fecha",
+      "obligatorio": true
+     },
+     {
+      "id": "responsable",
+      "etiqueta": "Responsable de la revisión",
+      "tipo": "texto",
+      "obligatorio": true
+     },
+     {
+      "id": "observaciones",
+      "etiqueta": "Observaciones de la semana",
+      "tipo": "area"
+     }
+    ],
+    "items": [
+     {
+      "id": "gabinete-tel",
+      "nombre": "Gabinete de telecomunicaciones"
+     },
+     {
+      "id": "aire",
+      "nombre": "Aire acondicionado",
+      "medicion": "Temperatura (°F)"
+     },
+     {
+      "id": "tomas",
+      "nombre": "Tomacorrientes de energía alterna"
+     },
+     {
+      "id": "gabinete-srv",
+      "nombre": "Gabinetes de servidores"
+     },
+     {
+      "id": "ups",
+      "nombre": "UPS",
+      "medicion": "Carga (%)"
+     },
+     {
+      "id": "alarma",
+      "nombre": "Alarma contra incendios"
+     },
+     {
+      "id": "sensores",
+      "nombre": "Sensores de temperatura",
+      "medicion": "Temperatura (°C)"
+     },
+     {
+      "id": "cables",
+      "nombre": "Cables y conexiones eléctricas"
+     },
+     {
+      "id": "limpieza",
+      "nombre": "Limpieza en cuarto de servidores",
+      "estados": [
+       "Realizada",
+       "No realizada",
+       "No aplica"
+      ]
+     },
+     {
+      "id": "planta",
+      "nombre": "Planta eléctrica (prueba semanal)",
+      "estados": [
+       "Realizada",
+       "No realizada",
+       "No aplica"
+      ],
+      "medicion": "Combustible (%)"
+     }
+    ]
+   },
+   {
+    "titulo": "Semana 3",
+    "semana": 3,
+    "descripcion": "Condiciones del cuarto de servidores, pozos y área de telecomunicaciones revisadas durante la semana.",
+    "campos": [
+     {
+      "id": "estado",
+      "etiqueta": "Estado de la semana",
+      "tipo": "opcion",
+      "opciones": [
+       "Semana completada",
+       "Semana observada",
+       "Semana no aplica"
+      ],
+      "obligatorio": true,
+      "ayuda": "Una semana marcada «Semana no aplica» no exige los demás datos, pero debe quedar declarada."
+     },
+     {
+      "id": "fecha",
+      "etiqueta": "Fecha de la revisión",
+      "tipo": "fecha",
+      "obligatorio": true
+     },
+     {
+      "id": "responsable",
+      "etiqueta": "Responsable de la revisión",
+      "tipo": "texto",
+      "obligatorio": true
+     },
+     {
+      "id": "observaciones",
+      "etiqueta": "Observaciones de la semana",
+      "tipo": "area"
+     }
+    ],
+    "items": [
+     {
+      "id": "gabinete-tel",
+      "nombre": "Gabinete de telecomunicaciones"
+     },
+     {
+      "id": "aire",
+      "nombre": "Aire acondicionado",
+      "medicion": "Temperatura (°F)"
+     },
+     {
+      "id": "tomas",
+      "nombre": "Tomacorrientes de energía alterna"
+     },
+     {
+      "id": "gabinete-srv",
+      "nombre": "Gabinetes de servidores"
+     },
+     {
+      "id": "ups",
+      "nombre": "UPS",
+      "medicion": "Carga (%)"
+     },
+     {
+      "id": "alarma",
+      "nombre": "Alarma contra incendios"
+     },
+     {
+      "id": "sensores",
+      "nombre": "Sensores de temperatura",
+      "medicion": "Temperatura (°C)"
+     },
+     {
+      "id": "cables",
+      "nombre": "Cables y conexiones eléctricas"
+     },
+     {
+      "id": "limpieza",
+      "nombre": "Limpieza en cuarto de servidores",
+      "estados": [
+       "Realizada",
+       "No realizada",
+       "No aplica"
+      ]
+     },
+     {
+      "id": "planta",
+      "nombre": "Planta eléctrica (prueba semanal)",
+      "estados": [
+       "Realizada",
+       "No realizada",
+       "No aplica"
+      ],
+      "medicion": "Combustible (%)"
+     }
+    ]
+   },
+   {
+    "titulo": "Semana 4",
+    "semana": 4,
+    "descripcion": "Condiciones del cuarto de servidores, pozos y área de telecomunicaciones revisadas durante la semana.",
+    "campos": [
+     {
+      "id": "estado",
+      "etiqueta": "Estado de la semana",
+      "tipo": "opcion",
+      "opciones": [
+       "Semana completada",
+       "Semana observada",
+       "Semana no aplica"
+      ],
+      "obligatorio": true,
+      "ayuda": "Una semana marcada «Semana no aplica» no exige los demás datos, pero debe quedar declarada."
+     },
+     {
+      "id": "fecha",
+      "etiqueta": "Fecha de la revisión",
+      "tipo": "fecha",
+      "obligatorio": true
+     },
+     {
+      "id": "responsable",
+      "etiqueta": "Responsable de la revisión",
+      "tipo": "texto",
+      "obligatorio": true
+     },
+     {
+      "id": "observaciones",
+      "etiqueta": "Observaciones de la semana",
+      "tipo": "area"
+     }
+    ],
+    "items": [
+     {
+      "id": "gabinete-tel",
+      "nombre": "Gabinete de telecomunicaciones"
+     },
+     {
+      "id": "aire",
+      "nombre": "Aire acondicionado",
+      "medicion": "Temperatura (°F)"
+     },
+     {
+      "id": "tomas",
+      "nombre": "Tomacorrientes de energía alterna"
+     },
+     {
+      "id": "gabinete-srv",
+      "nombre": "Gabinetes de servidores"
+     },
+     {
+      "id": "ups",
+      "nombre": "UPS",
+      "medicion": "Carga (%)"
+     },
+     {
+      "id": "alarma",
+      "nombre": "Alarma contra incendios"
+     },
+     {
+      "id": "sensores",
+      "nombre": "Sensores de temperatura",
+      "medicion": "Temperatura (°C)"
+     },
+     {
+      "id": "cables",
+      "nombre": "Cables y conexiones eléctricas"
+     },
+     {
+      "id": "limpieza",
+      "nombre": "Limpieza en cuarto de servidores",
+      "estados": [
+       "Realizada",
+       "No realizada",
+       "No aplica"
+      ]
+     },
+     {
+      "id": "planta",
+      "nombre": "Planta eléctrica (prueba semanal)",
+      "estados": [
+       "Realizada",
+       "No realizada",
+       "No aplica"
+      ],
+      "medicion": "Combustible (%)"
+     }
+    ]
+   },
+   {
+    "titulo": "Semana 5",
+    "semana": 5,
+    "descripcion": "Solo si el mes tiene una quinta semana; si no, márquela como «Semana no aplica».",
+    "campos": [
+     {
+      "id": "estado",
+      "etiqueta": "Estado de la semana",
+      "tipo": "opcion",
+      "opciones": [
+       "Semana completada",
+       "Semana observada",
+       "Semana no aplica"
+      ],
+      "obligatorio": true,
+      "ayuda": "Una semana marcada «Semana no aplica» no exige los demás datos, pero debe quedar declarada."
+     },
+     {
+      "id": "fecha",
+      "etiqueta": "Fecha de la revisión",
+      "tipo": "fecha",
+      "obligatorio": true
+     },
+     {
+      "id": "responsable",
+      "etiqueta": "Responsable de la revisión",
+      "tipo": "texto",
+      "obligatorio": true
+     },
+     {
+      "id": "observaciones",
+      "etiqueta": "Observaciones de la semana",
+      "tipo": "area"
+     }
+    ],
+    "items": [
+     {
+      "id": "gabinete-tel",
+      "nombre": "Gabinete de telecomunicaciones"
+     },
+     {
+      "id": "aire",
+      "nombre": "Aire acondicionado",
+      "medicion": "Temperatura (°F)"
+     },
+     {
+      "id": "tomas",
+      "nombre": "Tomacorrientes de energía alterna"
+     },
+     {
+      "id": "gabinete-srv",
+      "nombre": "Gabinetes de servidores"
+     },
+     {
+      "id": "ups",
+      "nombre": "UPS",
+      "medicion": "Carga (%)"
+     },
+     {
+      "id": "alarma",
+      "nombre": "Alarma contra incendios"
+     },
+     {
+      "id": "sensores",
+      "nombre": "Sensores de temperatura",
+      "medicion": "Temperatura (°C)"
+     },
+     {
+      "id": "cables",
+      "nombre": "Cables y conexiones eléctricas"
+     },
+     {
+      "id": "limpieza",
+      "nombre": "Limpieza en cuarto de servidores",
+      "estados": [
+       "Realizada",
+       "No realizada",
+       "No aplica"
+      ]
+     },
+     {
+      "id": "planta",
+      "nombre": "Planta eléctrica (prueba semanal)",
+      "estados": [
+       "Realizada",
+       "No realizada",
+       "No aplica"
+      ],
+      "medicion": "Combustible (%)"
+     }
+    ]
+   },
+   {
+    "titulo": "Cierre del mes",
+    "descripcion": "Verificaciones periódicas del mes y resumen que encabeza el documento consolidado.",
+    "items": [
+     {
+      "id": "iluminacion",
+      "nombre": "Iluminación"
+     },
+     {
+      "id": "techo",
+      "nombre": "Techo / cielo falso"
+     },
+     {
+      "id": "pared",
+      "nombre": "Pared / piso"
+     },
+     {
+      "id": "deshumificador",
+      "nombre": "Deshumidificadores",
+      "medicion": "Humedad (%)"
+     },
+     {
+      "id": "switches",
+      "nombre": "Switches"
+     },
+     {
+      "id": "librera",
+      "nombre": "Librera de respaldo"
+     },
+     {
+      "id": "acceso",
+      "nombre": "Sistema de acceso digital (con huella)"
      },
      {
       "id": "extintor",
@@ -195,15 +587,32 @@
        "No aplica"
       ],
       "medicion": "Carga (%)"
+     },
+     {
+      "id": "objetos",
+      "nombre": "Objetos extraños en el lugar",
+      "estados": [
+       "Sin hallazgos",
+       "Con hallazgos",
+       "No aplica"
+      ]
      }
-    ]
-   },
-   {
-    "titulo": "Observaciones generales",
+    ],
     "campos": [
      {
+      "id": "resultado",
+      "etiqueta": "Resultado general del mes",
+      "tipo": "opcion",
+      "obligatorio": true,
+      "opciones": [
+       "Condiciones normales",
+       "Con observaciones atendidas",
+       "Con condiciones críticas"
+      ]
+     },
+     {
       "id": "obs",
-      "etiqueta": "Observaciones de la semana",
+      "etiqueta": "Observaciones generales del mes",
       "tipo": "area"
      },
      {
@@ -571,12 +980,12 @@
   "requiereFirma": true,
   "permiteJustificacion": false,
   "activo": true,
-  "descripcion": "Verificación semanal de la sincronización de hora de computadoras, impresores multifuncionales, teléfonos IP y reloj marcador. Se llena semana a semana y se entrega en un solo documento mensual consolidado.",
+  "descripcion": "Verificación semanal de la sincronización de hora de computadoras, teléfonos IP y extensiones. Cada semana se verifican 3 equipos por su IP —tomada del inventario operativo— y 3 teléfonos o extensiones, con la hora de cada verificación. Se entrega en un solo documento mensual consolidado.",
   "plantilla": [
    {
     "titulo": "Semana 1",
     "semana": 1,
-    "descripcion": "Verificación semanal de la sincronización de hora de los equipos y dispositivos con IP.",
+    "descripcion": "Verificación semanal de la sincronización de hora: 3 equipos identificados por su IP y 3 teléfonos o extensiones, cada uno con su hora de verificación.",
     "campos": [
      {
       "id": "estado",
@@ -597,14 +1006,8 @@
       "obligatorio": true
      },
      {
-      "id": "equipos",
-      "etiqueta": "Equipos revisados",
-      "tipo": "numero",
-      "obligatorio": true
-     },
-     {
       "id": "resultado",
-      "etiqueta": "Resultado",
+      "etiqueta": "Resultado general de la semana",
       "tipo": "opcion",
       "obligatorio": true,
       "opciones": [
@@ -624,12 +1027,26 @@
       "etiqueta": "Observaciones",
       "tipo": "area"
      }
-    ]
+    ],
+    "equiposIp": {
+     "cantidad": 3,
+     "ayuda": "La IP debe existir en el inventario operativo, pertenecer a un equipo activo de esta misma Dirección/Unidad y no repetirse dentro de la semana."
+    },
+    "telefonos": {
+     "cantidad": 3,
+     "resultados": [
+      "Hora sincronizada",
+      "Hora corregida",
+      "Sin comunicación",
+      "No aplica"
+     ],
+     "ayuda": "Teléfonos IP o extensiones del área; cada uno con su ubicación, resultado y hora."
+    }
    },
    {
     "titulo": "Semana 2",
     "semana": 2,
-    "descripcion": "Verificación semanal de la sincronización de hora de los equipos y dispositivos con IP.",
+    "descripcion": "Verificación semanal de la sincronización de hora: 3 equipos identificados por su IP y 3 teléfonos o extensiones, cada uno con su hora de verificación.",
     "campos": [
      {
       "id": "estado",
@@ -650,14 +1067,8 @@
       "obligatorio": true
      },
      {
-      "id": "equipos",
-      "etiqueta": "Equipos revisados",
-      "tipo": "numero",
-      "obligatorio": true
-     },
-     {
       "id": "resultado",
-      "etiqueta": "Resultado",
+      "etiqueta": "Resultado general de la semana",
       "tipo": "opcion",
       "obligatorio": true,
       "opciones": [
@@ -677,12 +1088,26 @@
       "etiqueta": "Observaciones",
       "tipo": "area"
      }
-    ]
+    ],
+    "equiposIp": {
+     "cantidad": 3,
+     "ayuda": "La IP debe existir en el inventario operativo, pertenecer a un equipo activo de esta misma Dirección/Unidad y no repetirse dentro de la semana."
+    },
+    "telefonos": {
+     "cantidad": 3,
+     "resultados": [
+      "Hora sincronizada",
+      "Hora corregida",
+      "Sin comunicación",
+      "No aplica"
+     ],
+     "ayuda": "Teléfonos IP o extensiones del área; cada uno con su ubicación, resultado y hora."
+    }
    },
    {
     "titulo": "Semana 3",
     "semana": 3,
-    "descripcion": "Verificación semanal de la sincronización de hora de los equipos y dispositivos con IP.",
+    "descripcion": "Verificación semanal de la sincronización de hora: 3 equipos identificados por su IP y 3 teléfonos o extensiones, cada uno con su hora de verificación.",
     "campos": [
      {
       "id": "estado",
@@ -703,14 +1128,8 @@
       "obligatorio": true
      },
      {
-      "id": "equipos",
-      "etiqueta": "Equipos revisados",
-      "tipo": "numero",
-      "obligatorio": true
-     },
-     {
       "id": "resultado",
-      "etiqueta": "Resultado",
+      "etiqueta": "Resultado general de la semana",
       "tipo": "opcion",
       "obligatorio": true,
       "opciones": [
@@ -730,12 +1149,26 @@
       "etiqueta": "Observaciones",
       "tipo": "area"
      }
-    ]
+    ],
+    "equiposIp": {
+     "cantidad": 3,
+     "ayuda": "La IP debe existir en el inventario operativo, pertenecer a un equipo activo de esta misma Dirección/Unidad y no repetirse dentro de la semana."
+    },
+    "telefonos": {
+     "cantidad": 3,
+     "resultados": [
+      "Hora sincronizada",
+      "Hora corregida",
+      "Sin comunicación",
+      "No aplica"
+     ],
+     "ayuda": "Teléfonos IP o extensiones del área; cada uno con su ubicación, resultado y hora."
+    }
    },
    {
     "titulo": "Semana 4",
     "semana": 4,
-    "descripcion": "Verificación semanal de la sincronización de hora de los equipos y dispositivos con IP.",
+    "descripcion": "Verificación semanal de la sincronización de hora: 3 equipos identificados por su IP y 3 teléfonos o extensiones, cada uno con su hora de verificación.",
     "campos": [
      {
       "id": "estado",
@@ -756,14 +1189,8 @@
       "obligatorio": true
      },
      {
-      "id": "equipos",
-      "etiqueta": "Equipos revisados",
-      "tipo": "numero",
-      "obligatorio": true
-     },
-     {
       "id": "resultado",
-      "etiqueta": "Resultado",
+      "etiqueta": "Resultado general de la semana",
       "tipo": "opcion",
       "obligatorio": true,
       "opciones": [
@@ -783,7 +1210,21 @@
       "etiqueta": "Observaciones",
       "tipo": "area"
      }
-    ]
+    ],
+    "equiposIp": {
+     "cantidad": 3,
+     "ayuda": "La IP debe existir en el inventario operativo, pertenecer a un equipo activo de esta misma Dirección/Unidad y no repetirse dentro de la semana."
+    },
+    "telefonos": {
+     "cantidad": 3,
+     "resultados": [
+      "Hora sincronizada",
+      "Hora corregida",
+      "Sin comunicación",
+      "No aplica"
+     ],
+     "ayuda": "Teléfonos IP o extensiones del área; cada uno con su ubicación, resultado y hora."
+    }
    },
    {
     "titulo": "Semana 5",
@@ -809,14 +1250,8 @@
       "obligatorio": true
      },
      {
-      "id": "equipos",
-      "etiqueta": "Equipos revisados",
-      "tipo": "numero",
-      "obligatorio": true
-     },
-     {
       "id": "resultado",
-      "etiqueta": "Resultado",
+      "etiqueta": "Resultado general de la semana",
       "tipo": "opcion",
       "obligatorio": true,
       "opciones": [
@@ -836,7 +1271,21 @@
       "etiqueta": "Observaciones",
       "tipo": "area"
      }
-    ]
+    ],
+    "equiposIp": {
+     "cantidad": 3,
+     "ayuda": "La IP debe existir en el inventario operativo, pertenecer a un equipo activo de esta misma Dirección/Unidad y no repetirse dentro de la semana."
+    },
+    "telefonos": {
+     "cantidad": 3,
+     "resultados": [
+      "Hora sincronizada",
+      "Hora corregida",
+      "Sin comunicación",
+      "No aplica"
+     ],
+     "ayuda": "Teléfonos IP o extensiones del área; cada uno con su ubicación, resultado y hora."
+    }
    },
    {
     "titulo": "Cierre del mes",

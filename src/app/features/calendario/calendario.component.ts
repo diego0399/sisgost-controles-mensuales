@@ -155,8 +155,10 @@ export class CalendarioComponent {
   private readonly plazos = inject(ControlDeadlineService);
 
   protected readonly encabezados = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
-  protected readonly anio = signal(new Date().getFullYear());
-  protected readonly mes = signal(new Date().getMonth() + 1);
+  /** El calendario abre en el período activo: mes actual del sistema. */
+  private readonly activo = this.plazos.periodoActivo();
+  protected readonly anio = signal(this.activo.anio);
+  protected readonly mes = signal(this.activo.mes);
 
   protected mueve(paso: number): void {
     let m = this.mes() + paso;
@@ -168,8 +170,9 @@ export class CalendarioComponent {
   }
 
   protected hoyMes(): void {
-    this.anio.set(new Date().getFullYear());
-    this.mes.set(new Date().getMonth() + 1);
+    const p = this.plazos.periodoActivo();
+    this.anio.set(p.anio);
+    this.mes.set(p.mes);
   }
 
   protected nombreMesVista(): string { return nombreMes(this.mes()); }

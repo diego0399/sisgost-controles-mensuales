@@ -209,8 +209,11 @@ export class ControlesComponent {
   private readonly oper = inject(OperatividadService);
   private readonly plazos = inject(ControlDeadlineService);
 
-  /** El Encargado revisa el último período CERRADO: medir un mes cuyo plazo aún corre no dice nada. */
-  private readonly periodo = this.plazos.ultimoPeriodoCerrado();
+  /**
+   * La pantalla abre en el **período activo**: el mes actual del sistema. Si el usuario elige otro
+   * mes, su selección se respeta mientras permanezca en la pantalla.
+   */
+  private readonly periodo = this.plazos.periodoActivo();
 
   protected readonly MESES = MESES;
   protected readonly anios = [2026];

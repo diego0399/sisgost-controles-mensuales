@@ -83,6 +83,7 @@ import { MESES, formateaFecha, isoLocal, nombreMes } from '../../core/models/mod
               <button class="btn btn-outline btn-sm" type="button" (click)="generarReporte('Reporte de inventario operativo por Dirección')">Inventario operativo</button>
               <button class="btn btn-outline btn-sm" type="button" (click)="generarReporte('Reporte de bitácoras diarias por Dirección')">Bitácoras diarias</button>
               <button class="btn btn-outline btn-sm" type="button" (click)="generarReporte('Reporte de F0387 consolidado mensual por Dirección')">F0387 consolidado</button>
+              <button class="btn btn-outline btn-sm" type="button" (click)="generarReporte('Reporte de F0389 consolidado mensual por Dirección')">F0389 consolidado</button>
               <button class="btn btn-outline btn-sm" type="button" (click)="generarReporte('Reporte anual por Dirección')">Reporte anual</button>
             </div>
           </div>
@@ -181,7 +182,12 @@ import { MESES, formateaFecha, isoLocal, nombreMes } from '../../core/models/mod
                     <tr>
                       <td><b class="mono">{{ c.codigo }}</b>@if (c.semana) { <div class="muted" style="font-size: 11px;">Semana {{ c.semana }}</div> }</td>
                       <td style="max-width: 280px;">{{ data.catalogoDe(c.codigo)?.nombre }}</td>
-                      <td><ui-badge [estado]="data.catalogoDe(c.codigo)?.frecuencia ?? ''" /></td>
+                      <td>
+                        <ui-badge [estado]="data.etiquetaFrecuencia(c.codigo)" />
+                        @if (data.etiquetaEntrega(c.codigo); as ent) {
+                          <div class="muted" style="font-size: 11px;">{{ ent }}</div>
+                        }
+                      </td>
                       <td>{{ c.responsable }}</td>
                       <td class="mono">{{ formatea(c.fechaLimite) }}</td>
                       <td style="min-width: 90px;">
@@ -326,7 +332,8 @@ export class DireccionDetalleComponent {
   private readonly oper = inject(OperatividadService);
   private readonly habiles = inject(BusinessDayService);
   private readonly plazos = inject(ControlDeadlineService);
-  private readonly periodo = this.plazos.ultimoPeriodoCerrado();
+  /** El detalle abre en el mes actual del sistema; el selector respeta lo que elija el usuario. */
+  private readonly periodo = this.plazos.periodoActivo();
   private readonly toast = inject(ToastService);
 
   /** Parámetros de la ruta `/controles/direccion/:direccion/:unidad`. */

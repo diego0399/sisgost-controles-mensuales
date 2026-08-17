@@ -135,16 +135,39 @@ export interface EquiposPlantilla {
   ayuda?: string;
 }
 
+/**
+ * Verificación de equipos identificados por su **IP**. La IP no se acepta a ciegas: se busca en el
+ * inventario operativo —que proviene de las entregas aceptadas en Gestión de Equipos— y solo vale
+ * si corresponde a un equipo ACTIVO de la misma Dirección/Unidad del control. Es la sección de
+ * verificación semanal del F0387.
+ */
+export interface EquiposIpPlantilla {
+  /** Cuántos equipos distintos deben registrarse (F0387: 3). */
+  cantidad: number;
+  ayuda?: string;
+}
+
+/** Verificación de teléfonos o extensiones, cada uno con su hora (F0387). */
+export interface TelefonosPlantilla {
+  /** Cuántos teléfonos o extensiones deben registrarse (F0387: 3). */
+  cantidad: number;
+  /** Resultados admitidos de la verificación. */
+  resultados: string[];
+  ayuda?: string;
+}
+
 /** Sección de un formulario digital; el «stepper» de completar control recorre estas secciones. */
 export interface SeccionPlantilla {
   titulo: string;
   descripcion?: string;
-  /** Número de semana en los controles semanales con entrega mensual consolidada (F0387). */
+  /** Número de semana en los controles semanales con entrega mensual consolidada (F0387, F0389). */
   semana?: number;
   campos?: CampoPlantilla[];
   items?: ItemPlantilla[];
   tabla?: TablaPlantilla;
   equipos?: EquiposPlantilla;
+  equiposIp?: EquiposIpPlantilla;
+  telefonos?: TelefonosPlantilla;
 }
 
 /**
@@ -218,12 +241,40 @@ export interface RespuestaEquipo {
   observacion: string;
 }
 
+/**
+ * Equipo verificado por su IP. Solo se guarda `ip` y `hora`: los demás datos son el reflejo del
+ * inventario operativo al momento del registro y se conservan para que el documento del mes siga
+ * siendo legible aunque el equipo se descargue después.
+ */
+export interface RespuestaEquipoIp {
+  ip: string;
+  /** Hora de verificación `HH:mm`. */
+  hora: string;
+  inventario?: string;
+  nombreEquipo?: string;
+  usuarioFinal?: string;
+  /** Estado operativo del equipo al momento de la verificación. */
+  estadoEquipo?: string;
+}
+
+/** Teléfono o extensión verificado dentro de una semana del F0387. */
+export interface RespuestaTelefono {
+  numero: string;
+  ubicacion: string;
+  resultado: string;
+  /** Hora de verificación `HH:mm`. */
+  hora: string;
+  observaciones: string;
+}
+
 export interface RespuestaSeccion {
   titulo: string;
   campos?: RespuestaCampo[];
   items?: RespuestaItem[];
   filas?: string[][];
   equipos?: RespuestaEquipo[];
+  equiposIp?: RespuestaEquipoIp[];
+  telefonos?: RespuestaTelefono[];
 }
 
 export interface EvidenciaControl { nombre: string; descripcion: string; fecha: string; }
@@ -347,6 +398,14 @@ export interface EquipoOperativo {
   modelo: string;
   serie: string;
   nombreEquipo: string;
+  /**
+   * IP fija del equipo, cuando Gestión de Equipos registró la reserva en el F0302. Es el dato con
+   * el que el F0387 identifica los equipos que verifica cada semana; los equipos sin reserva de IP
+   * no pueden usarse en esa verificación.
+   */
+  ip?: string;
+  /** MAC con la que se solicitó la reserva de IP, si la hubo. */
+  mac?: string;
   usuarioFinal: string;
   carne: string;
   correoInstitucional: string;
@@ -390,7 +449,8 @@ export interface DocumentoGenerado {
   | 'Reporte mensual por Dirección' | 'Reporte anual por Dirección'
   | 'Reporte de controles pendientes por Dirección' | 'Reporte de operatividad por Dirección'
   | 'Reporte de inventario operativo por Dirección' | 'Reporte de bitácoras diarias por Dirección'
-  | 'Reporte de F0387 consolidado mensual por Dirección';
+  | 'Reporte de F0387 consolidado mensual por Dirección'
+  | 'Reporte de F0389 consolidado mensual por Dirección';
   nombre: string;
   codigo: string;
   fecha: string;

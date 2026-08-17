@@ -157,6 +157,37 @@ export class DocumentoComponent {
           s.texto = 'Sin registros en el período. El detalle consta en las observaciones del control.';
         }
       }
+      // Equipos verificados por su IP y teléfonos/extensiones (F0387). Van justo después de la
+      // semana a la que pertenecen: el documento del mes lleva las cinco semanas en una sola hoja.
+      const anexos: SeccionDoc[] = [];
+      if (p.equiposIp) {
+        const conIp = (r?.equiposIp ?? []).filter((e) => e.ip.trim());
+        if (conIp.length) {
+          anexos.push({
+            titulo: `${p.titulo} · Equipos revisados por IP`,
+            columnas: ['IP', 'N° de inventario', 'Equipo', 'Usuario final', 'Estado operativo', 'Hora de verificación'],
+            filas: conIp.map((e) => {
+              const eq = e.inventario ? this.data.equipoDe(e.inventario) : undefined;
+              return [
+                e.ip, e.inventario || '—',
+                eq ? `${eq.nombreEquipo || eq.tipo} · ${eq.marca} ${eq.modelo}` : e.nombreEquipo || '—',
+                e.usuarioFinal || '—', e.estadoEquipo || '—', e.hora || '—'
+              ];
+            }),
+            nota: 'Cada IP corresponde a un equipo activo de esta Dirección/Unidad en el inventario operativo, proveniente de las entregas aceptadas en SISGOST — Gestión de Equipos.'
+          });
+        }
+      }
+      if (p.telefonos) {
+        const conTel = (r?.telefonos ?? []).filter((t) => t.numero.trim());
+        if (conTel.length) {
+          anexos.push({
+            titulo: `${p.titulo} · Teléfonos y extensiones revisados`,
+            columnas: ['Teléfono / Extensión', 'Ubicación o área', 'Resultado', 'Hora de verificación', 'Observaciones'],
+            filas: conTel.map((t) => [t.numero, t.ubicacion || '—', t.resultado || '—', t.hora || '—', t.observaciones || '—'])
+          });
+        }
+      }
       // Equipos relacionados: se imprimen con los datos vivos del inventario operativo.
       if (p.equipos) {
         const revisados = r?.equipos?.filter((e) => e.incluido) ?? [];
@@ -178,7 +209,7 @@ export class DocumentoComponent {
           s.texto = 'No se registraron equipos revisados en el período.';
         }
       }
-      salida.push(s);
+      salida.push(s, ...anexos);
     }
     if (c.observaciones) salida.push({ titulo: 'Observaciones del proceso', texto: c.observaciones });
     return salida;
@@ -402,40 +433,8 @@ export class DocumentoComponent {
             }
           : { texto: 'La Dirección/Unidad no lleva bitácora diaria de atención al público.' })
       });
-    } else if (d.tipo.includes('F0387')) {
-      // Un solo documento del mes con las verificaciones de todas sus semanas.
-      const f0387 = controles.find((c) => c.codigo === 'F0387');
-      if (!f0387) {
-        salida.push({
-          titulo: 'F0387 · Verificación de sincronización de hora',
-          texto: 'El control F0387 no aplica a esta Dirección/Unidad en el período, o todavía no fue programado.'
-        });
-      } else {
-        salida.push({
-          titulo: 'F0387 · Verificaciones semanales del mes',
-          columnas: ['Semana', 'Estado', 'Fecha de verificación', 'Equipos revisados', 'Resultado', 'Responsable', 'Observaciones'],
-          filas: this.data.estadoSemanas(f0387).map((s) => {
-            const r = f0387.secciones.find((x) => x.titulo === s.titulo);
-            const campo = (id: string) => r?.campos?.find((c) => c.id === id)?.valor || '—';
-            return [
-              `Semana ${s.semana}`, s.estado, campo('fecha'), campo('equipos'),
-              campo('resultado'), campo('responsable'), campo('observaciones')
-            ];
-          }),
-          nota: 'El F0387 se trabaja semana a semana y se entrega en un único documento mensual consolidado: no se generan cuatro documentos separados.'
-        });
-        salida.push({
-          titulo: 'Estado del consolidado',
-          campos: [
-            { etiqueta: 'Estado del control', valor: f0387.estado },
-            { etiqueta: 'Semanas completadas', valor: String(this.data.estadoSemanas(f0387).filter((s) => s.estado === 'Semana completada').length) },
-            { etiqueta: 'Semanas observadas', valor: String(this.data.estadoSemanas(f0387).filter((s) => s.estado === 'Semana observada').length) },
-            { etiqueta: 'Semanas que no aplican', valor: String(this.data.estadoSemanas(f0387).filter((s) => s.estado === 'Semana no aplica').length) },
-            { etiqueta: 'Documento del mes', valor: f0387.documento ? 'Generado' : 'Pendiente de generar' },
-            { etiqueta: 'Fecha de entrega', valor: f0387.fechaEntrega ? formateaFecha(f0387.fechaEntrega) : 'Sin entrega registrada', mono: true }
-          ]
-        });
-      }
+    } else if (d.tipo.includes('F0387') || d.tipo.includes('F0389')) {
+      salida.push(...this.seccionesConsolidado(d.tipo.includes('F0387') ? 'F0387' : 'F0389', controles));
     } else if (d.tipo.includes('operatividad')) {
       salida.push({
         titulo: 'Cálculo de la operatividad',
@@ -452,7 +451,7 @@ export class DocumentoComponent {
     }
 
     if (!anual && !d.tipo.includes('inventario') && !d.tipo.includes('bitácoras')
-      && !d.tipo.includes('pendientes') && !d.tipo.includes('F0387')) {
+      && !d.tipo.includes('pendientes') && !d.tipo.includes('F0387') && !d.tipo.includes('F0389')) {
       salida.push({
         titulo: 'Controles del período',
         ...(controles.length
@@ -472,6 +471,98 @@ export class DocumentoComponent {
       titulo: 'Conclusión y estado operativo',
       texto: this.conclusionOperativa(k),
       nota: 'Reporte generado por SISGOST — Controles Mensuales con los datos vigentes del período.'
+    });
+    return salida;
+  }
+
+  /**
+   * Reporte de un control **semanal con entrega mensual consolidada** (F0387 o F0389): las cinco
+   * semanas del mes en una sola hoja, con su detalle propio —equipos por IP y teléfonos en el
+   * F0387, condiciones revisadas en el F0389— y el estado del consolidado. Nunca se imprime un
+   * reporte por semana.
+   */
+  private seccionesConsolidado(codigo: string, controles: ControlMes[]): SeccionDoc[] {
+    const cat = this.data.catalogoDe(codigo);
+    const control = controles.find((c) => c.codigo === codigo);
+    if (!control) {
+      return [{
+        titulo: `${codigo} · ${cat?.nombre ?? ''}`,
+        texto: `El control ${codigo} no aplica a esta Dirección/Unidad en el período, o todavía no fue programado.`
+      }];
+    }
+    const semanas = this.data.estadoSemanas(control);
+    const campo = (titulo: string, id: string) =>
+      control.secciones.find((x) => x.titulo === titulo)?.campos?.find((c) => c.id === id)?.valor || '—';
+    const salida: SeccionDoc[] = [{
+      titulo: `${codigo} · Verificaciones semanales del mes`,
+      columnas: ['Semana', 'Estado', 'Fecha', 'Resultado', 'Responsable', 'Observaciones'],
+      filas: semanas.map((s) => [
+        `Semana ${s.semana}`, s.estado, campo(s.titulo, 'fecha'),
+        campo(s.titulo, 'resultado'), campo(s.titulo, 'responsable'), campo(s.titulo, 'observaciones')
+      ]),
+      nota: `El ${codigo} se trabaja semana a semana y se entrega en un único documento mensual consolidado: no se generan documentos separados por semana.`
+    }];
+
+    // Detalle propio de cada consolidado.
+    if (codigo === 'F0387') {
+      const filasIp: string[][] = [];
+      const filasTel: string[][] = [];
+      for (const s of semanas) {
+        const r = control.secciones.find((x) => x.titulo === s.titulo);
+        for (const e of r?.equiposIp ?? []) {
+          if (e.ip.trim()) filasIp.push([`Semana ${s.semana}`, e.ip, e.inventario || '—', e.nombreEquipo || '—', e.usuarioFinal || '—', e.hora || '—']);
+        }
+        for (const t of r?.telefonos ?? []) {
+          if (t.numero.trim()) filasTel.push([`Semana ${s.semana}`, t.numero, t.ubicacion || '—', t.resultado || '—', t.hora || '—']);
+        }
+      }
+      salida.push({
+        titulo: 'Equipos revisados por IP',
+        ...(filasIp.length
+          ? {
+              columnas: ['Semana', 'IP', 'N° de inventario', 'Equipo', 'Usuario final', 'Hora de verificación'],
+              filas: filasIp,
+              nota: 'Las IP corresponden a equipos activos de esta Dirección/Unidad en el inventario operativo.'
+            }
+          : { texto: 'Todavía no se registraron equipos por IP en el período.' })
+      });
+      salida.push({
+        titulo: 'Teléfonos y extensiones revisados',
+        ...(filasTel.length
+          ? {
+              columnas: ['Semana', 'Teléfono / Extensión', 'Ubicación o área', 'Resultado', 'Hora de verificación'],
+              filas: filasTel
+            }
+          : { texto: 'Todavía no se registraron teléfonos ni extensiones en el período.' })
+      });
+    } else {
+      const filas: string[][] = [];
+      for (const s of semanas) {
+        const r = control.secciones.find((x) => x.titulo === s.titulo);
+        const plantilla = cat?.plantilla.find((p) => p.titulo === s.titulo);
+        for (const i of r?.items ?? []) {
+          const nombre = plantilla?.items?.find((x) => x.id === i.id)?.nombre ?? i.id;
+          filas.push([`Semana ${s.semana}`, nombre, i.estado || 'Sin marcar', i.medicion || '—']);
+        }
+      }
+      salida.push({
+        titulo: 'Condiciones revisadas por semana',
+        ...(filas.length
+          ? { columnas: ['Semana', 'Condición revisada', 'Estado', 'Medición'], filas }
+          : { texto: 'Todavía no se registraron condiciones revisadas en el período.' })
+      });
+    }
+
+    salida.push({
+      titulo: 'Estado del consolidado',
+      campos: [
+        { etiqueta: 'Estado del control', valor: control.estado },
+        { etiqueta: 'Semanas completadas', valor: String(semanas.filter((s) => s.estado === 'Semana completada').length) },
+        { etiqueta: 'Semanas observadas', valor: String(semanas.filter((s) => s.estado === 'Semana observada').length) },
+        { etiqueta: 'Semanas que no aplican', valor: String(semanas.filter((s) => s.estado === 'Semana no aplica').length) },
+        { etiqueta: 'Documento del mes', valor: control.documento ? 'Generado' : 'Pendiente de generar' },
+        { etiqueta: 'Fecha de entrega', valor: control.fechaEntrega ? formateaFecha(control.fechaEntrega) : 'Sin entrega registrada', mono: true }
+      ]
     });
     return salida;
   }

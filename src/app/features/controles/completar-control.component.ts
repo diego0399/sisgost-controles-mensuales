@@ -9,8 +9,8 @@ import { BadgeComponent, HelpTipComponent, ModalComponent } from '../../shared/u
 import { DocumentoComponent } from '../../shared/documento';
 import { IconComponent } from '../../shared/icon';
 import {
-  ControlMes, EvidenciaControl, RespuestaEquipo, RespuestaSeccion, SeccionPlantilla,
-  formateaFecha, isoLocal, nombreMes
+  ControlMes, EvidenciaControl, RespuestaEquipo, RespuestaEquipoIp, RespuestaSeccion,
+  RespuestaTelefono, SeccionPlantilla, formateaFecha, isoLocal, nombreMes
 } from '../../core/models/models';
 
 /** Estado editable de una sección del formulario (espejo mutable de la plantilla). */
@@ -21,6 +21,10 @@ interface SeccionEdit {
   filas: string[][];
   /** Revisión por equipo, indexada por número de inventario (solo secciones de equipos). */
   equipos: Record<string, RespuestaEquipo>;
+  /** Equipos verificados por IP (F0387): tantas filas como pida la plantilla. */
+  equiposIp: RespuestaEquipoIp[];
+  /** Teléfonos o extensiones verificados (F0387). */
+  telefonos: RespuestaTelefono[];
 }
 
 /**
@@ -75,6 +79,13 @@ interface SeccionEdit {
       border: 1px solid var(--line); border-radius: 9px; padding: 7px 10px; font-size: 11.5px;
     }
     .sem.on { border-color: var(--navy-400, #7ba3d8); background: var(--surface-2, #f8fafc); }
+    /* Verificación por IP y por teléfono/extensión (F0387) */
+    .ip-fila { display: grid; grid-template-columns: 1fr 160px; gap: 12px; align-items: start; }
+    .tel-fila { display: grid; grid-template-columns: 1fr 1fr 1fr 140px; gap: 12px; align-items: start; }
+    .ip-datos { margin-top: 10px; }
+    @media (max-width: 760px) {
+      .ip-fila, .tel-fila { grid-template-columns: 1fr; }
+    }
   `,
   template: `
     @if (control(); as c) {
@@ -176,6 +187,43 @@ interface SeccionEdit {
                       </table>
                     </div>
                   }
+                  @if (conIp(s).length) {
+                    <div class="table-wrap" style="margin: 8px 0;">
+                      <table class="tbl">
+                        <thead><tr><th>IP</th><th>N° de inventario</th><th>Equipo</th><th>Usuario final</th><th>Estado</th><th>Hora</th></tr></thead>
+                        <tbody>
+                          @for (e of conIp(s); track e.ip) {
+                            <tr>
+                              <td class="mono">{{ e.ip }}</td>
+                              <td class="mono">{{ e.inventario || '—' }}</td>
+                              <td>{{ e.nombreEquipo || '—' }}</td>
+                              <td>{{ e.usuarioFinal || '—' }}</td>
+                              <td>{{ e.estadoEquipo || '—' }}</td>
+                              <td class="mono">{{ e.hora || '—' }}</td>
+                            </tr>
+                          }
+                        </tbody>
+                      </table>
+                    </div>
+                  }
+                  @if (conTelefono(s).length) {
+                    <div class="table-wrap" style="margin: 8px 0;">
+                      <table class="tbl">
+                        <thead><tr><th>Teléfono / Extensión</th><th>Ubicación o área</th><th>Resultado</th><th>Hora</th><th>Observaciones</th></tr></thead>
+                        <tbody>
+                          @for (t of conTelefono(s); track t.numero) {
+                            <tr>
+                              <td class="mono">{{ t.numero }}</td>
+                              <td>{{ t.ubicacion || '—' }}</td>
+                              <td>{{ t.resultado || '—' }}</td>
+                              <td class="mono">{{ t.hora || '—' }}</td>
+                              <td>{{ t.observaciones || '—' }}</td>
+                            </tr>
+                          }
+                        </tbody>
+                      </table>
+                    </div>
+                  }
                   @if (s.filas?.length) {
                     <div class="table-wrap" style="margin: 8px 0;">
                       <table class="tbl">
@@ -197,7 +245,7 @@ interface SeccionEdit {
               <div class="card-body">
                 <div class="row-between" style="gap: 12px; flex-wrap: wrap;">
                   <div>
-                    <b>Control semanal con entrega mensual consolidada.</b>
+                    <b>Frecuencia: Semanal · Entrega: Mensual consolidada · Período: {{ nombreMes(c.mes) }} {{ c.anio }}</b>
                     <div class="muted" style="font-size: 12.5px; max-width: 620px;">
                       Se llena semana a semana y se guarda el avance; al cerrar el mes se genera
                       <b>un solo documento</b> con todas las semanas, no uno por semana.
@@ -309,6 +357,8 @@ interface SeccionEdit {
                     @if (s.plantilla.items?.length) { {{ itemsMarcados(s) }} de {{ s.plantilla.items?.length }} ítem(s) marcado(s). }
                     @if (s.plantilla.tabla) { {{ s.filas.length }} registro(s) en la tabla. }
                     @if (s.plantilla.equipos) { {{ equiposRevisados(s) }} de {{ equiposActivos().length }} equipo(s) del inventario operativo revisado(s). }
+                    @if (s.plantilla.equiposIp; as pip) { {{ equiposIpLlenos(s) }} de {{ pip.cantidad }} equipo(s) verificados por IP con hora. }
+                    @if (s.plantilla.telefonos; as ptel) { {{ telefonosLlenos(s) }} de {{ ptel.cantidad }} teléfono(s)/extensión(es) con hora. }
                   </p>
                 }
               }
@@ -414,6 +464,96 @@ interface SeccionEdit {
                       Esta Dirección/Unidad no tiene equipos activos en el inventario operativo. Los equipos entran
                       cuando el Usuario Final acepta la entrega en Gestión de Equipos.
                     </p>
+                  }
+                }
+
+                @if (s.plantilla.equiposIp; as pip) {
+                  <div class="sec-title">Equipos revisados por IP</div>
+                  <div class="alert" style="margin-bottom: 12px;">
+                    <span class="alert-ico">i</span>
+                    <span>
+                      Digite la IP de <b>{{ pip.cantidad }} equipos distintos</b>. La IP se busca en el
+                      <b>inventario operativo</b> de {{ data.dirUnidad(c.direccion, c.unidad) }}, que proviene de las
+                      entregas aceptadas en Gestión de Equipos: no se admite una IP de otra Dirección/Unidad.
+                      @if (pip.ayuda) { {{ pip.ayuda }} }
+                      @if (ipsDisponibles().length) {
+                        Hay {{ ipsDisponibles().length }} equipo(s) activo(s) con IP registrada.
+                      } @else {
+                        <b>Esta Dirección/Unidad no tiene equipos con IP registrada en el inventario operativo.</b>
+                      }
+                    </span>
+                  </div>
+                  <datalist [id]="'ips-' + paso()">
+                    @for (eq of ipsDisponibles(); track eq.ciclo) { <option [value]="eq.ip"></option> }
+                  </datalist>
+                  @for (e of s.equiposIp; track $index; let i = $index) {
+                    <div class="eq-card" [class.on]="!!equipoDeIp(e.ip)">
+                      <div class="ip-fila">
+                        <div class="field">
+                          <label [for]="'ip-' + paso() + '-' + i">Equipo {{ i + 1 }} — IP <span style="color: var(--danger)">*</span></label>
+                          <input [id]="'ip-' + paso() + '-' + i" class="control mono" [attr.list]="'ips-' + paso()"
+                            placeholder="192.168.10.25" [(ngModel)]="e.ip" />
+                        </div>
+                        <div class="field">
+                          <label [for]="'ip-hora-' + paso() + '-' + i">Hora de verificación <span style="color: var(--danger)">*</span></label>
+                          <input [id]="'ip-hora-' + paso() + '-' + i" class="control" type="time" [(ngModel)]="e.hora" />
+                        </div>
+                      </div>
+                      @if (errorIp(s, i); as err) {
+                        <div class="alert danger" style="margin-top: 9px;">
+                          <span class="alert-ico">!</span><span>{{ err }}</span>
+                        </div>
+                      } @else if (equipoDeIp(e.ip); as eq) {
+                        <!-- Autocompletado: los datos NO se teclean, salen del inventario operativo. -->
+                        <dl class="dl ip-datos">
+                          <div><dt>N° de inventario</dt><dd class="mono">{{ eq.inventario }}</dd></div>
+                          <div><dt>Equipo</dt><dd>{{ eq.nombreEquipo || eq.tipo }}</dd></div>
+                          <div><dt>Tipo, marca y modelo</dt><dd>{{ eq.tipo }} {{ eq.marca }} {{ eq.modelo }}</dd></div>
+                          <div><dt>Usuario final</dt><dd>{{ eq.usuarioFinal }}</dd></div>
+                          <div><dt>Dirección/Unidad</dt><dd>{{ data.dirUnidad(eq.direccion, eq.unidad) }}</dd></div>
+                          <div><dt>Estado operativo</dt><dd>{{ eq.estado }}</dd></div>
+                        </dl>
+                      }
+                    </div>
+                  }
+                }
+
+                @if (s.plantilla.telefonos; as ptel) {
+                  <div class="sec-title">Teléfonos y extensiones revisados</div>
+                  <div class="alert" style="margin-bottom: 12px;">
+                    <span class="alert-ico">i</span>
+                    <span>
+                      Registre <b>{{ ptel.cantidad }} teléfonos o extensiones</b> con su ubicación, el resultado de la
+                      verificación y la <b>hora</b> de cada uno.
+                      @if (ptel.ayuda) { {{ ptel.ayuda }} }
+                    </span>
+                  </div>
+                  @for (t of s.telefonos; track $index; let i = $index) {
+                    <div class="eq-card" [class.on]="!!t.numero.trim()">
+                      <div class="tel-fila">
+                        <div class="field">
+                          <label [for]="'tel-' + paso() + '-' + i">Teléfono / Extensión {{ i + 1 }} <span style="color: var(--danger)">*</span></label>
+                          <input [id]="'tel-' + paso() + '-' + i" class="control mono" placeholder="Ext. 3428" [(ngModel)]="t.numero" />
+                        </div>
+                        <div class="field">
+                          <label [for]="'tel-ub-' + paso() + '-' + i">Ubicación o área</label>
+                          <input [id]="'tel-ub-' + paso() + '-' + i" class="control" [(ngModel)]="t.ubicacion" />
+                        </div>
+                        <div class="field">
+                          <label [for]="'tel-res-' + paso() + '-' + i">Resultado <span style="color: var(--danger)">*</span></label>
+                          <select [id]="'tel-res-' + paso() + '-' + i" class="control" [(ngModel)]="t.resultado">
+                            <option value="">Seleccione…</option>
+                            @for (o of ptel.resultados; track o) { <option [value]="o">{{ o }}</option> }
+                          </select>
+                        </div>
+                        <div class="field">
+                          <label [for]="'tel-hora-' + paso() + '-' + i">Hora de verificación <span style="color: var(--danger)">*</span></label>
+                          <input [id]="'tel-hora-' + paso() + '-' + i" class="control" type="time" [(ngModel)]="t.hora" />
+                        </div>
+                      </div>
+                      <input class="control" style="margin-top: 8px;" placeholder="Observaciones (opcional)…"
+                        [(ngModel)]="t.observaciones" />
+                    </div>
                   }
                 }
 
@@ -579,7 +719,29 @@ export class CompletarControlComponent {
             };
           }
         }
-        return { plantilla: p, campos, items, equipos, filas: (r?.filas ?? []).map((f) => [...f]) };
+        // Equipos por IP y teléfonos: siempre tantas filas como exija la plantilla, para que el
+        // técnico vea los tres huecos aunque todavía no haya registrado ninguno.
+        const equiposIp: RespuestaEquipoIp[] = [];
+        for (let i = 0; i < (p.equiposIp?.cantidad ?? 0); i++) {
+          const g = r?.equiposIp?.[i];
+          equiposIp.push({
+            ip: g?.ip ?? '', hora: g?.hora ?? '', inventario: g?.inventario ?? '',
+            nombreEquipo: g?.nombreEquipo ?? '', usuarioFinal: g?.usuarioFinal ?? '',
+            estadoEquipo: g?.estadoEquipo ?? ''
+          });
+        }
+        const telefonos: RespuestaTelefono[] = [];
+        for (let i = 0; i < (p.telefonos?.cantidad ?? 0); i++) {
+          const t = r?.telefonos?.[i];
+          telefonos.push({
+            numero: t?.numero ?? '', ubicacion: t?.ubicacion ?? '', resultado: t?.resultado ?? '',
+            hora: t?.hora ?? '', observaciones: t?.observaciones ?? ''
+          });
+        }
+        return {
+          plantilla: p, campos, items, equipos, equiposIp, telefonos,
+          filas: (r?.filas ?? []).map((f) => [...f])
+        };
       });
       this.evidencias = c.evidencias.map((e) => ({ ...e }));
       this.paso.set(0);
@@ -676,9 +838,52 @@ export class CompletarControlComponent {
         medicion: s.items[i.id]?.medicion || undefined, nota: s.items[i.id]?.nota || undefined
       })),
       filas: s.filas.filter((f) => f.some((x) => x.trim())),
-      equipos: s.plantilla.equipos ? Object.values(s.equipos).filter((e) => e.incluido) : undefined
+      equipos: s.plantilla.equipos ? Object.values(s.equipos).filter((e) => e.incluido) : undefined,
+      // La IP se guarda junto con los datos que el inventario operativo tenía al registrarla: el
+      // documento del mes debe seguir siendo legible aunque el equipo se descargue después.
+      equiposIp: s.plantilla.equiposIp
+        ? s.equiposIp.map((e) => {
+          const eq = this.equipoDeIp(e.ip);
+          return {
+            ip: String(e.ip ?? '').trim(), hora: String(e.hora ?? ''),
+            inventario: eq?.inventario ?? '', nombreEquipo: eq?.nombreEquipo ?? '',
+            usuarioFinal: eq?.usuarioFinal ?? '', estadoEquipo: eq?.estado ?? ''
+          };
+        })
+        : undefined,
+      telefonos: s.plantilla.telefonos
+        ? s.telefonos.map((t) => ({
+          numero: String(t.numero ?? '').trim(), ubicacion: String(t.ubicacion ?? ''),
+          resultado: String(t.resultado ?? ''), hora: String(t.hora ?? ''),
+          observaciones: String(t.observaciones ?? '')
+        }))
+        : undefined
     }));
   }
+
+  // ------------------------------------------------------------------ equipos verificados por IP
+
+  /** Equipo activo de la Dirección/Unidad del control que tiene esa IP, si lo hay. */
+  protected equipoDeIp(ip: string) {
+    const c = this.control();
+    return c ? this.data.buscarEquipoIp(ip, c.direccion, c.unidad).equipo : undefined;
+  }
+
+  /** Motivo por el que la IP digitada no sirve, o '' si es válida (o si aún no se digitó nada). */
+  protected errorIp(s: SeccionEdit, i: number): string {
+    const c = this.control();
+    const ip = String(s.equiposIp[i]?.ip ?? '').trim();
+    if (!c || !ip) return '';
+    const repetida = s.equiposIp.some((e, k) => k < i && String(e.ip ?? '').trim() === ip);
+    if (repetida) return 'Esta IP ya se registró en esta semana; deben ser tres equipos distintos.';
+    return this.data.buscarEquipoIp(ip, c.direccion, c.unidad).error ?? '';
+  }
+
+  /** IPs que el técnico puede usar: las de los equipos activos de la Dirección/Unidad del control. */
+  protected readonly ipsDisponibles = computed(() => {
+    const c = this.control();
+    return c ? this.data.ipsDeControl(c) : [];
+  });
 
   // ------------------------------------------------------------------ equipos del inventario operativo
 
@@ -816,6 +1021,22 @@ export class CompletarControlComponent {
   }
   protected columnasDe(titulo: string): string[] {
     return this.catalogo()?.plantilla.find((p) => p.titulo === titulo)?.tabla?.columnas ?? [];
+  }
+
+  /** Filas con IP registrada de una sección ya entregada (vista de solo lectura). */
+  protected conIp(s: RespuestaSeccion): RespuestaEquipoIp[] {
+    return (s.equiposIp ?? []).filter((e) => e.ip.trim());
+  }
+  /** Teléfonos/extensiones registrados de una sección ya entregada. */
+  protected conTelefono(s: RespuestaSeccion): RespuestaTelefono[] {
+    return (s.telefonos ?? []).filter((t) => t.numero.trim());
+  }
+
+  protected equiposIpLlenos(s: SeccionEdit): number {
+    return s.equiposIp.filter((e) => e.ip.trim() && e.hora.trim()).length;
+  }
+  protected telefonosLlenos(s: SeccionEdit): number {
+    return s.telefonos.filter((t) => t.numero.trim() && t.hora.trim()).length;
   }
 
   protected camposLlenos(s: SeccionEdit): number {

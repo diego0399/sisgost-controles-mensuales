@@ -3,7 +3,7 @@ import {
   ActividadDia, AplicacionControl, AreaTecnica, BitacoraDiaria, ControlCatalogo, ControlMes,
   Direccion, DistribucionSoporte, DocumentoGenerado, EquipoOperativo, ESTADOS_ACTIVOS,
   EstadoControl, EventoIntegracion, EventoTrazabilidad, Justificacion, RespuestaSeccion,
-  RevisionAtencion, UsuarioSistema, isoLocal, nombreMes
+  RevisionAtencion, SeccionPlantilla, UsuarioSistema, isoLocal, nombreMes
 } from '../models/models';
 import { HolidayService } from './holiday.service';
 import { BusinessDayService } from './business-day.service';
@@ -406,6 +406,44 @@ export class DataService {
     return propios.find((e) => ESTADOS_ACTIVOS.includes(e.estado)) ?? propios[0];
   }
 
+  // ------------------------------------------------------------------ búsqueda de equipos por IP
+
+  /** Mensajes de la validación de IP del F0387; se reutilizan en el formulario y en la entrega. */
+  readonly MSG_IP_NO_ENCONTRADA =
+    'No se encontró un equipo activo con esta IP en el inventario operativo.';
+  readonly MSG_IP_OTRA_UNIDAD =
+    'La IP ingresada pertenece a otra Dirección/Unidad y no puede usarse en este control.';
+
+  /**
+   * Equipo ACTIVO cuya IP coincide con la buscada. La IP viene del inventario operativo, es decir,
+   * de la reserva registrada en Gestión de Equipos al aceptar la conformidad: este módulo no la
+   * inventa ni permite escribir una IP suelta.
+   */
+  equipoPorIp(ip: string): EquipoOperativo | undefined {
+    const buscada = (ip ?? '').trim();
+    if (!buscada) return undefined;
+    return this.inventarioActivo().find((e) => (e.ip ?? '').trim() === buscada);
+  }
+
+  /**
+   * Resuelve una IP dentro de una Dirección/Unidad. Devuelve el equipo o el motivo del rechazo:
+   * la IP no existe entre los equipos activos, o existe pero en otra Dirección/Unidad.
+   */
+  buscarEquipoIp(ip: string, direccionId: string, unidad: string):
+    { equipo?: EquipoOperativo; error?: string } {
+    const equipo = this.equipoPorIp(ip);
+    if (!equipo) return { error: this.MSG_IP_NO_ENCONTRADA };
+    if (equipo.direccion !== direccionId || equipo.unidad !== unidad) {
+      return { error: this.MSG_IP_OTRA_UNIDAD };
+    }
+    return { equipo };
+  }
+
+  /** IPs disponibles para un control: las de los equipos activos de su Dirección/Unidad. */
+  ipsDeControl(c: ControlMes): EquipoOperativo[] {
+    return this.equiposDeControl(c).filter((e) => (e.ip ?? '').trim());
+  }
+
   /** Todos los ciclos operativos de un número de inventario, del más reciente al más antiguo. */
   ciclosDe(inventario: string): EquipoOperativo[] {
     return this.inventario()
@@ -481,6 +519,19 @@ export class DataService {
     return this.catalogoDe(codigo)?.frecuencia === 'Semanal con entrega mensual consolidada';
   }
 
+  /**
+   * Cómo se rotula la frecuencia en las tablas: los consolidados se leen como «Semanal» con la
+   * nota de que la entrega es mensual, para que la columna no arrastre una etiqueta larguísima.
+   */
+  etiquetaFrecuencia(codigo: string): string {
+    return this.esSemanalConsolidado(codigo) ? 'Semanal' : this.catalogoDe(codigo)?.frecuencia ?? '';
+  }
+
+  /** Nota de entrega del control: '' cuando la entrega coincide con la frecuencia. */
+  etiquetaEntrega(codigo: string): string {
+    return this.esSemanalConsolidado(codigo) ? 'Entrega mensual consolidada' : '';
+  }
+
   /** Secciones semanales de la plantilla de un control (vacío si no es consolidado). */
   seccionesSemanales(codigo: string): { titulo: string; semana: number }[] {
     return (this.catalogoDe(codigo)?.plantilla ?? [])
@@ -528,7 +579,9 @@ export class DataService {
       const tiene = (r.campos?.some((x) => String(x.valor ?? '').trim()) ?? false)
         || (r.items?.some((x) => x.estado) ?? false)
         || ((r.filas?.length ?? 0) > 0)
-        || (r.equipos?.some((x) => x.incluido && x.estado) ?? false);
+        || (r.equipos?.some((x) => x.incluido && x.estado) ?? false)
+        || (r.equiposIp?.some((x) => x.ip.trim() || x.hora.trim()) ?? false)
+        || (r.telefonos?.some((x) => x.numero.trim() || x.hora.trim()) ?? false);
       if (tiene) conRespuesta++;
     }
     return Math.round((conRespuesta / plantilla.length) * 100);
@@ -577,8 +630,59 @@ export class DataService {
           faltas.push(`${p.titulo}: se requiere revisar al menos ${p.equipos.minimo} equipo(s) del inventario operativo.`);
         }
       }
+      if (p.equiposIp && !semanaNoAplica) faltas.push(...this.faltasEquiposIp(p, r, c));
+      if (p.telefonos && !semanaNoAplica) faltas.push(...this.faltasTelefonos(p, r));
     }
     if (cat?.requiereEvidencia && !c.evidencias.length) faltas.push('Este control requiere al menos una evidencia.');
+    return faltas;
+  }
+
+  /**
+   * Reglas de los equipos verificados por IP (F0387): deben ser tantos como pida la plantilla,
+   * distintos entre sí, existir como equipos ACTIVOS del inventario operativo, pertenecer a la
+   * Dirección/Unidad del control y llevar hora de verificación.
+   */
+  private faltasEquiposIp(p: SeccionPlantilla, r: RespuestaSeccion | undefined, c: ControlMes): string[] {
+    const faltas: string[] = [];
+    const pedidos = p.equiposIp!.cantidad;
+    const filas = (r?.equiposIp ?? []).slice(0, pedidos);
+    const conIp = filas.filter((e) => e.ip.trim());
+    if (conIp.length < pedidos) {
+      faltas.push(`${p.titulo}: debe registrar ${pedidos} equipos distintos para completar la verificación semanal.`);
+    }
+    const vistas = new Set<string>();
+    for (const [i, e] of filas.entries()) {
+      const ip = e.ip.trim();
+      if (!ip) continue;
+      if (vistas.has(ip)) {
+        faltas.push(`${p.titulo}: la IP ${ip} se repite; deben registrarse ${pedidos} equipos distintos.`);
+        continue;
+      }
+      vistas.add(ip);
+      const { error } = this.buscarEquipoIp(ip, c.direccion, c.unidad);
+      if (error) faltas.push(`${p.titulo} · equipo ${i + 1} (${ip}): ${error}`);
+      if (!e.hora.trim()) {
+        faltas.push(`${p.titulo}: debe seleccionar la hora de verificación para cada equipo.`);
+      }
+    }
+    return faltas;
+  }
+
+  /** Reglas de los teléfonos/extensiones verificados (F0387): número, resultado y hora de cada uno. */
+  private faltasTelefonos(p: SeccionPlantilla, r: RespuestaSeccion | undefined): string[] {
+    const faltas: string[] = [];
+    const pedidos = p.telefonos!.cantidad;
+    const filas = (r?.telefonos ?? []).slice(0, pedidos);
+    const conNumero = filas.filter((t) => t.numero.trim());
+    if (conNumero.length < pedidos) {
+      faltas.push(`${p.titulo}: debe ingresar ${pedidos} teléfonos o extensiones.`);
+    }
+    if (conNumero.some((t) => !t.hora.trim())) {
+      faltas.push(`${p.titulo}: debe seleccionar la hora de verificación para cada teléfono o extensión.`);
+    }
+    if (conNumero.some((t) => !t.resultado.trim())) {
+      faltas.push(`${p.titulo}: debe registrar el resultado de verificación de cada teléfono o extensión.`);
+    }
     return faltas;
   }
 
@@ -790,7 +894,7 @@ export class DataService {
     this.registrarEvento(null, {
       ...this.trazaEquipo(ev), accion: 'Equipo incorporado automáticamente desde Gestión de Equipos',
       estadoAnterior: 'Entregado', estadoNuevo: 'Activo en Dirección/Unidad',
-      observacion: `El Usuario Final aceptó la conformidad (${ev.expedienteUnico || ev.expediente}); el equipo se incorporó automáticamente al inventario operativo de ${this.dirUnidad(equipo.direccion, equipo.unidad)}. Soporte responsable: ${equipo.soporteResponsable || 'sin asignar'}.`
+      observacion: `El Usuario Final aceptó la conformidad (${ev.expedienteUnico || ev.expediente}); el equipo se incorporó automáticamente al inventario operativo de ${this.dirUnidad(equipo.direccion, equipo.unidad)} con sus datos técnicos${equipo.ip ? ` (IP ${equipo.ip})` : ' (sin reserva de IP)'}. Soporte responsable: ${equipo.soporteResponsable || 'sin asignar'}.`
     });
   }
 

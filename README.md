@@ -93,11 +93,22 @@ el panel ejecutivo cuenta «controles aplicables del mes» y avisa cuando una Di
 **tiene controles aplicables pero no tiene Técnico de Soporte asignado**; y los controles que
 trabajan con equipos solo se programan donde hay inventario operativo activo.
 
-## F0387: semanal, con entrega mensual consolidada
+## Período activo: el mes actual
 
-El **F0387 — Verificación de sincronización de hora de equipos con IP** se trabaja semana a semana
-pero se entrega en **un solo documento mensual**: es un único control por Dirección/Unidad y mes
-—no cuatro— cuyo formulario tiene una sección por semana (1 a 5) más el cierre del mes.
+Todas las pantallas que trabajan por período —controles mensuales, vista por Dirección, detalle de
+Dirección, detalle de control, calendario, historial anual y panel ejecutivo— **abren en el mes
+actual del sistema**. Con la fecha de demostración (16/08/2026) cargan **Agosto 2026**, aunque el
+plazo de entrega de ese período venza hasta el **03/09/2026**: la fecha límite es del mes
+siguiente, el período seleccionado no. La regla vive en un solo lugar,
+`ControlDeadlineService.periodoActivo()`, y si el usuario elige otro mes su selección se respeta
+mientras permanezca en la pantalla.
+
+## F0387 y F0389: semanales, con entrega mensual consolidada
+
+El **F0387 — Verificación de sincronización de hora de equipos con IP** y el **F0389 — Control de
+condiciones de infraestructura del CSOD** se trabajan semana a semana pero se entregan en **un solo
+documento mensual**: son un único control por Dirección/Unidad y mes —no cuatro— cuyo formulario
+tiene una sección por semana (1 a 5) más el cierre del mes.
 
 | Estado interno de la semana | Efecto |
 |---|---|
@@ -108,12 +119,36 @@ pero se entrega en **un solo documento mensual**: es un único control por Direc
 
 Estado del control: **Pendiente** (ninguna semana), **En proceso** (alguna), **Listo para
 entregar** (todas declaradas) y **Entregado** al generar el documento consolidado, que sale una
-sola vez por mes. Hay además un **Reporte de F0387 consolidado mensual por Dirección**.
+sola vez por mes. Hay un **reporte consolidado mensual por Dirección** para cada uno.
+
+### Verificación por IP y por extensión (F0387)
+
+Cada semana del F0387 verifica **3 equipos identificados por su IP** y **3 teléfonos o
+extensiones**, cada uno con su **hora de verificación**. La IP no se teclea a ciegas: se busca en
+el **inventario operativo**, que proviene de las entregas aceptadas en Gestión de Equipos junto con
+los datos técnicos del equipo (nombre, IP y MAC del F0302). Al digitar una IP válida el formulario
+autocompleta número de inventario, equipo, tipo/marca/modelo, usuario final, Dirección/Unidad y
+estado operativo.
+
+Reglas: la IP debe existir en el inventario operativo, pertenecer a un equipo **activo**, ser de la
+**misma Dirección/Unidad** del control, no repetirse dentro de la semana, y los 3 equipos y los
+3 teléfonos deben llevar hora. Cada Dirección/Unidad usa su propio segmento de red, así que una IP
+ajena se rechaza con el mensaje correspondiente.
+
+El F0389, en cambio, registra por semana las **condiciones del cuarto de servidores** (gabinetes,
+aire acondicionado con su temperatura, UPS con su carga, alarma, sensores, limpieza y prueba de la
+planta eléctrica) y deja para el **cierre del mes** las verificaciones periódicas: iluminación,
+techo y piso, deshumidificadores, switches, librera de respaldo, acceso digital, extintor y objetos
+extraños.
+
+La bitácora de la última sesión de trabajo (rondas 74 a 77: integración, inventario
+automático, operatividad por Dirección, meses pendientes, F0387 con IP y F0389 consolidado) está
+en [docs/bitacora-sesion-2026-08-16-17.md](docs/bitacora-sesion-2026-08-16-17.md).
 
 ## Catálogo de controles modelado
 
 Modelado desde la carpeta real `controles/`: F0234 (ingreso a cuartos de servidores),
-F0389 (infraestructura del cuarto de servidores, **semanal**), F0382 (políticas de seguridad
+F0389 (infraestructura del cuarto de servidores, **semanal con entrega mensual consolidada**), F0382 (políticas de seguridad
 TIC), F0384 (inventario de cintas), F0386 (traslado de cintas, eventual/justificable),
 F0387 (sincronización de hora, **semanal con entrega mensual consolidada**), F0422 (inventario de equipos), F0174
 (mantenimiento preventivo), F0288 (correctivo, eventual/justificable), GLPI (tiquetes,
@@ -189,7 +224,8 @@ cumplimiento  = (entregados a tiempo + justificados) / controles aplicables
 Semáforo: **90–100 % Operativa · 75–89 % En observación · menos de 75 % Crítica**, más tres estados
 aparte: **Sin soporte asignado**, **Sin controles aplicables** y **En curso** (el plazo del período
 todavía corre y no hay nada vencido: medirlo como incumplimiento castigaría a quien está dentro de
-su plazo). Por eso la vista ejecutiva abre en el **último período cerrado**.
+su plazo). Ese estado es el que permite abrir en el **mes actual** sin marcar en rojo a las
+Direcciones que todavía están dentro de su plazo.
 
 ### Meses pendientes por completar
 

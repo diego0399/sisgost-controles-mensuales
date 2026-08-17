@@ -177,7 +177,13 @@ import { EquipoOperativo, formateaFecha, nombreMes } from '../../core/models/mod
                 @for (e of filtrados(); track e.ciclo) {
                   <tr>
                     <td class="mono">{{ e.inventario }}</td>
-                    <td><b>{{ e.nombreEquipo }}</b><div class="muted" style="font-size: 11.5px;">{{ e.tipo }} · {{ e.marca }} {{ e.modelo }}</div></td>
+                    <td>
+                      <b>{{ e.nombreEquipo }}</b>
+                      <div class="muted" style="font-size: 11.5px;">
+                        {{ e.tipo }} · {{ e.marca }} {{ e.modelo }}
+                        @if (e.ip) { · IP <span class="mono">{{ e.ip }}</span> }
+                      </div>
+                    </td>
                     <td>{{ e.usuarioFinal }}</td>
                     <td>{{ data.cortaDireccion(e.direccion) }} · {{ e.unidad }}</td>
                     <td>{{ data.soportes.soloNombre(e.soporteResponsable) || '—' }}</td>
@@ -203,6 +209,8 @@ import { EquipoOperativo, formateaFecha, nombreMes } from '../../core/models/mod
           <dl class="dl">
             <div><dt>N° de inventario</dt><dd class="mono">{{ e.inventario }}</dd></div>
             <div><dt>Serie</dt><dd class="mono">{{ e.serie }}</dd></div>
+            <div><dt>IP reservada</dt><dd class="mono">{{ e.ip || 'Sin reserva de IP' }}</dd></div>
+            <div><dt>MAC</dt><dd class="mono">{{ e.mac || '—' }}</dd></div>
             <div><dt>Usuario final</dt><dd>{{ e.usuarioFinal }}@if (e.carne !== '—') { (carné {{ e.carne }}) }</dd></div>
             <div><dt>Dirección/Unidad</dt><dd>{{ data.nombreDireccion(e.direccion) }} — {{ e.unidad }}</dd></div>
             <div><dt>Técnico de configuración</dt><dd>{{ e.tecnicoConfiguracion || '—' }}</dd></div>

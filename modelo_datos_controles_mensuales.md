@@ -59,6 +59,8 @@ Catálogo **editable**; insumo del cálculo de días hábiles.
 | Campo | Tipo | Nota |
 |---|---|---|
 | codigo | PK | `F0234`, `F0389`, `GLPI`… |
+| plantilla[].equiposIp | bloque | Verificación de N equipos por su IP (F0387: 3) |
+| plantilla[].telefonos | bloque | Verificación de N teléfonos/extensiones con hora (F0387: 3) |
 | nombre, version, descripcion | texto | |
 | frecuencia | catálogo | `Mensual, Semanal, Diaria, Eventual, Programado, Semanal con entrega mensual consolidada` |
 | aplicacion | AplicacionControl | **dónde aplica el control** (editable); ver abajo |

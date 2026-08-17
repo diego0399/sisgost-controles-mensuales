@@ -102,7 +102,7 @@ programa; si el control trabaja con equipos (`requiereEquipos`), además exige i
 activo en el par. De ahí salen:
 
 - el **calendario y la semilla**: un control solo se programa donde aplica —el generador de la
-  semilla usa el mismo algoritmo, así que los 384 controles del set cumplen la configuración—;
+  semilla usa el mismo algoritmo, así que los 336 controles del set cumplen la configuración—;
 - el **listado de controles**: filtra por control activo y por aplicación;
 - el **historial anual**: los controles que no aplican se muestran como **No aplica**, informativo,
   nunca como pendientes ni vencidos (`controlesNoAplicablesDe`);
@@ -146,12 +146,25 @@ de operatividad, de controles pendientes, de inventario operativo y de bitácora
 `DocumentoComponent.seccionesReporteDireccion` arma su hoja con datos generales, resumen de
 indicadores, el detalle propio de cada tipo y la conclusión del estado operativo.
 
-## 4.3 Controles semanales con entrega mensual consolidada (F0387)
+## 4.2.1 Período activo
+
+`ControlDeadlineService.periodoActivo(hoy?)` devuelve el año y el mes de la fecha del sistema. Es
+el período que cargan al abrirse los controles mensuales, la vista por Dirección, el detalle de
+Dirección, el calendario, el historial anual y el panel ejecutivo; ninguna pantalla vuelve a
+calcular la regla por su cuenta ni deja el año quemado. `ultimoPeriodoCerrado()` se conserva para
+comparar meses cuyo plazo ya venció, pero **no** decide qué se muestra al entrar.
+
+La fecha límite es independiente del período mostrado: `fechaLimiteMensual` sigue devolviendo el
+tercer día hábil del mes siguiente, así que agosto de 2026 se muestra como período activo aunque su
+plazo venza el 03/09/2026.
+
+## 4.3 Controles semanales con entrega mensual consolidada (F0387 y F0389)
 
 La frecuencia `Semanal con entrega mensual consolidada` marca los controles que se trabajan por
 semana pero producen **un solo documento del mes**. Su plantilla lleva secciones con `semana: n`
-(1–5) más el cierre del mes; cada semana pide estado, fecha, equipos revisados, resultado,
-responsable y observaciones.
+(1–5) más el cierre del mes. El **F0387** pide por semana estado, fecha, resultado, responsable,
+observaciones, **3 equipos por IP** y **3 teléfonos/extensiones**; el **F0389**, estado, fecha,
+responsable, observaciones y el checklist de condiciones del CSOD.
 
 | Método (`DataService`) | Qué hace |
 |---|---|
@@ -162,10 +175,25 @@ responsable y observaciones.
 | `entregarControl` | Genera **un** documento del mes y registra «F0387 consolidado mensual generado» |
 
 Cada semana que se cierra deja su propia traza («F0387 semana completada»). El formulario muestra
-una banda con el avance semanal y el reporte **F0387 consolidado mensual por Dirección** imprime
-las cinco semanas en una sola hoja.
+una banda con el avance semanal, y los reportes **F0387 / F0389 consolidado mensual por Dirección**
+imprimen las cinco semanas en una sola hoja.
 
-Nota: el **F0389** sigue siendo semanal puro (una hoja por semana), porque así es su formato real.
+### Verificación por IP (F0387)
+
+`SeccionPlantilla` gana dos bloques declarativos: `equiposIp` (cuántos equipos por IP) y
+`telefonos` (cuántas extensiones y qué resultados admite). Sus respuestas viajan en
+`RespuestaSeccion.equiposIp` y `RespuestaSeccion.telefonos`.
+
+| Método (`DataService`) | Qué hace |
+|---|---|
+| `equipoPorIp(ip)` | Equipo **activo** del inventario operativo con esa IP |
+| `buscarEquipoIp(ip, dir, unidad)` | Devuelve el equipo o el motivo del rechazo (no existe / es de otra Dirección/Unidad) |
+| `ipsDeControl(control)` | IP admitidas: las de los equipos activos de la Dirección/Unidad del control |
+| `faltasEquiposIp` / `faltasTelefonos` | Reglas de entrega: cantidad, IP repetida, pertenencia y hora obligatoria |
+
+La IP llega del ecosistema: `EquipoOperativo` guarda `ip` y `mac`, y Gestión de Equipos las
+incluye en la ficha del inventario operativo (`fichaControles`) tomándolas de la reserva del F0302
+al aceptar la conformidad. Un equipo sin reserva de IP no puede verificarse en el F0387.
 
 ## 5. Formularios digitales dirigidos por datos
 
@@ -268,15 +296,16 @@ Si el otro módulo no está levantado, el enlace simplemente no abre: son dos de
 
 Generada por script (no a mano) para que cada `fechaLimite` salga del mismo algoritmo de
 días hábiles que usa la aplicación, y sobre la organización compartida con Gestión de Equipos:
-**384 controles** de enero a agosto de 2026 (mensuales, semanales F0389, el F0387 consolidado, eventuales y
+**336 controles** de enero a agosto de 2026 (mensuales, los consolidados F0387 y F0389, eventuales y
 programados) con estados realistas —entregados, tardíos, vencidos, justificados, observado y
 abiertos—, **48 bitácoras** de los últimos 12 días hábiles, 3 cartas de justificación con el
-texto real de `Formatos_nuevos_2025_.docx`, ~417 documentos y ~560 eventos de trazabilidad.
+texto real de `Formatos_nuevos_2025_.docx`, ~339 documentos y ~455 eventos de trazabilidad.
 
-El **inventario operativo (23 equipos)** se deriva de Gestión de Equipos: los tres equipos que
-aquel módulo ya tiene aceptados se copian con su mismo número de inventario, expediente y técnico
-de configuración; el resto es la flota histórica de las mismas Direcciones/Unidades, con el
-soporte responsable resuelto por la distribución compartida.
+El **inventario operativo (25 equipos)** se deriva de Gestión de Equipos: los equipos que aquel
+módulo ya tiene aceptados se copian con su mismo número de inventario, expediente y técnico de
+configuración; el resto es la flota histórica de las mismas Direcciones/Unidades, con el soporte
+responsable resuelto por la distribución compartida. Cada equipo activo lleva su **IP** y su
+**MAC**, con un segmento de red por Dirección/Unidad: es lo que el F0387 verifica cada semana.
 
 La unidad **Dirección de Registros / Archivo Registral** queda sin soporte asignado a propósito
 (su asignación se desactivó el 31/07/2026): así el panel muestra la alerta de Dirección/Unidad sin

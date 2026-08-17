@@ -209,16 +209,16 @@ export class PanelComponent {
 
   private readonly hoy = isoLocal(new Date());
   protected readonly esHabilHoy = this.habiles.esHabil(this.hoy);
-  protected readonly mesActual = `${nombreMes(new Date().getMonth() + 1)} ${new Date().getFullYear()}`;
-  protected readonly limiteMes = formateaFecha(this.plazos.fechaLimiteMensual(new Date().getFullYear(), new Date().getMonth() + 1));
+  /** Período activo del sistema: el panel siempre habla del mes en curso. */
+  private readonly periodo = this.plazos.periodoActivo(this.hoy);
+  protected readonly mesActual = `${nombreMes(this.periodo.mes)} ${this.periodo.anio}`;
+  protected readonly limiteMes = formateaFecha(this.plazos.fechaLimiteMensual(this.periodo.anio, this.periodo.mes));
 
   private readonly visibles = computed(() => this.data.controlesVisibles(this.auth.usuario()));
 
   /** Controles del período en curso (los que están corriendo este mes). */
-  protected readonly delMes = computed(() => {
-    const [a, m] = [new Date().getFullYear(), new Date().getMonth() + 1];
-    return this.visibles().filter((c) => c.anio === a && c.mes === m);
-  });
+  protected readonly delMes = computed(() =>
+    this.visibles().filter((c) => c.anio === this.periodo.anio && c.mes === this.periodo.mes));
 
   protected cuenta(estados: string[]): number {
     return this.delMes().filter((c) => estados.includes(c.estado)).length;
@@ -248,9 +248,7 @@ export class PanelComponent {
   protected formatea(iso: string): string { return formateaFecha(iso); }
 
   /** Operatividad por Dirección/Unidad del período en curso. */
-  private readonly filtroOper = computed(() => ({
-    anio: new Date().getFullYear(), mes: new Date().getMonth() + 1
-  }));
+  private readonly filtroOper = computed(() => ({ anio: this.periodo.anio, mes: this.periodo.mes }));
   protected readonly kpis = computed(() => this.oper.kpis(this.filtroOper()));
   protected readonly resumenOper = computed(() => this.oper.resumen(this.filtroOper()));
   protected readonly cargaSoportes = computed(() => this.oper.cargaSoportes(this.filtroOper()));
@@ -277,7 +275,8 @@ export class PanelComponent {
   protected readonly noAplicables = computed(() => {
     const u = this.auth.usuario();
     const pares = this.auth.esTecnico() && u ? this.data.paresDe(u.usuario) : this.data.pares();
-    const mensuales = this.data.catalogo().filter((c) => c.activo && (c.frecuencia === 'Mensual' || c.frecuencia === 'Semanal'));
+    const mensuales = this.data.catalogo().filter((c) => c.activo && ['Mensual', 'Semanal',
+      'Semanal con entrega mensual consolidada'].includes(c.frecuencia));
     let n = 0;
     for (const c of mensuales) {
       for (const p of pares) if (!this.data.aplicaEn(c.codigo, p.direccion, p.unidad)) n++;

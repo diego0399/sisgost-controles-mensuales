@@ -54,7 +54,9 @@ El Encargado puede **generar el reporte mensual consolidado** para presentarlo a
 ## 4. Controles mensuales
 
 La pantalla se organiza **por Dirección/Unidad**, que es como se atienden los controles, y abre
-en el **último período cerrado** (el mes cuyo plazo de entrega ya venció).
+en el **mes actual** del sistema. Con la fecha de demostración (16/08/2026) carga **Agosto 2026**;
+la fecha límite de ese período sigue siendo el tercer día hábil del mes siguiente (03/09/2026). Si
+elige otro mes en el selector, su elección se mantiene mientras siga en la pantalla.
 
 ### Vista por Dirección (predeterminada)
 
@@ -119,14 +121,29 @@ editarlo.
    marca «Entregado» o «Entregado tarde» según el plazo, genera el **documento formal** y
    deja constancia en trazabilidad.
 
-### F0387: cuatro semanas, un solo documento
+### F0387 y F0389: cuatro semanas, un solo documento
 
-El **F0387** se llena semana a semana. Al abrirlo se ve una banda con el estado de cada semana y el
-formulario tiene un paso por semana: estado de la semana, fecha de verificación, equipos revisados,
-resultado, responsable y observaciones. **Guardar avance** conserva lo registrado; cuando todas las
-semanas están declaradas —incluidas las marcadas «Semana no aplica»— el control pasa a **Listo para
-entregar** y al entregarlo se genera **un único documento del mes** con todas las semanas, no uno
-por semana.
+El **F0387** y el **F0389** se llenan semana a semana. Al abrirlos se ve una banda con el estado de
+cada semana y el formulario tiene un paso por semana. **Guardar avance** conserva lo registrado;
+cuando todas las semanas están declaradas —incluidas las marcadas «Semana no aplica»— el control
+pasa a **Listo para entregar** y al entregarlo se genera **un único documento del mes** con todas
+las semanas, no uno por semana.
+
+En el **F0387**, cada semana pide el estado de la semana, la fecha, el resultado general, el
+responsable, las observaciones y, sobre todo:
+
+- **3 equipos identificados por su IP**, cada uno con su **hora de verificación**. Al escribir una
+  IP el sistema la busca en el inventario operativo y muestra el número de inventario, el equipo,
+  el usuario final, la Dirección/Unidad y el estado operativo. Si la IP no existe entre los equipos
+  activos, o si pertenece a otra Dirección/Unidad, el formulario lo advierte y no deja entregar.
+  Tampoco admite la misma IP dos veces en la misma semana.
+- **3 teléfonos o extensiones**, con su ubicación, el resultado de la verificación, su **hora** y
+  observaciones.
+
+En el **F0389**, cada semana registra las condiciones del cuarto de servidores (gabinetes, aire
+acondicionado, UPS, alarma, sensores, limpieza y planta eléctrica) con sus mediciones, y el cierre
+del mes recoge las verificaciones periódicas —extintor, librera, acceso digital, objetos extraños—
+y el resultado general del mes.
 
 ### Justificar un mes sin actividad
 

@@ -271,7 +271,8 @@ export class CatalogoComponent {
   protected readonly auth = inject(AuthService);
   private readonly toast = inject(ToastService);
 
-  protected readonly frecuencias: Frecuencia[] = ['Mensual', 'Semanal', 'Diaria', 'Eventual', 'Programado'];
+  protected readonly frecuencias: Frecuencia[] = ['Mensual', 'Semanal',
+    'Semanal con entrega mensual consolidada', 'Diaria', 'Eventual', 'Programado'];
   protected readonly modos: { valor: ModoAplicacion; detalle: string }[] = [
     { valor: 'Todas las direcciones', detalle: 'El control se lleva en todas las Direcciones/Unidades atendidas por Soporte Técnico.' },
     { valor: 'Direcciones específicas', detalle: 'Solo en las Direcciones seleccionadas, con todas sus unidades.' },

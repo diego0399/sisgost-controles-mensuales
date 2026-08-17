@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 import { DataService } from '../../core/services/data.service';
+import { ControlDeadlineService } from '../../core/services/control-deadline.service';
 import { OperatividadService } from '../../core/services/operatividad.service';
 import { ToastService } from '../../core/services/toast.service';
 import { BadgeComponent } from '../../shared/ui';
@@ -226,9 +227,13 @@ export class HistorialComponent {
   private readonly toast = inject(ToastService);
   private readonly oper = inject(OperatividadService);
 
+  private readonly plazos = inject(ControlDeadlineService);
+  /** El historial abre en el período activo: año y mes actuales del sistema. */
+  private readonly periodo = this.plazos.periodoActivo();
+
   protected readonly anios = [2026];
-  protected readonly anio = signal(2026);
-  protected readonly mesSel = signal(new Date().getMonth() + 1);
+  protected readonly anio = signal(this.periodo.anio);
+  protected readonly mesSel = signal(this.periodo.mes);
   protected readonly fDireccion = signal('');
   protected readonly fUnidad = signal('');
   protected readonly fTecnico = signal('');
