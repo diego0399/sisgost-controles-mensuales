@@ -9,6 +9,7 @@ Las fuentes PlantUML están en `docs/plantuml/`. Se renderizan con cualquier vis
 | **Integración entre módulos** | `docs/plantuml/integracion-modulos.puml` | Qué datos comparten los dos módulos, cómo la distribución de soportes filtra el Técnico de Configuración en Gestión de Equipos y cómo el equipo aceptado llega al inventario operativo. |
 | Actividades — control | `docs/plantuml/actividades-control.puml` | El ciclo de vida completo de un control: programación con plazo hábil, completado, entrega a tiempo/tarde, justificación, revisión del Encargado y vencimiento. |
 | Actividades — bitácora | `docs/plantuml/actividades-bitacora.puml` | La bitácora diaria: revisión obligatoria de atención al público, tratamiento de fallas y el corte de las 5:00 p. m. |
+| Operatividad por Dirección | `docs/plantuml/operatividad.puml` | Cómo se calcula la operatividad de una Dirección/Unidad y qué pantallas la consumen. |
 | Componentes | `docs/plantuml/componentes.puml` | Pantallas lazy, componentes compartidos (visor y armador de documentos) y la cadena de servicios `Holiday → BusinessDay → Deadline → Data`. |
 | Arquitectura | `docs/plantuml/arquitectura.puml` | El prototipo en el navegador (Angular 21 zoneless), su persistencia local y la integración simulada con Gestión de Equipos. |
 | Entidad-relación | `docs/plantuml/entidad-relacion.puml` | Las once entidades del dominio y sus relaciones (control ↔ justificación ↔ documento, integración ↔ inventario). |

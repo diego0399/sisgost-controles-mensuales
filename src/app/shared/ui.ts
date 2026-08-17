@@ -9,13 +9,13 @@ import { IconComponent } from './icon';
 export function estadoKind(estado: string): 'ok' | 'warn' | 'danger' | 'info' | 'gold' | 'neutral' {
   const e = (estado || '').toLowerCase();
   if (/(entregado tarde|enviada tarde|fuera de plazo)/.test(e)) return 'warn';
-  if (/(vencid|sin asignar|sin soporte|presenta falla|no cumple|incumpl|descargado|no disponible|no ubicado|crítico pendiente)/.test(e)) return 'danger';
+  if (/(vencid|sin asignar|sin soporte|presenta falla|no cumple|incumpl|descargado|no disponible|no ubicado|crítico pendiente|crítica)/.test(e)) return 'danger';
   if (/(observad|pendiente de revisión|con hallazgo|en garantía|parcial|en remediación|reprogramado)/.test(e)) return 'warn';
   if (/justificad/.test(e)) return 'gold';
   if (/(inactiv|no aplica|finalizada|desactivad|sin cambios|sin garantía)/.test(e)) return 'neutral';
   if (/(entregad|enviad|cerrad|cumple|aceptad|aplicad|resuelto|activo|activa|completad|realizad|verificad|registrada|funciona|al día|emitida|generado|descargado el|vigente|bueno|actualizad|atendido|sin vulnerabilidades|up)/.test(e)) return 'ok';
   if (/(pendiente|en edición|por vencer|programado|escalado|en observación)/.test(e)) return 'warn';
-  if (/(en proceso|en revisión|entrega aceptada)/.test(e)) return 'info';
+  if (/(en proceso|en revisión|en curso|entrega aceptada)/.test(e)) return 'info';
   return 'neutral';
 }
 

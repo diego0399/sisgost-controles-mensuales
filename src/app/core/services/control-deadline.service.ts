@@ -42,7 +42,29 @@ export class ControlDeadlineService {
 
   /** Un control abierto cuya fecha límite ya pasó está vencido. */
   estaVencido(c: ControlMes, hoy = isoLocal(new Date())): boolean {
-    const abierto = ['Programado', 'Pendiente', 'En proceso'].includes(c.estado);
+    const abierto = ['Programado', 'Pendiente', 'En proceso', 'Listo para entregar'].includes(c.estado);
     return abierto && c.fechaLimite < hoy;
+  }
+
+  /** ¿El plazo de entrega del período mensual ya venció? */
+  periodoCerrado(anio: number, mes: number, hoy = isoLocal(new Date())): boolean {
+    return this.fechaLimiteMensual(anio, mes) < hoy;
+  }
+
+  /**
+   * Último período **cerrado**: el mes más reciente cuyo plazo de entrega ya venció. Es el
+   * período que el Encargado de Soporte revisa —medir la operatividad de un mes cuyo plazo
+   * todavía corre castigaría a Direcciones que están dentro de su plazo—.
+   */
+  ultimoPeriodoCerrado(hoy = isoLocal(new Date())): { anio: number; mes: number } {
+    const f = new Date(hoy);
+    let anio = f.getFullYear();
+    let mes = f.getMonth() + 1;
+    for (let i = 0; i < 24; i++) {
+      if (this.periodoCerrado(anio, mes, hoy)) return { anio, mes };
+      mes -= 1;
+      if (mes === 0) { mes = 12; anio -= 1; }
+    }
+    return { anio, mes };
   }
 }

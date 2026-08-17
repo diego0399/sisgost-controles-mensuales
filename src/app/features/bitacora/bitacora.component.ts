@@ -136,7 +136,7 @@ export class BitacoraComponent {
 
   protected puedeEditar(b: { estado: string; direccion: string }): boolean {
     const u = this.auth.usuario();
-    if (!u || u.clave === 'jefatura') return false;
+    if (!u || u.clave === 'coordinador') return false;
     if (!['Pendiente', 'En edición'].includes(b.estado)) return false;
     if (u.clave === 'tec-soporte') return this.data.direccionesDe(u.usuario).includes(b.direccion);
     return true;

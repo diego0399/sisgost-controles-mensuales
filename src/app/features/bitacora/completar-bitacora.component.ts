@@ -220,7 +220,7 @@ export class CompletarBitacoraComponent {
   protected readonly editable = computed(() => {
     const b = this.bitacora();
     const u = this.auth.usuario();
-    if (!b || !u || u.clave === 'jefatura') return false;
+    if (!b || !u || u.clave === 'coordinador') return false;
     if (!['Pendiente', 'En edición'].includes(b.estado)) return false;
     if (u.clave === 'tec-soporte') return this.data.direccionesDe(u.usuario).includes(b.direccion);
     return true;

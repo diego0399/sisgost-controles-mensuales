@@ -41,12 +41,61 @@ hábil del mes siguiente**. En agosto de 2026, por ejemplo, los controles de jul
 
 ## 3. Historial anual
 
+Al elegir una **Dirección** (y su Unidad) aparece además el resumen **mes a mes de operatividad**
+de esa Dirección/Unidad: controles aplicables, entregados, pendientes, vencidos, justificados,
+bitácoras, porcentaje y estado. Desde ahí se abre el mes en el detalle o se genera el
+**Reporte anual por Dirección**.
+
 Los doce meses del año con su resumen visual (a tiempo / tarde / justificados / vencidos).
 Al seleccionar un mes se abre el detalle filtrable por **Dirección, técnico, tipo de control
 y estado**, con fecha límite, fecha de entrega, responsable y acceso al documento generado.
 El Encargado puede **generar el reporte mensual consolidado** para presentarlo a jefaturas.
 
 ## 4. Controles mensuales
+
+La pantalla se organiza **por Dirección/Unidad**, que es como se atienden los controles, y abre
+en el **último período cerrado** (el mes cuyo plazo de entrega ya venció).
+
+### Vista por Dirección (predeterminada)
+
+- **Indicadores del período**: Direcciones/Unidades atendidas y su operatividad promedio,
+  cuántas están operativas, en observación, críticas y sin soporte asignado.
+- **Una tarjeta por Dirección/Unidad** con sus responsables, el porcentaje de operatividad, el
+  semáforo institucional y las cifras del período (aplicables, entregados, pendientes, vencidos,
+  justificados, equipos activos y con incidencia). El botón **Ver detalle** abre la Dirección.
+- **Comparativo por Dirección**: la misma información en tabla, para comparar de un vistazo.
+- **Filtros**: año, mes, Dirección, Unidad, Técnico de Soporte y nivel de operatividad.
+
+El semáforo es **Operativa** (90 % o más), **En observación** (75–89 %), **Crítica** (menos de
+75 %), **En curso** (el plazo del período todavía corre), **Sin soporte asignado** y
+**Sin controles aplicables**.
+
+### Detalle de una Dirección/Unidad
+
+Abre con **Meses pendientes por completar**: los meses del año con controles pendientes o
+vencidos, con su resumen y su estado general (Pendiente, En proceso, Entregado, Entregado tarde,
+Vencido, Justificado o Cerrado). Con **Ver historial mensual completo** se ven también los meses ya
+cerrados, y con **Ver controles del mes** se entra a los controles aplicables de ese mes: los que
+faltan muestran **Completar** (o **Continuar** si ya se empezó) y los entregados, **Ver documento**.
+Los que no aplican aparecen al pie como **No aplica** y no cuentan como pendientes.
+
+Reúne además todo lo de esa Dirección/Unidad en el período: responsables, fecha límite, operatividad y
+estado, los quince indicadores, sus alertas, los controles que le aplican —y, al pie, los que
+**no aplican**—, sus bitácoras diarias, su inventario operativo y los documentos generados.
+Desde ahí se generan los **reportes formales por Dirección** (mensual, anual, de operatividad,
+de controles pendientes, de inventario operativo y de bitácoras diarias), que se abren en la
+vista tipo PDF con **Imprimir**, **Descargar** y **Cerrar**.
+
+### Vista general
+
+La tabla plana de todos los controles del período —código, período, Dirección/Unidad,
+responsable, fecha límite, días hábiles restantes, avance y estado— con sus filtros de control y
+estado. Sigue disponible en la pestaña **Vista general**.
+
+### Si usted es Técnico de Soporte
+
+La pantalla muestra primero **Mis Direcciones asignadas** y solo las Direcciones/Unidades que la
+distribución le asigna, con los controles que le corresponden.
 
 Lista de controles del período con fecha límite, **días hábiles restantes**, avance y estado.
 El Técnico de Soporte solo ve —y solo puede completar— las Direcciones/Unidades que la
@@ -69,6 +118,15 @@ editarlo.
    tabla y evidencia; si falta algo lo enumera. **Entregar control** registra fecha y hora,
    marca «Entregado» o «Entregado tarde» según el plazo, genera el **documento formal** y
    deja constancia en trazabilidad.
+
+### F0387: cuatro semanas, un solo documento
+
+El **F0387** se llena semana a semana. Al abrirlo se ve una banda con el estado de cada semana y el
+formulario tiene un paso por semana: estado de la semana, fecha de verificación, equipos revisados,
+resultado, responsable y observaciones. **Guardar avance** conserva lo registrado; cuando todas las
+semanas están declaradas —incluidas las marcadas «Semana no aplica»— el control pasa a **Listo para
+entregar** y al entregarlo se genera **un único documento del mes** con todas las semanas, no uno
+por semana.
 
 ### Justificar un mes sin actividad
 
@@ -103,6 +161,10 @@ Todas las cartas emitidas, con su motivo, período, responsable, avance de firma
 (técnico, Coordinador de Soporte Técnico y jefatura) y acceso a la carta en el visor.
 
 ## 7. Inventario operativo
+
+Antes de la tabla de equipos hay un resumen **por Dirección/Unidad**: equipos activos, equipos con
+incidencias, descargados del mes, estado del último F0422 y de la última bitácora, con acceso a
+los equipos de esa Dirección/Unidad.
 
 Los equipos activos por Dirección/Unidad que alimentan F0422, el mantenimiento preventivo y
 el análisis de vulnerabilidades. El inventario se mantiene **solo**: cuando el Usuario Final

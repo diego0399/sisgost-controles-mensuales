@@ -4,7 +4,9 @@ import { AuthService } from '../../core/services/auth.service';
 import { DataService } from '../../core/services/data.service';
 import { BusinessDayService } from '../../core/services/business-day.service';
 import { ControlDeadlineService } from '../../core/services/control-deadline.service';
+import { OperatividadService } from '../../core/services/operatividad.service';
 import { BadgeComponent } from '../../shared/ui';
+import { KpiDireccionesComponent } from '../../shared/kpi-direcciones';
 import { IconComponent } from '../../shared/icon';
 import { MESES, formateaFecha, isoLocal, nombreMes } from '../../core/models/models';
 import { URL_GESTION_EQUIPOS } from '../../core/config/modulos';
@@ -17,10 +19,11 @@ interface Alerta { tipo: 'danger' | 'warn' | 'ok'; titulo: string; texto: string
  */
 @Component({
   selector: 'app-panel',
-  imports: [RouterLink, BadgeComponent, IconComponent],
+  imports: [RouterLink, BadgeComponent, IconComponent, KpiDireccionesComponent],
   styles: `
     .dos-col { grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr); }
     @media (max-width: 1100px) { .dos-col { grid-template-columns: 1fr; } }
+    .col-num { text-align: center; }
     .modulo-card { border-left: 3px solid var(--gold-500); }
     .mod-ico {
       display: inline-flex; align-items: center; justify-content: center;
@@ -49,25 +52,42 @@ interface Alerta { tipo: 'danger' | 'warn' | 'ok'; titulo: string; texto: string
           <div class="kpi-hint">{{ mesActual }} · {{ noAplicables() }} no aplicables</div>
         </div>
         <div class="kpi"><div class="kpi-label">Entregados</div><div class="kpi-value">{{ cuenta(['Entregado', 'Entregado tarde', 'Cerrado']) }}</div><div class="kpi-hint">{{ cuenta(['Entregado tarde']) }} fuera de plazo</div></div>
-        <div class="kpi"><div class="kpi-label">Pendientes</div><div class="kpi-value">{{ cuenta(['Programado', 'Pendiente', 'En proceso']) }}</div><div class="kpi-hint">{{ cuenta(['En proceso']) }} en proceso</div></div>
+        <div class="kpi"><div class="kpi-label">Pendientes</div><div class="kpi-value">{{ cuenta(['Programado', 'Pendiente', 'En proceso', 'Listo para entregar']) }}</div><div class="kpi-hint">{{ cuenta(['En proceso']) }} en proceso</div></div>
         <div class="kpi"><div class="kpi-label">Vencidos</div><div class="kpi-value">{{ vencidosTotales() }}</div><div class="kpi-hint">de todo el año</div></div>
         <div class="kpi"><div class="kpi-label">Justificados</div><div class="kpi-value">{{ justificadosAnio() }}</div><div class="kpi-hint">cartas emitidas en 2026</div></div>
       </div>
 
-      <div class="grid grid-3" style="margin-top: 14px;">
+      <div class="grid grid-5" style="margin-top: 14px;">
         <div class="kpi"><div class="kpi-label">Bitácoras enviadas hoy</div><div class="kpi-value">{{ bitacorasHoy().enviadas }}</div><div class="kpi-hint">{{ esHabilHoy ? 'de ' + bitacorasHoy().total + ' esperadas' : 'hoy no es día hábil' }}</div></div>
         <div class="kpi"><div class="kpi-label">Bitácoras pendientes hoy</div><div class="kpi-value">{{ bitacorasHoy().pendientes }}</div><div class="kpi-hint">límite 5:00 p. m.</div></div>
         <div class="kpi"><div class="kpi-label">Próximos a vencer</div><div class="kpi-value">{{ proximos().length }}</div><div class="kpi-hint">dentro de 3 días hábiles</div></div>
+        <div class="kpi"><div class="kpi-label">Equipos activos</div><div class="kpi-value">{{ equiposActivos() }}</div><div class="kpi-hint">en inventario operativo</div></div>
+        <div class="kpi"><div class="kpi-label">Equipos con incidencias</div><div class="kpi-value">{{ equiposIncidencia() }}</div><div class="kpi-hint">en garantía, revisión o con hallazgo</div></div>
+      </div>
+
+      <!-- Operatividad por Dirección/Unidad -->
+      <div class="grid grid-5" style="margin-top: 14px;">
+        <div class="kpi"><div class="kpi-label">Direcciones atendidas</div><div class="kpi-value">{{ resumenOper().total }}</div><div class="kpi-hint">{{ resumenOper().promedio }} % de operatividad promedio</div></div>
+        <div class="kpi"><div class="kpi-label">Operativas</div><div class="kpi-value">{{ resumenOper().operativas }}</div><div class="kpi-hint">90 % o más</div></div>
+        <div class="kpi"><div class="kpi-label">En observación</div><div class="kpi-value">{{ resumenOper().observacion }}</div><div class="kpi-hint">entre 75 % y 89 %</div></div>
+        <div class="kpi"><div class="kpi-label">Críticas</div><div class="kpi-value">{{ resumenOper().criticas }}</div><div class="kpi-hint">menos de 75 %</div></div>
+        <div class="kpi"><div class="kpi-label">Sin soporte asignado</div><div class="kpi-value">{{ resumenOper().sinSoporte }}</div><div class="kpi-hint">nadie puede entregar</div></div>
       </div>
 
       @if (alertas().length) {
-        <div class="sec-title" style="margin-top: 26px;">Alertas del sistema</div>
+        <div class="sec-title" style="margin-top: 26px;">Alertas del sistema · {{ alertas().length }}</div>
         <div style="display: grid; gap: 8px;">
-          @for (a of alertas(); track a.titulo + a.texto) {
+          @for (a of alertasVisibles(); track a.titulo + a.texto) {
             <a class="alert {{ a.tipo }}" [routerLink]="a.ruta" style="text-decoration: none; color: inherit;">
               <span class="alert-ico">!</span>
               <span><b>{{ a.titulo }}.</b> {{ a.texto }}</span>
             </a>
+          }
+          @if (alertas().length > alertasVisibles().length) {
+            <p class="muted" style="font-size: 12.5px;">
+              y {{ alertas().length - alertasVisibles().length }} alerta(s) más; el detalle de cada
+              Dirección/Unidad las muestra completas.
+            </p>
           }
         </div>
       }
@@ -96,30 +116,44 @@ interface Alerta { tipo: 'danger' | 'warn' | 'ok'; titulo: string; texto: string
         </div>
       </div>
 
-      <!-- La tabla de avance lleva seis columnas: necesita más ancho que la tarjeta de al lado. -->
+      <!-- Operatividad por Dirección: la misma tabla comparativa de Controles mensuales. -->
+      <div class="card" style="margin-top: 18px;">
+        <div class="card-head">
+          <div>
+            <h3>Operatividad por Dirección</h3>
+            <p class="sub">
+              Controles aplicables, bitácoras, inventario y semáforo institucional del período {{ mesActual }}
+            </p>
+          </div>
+          <a class="btn btn-outline btn-sm" routerLink="/controles">Ver controles por Dirección</a>
+        </div>
+        <div class="card-body">
+          <ui-kpi-direcciones [kpis]="kpis()" modo="tabla" />
+        </div>
+      </div>
+
       <div class="grid dos-col" style="margin-top: 18px; align-items: start;">
         <div class="card">
           <div class="card-head">
             <div>
-              <h3>Avance por Dirección/Unidad</h3>
-              <p class="sub">Controles del período {{ mesActual }}</p>
+              <h3>Carga por Técnico de Soporte</h3>
+              <p class="sub">Direcciones/Unidades atendidas y controles abiertos del período</p>
             </div>
-            <a class="btn btn-ghost btn-sm" routerLink="/controles">Ver controles</a>
+            <a class="btn btn-ghost btn-sm" routerLink="/distribucion">Ver distribución</a>
           </div>
           <div class="card-body">
             <div class="table-wrap">
               <table class="tbl">
-                <thead><tr><th>Dirección/Unidad</th><th>Soporte responsable</th><th>Equipos</th><th>Entregados</th><th>Pendientes</th><th>Avance</th></tr></thead>
+                <thead><tr><th>Técnico de Soporte</th><th class="col-num">Dir./Unid.</th><th class="col-num">Abiertos</th><th class="col-num">Venc.</th><th>Carga</th></tr></thead>
                 <tbody>
-                  @for (f of porDireccion(); track f.id) {
+                  @for (c of cargaSoportes(); track c.tecnico) {
                     <tr>
-                      <td><b>{{ f.corta }}</b> · {{ f.nombre }}</td>
-                      <td>@if (f.soporte) { {{ f.soporte }} } @else { <span class="badge danger">Sin asignar</span> }</td>
-                      <td>{{ f.equipos }}</td>
-                      <td>{{ f.entregados }} / {{ f.total }}</td>
-                      <td>{{ f.pendientes }}</td>
-                      <td style="min-width: 120px;">
-                        <div class="progress" [class.ok]="f.pct === 100"><span [style.width.%]="f.pct"></span></div>
+                      <td><b>{{ c.tecnico }}</b></td>
+                      <td class="col-num">{{ c.pares }}</td>
+                      <td class="col-num">{{ c.abiertos }}</td>
+                      <td class="col-num">{{ c.vencidos }}</td>
+                      <td style="min-width: 110px;">
+                        <div class="progress"><span [style.width.%]="pctCarga(c.abiertos)"></span></div>
                       </td>
                     </tr>
                   }
@@ -169,6 +203,7 @@ export class PanelComponent {
   protected readonly auth = inject(AuthService);
   private readonly habiles = inject(BusinessDayService);
   private readonly plazos = inject(ControlDeadlineService);
+  private readonly oper = inject(OperatividadService);
 
   protected readonly urlEquipos = URL_GESTION_EQUIPOS;
 
@@ -204,7 +239,7 @@ export class PanelComponent {
   /** Controles abiertos cuyo límite cae dentro de los próximos 3 días hábiles. */
   protected readonly proximos = computed(() =>
     this.visibles()
-      .filter((c) => ['Programado', 'Pendiente', 'En proceso'].includes(c.estado) && c.fechaLimite >= this.hoy)
+      .filter((c) => ['Programado', 'Pendiente', 'En proceso', 'Listo para entregar'].includes(c.estado) && c.fechaLimite >= this.hoy)
       .filter((c) => this.habiles.habilesHasta(c.fechaLimite) <= 3)
       .sort((a, b) => a.fechaLimite.localeCompare(b.fechaLimite))
       .slice(0, 8));
@@ -212,25 +247,22 @@ export class PanelComponent {
   protected restan(limite: string): number { return Math.max(this.habiles.habilesHasta(limite), 0); }
   protected formatea(iso: string): string { return formateaFecha(iso); }
 
-  /** Avance por Dirección/Unidad: el par completo, que es como se distribuye el soporte. */
-  protected readonly porDireccion = computed(() => {
-    const delMes = this.delMes();
-    const u = this.auth.usuario();
-    const pares = this.auth.esTecnico() && u ? this.data.paresDe(u.usuario) : this.data.pares();
-    return pares.map((p) => {
-      const propios = delMes.filter((c) => c.direccion === p.direccion && c.unidad === p.unidad);
-      const entregados = propios.filter((c) => ['Entregado', 'Entregado tarde', 'Cerrado', 'Justificado'].includes(c.estado)).length;
-      return {
-        id: `${p.direccion}|${p.unidad}`,
-        corta: this.data.cortaDireccion(p.direccion), nombre: p.unidad,
-        soporte: this.data.tecnicosDe(p.direccion, p.unidad).map((t) => this.data.soportes.soloNombre(t)).join(' · '),
-        equipos: this.data.equiposActivosDe(p.direccion, p.unidad).length,
-        total: propios.length, entregados,
-        pendientes: propios.filter((c) => ['Programado', 'Pendiente', 'En proceso'].includes(c.estado)).length,
-        pct: propios.length ? Math.round((entregados / propios.length) * 100) : 0
-      };
-    });
-  });
+  /** Operatividad por Dirección/Unidad del período en curso. */
+  private readonly filtroOper = computed(() => ({
+    anio: new Date().getFullYear(), mes: new Date().getMonth() + 1
+  }));
+  protected readonly kpis = computed(() => this.oper.kpis(this.filtroOper()));
+  protected readonly resumenOper = computed(() => this.oper.resumen(this.filtroOper()));
+  protected readonly cargaSoportes = computed(() => this.oper.cargaSoportes(this.filtroOper()));
+
+  /** Barra de carga relativa al técnico más cargado del período. */
+  protected pctCarga(abiertos: number): number {
+    const max = Math.max(...this.cargaSoportes().map((c) => c.abiertos), 1);
+    return Math.round((abiertos / max) * 100);
+  }
+
+  protected readonly equiposIncidencia = computed(() =>
+    this.kpis().reduce((n, k) => n + k.equiposIncidencia, 0));
 
   /** Eventos de Gestión de Equipos aún sin aplicar al inventario operativo. */
   protected readonly integracionPendiente = computed(() => this.data.eventosIntegracion().filter((e) => !e.aplicado));
@@ -255,13 +287,51 @@ export class PanelComponent {
 
   protected readonly alertas = computed<Alerta[]>(() => {
     const lista: Alerta[] = [];
-    for (const p of this.data.paresAplicablesSinSoporte()) {
-      const equipos = this.data.equiposActivosDe(p.direccion, p.unidad).length;
-      lista.push({
-        tipo: 'danger', titulo: 'Dirección/Unidad sin soporte asignado',
-        texto: `${this.data.dirUnidad(p.direccion, p.unidad)} tiene ${p.controles} control(es) aplicables, pero no posee Técnico de Soporte asignado${equipos ? `; además, ${equipos} equipo(s) activo(s) quedan sin responsable` : ''}.`,
-        ruta: '/distribucion'
-      });
+    // ---- alertas por Dirección/Unidad (§19): cada una lleva a su detalle de operatividad
+    for (const k of this.kpis()) {
+      const ruta = `/controles/direccion/${k.direccion}/${k.unidad}`;
+      if (k.estado === 'Sin soporte asignado') {
+        lista.push({
+          tipo: 'danger', titulo: 'Dirección/Unidad sin soporte responsable',
+          texto: `${this.data.dirUnidad(k.direccion, k.unidad)} tiene ${k.aplicables} control(es) aplicables, pero no posee Técnico de Soporte asignado${k.equiposActivos ? `; además, ${k.equiposActivos} equipo(s) activo(s) quedan sin responsable` : ''}.`,
+          ruta: '/distribucion'
+        });
+      }
+      if (k.vencidos) {
+        lista.push({
+          tipo: 'danger', titulo: 'Dirección con controles vencidos',
+          texto: `${this.data.dirUnidad(k.direccion, k.unidad)}: ${k.vencidos} control(es) vencieron el plazo sin carta de justificación.`,
+          ruta
+        });
+      }
+      if (k.estado === 'Crítica') {
+        lista.push({
+          tipo: 'danger', titulo: 'Dirección con baja operatividad',
+          texto: `${this.data.dirUnidad(k.direccion, k.unidad)} cerró el período con ${k.operatividad} % de operatividad (menos del 75 % institucional).`,
+          ruta
+        });
+      }
+      if (k.bitacorasPendientes || k.bitacorasVencidas) {
+        lista.push({
+          tipo: 'warn', titulo: 'Dirección con bitácoras pendientes',
+          texto: `${this.data.dirUnidad(k.direccion, k.unidad)}: ${k.bitacorasPendientes} bitácora(s) pendientes y ${k.bitacorasVencidas} vencida(s) en el período.`,
+          ruta: '/bitacora'
+        });
+      }
+      if (k.equiposActivos && k.ultimoF0422 === 'No aplica') {
+        lista.push({
+          tipo: 'warn', titulo: 'Equipos activos sin control F0422',
+          texto: `${this.data.dirUnidad(k.direccion, k.unidad)} tiene ${k.equiposActivos} equipo(s) activo(s) y ningún F0422 programado en el período.`,
+          ruta: '/catalogo'
+        });
+      }
+      if (k.equiposIncidencia) {
+        lista.push({
+          tipo: 'warn', titulo: 'Dirección con incidencias en equipos',
+          texto: `${this.data.dirUnidad(k.direccion, k.unidad)}: ${k.equiposIncidencia} equipo(s) con incidencia en atención al público, garantía o revisión.`,
+          ruta: '/inventario'
+        });
+      }
     }
     if (this.integracionPendiente().length) {
       lista.push({
@@ -269,10 +339,6 @@ export class PanelComponent {
         texto: `${this.integracionPendiente().length} evento(s) de aceptación o descargo esperan incorporarse al inventario operativo.`,
         ruta: '/inventario'
       });
-    }
-    const vencidosSinJustificar = this.visibles().filter((c) => c.estado === 'Vencido');
-    if (vencidosSinJustificar.length) {
-      lista.push({ tipo: 'danger', titulo: 'Controles vencidos sin justificación', texto: `${vencidosSinJustificar.length} control(es) vencieron el plazo de entrega establecido y no tienen carta de justificación.`, ruta: '/controles' });
     }
     if (this.esHabilHoy && this.bitacorasHoy().pendientes > 0) {
       lista.push({ tipo: 'warn', titulo: 'Bitácoras diarias pendientes', texto: `${this.bitacorasHoy().pendientes} bitácora(s) de hoy aún sin enviar; el límite institucional es a las 5:00 p. m.`, ruta: '/bitacora' });
@@ -285,8 +351,12 @@ export class PanelComponent {
     if (sinControl.length) {
       lista.push({ tipo: 'warn', titulo: 'Equipos activos sin control asociado', texto: `${sinControl.length} equipo(s) del inventario operativo no aparecen en ningún control del año.`, ruta: '/inventario' });
     }
-    return lista;
+    // Primero lo crítico: las alertas rojas encabezan la lista.
+    return lista.sort((a, b) => (a.tipo === b.tipo ? 0 : a.tipo === 'danger' ? -1 : 1));
   });
+
+  /** El panel muestra las ocho primeras; el resto se consulta en cada pantalla. */
+  protected readonly alertasVisibles = computed(() => this.alertas().slice(0, 8));
 
   protected readonly MESES = MESES;
 }

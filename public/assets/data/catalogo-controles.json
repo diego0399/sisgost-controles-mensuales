@@ -550,7 +550,7 @@
   "codigo": "F0387",
   "nombre": "Verificación de sincronización de hora de equipos con IP",
   "version": "V1",
-  "frecuencia": "Semanal",
+  "frecuencia": "Semanal con entrega mensual consolidada",
   "aplicacion": {
    "modo": "Unidades específicas",
    "direcciones": [],
@@ -571,44 +571,286 @@
   "requiereFirma": true,
   "permiteJustificacion": false,
   "activo": true,
-  "descripcion": "Verificación semanal de que computadoras, impresores multifuncionales, teléfonos IP y reloj marcador están sincronizados con la hora de referencia.",
+  "descripcion": "Verificación semanal de la sincronización de hora de computadoras, impresores multifuncionales, teléfonos IP y reloj marcador. Se llena semana a semana y se entrega en un solo documento mensual consolidado.",
   "plantilla": [
    {
-    "titulo": "Datos generales",
+    "titulo": "Semana 1",
+    "semana": 1,
+    "descripcion": "Verificación semanal de la sincronización de hora de los equipos y dispositivos con IP.",
     "campos": [
      {
+      "id": "estado",
+      "etiqueta": "Estado de la semana",
+      "tipo": "opcion",
+      "opciones": [
+       "Semana completada",
+       "Semana observada",
+       "Semana no aplica"
+      ],
+      "obligatorio": true,
+      "ayuda": "Una semana marcada «Semana no aplica» no exige los demás datos, pero debe quedar declarada."
+     },
+     {
       "id": "fecha",
-      "etiqueta": "Fecha de la verificación",
+      "etiqueta": "Fecha de verificación",
       "tipo": "fecha",
       "obligatorio": true
      },
      {
-      "id": "hora-ref",
-      "etiqueta": "Hora de referencia",
-      "tipo": "hora",
+      "id": "equipos",
+      "etiqueta": "Equipos revisados",
+      "tipo": "numero",
       "obligatorio": true
+     },
+     {
+      "id": "resultado",
+      "etiqueta": "Resultado",
+      "tipo": "opcion",
+      "obligatorio": true,
+      "opciones": [
+       "Todos sincronizados",
+       "Con desfase corregido",
+       "Con desfase pendiente"
+      ]
+     },
+     {
+      "id": "responsable",
+      "etiqueta": "Responsable de la verificación",
+      "tipo": "texto",
+      "obligatorio": true
+     },
+     {
+      "id": "observaciones",
+      "etiqueta": "Observaciones",
+      "tipo": "area"
      }
     ]
    },
    {
-    "titulo": "Equipos verificados",
-    "descripcion": "Computadoras y multifuncionales se identifican por IP; teléfonos por extensión; el reloj marcador por número de inventario.",
-    "tabla": {
-     "columnas": [
-      "Equipo",
-      "IP / extensión / inventario",
-      "¿Hora sincronizada?",
-      "Hora observada"
-     ],
-     "minimo": 3
-    }
-   },
-   {
-    "titulo": "Observaciones",
+    "titulo": "Semana 2",
+    "semana": 2,
+    "descripcion": "Verificación semanal de la sincronización de hora de los equipos y dispositivos con IP.",
     "campos": [
      {
+      "id": "estado",
+      "etiqueta": "Estado de la semana",
+      "tipo": "opcion",
+      "opciones": [
+       "Semana completada",
+       "Semana observada",
+       "Semana no aplica"
+      ],
+      "obligatorio": true,
+      "ayuda": "Una semana marcada «Semana no aplica» no exige los demás datos, pero debe quedar declarada."
+     },
+     {
+      "id": "fecha",
+      "etiqueta": "Fecha de verificación",
+      "tipo": "fecha",
+      "obligatorio": true
+     },
+     {
+      "id": "equipos",
+      "etiqueta": "Equipos revisados",
+      "tipo": "numero",
+      "obligatorio": true
+     },
+     {
+      "id": "resultado",
+      "etiqueta": "Resultado",
+      "tipo": "opcion",
+      "obligatorio": true,
+      "opciones": [
+       "Todos sincronizados",
+       "Con desfase corregido",
+       "Con desfase pendiente"
+      ]
+     },
+     {
+      "id": "responsable",
+      "etiqueta": "Responsable de la verificación",
+      "tipo": "texto",
+      "obligatorio": true
+     },
+     {
+      "id": "observaciones",
+      "etiqueta": "Observaciones",
+      "tipo": "area"
+     }
+    ]
+   },
+   {
+    "titulo": "Semana 3",
+    "semana": 3,
+    "descripcion": "Verificación semanal de la sincronización de hora de los equipos y dispositivos con IP.",
+    "campos": [
+     {
+      "id": "estado",
+      "etiqueta": "Estado de la semana",
+      "tipo": "opcion",
+      "opciones": [
+       "Semana completada",
+       "Semana observada",
+       "Semana no aplica"
+      ],
+      "obligatorio": true,
+      "ayuda": "Una semana marcada «Semana no aplica» no exige los demás datos, pero debe quedar declarada."
+     },
+     {
+      "id": "fecha",
+      "etiqueta": "Fecha de verificación",
+      "tipo": "fecha",
+      "obligatorio": true
+     },
+     {
+      "id": "equipos",
+      "etiqueta": "Equipos revisados",
+      "tipo": "numero",
+      "obligatorio": true
+     },
+     {
+      "id": "resultado",
+      "etiqueta": "Resultado",
+      "tipo": "opcion",
+      "obligatorio": true,
+      "opciones": [
+       "Todos sincronizados",
+       "Con desfase corregido",
+       "Con desfase pendiente"
+      ]
+     },
+     {
+      "id": "responsable",
+      "etiqueta": "Responsable de la verificación",
+      "tipo": "texto",
+      "obligatorio": true
+     },
+     {
+      "id": "observaciones",
+      "etiqueta": "Observaciones",
+      "tipo": "area"
+     }
+    ]
+   },
+   {
+    "titulo": "Semana 4",
+    "semana": 4,
+    "descripcion": "Verificación semanal de la sincronización de hora de los equipos y dispositivos con IP.",
+    "campos": [
+     {
+      "id": "estado",
+      "etiqueta": "Estado de la semana",
+      "tipo": "opcion",
+      "opciones": [
+       "Semana completada",
+       "Semana observada",
+       "Semana no aplica"
+      ],
+      "obligatorio": true,
+      "ayuda": "Una semana marcada «Semana no aplica» no exige los demás datos, pero debe quedar declarada."
+     },
+     {
+      "id": "fecha",
+      "etiqueta": "Fecha de verificación",
+      "tipo": "fecha",
+      "obligatorio": true
+     },
+     {
+      "id": "equipos",
+      "etiqueta": "Equipos revisados",
+      "tipo": "numero",
+      "obligatorio": true
+     },
+     {
+      "id": "resultado",
+      "etiqueta": "Resultado",
+      "tipo": "opcion",
+      "obligatorio": true,
+      "opciones": [
+       "Todos sincronizados",
+       "Con desfase corregido",
+       "Con desfase pendiente"
+      ]
+     },
+     {
+      "id": "responsable",
+      "etiqueta": "Responsable de la verificación",
+      "tipo": "texto",
+      "obligatorio": true
+     },
+     {
+      "id": "observaciones",
+      "etiqueta": "Observaciones",
+      "tipo": "area"
+     }
+    ]
+   },
+   {
+    "titulo": "Semana 5",
+    "semana": 5,
+    "descripcion": "Solo si el mes tiene una quinta semana; si no, márquela como «Semana no aplica».",
+    "campos": [
+     {
+      "id": "estado",
+      "etiqueta": "Estado de la semana",
+      "tipo": "opcion",
+      "opciones": [
+       "Semana completada",
+       "Semana observada",
+       "Semana no aplica"
+      ],
+      "obligatorio": true,
+      "ayuda": "Una semana marcada «Semana no aplica» no exige los demás datos, pero debe quedar declarada."
+     },
+     {
+      "id": "fecha",
+      "etiqueta": "Fecha de verificación",
+      "tipo": "fecha",
+      "obligatorio": true
+     },
+     {
+      "id": "equipos",
+      "etiqueta": "Equipos revisados",
+      "tipo": "numero",
+      "obligatorio": true
+     },
+     {
+      "id": "resultado",
+      "etiqueta": "Resultado",
+      "tipo": "opcion",
+      "obligatorio": true,
+      "opciones": [
+       "Todos sincronizados",
+       "Con desfase corregido",
+       "Con desfase pendiente"
+      ]
+     },
+     {
+      "id": "responsable",
+      "etiqueta": "Responsable de la verificación",
+      "tipo": "texto",
+      "obligatorio": true
+     },
+     {
+      "id": "observaciones",
+      "etiqueta": "Observaciones",
+      "tipo": "area"
+     }
+    ]
+   },
+   {
+    "titulo": "Cierre del mes",
+    "descripcion": "Resumen del mes que encabeza el documento consolidado.",
+    "campos": [
+     {
+      "id": "hora-ref",
+      "etiqueta": "Hora de referencia utilizada",
+      "tipo": "texto",
+      "obligatorio": true
+     },
+     {
       "id": "obs",
-      "etiqueta": "Observaciones y recomendaciones",
+      "etiqueta": "Observaciones generales del mes",
       "tipo": "area"
      }
     ]

@@ -1,6 +1,7 @@
 import { Component, computed, inject, input, output } from '@angular/core';
 import { AuthService } from '../core/services/auth.service';
 import { DataService } from '../core/services/data.service';
+import { KpiDireccion, OperatividadService } from '../core/services/operatividad.service';
 import { ToastService } from '../core/services/toast.service';
 import {
   BitacoraDiaria, ControlMes, DocumentoGenerado, Justificacion, formateaFecha, nombreMes
@@ -22,7 +23,7 @@ import { CampoDoc, EvidenciaDoc, FirmaDoc, SeccionDoc, VisorDocumentoComponent }
         [abierto]="true"
         [nombre]="d.nombre"
         [subtitulo]="subtitulo()"
-        [codigo]="d.codigo === 'BITACORA' ? 'Bitácora diaria' : d.codigo === 'REPORTE' ? 'Reporte consolidado' : d.codigo + (versionCatalogo() ? ' ' + versionCatalogo() : '')"
+        [codigo]="etiquetaCodigo(d)"
         [fecha]="formatea(d.fecha)"
         [hora]="d.hora"
         [generadoPor]="d.generadoPor"
@@ -40,6 +41,7 @@ import { CampoDoc, EvidenciaDoc, FirmaDoc, SeccionDoc, VisorDocumentoComponent }
 export class DocumentoComponent {
   private readonly data = inject(DataService);
   private readonly auth = inject(AuthService);
+  private readonly oper = inject(OperatividadService);
   private readonly toast = inject(ToastService);
 
   /** Id del documento generado; vacío = cerrado. */
@@ -79,6 +81,13 @@ export class DocumentoComponent {
 
   protected formatea(iso: string): string { return formateaFecha(iso); }
 
+  /** Qué se escribe en «Código del formato» de la hoja según el tipo de documento. */
+  protected etiquetaCodigo(d: DocumentoGenerado): string {
+    if (d.codigo === 'BITACORA') return 'Bitácora diaria';
+    if (d.codigo === 'REPORTE') return d.tipo.endsWith('por Dirección') ? 'Reporte por Dirección' : 'Reporte consolidado';
+    return d.codigo + (this.versionCatalogo() ? ' ' + this.versionCatalogo() : '');
+  }
+
   /** Cargo institucional del responsable, tomado del directorio compartido. */
   private cargoDe(nombre: string): string {
     return this.data.usuarios().find((u) => u.nombre === nombre)?.cargo ?? 'Técnico de Soporte Técnico';
@@ -92,7 +101,8 @@ export class DocumentoComponent {
     if (this.control()) return this.seccionesControl(this.control()!);
     if (this.bitacora()) return this.seccionesBitacora(this.bitacora()!);
     if (this.justificacion()) return this.seccionesJustificacion(this.justificacion()!);
-    if (d.tipo === 'Reporte mensual consolidado' || d.tipo === 'Reporte por Dirección') return this.seccionesReporte(d);
+    if (d.tipo === 'Reporte mensual consolidado') return this.seccionesReporte(d);
+    if (d.tipo.startsWith('Reporte') && d.tipo.endsWith('por Dirección')) return this.seccionesReporteDireccion(d);
     return [];
   });
 
@@ -238,7 +248,7 @@ export class DocumentoComponent {
           { etiqueta: 'Entregados tarde', valor: String(cuenta(['Entregado tarde'])) },
           { etiqueta: 'Justificados', valor: String(cuenta(['Justificado'])) },
           { etiqueta: 'Vencidos', valor: String(cuenta(['Vencido'])) },
-          { etiqueta: 'Pendientes o en proceso', valor: String(cuenta(['Programado', 'Pendiente', 'En proceso', 'En revisión', 'Observado'])) },
+          { etiqueta: 'Pendientes o en proceso', valor: String(cuenta(['Programado', 'Pendiente', 'En proceso', 'Listo para entregar', 'En revisión', 'Observado'])) },
           { etiqueta: 'Bitácoras del mes', valor: `${bitacoras.filter((b) => b.estado === 'Enviada' || b.estado === 'Enviada tarde').length} enviadas de ${bitacoras.length}` },
           { etiqueta: 'Equipos activos en inventario operativo', valor: String(equipos.length) }
         ]
@@ -282,6 +292,207 @@ export class DocumentoComponent {
           : 'Sin bitácoras registradas en el período.'
       }
     ];
+  }
+
+  /**
+   * Reportes por Dirección/Unidad (§17-18 del requerimiento). Todos comparten el encabezado de
+   * datos generales y el resumen de indicadores; luego cada tipo aporta su detalle y todos
+   * cierran con el estado operativo.
+   */
+  private seccionesReporteDireccion(d: DocumentoGenerado): SeccionDoc[] {
+    const unidad = d.unidad ?? '';
+    const anual = d.tipo.includes('anual');
+    const k = this.oper.kpi(d.direccion, unidad, d.anio, d.mes);
+    const controles = this.oper.controlesDe(d.direccion, unidad, d.anio, d.mes);
+    const salida: SeccionDoc[] = [
+      {
+        titulo: 'Datos generales del reporte',
+        campos: [
+          { etiqueta: 'Reporte', valor: d.tipo },
+          { etiqueta: 'Dirección/Unidad', valor: this.data.dirUnidad(d.direccion, unidad) },
+          { etiqueta: 'Período', valor: anual ? `Año ${d.anio}` : `${nombreMes(d.mes)} ${d.anio}` },
+          { etiqueta: 'Responsable(s)', valor: k.responsables.join(', ') || 'Sin Técnico de Soporte asignado' },
+          { etiqueta: 'Fecha límite del período', valor: formateaFecha(k.fechaLimite), mono: true },
+          { etiqueta: 'Fecha de generación', valor: `${formateaFecha(d.fecha)} · ${d.hora}`, mono: true },
+          { etiqueta: 'Generado por', valor: d.generadoPor },
+          { etiqueta: 'Estado operativo', valor: `${k.estado}${k.aplicables ? ` (${k.operatividad} %)` : ''}` }
+        ]
+      },
+      {
+        titulo: 'Resumen de indicadores',
+        campos: [
+          { etiqueta: 'Controles aplicables', valor: String(k.aplicables) },
+          { etiqueta: 'Entregados', valor: `${k.entregados + k.entregadosTarde} (${k.entregadosTarde} fuera de plazo)` },
+          { etiqueta: 'Pendientes', valor: String(k.pendientes) },
+          { etiqueta: 'Vencidos', valor: String(k.vencidos) },
+          { etiqueta: 'Justificados', valor: String(k.justificados) },
+          { etiqueta: 'Cumplimiento', valor: `${k.cumplimiento} %` },
+          { etiqueta: 'Operatividad', valor: `${k.operatividad} %` },
+          { etiqueta: 'Bitácoras del período', valor: `${k.bitacorasEnviadas + k.bitacorasTarde} de ${k.bitacoras} enviadas` },
+          { etiqueta: 'Equipos activos', valor: String(k.equiposActivos) },
+          { etiqueta: 'Equipos con incidencia', valor: String(k.equiposIncidencia) },
+          { etiqueta: 'Equipos descargados en el período', valor: String(k.equiposDescargados) },
+          { etiqueta: 'Documentos generados', valor: String(k.documentos) }
+        ]
+      }
+    ];
+
+    if (anual) {
+      const meses = this.oper.anual(d.direccion, unidad, d.anio);
+      salida.push({
+        titulo: 'Operatividad mes a mes',
+        columnas: ['Mes', 'Aplicables', 'Entregados', 'Pendientes', 'Vencidos', 'Justificados', 'Operatividad', 'Estado'],
+        filas: meses.map((m, i) => [
+          nombreMes(i + 1), String(m.aplicables), String(m.entregados + m.entregadosTarde),
+          String(m.pendientes), String(m.vencidos), String(m.justificados),
+          m.aplicables ? `${m.operatividad} %` : '—', m.estado
+        ]),
+        nota: 'Los meses sin controles aplicables no se puntúan: el catálogo no programa controles en esa Dirección/Unidad.'
+      });
+    } else if (d.tipo.includes('controles pendientes')) {
+      const abiertos = controles.filter((c) => ['Programado', 'Pendiente', 'En proceso', 'Listo para entregar', 'Vencido', 'Observado'].includes(c.estado));
+      salida.push({
+        titulo: 'Controles pendientes y vencidos',
+        ...(abiertos.length
+          ? {
+              columnas: ['Código', 'Control', 'Responsable', 'Fecha límite', 'Avance', 'Estado'],
+              filas: abiertos.map((c) => [
+                c.codigo, this.data.catalogoDe(c.codigo)?.nombre ?? '', c.responsable,
+                formateaFecha(c.fechaLimite), `${c.avance} %`, c.estado
+              ])
+            }
+          : { texto: 'No hay controles pendientes ni vencidos en el período.' })
+      });
+    } else if (d.tipo.includes('inventario operativo')) {
+      const equipos = this.data.equiposActivosDe(d.direccion, unidad);
+      const conIncidencia = new Set(this.oper.equiposConIncidencia(d.direccion, unidad, d.anio, d.mes).map((e) => e.inventario));
+      salida.push({
+        titulo: 'Inventario operativo de la Dirección/Unidad',
+        ...(equipos.length
+          ? {
+              columnas: ['N° de inventario', 'Tipo', 'Marca y modelo', 'Usuario final', 'Último control', 'Incidencia', 'Garantía', 'Estado'],
+              filas: equipos.map((e) => {
+                const c = this.data.controlesDeEquipo(e.inventario)[0];
+                return [
+                  e.inventario, e.tipo, `${e.marca} ${e.modelo}`, e.usuarioFinal,
+                  c ? `${c.codigo} · ${nombreMes(c.mes)} ${c.anio}` : 'Sin control asociado',
+                  conIncidencia.has(e.inventario) ? 'Sí' : 'No', e.garantia, e.estado
+                ];
+              }),
+              nota: 'Equipos provenientes de las entregas aceptadas en SISGOST — Gestión de Equipos.'
+            }
+          : { texto: 'La Dirección/Unidad no tiene equipos activos en el inventario operativo.' })
+      });
+    } else if (d.tipo.includes('bitácoras')) {
+      const prefijo = `${d.anio}-${String(d.mes).padStart(2, '0')}`;
+      const bits = this.data.bitacoras().filter((b) => b.fecha.startsWith(prefijo)
+        && b.direccion === d.direccion && b.unidad === unidad)
+        .sort((a, b) => a.fecha.localeCompare(b.fecha));
+      salida.push({
+        titulo: 'Bitácoras diarias del período',
+        ...(bits.length
+          ? {
+              columnas: ['Fecha', 'Responsable', 'Hora de envío', 'Fallas registradas', 'Actividades', 'Estado'],
+              filas: bits.map((b) => [
+                formateaFecha(b.fecha), b.responsable, b.horaEnvio ?? '—',
+                String(b.revision.filter((r) => r.estado === 'Presenta falla').length),
+                String(b.actividades.length), b.estado
+              ]),
+              nota: 'Límite institucional de envío: 5:00 p. m. de cada día hábil.'
+            }
+          : { texto: 'La Dirección/Unidad no lleva bitácora diaria de atención al público.' })
+      });
+    } else if (d.tipo.includes('F0387')) {
+      // Un solo documento del mes con las verificaciones de todas sus semanas.
+      const f0387 = controles.find((c) => c.codigo === 'F0387');
+      if (!f0387) {
+        salida.push({
+          titulo: 'F0387 · Verificación de sincronización de hora',
+          texto: 'El control F0387 no aplica a esta Dirección/Unidad en el período, o todavía no fue programado.'
+        });
+      } else {
+        salida.push({
+          titulo: 'F0387 · Verificaciones semanales del mes',
+          columnas: ['Semana', 'Estado', 'Fecha de verificación', 'Equipos revisados', 'Resultado', 'Responsable', 'Observaciones'],
+          filas: this.data.estadoSemanas(f0387).map((s) => {
+            const r = f0387.secciones.find((x) => x.titulo === s.titulo);
+            const campo = (id: string) => r?.campos?.find((c) => c.id === id)?.valor || '—';
+            return [
+              `Semana ${s.semana}`, s.estado, campo('fecha'), campo('equipos'),
+              campo('resultado'), campo('responsable'), campo('observaciones')
+            ];
+          }),
+          nota: 'El F0387 se trabaja semana a semana y se entrega en un único documento mensual consolidado: no se generan cuatro documentos separados.'
+        });
+        salida.push({
+          titulo: 'Estado del consolidado',
+          campos: [
+            { etiqueta: 'Estado del control', valor: f0387.estado },
+            { etiqueta: 'Semanas completadas', valor: String(this.data.estadoSemanas(f0387).filter((s) => s.estado === 'Semana completada').length) },
+            { etiqueta: 'Semanas observadas', valor: String(this.data.estadoSemanas(f0387).filter((s) => s.estado === 'Semana observada').length) },
+            { etiqueta: 'Semanas que no aplican', valor: String(this.data.estadoSemanas(f0387).filter((s) => s.estado === 'Semana no aplica').length) },
+            { etiqueta: 'Documento del mes', valor: f0387.documento ? 'Generado' : 'Pendiente de generar' },
+            { etiqueta: 'Fecha de entrega', valor: f0387.fechaEntrega ? formateaFecha(f0387.fechaEntrega) : 'Sin entrega registrada', mono: true }
+          ]
+        });
+      }
+    } else if (d.tipo.includes('operatividad')) {
+      salida.push({
+        titulo: 'Cálculo de la operatividad',
+        campos: [
+          { etiqueta: 'Controles cumplidos', valor: `${k.entregados + k.entregadosTarde + k.justificados} de ${k.aplicables}` },
+          { etiqueta: 'Peso de los controles', valor: `${this.oper.PESO_CONTROLES * 100} %` },
+          { etiqueta: 'Bitácoras cumplidas', valor: k.bitacoras ? `${k.bitacorasEnviadas + k.bitacorasTarde} de ${k.bitacoras}` : 'No lleva bitácora' },
+          { etiqueta: 'Peso de la bitácora', valor: k.bitacoras ? `${this.oper.PESO_BITACORAS * 100} %` : 'No aplica' },
+          { etiqueta: 'Operatividad resultante', valor: `${k.operatividad} %` },
+          { etiqueta: 'Semáforo institucional', valor: '90–100 % Operativa · 75–89 % En observación · menos de 75 % Crítica' }
+        ],
+        nota: 'La operatividad combina el cumplimiento de los controles aplicables con el de la bitácora diaria donde la hay.'
+      });
+    }
+
+    if (!anual && !d.tipo.includes('inventario') && !d.tipo.includes('bitácoras')
+      && !d.tipo.includes('pendientes') && !d.tipo.includes('F0387')) {
+      salida.push({
+        titulo: 'Controles del período',
+        ...(controles.length
+          ? {
+              columnas: ['Código', 'Control', 'Frecuencia', 'Responsable', 'Fecha límite', 'Entrega', 'Estado'],
+              filas: controles.map((c) => [
+                c.codigo, this.data.catalogoDe(c.codigo)?.nombre ?? '',
+                this.data.catalogoDe(c.codigo)?.frecuencia ?? '', c.responsable,
+                formateaFecha(c.fechaLimite), c.fechaEntrega ? formateaFecha(c.fechaEntrega) : '—', c.estado
+              ])
+            }
+          : { texto: 'Ningún control del catálogo aplica a esta Dirección/Unidad en el período.' })
+      });
+    }
+
+    salida.push({
+      titulo: 'Conclusión y estado operativo',
+      texto: this.conclusionOperativa(k),
+      nota: 'Reporte generado por SISGOST — Controles Mensuales con los datos vigentes del período.'
+    });
+    return salida;
+  }
+
+  /** Redacción institucional del cierre del reporte según el semáforo. */
+  private conclusionOperativa(k: KpiDireccion): string {
+    const dir = this.data.dirUnidad(k.direccion, k.unidad);
+    if (k.estado === 'Sin controles aplicables') {
+      return `El catálogo de controles no programa ningún control en ${dir} para el período, por lo que no se registra medición de operatividad.`;
+    }
+    if (k.estado === 'Sin soporte asignado') {
+      return `${dir} tiene ${k.aplicables} control(es) aplicables en el período, pero no posee Técnico de Soporte responsable en la distribución vigente: sus controles no tienen quién los entregue. Se requiere asignar responsable.`;
+    }
+    const base = `${dir} presenta una operatividad de ${k.operatividad} % en el período, con ${k.entregados + k.entregadosTarde} control(es) entregados y ${k.justificados} justificado(s) de ${k.aplicables} aplicables`;
+    if (k.estado === 'Operativa') {
+      return `${base}. La Dirección/Unidad se encuentra OPERATIVA: cumple el estándar institucional del 90 %.`;
+    }
+    if (k.estado === 'En observación') {
+      return `${base}. La Dirección/Unidad queda EN OBSERVACIÓN: ${k.pendientes} control(es) pendientes y ${k.vencidos} vencido(s) deben regularizarse antes del cierre del siguiente período.`;
+    }
+    return `${base}. La Dirección/Unidad se encuentra en estado CRÍTICO: se requiere plan de regularización inmediato sobre los ${k.pendientes + k.vencidos} control(es) sin entregar.`;
   }
 
   // ------------------------------------------------------------------ evidencias y firmas

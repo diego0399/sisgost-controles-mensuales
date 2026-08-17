@@ -4,6 +4,7 @@ import { RouterLink } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 import { DataService, MODULO_CONTROLES, MODULO_EQUIPOS } from '../../core/services/data.service';
 import { EquipmentIntegrationService } from '../../core/services/equipment-integration.service';
+import { OperatividadService } from '../../core/services/operatividad.service';
 import { BadgeComponent, HelpTipComponent, ModalComponent } from '../../shared/ui';
 import { IconComponent } from '../../shared/icon';
 import { EquipoOperativo, formateaFecha, nombreMes } from '../../core/models/models';
@@ -28,6 +29,9 @@ import { EquipoOperativo, formateaFecha, nombreMes } from '../../core/models/mod
     }
     .mov:last-child { border-bottom: 0; }
     .ver-hist { display: flex; align-items: center; gap: 7px; font-size: 12.5px; color: var(--tx-2); white-space: nowrap; }
+    .col-num { text-align: center; }
+    /* Los encabezados largos empujan la tabla de equipos: aquí pueden partirse. */
+    .tbl th { white-space: normal; }
   `,
   template: `
     <div class="page">
@@ -93,6 +97,49 @@ import { EquipoOperativo, formateaFecha, nombreMes } from '../../core/models/mod
         <div class="kpi"><div class="kpi-label">Movimientos sincronizados</div><div class="kpi-value">{{ integracion.totalSincronizados() }}</div><div class="kpi-hint">{{ integracion.aceptaciones() }} aceptaciones · {{ integracion.descargos() }} descargos</div></div>
       </div>
 
+      <!-- Resumen del inventario por Dirección/Unidad -->
+      <div class="card" style="margin-bottom: 18px;">
+        <div class="card-head">
+          <div>
+            <h3>Inventario por Dirección/Unidad</h3>
+            <p class="sub">Equipos activos, incidencias y su relación con el F0422 y la bitácora del período</p>
+          </div>
+          <a class="btn btn-ghost btn-sm" routerLink="/controles">Ver operatividad</a>
+        </div>
+        <div class="card-body">
+          <div class="table-wrap">
+            <table class="tbl">
+              <thead><tr>
+                <th>Dirección/Unidad</th><th>Soporte responsable</th>
+                <th class="col-num">Equipos activos</th><th class="col-num">Con incidencias</th>
+                <th class="col-num">Descargados del mes</th><th>Último F0422</th><th>Última bitácora</th><th></th>
+              </tr></thead>
+              <tbody>
+                @for (k of porDireccion(); track k.direccion + k.unidad) {
+                  <tr>
+                    <td><b>{{ k.corta }}</b> · {{ k.unidad }}</td>
+                    <td>
+                      @if (k.responsables.length) { {{ k.responsables.join(' · ') }} }
+                      @else { <span class="badge danger">Sin asignar</span> }
+                    </td>
+                    <td class="col-num">{{ k.equiposActivos }}</td>
+                    <td class="col-num">{{ k.equiposIncidencia }}</td>
+                    <td class="col-num">{{ k.equiposDescargados }}</td>
+                    <td><ui-badge [estado]="k.ultimoF0422" /></td>
+                    <td><ui-badge [estado]="k.ultimaBitacora" /></td>
+                    <td>
+                      <button class="btn btn-ghost btn-sm" type="button" (click)="verSolo(k.direccion, k.unidad)">Ver equipos</button>
+                    </td>
+                  </tr>
+                } @empty {
+                  <tr><td colspan="8" class="muted">Sin Direcciones/Unidades visibles.</td></tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
       <div class="card">
         <div class="card-head">
           <div>
@@ -108,9 +155,13 @@ import { EquipoOperativo, formateaFecha, nombreMes } from '../../core/models/mod
               Ver descargados e históricos
             </label>
             <input class="control" placeholder="Buscar inventario o usuario…" [(ngModel)]="busca" />
-            <select class="control" [(ngModel)]="fDireccion">
+            <select class="control" [(ngModel)]="fDireccion" (ngModelChange)="fUnidad.set('')">
               <option value="">Todas las direcciones</option>
               @for (d of data.direcciones(); track d.id) { <option [value]="d.id">{{ d.corta }} — {{ d.nombre }}</option> }
+            </select>
+            <select class="control" [(ngModel)]="fUnidad">
+              <option value="">Todas las unidades</option>
+              @for (u of unidades(); track u) { <option [value]="u">{{ u }}</option> }
             </select>
             <select class="control" [(ngModel)]="fEstado">
               <option value="">Todos los estados</option>
@@ -121,7 +172,7 @@ import { EquipoOperativo, formateaFecha, nombreMes } from '../../core/models/mod
         <div class="card-body">
           <div class="table-wrap">
             <table class="tbl">
-              <thead><tr><th>N° inventario</th><th>Equipo</th><th>Usuario final</th><th>Dirección/Unidad</th><th>Soporte responsable</th><th>Aceptación</th><th>Garantía</th><th>Último control</th><th>Estado</th><th></th></tr></thead>
+              <thead><tr><th>N° inventario</th><th>Equipo</th><th>Usuario final</th><th>Dirección/Unidad</th><th>Soporte responsable</th><th>Garantía</th><th>Último control</th><th>Estado</th><th></th></tr></thead>
               <tbody>
                 @for (e of filtrados(); track e.ciclo) {
                   <tr>
@@ -129,9 +180,8 @@ import { EquipoOperativo, formateaFecha, nombreMes } from '../../core/models/mod
                     <td><b>{{ e.nombreEquipo }}</b><div class="muted" style="font-size: 11.5px;">{{ e.tipo }} · {{ e.marca }} {{ e.modelo }}</div></td>
                     <td>{{ e.usuarioFinal }}</td>
                     <td>{{ data.cortaDireccion(e.direccion) }} · {{ e.unidad }}</td>
-                    <td>{{ e.soporteResponsable }}</td>
-                    <td class="mono">{{ formatea(e.fechaAceptacion) }}</td>
-                    <td style="max-width: 160px;">{{ e.garantia }}</td>
+                    <td>{{ data.soportes.soloNombre(e.soporteResponsable) || '—' }}</td>
+                    <td style="max-width: 150px;">{{ e.garantia }}</td>
                     <td>
                       @if (ultimoControl(e.inventario); as uc) { {{ uc }} }
                       @else { <span class="badge warn">Sin control asociado</span> }
@@ -140,7 +190,7 @@ import { EquipoOperativo, formateaFecha, nombreMes } from '../../core/models/mod
                     <td><button class="btn btn-ghost btn-sm" type="button" (click)="detalle.set(e)">Detalle</button></td>
                   </tr>
                 } @empty {
-                  <tr><td colspan="10" class="muted">Sin equipos para los filtros seleccionados.</td></tr>
+                  <tr><td colspan="9" class="muted">Sin equipos para los filtros seleccionados.</td></tr>
                 }
               </tbody>
             </table>
@@ -232,9 +282,11 @@ export class InventarioComponent {
   protected readonly data = inject(DataService);
   protected readonly auth = inject(AuthService);
   protected readonly integracion = inject(EquipmentIntegrationService);
+  private readonly oper = inject(OperatividadService);
 
   protected readonly busca = signal('');
   protected readonly fDireccion = signal('');
+  protected readonly fUnidad = signal('');
   protected readonly fEstado = signal('');
   /** Por defecto la tabla muestra solo los equipos activos (regla del inventario operativo). */
   protected readonly verHistorico = signal(false);
@@ -260,6 +312,7 @@ export class InventarioComponent {
     return this.visibles()
       .filter((e) => this.verHistorico() || this.fEstado() || !fuera.includes(e.estado))
       .filter((e) => !this.fDireccion() || e.direccion === this.fDireccion())
+      .filter((e) => !this.fUnidad() || e.unidad === this.fUnidad())
       .filter((e) => !this.fEstado() || e.estado === this.fEstado())
       .filter((e) => !q || [e.inventario, e.nombreEquipo, e.usuarioFinal, e.marca, e.modelo].join(' ').toLowerCase().includes(q))
       .sort((a, b) => a.direccion.localeCompare(b.direccion) || a.nombreEquipo.localeCompare(b.nombreEquipo));
@@ -268,6 +321,23 @@ export class InventarioComponent {
   protected alternarHistorico(): void { this.verHistorico.update((v) => !v); }
 
   protected cuenta(estado: string): number { return this.visibles().filter((e) => e.estado === estado).length; }
+
+  protected readonly unidades = computed(() => [...new Set(this.visibles()
+    .filter((e) => !this.fDireccion() || e.direccion === this.fDireccion())
+    .map((e) => e.unidad))].sort());
+
+  /** Resumen del inventario por Dirección/Unidad, con los mismos KPIs de la vista ejecutiva. */
+  protected readonly porDireccion = computed(() => {
+    const hoy = new Date();
+    return this.oper.kpis({ anio: hoy.getFullYear(), mes: hoy.getMonth() + 1 })
+      .sort((a, b) => b.equiposIncidencia - a.equiposIncidencia || b.equiposActivos - a.equiposActivos);
+  });
+
+  /** Filtra la tabla de equipos por la Dirección/Unidad elegida en el resumen. */
+  protected verSolo(direccion: string, unidad: string): void {
+    this.fDireccion.set(direccion);
+    this.fUnidad.set(unidad);
+  }
 
   /** Ciclos operativos anteriores del mismo número de inventario (historial del equipo). */
   protected readonly ciclosPrevios = computed(() => {

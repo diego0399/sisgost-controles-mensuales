@@ -441,12 +441,80 @@ export class DataService {
     this.registrarEvento(u, { direccion: c.direccion, unidad: c.unidad, tipoControl: c.codigo, mes: c.mes, anio: c.anio, accion: 'Control iniciado', estadoAnterior: c.estado, estadoNuevo: 'En proceso' });
   }
 
-  guardarAvance(id: string, secciones: RespuestaSeccion[], evidencias: ControlMes['evidencias'], observaciones: string): void {
+  guardarAvance(id: string, secciones: RespuestaSeccion[], evidencias: ControlMes['evidencias'],
+    observaciones: string, u: UsuarioSistema | null = null): void {
+    const antes = this.controlPorId(id);
     this.actualizaControl(id, (c) => ({
       ...c, secciones, evidencias, observaciones,
-      estado: c.estado === 'Programado' || c.estado === 'Pendiente' ? 'En proceso' : c.estado,
+      estado: this.estadoTrasAvance(c, secciones),
       avance: this.calculaAvance(c.codigo, secciones)
     }));
+    // Los controles semanales consolidados dejan traza de cada semana que se cierra.
+    const despues = this.controlPorId(id);
+    if (antes && despues && this.esSemanalConsolidado(despues.codigo)) {
+      const nuevas = this.semanasCompletas(despues).filter((s) => !this.semanasCompletas(antes).includes(s));
+      for (const semana of nuevas) {
+        this.registrarEvento(u, {
+          direccion: despues.direccion, unidad: despues.unidad, tipoControl: despues.codigo,
+          mes: despues.mes, anio: despues.anio, accion: `${despues.codigo} semana completada`,
+          observacion: `Semana ${semana} registrada en el control ${despues.codigo} de ${nombreMes(despues.mes)} ${despues.anio}; el documento se genera una sola vez al cerrar el mes.`
+        });
+      }
+      if (despues.estado === 'Listo para entregar' && antes.estado !== 'Listo para entregar') {
+        this.registrarEvento(u, {
+          direccion: despues.direccion, unidad: despues.unidad, tipoControl: despues.codigo,
+          mes: despues.mes, anio: despues.anio, accion: 'Control listo para entregar',
+          estadoAnterior: antes.estado, estadoNuevo: 'Listo para entregar',
+          observacion: 'Todas las semanas aplicables del mes quedaron registradas.'
+        });
+      }
+    }
+  }
+
+  // ------------------------------------------------------------------ controles semanales consolidados
+
+  /**
+   * ¿El control se trabaja semana a semana pero se entrega en **un solo documento mensual**?
+   * Es el caso del F0387: cuatro o cinco verificaciones semanales, una sola hoja al cierre.
+   */
+  esSemanalConsolidado(codigo: string): boolean {
+    return this.catalogoDe(codigo)?.frecuencia === 'Semanal con entrega mensual consolidada';
+  }
+
+  /** Secciones semanales de la plantilla de un control (vacío si no es consolidado). */
+  seccionesSemanales(codigo: string): { titulo: string; semana: number }[] {
+    return (this.catalogoDe(codigo)?.plantilla ?? [])
+      .filter((s) => !!s.semana)
+      .map((s) => ({ titulo: s.titulo, semana: s.semana! }));
+  }
+
+  /** Estado interno de cada semana: «Semana pendiente» mientras no se declare. */
+  estadoSemanas(c: ControlMes): { semana: number; titulo: string; estado: string }[] {
+    return this.seccionesSemanales(c.codigo).map((s) => ({
+      ...s,
+      estado: c.secciones.find((r) => r.titulo === s.titulo)?.campos?.find((x) => x.id === 'estado')?.valor
+        || 'Semana pendiente'
+    }));
+  }
+
+  /** Números de semana ya declaradas (completada, observada o no aplica). */
+  private semanasCompletas(c: ControlMes): number[] {
+    return this.estadoSemanas(c).filter((s) => s.estado !== 'Semana pendiente').map((s) => s.semana);
+  }
+
+  /**
+   * Estado del control tras guardar: los semanales consolidados pasan a «Listo para entregar»
+   * cuando todas sus semanas están declaradas; el resto sigue la regla normal.
+   */
+  private estadoTrasAvance(c: ControlMes, secciones: RespuestaSeccion[]): EstadoControl {
+    if (!['Programado', 'Pendiente', 'En proceso', 'Listo para entregar'].includes(c.estado)) return c.estado;
+    if (this.esSemanalConsolidado(c.codigo)) {
+      const semanas = this.estadoSemanas({ ...c, secciones });
+      if (semanas.length && semanas.every((s) => s.estado !== 'Semana pendiente')) return 'Listo para entregar';
+      if (semanas.some((s) => s.estado !== 'Semana pendiente')) return 'En proceso';
+      return c.estado === 'Programado' || c.estado === 'Pendiente' ? c.estado : 'En proceso';
+    }
+    return c.estado === 'Programado' || c.estado === 'Pendiente' ? 'En proceso' : c.estado;
   }
 
   /** Avance = proporción de secciones de la plantilla con alguna respuesta. */
@@ -457,7 +525,7 @@ export class DataService {
     for (const p of plantilla) {
       const r = secciones.find((s) => s.titulo === p.titulo);
       if (!r) continue;
-      const tiene = (r.campos?.some((x) => x.valor.trim()) ?? false)
+      const tiene = (r.campos?.some((x) => String(x.valor ?? '').trim()) ?? false)
         || (r.items?.some((x) => x.estado) ?? false)
         || ((r.filas?.length ?? 0) > 0)
         || (r.equipos?.some((x) => x.incluido && x.estado) ?? false);
@@ -477,8 +545,12 @@ export class DataService {
     const activos = this.equiposDeControl(c);
     for (const p of cat?.plantilla ?? []) {
       const r = c.secciones.find((s) => s.titulo === p.titulo);
+      // Una semana declarada «no aplica» no exige el resto de sus datos, pero sí declararse.
+      const semanaNoAplica = !!p.semana
+        && (r?.campos?.find((x) => x.id === 'estado')?.valor ?? '') === 'Semana no aplica';
       for (const campo of p.campos ?? []) {
-        if (campo.obligatorio && !(r?.campos?.find((x) => x.id === campo.id)?.valor ?? '').trim()) {
+        if (semanaNoAplica && campo.id !== 'estado') continue;
+        if (campo.obligatorio && !String(r?.campos?.find((x) => x.id === campo.id)?.valor ?? '').trim()) {
           faltas.push(`«${campo.etiqueta}» (${p.titulo}) es obligatorio.`);
         }
       }
@@ -534,6 +606,15 @@ export class DataService {
       estadoAnterior: c.estado, estadoNuevo: estado, documento: doc,
       observacion: estado === 'Entregado tarde' ? 'Entrega registrada fuera del plazo de los primeros tres días hábiles.' : undefined
     });
+    // El semanal consolidado deja constancia de que su documento del mes es uno solo.
+    if (this.esSemanalConsolidado(c.codigo)) {
+      const semanas = this.estadoSemanas(this.controlPorId(id)!);
+      this.registrarEvento(u, {
+        direccion: c.direccion, unidad: c.unidad, tipoControl: c.codigo, mes: c.mes, anio: c.anio,
+        accion: `${c.codigo} consolidado mensual generado`, documento: doc,
+        observacion: `Documento único de ${nombreMes(c.mes)} ${c.anio} con ${semanas.filter((s) => s.estado === 'Semana completada').length} semana(s) completada(s), ${semanas.filter((s) => s.estado === 'Semana observada').length} observada(s) y ${semanas.filter((s) => s.estado === 'Semana no aplica').length} sin aplicar.`
+      });
+    }
     return { ok: true, faltas: [], estado };
   }
 
@@ -567,14 +648,17 @@ export class DataService {
     return { ok: true };
   }
 
-  /** Las tres firmas del formato institucional, tomadas del directorio compartido. */
+  /**
+   * Las tres firmas del formato institucional, tomadas del directorio: el técnico que la emite,
+   * el Coordinador de Soporte Técnico y el Encargado de Soporte, que es el jefe del área.
+   */
   private firmasCarta(u: UsuarioSistema): Justificacion['firmas'] {
-    const encargado = this.usuarios().find((x) => x.clave === 'enc-soporte');
-    const jefatura = this.usuarios().find((x) => x.clave === 'jefatura');
+    const coordinador = this.usuarios().find((x) => x.clave === 'coordinador');
+    const jefe = this.usuarios().find((x) => x.clave === 'enc-soporte');
     return [
       { nombre: u.nombre, cargo: u.cargo, estado: 'Registrada' },
-      { nombre: encargado?.nombre ?? 'Encargado de Soporte', cargo: encargado?.cargo ?? 'Coordinador de Soporte Técnico', estado: 'Pendiente' },
-      { nombre: jefatura?.nombre ?? 'Jefatura', cargo: jefatura?.cargo ?? 'Jefe del Departamento de Soporte Técnico', estado: 'Pendiente' }
+      { nombre: coordinador?.nombre ?? 'Coordinador', cargo: coordinador?.cargo ?? 'Coordinador de Soporte Técnico', estado: 'Pendiente' },
+      { nombre: jefe?.nombre ?? 'Encargado de Soporte', cargo: jefe?.cargo ?? 'Jefe del Departamento de Soporte Técnico', estado: 'Pendiente' }
     ];
   }
 
@@ -757,7 +841,7 @@ export class DataService {
     this.registrarEvento(u, { direccion: d.direccion, unidad: d.unidad, tipoControl: d.codigo, mes: d.mes, anio: d.anio, accion: 'Documento descargado', documento: idDoc });
   }
 
-  /** Reporte mensual consolidado de una Dirección (o de todas) para presentar a jefaturas. */
+  /** Reporte mensual consolidado de una Dirección (o de todas) para presentar a la jefatura. */
   generarReporteMensual(anio: number, mes: number, direccion: string, u: UsuarioSistema): string {
     const doc = this.generaDocumento({
       tipo: 'Reporte mensual consolidado',
@@ -766,6 +850,30 @@ export class DataService {
       referencia: `REP-${anio}-${mes}-${direccion || 'todas'}`
     });
     this.registrarEvento(u, { direccion: direccion || undefined, mes, anio, accion: 'Vista PDF generada', documento: doc, observacion: 'Reporte mensual consolidado generado desde el Generador de documentos.' });
+    return doc;
+  }
+
+  /**
+   * Reportes formales por Dirección/Unidad (mensual, anual, pendientes, operatividad, inventario
+   * y bitácoras). El contenido lo arma el visor con los datos vivos del período; aquí solo se
+   * registra el documento y su traza.
+   */
+  generarReporteDireccion(tipo: string, p: { anio: number; mes: number; direccion: string; unidad: string },
+    u: UsuarioSistema): string {
+    const anual = tipo.includes('anual');
+    const periodo = anual ? `${p.anio}` : `${nombreMes(p.mes)} ${p.anio}`;
+    const doc = this.generaDocumento({
+      tipo: tipo as DocumentoGenerado['tipo'],
+      nombre: `${tipo} — ${this.cortaDireccion(p.direccion)} / ${p.unidad} — ${periodo}`,
+      codigo: 'REPORTE', generadoPor: u.nombre, direccion: p.direccion, unidad: p.unidad,
+      mes: p.mes, anio: p.anio,
+      referencia: `REP-${p.anio}-${anual ? 'ANUAL' : p.mes}-${p.direccion}-${p.unidad}-${tipo.length}`
+    });
+    this.registrarEvento(u, {
+      direccion: p.direccion, unidad: p.unidad, mes: p.mes, anio: p.anio,
+      accion: 'Reporte de Dirección generado', documento: doc,
+      observacion: `${tipo} de ${this.dirUnidad(p.direccion, p.unidad)} · ${periodo}.`
+    });
     return doc;
   }
 

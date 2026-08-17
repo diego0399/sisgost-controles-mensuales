@@ -38,6 +38,7 @@ TEC --> UC3
 TEC --> UC4
 TEC --> UC5
 TEC --> UC6
+TEC --> UC21
 TEC --> UC13
 TEC --> UC17
 TEC --> UC19
@@ -48,6 +49,9 @@ ENC --> UC7
 ENC --> UC8
 ENC --> UC9
 ENC --> UC10
+ENC --> UC21
+ENC --> UC22
+ENC --> UC23
 ENC --> UC15
 ENC --> UC16
 
@@ -60,11 +64,14 @@ ADM --> UC19
 
 JEF --> UC1
 JEF --> UC7
+JEF --> UC21
+JEF --> UC22
 JEF --> UC15
 JEF --> UC16
 
 GE ..> UC14 : "entrega aceptada / descargo\n(se aplica sin acción del usuario)"
 UC14 ..> UC13 : <<include>>
+UC21 ..> UC23 : <<extend>>
 UC20 ..> UC3 : "decide en qué Direcciones/Unidades\nse programa el control"
 UC4 ..> UC16 : <<include>>
 UC5 ..> UC16 : <<include>>

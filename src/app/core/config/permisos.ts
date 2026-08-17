@@ -15,25 +15,33 @@ export interface NavGrupo {
 
 /**
  * Menú y permisos por rol, compartidos entre el shell y el guard de rutas.
- * Jefatura solo consulta (seguimiento, documentos y trazabilidad); Administración
- * queda reservada al Administrador, salvo el catálogo y la distribución, que el
- * Encargado de Soporte necesita consultar para asignar responsables.
+ *
+ * · **Administrador**: todo, incluida la configuración (usuarios, catálogo, feriados, demo).
+ * · **Encargado de Soporte** (jefe del área): ve todas las Direcciones/Unidades, la operatividad,
+ *   los pendientes y vencidos, el historial, los reportes y la distribución de soportes.
+ * · **Técnico de Soporte**: opera lo suyo (controles, bitácora, justificaciones e inventario de
+ *   sus Direcciones/Unidades).
+ * · **Coordinador**: consulta y seguimiento — panel, operatividad por Dirección, historial,
+ *   documentos y trazabilidad. No completa controles ni administra.
  */
-const OPERAN: ClaveRol[] = ['admin', 'enc-soporte', 'tec-soporte', 'jefatura'];
+/** Todos los roles del módulo. */
+const TODOS: ClaveRol[] = ['admin', 'enc-soporte', 'tec-soporte', 'coordinador'];
+/** Roles que operan controles y bitácoras; el Coordinador solo consulta. */
+const OPERAN: ClaveRol[] = ['admin', 'enc-soporte', 'tec-soporte'];
 
 export const NAVEGACION: NavGrupo[] = [
   {
     titulo: 'Seguimiento',
     items: [
-      { ruta: '/panel', titulo: 'Panel ejecutivo', icono: 'panel', roles: OPERAN },
+      { ruta: '/panel', titulo: 'Panel ejecutivo', icono: 'panel', roles: TODOS },
       { ruta: '/calendario', titulo: 'Calendario de controles', icono: 'calendar', roles: OPERAN },
-      { ruta: '/historial', titulo: 'Historial anual', icono: 'archive', roles: OPERAN }
+      { ruta: '/historial', titulo: 'Historial anual', icono: 'archive', roles: TODOS }
     ]
   },
   {
     titulo: 'Operación',
     items: [
-      { ruta: '/controles', titulo: 'Controles mensuales', icono: 'clipboard', roles: OPERAN },
+      { ruta: '/controles', titulo: 'Controles mensuales', icono: 'clipboard', roles: TODOS },
       { ruta: '/bitacora', titulo: 'Bitácora diaria', icono: 'sun', roles: OPERAN },
       { ruta: '/justificaciones', titulo: 'Justificaciones', icono: 'mail', roles: OPERAN },
       { ruta: '/inventario', titulo: 'Inventario operativo', icono: 'box', roles: OPERAN }
@@ -42,8 +50,8 @@ export const NAVEGACION: NavGrupo[] = [
   {
     titulo: 'Documentación',
     items: [
-      { ruta: '/documentos', titulo: 'Generador de documentos', icono: 'file', roles: OPERAN },
-      { ruta: '/trazabilidad', titulo: 'Trazabilidad', icono: 'clock', roles: OPERAN }
+      { ruta: '/documentos', titulo: 'Generador de documentos', icono: 'file', roles: TODOS },
+      { ruta: '/trazabilidad', titulo: 'Trazabilidad', icono: 'clock', roles: TODOS }
     ]
   },
   {

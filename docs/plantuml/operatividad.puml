@@ -1,0 +1,67 @@
+@startuml operatividad
+title SISGOST — Controles Mensuales · Operatividad por Dirección/Unidad
+skinparam componentStyle rectangle
+
+package "Fuentes del cálculo" {
+  [CONTROL_MES del período\n(solo los que APLICAN)] as CTL
+  [BITACORA_DIARIA del período] as BIT
+  [EQUIPO_OPERATIVO\n(activos, incidencias, descargos)] as INV
+  [DISTRIBUCION_SOPORTE\n(responsables)] as DIS
+  [DOCUMENTO_GENERADO] as DOC
+}
+
+[OperatividadService\nkpi(dirección, unidad, año, mes)] as OPER
+
+CTL --> OPER
+BIT --> OPER
+INV --> OPER
+DIS --> OPER
+DOC --> OPER
+
+note right of OPER
+  controles    = (entregados + entregados tarde
+                  + justificados) / aplicables
+  bitácoras    = (enviadas + enviadas tarde) / bitácoras
+  operatividad = controles                        (sin bitácora)
+               = controles·0.7 + bitácoras·0.3    (con bitácora)
+  cumplimiento = (entregados a tiempo + justificados) / aplicables
+end note
+
+package "Semáforo institucional" {
+  [Operativa\n90–100 %] as S1
+  [En observación\n75–89 %] as S2
+  [Crítica\n< 75 %] as S3
+  [En curso\n(plazo abierto, nada vencido)] as S4
+  [Sin soporte asignado] as S5
+  [Sin controles aplicables] as S6
+}
+
+OPER --> S1
+OPER --> S2
+OPER --> S3
+OPER --> S4
+OPER --> S5
+OPER --> S6
+
+package "Pantallas que lo consumen" {
+  [Controles mensuales\nvista por Dirección + comparativo] as P1
+  [Detalle de Dirección/Unidad] as P2
+  [Panel ejecutivo\n(KPIs globales y alertas por Dirección)] as P3
+  [Historial anual\n(operatividad mes a mes)] as P4
+  [Inventario operativo\n(resumen por Dirección)] as P5
+  [Reportes formales por Dirección] as P6
+}
+
+OPER --> P1
+OPER --> P2
+OPER --> P3
+OPER --> P4
+OPER --> P5
+OPER --> P6
+
+note bottom of P1
+  La vista por Dirección es la predeterminada del Encargado de Soporte
+  y abre en el ÚLTIMO PERÍODO CERRADO (ControlDeadlineService).
+  El Técnico de Soporte solo ve sus Direcciones/Unidades asignadas.
+end note
+@enduml

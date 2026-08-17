@@ -26,7 +26,7 @@ bitácoras, inventario y distribución.
 |---|---|---|
 | usuario | PK | `wcarranza` — mismo identificador que en Gestión de Equipos |
 | nombre, iniciales, cargo, unidad, estado | texto | |
-| rol / clave | catálogo | `admin`, `enc-soporte`, `tec-soporte`, `jefatura`, `enc-hardware`, `tec-hardware` |
+| rol / clave | catálogo | `admin`, `enc-soporte` (jefe del área), `tec-soporte`, `coordinador` — **sin roles de Hardware** |
 | moduloControles | bool | false = usuario del ecosistema que opera solo en Gestión de Equipos |
 
 ### DISTRIBUCION_SOPORTE
@@ -60,7 +60,7 @@ Catálogo **editable**; insumo del cálculo de días hábiles.
 |---|---|---|
 | codigo | PK | `F0234`, `F0389`, `GLPI`… |
 | nombre, version, descripcion | texto | |
-| frecuencia | catálogo | `Mensual, Semanal, Diaria, Eventual, Programado` |
+| frecuencia | catálogo | `Mensual, Semanal, Diaria, Eventual, Programado, Semanal con entrega mensual consolidada` |
 | aplicacion | AplicacionControl | **dónde aplica el control** (editable); ver abajo |
 | requiereEvidencia, requiereFirma, permiteJustificacion, activo | bool | |
 | plantilla | SeccionPlantilla[] | el formulario digital |
@@ -96,7 +96,7 @@ exigen además inventario operativo activo.
 | anio, mes, semana? | número | semana solo en controles semanales |
 | direccion | FK → DIRECCION | unidad en texto |
 | responsable | texto | del soporte asignado |
-| estado | catálogo | `Programado, Pendiente, En proceso, En revisión, Entregado, Entregado tarde, Vencido, Justificado, Observado, Cerrado, No aplica` |
+| estado | catálogo | `Programado, Pendiente, En proceso, Listo para entregar, En revisión, Entregado, Entregado tarde, Vencido, Justificado, Observado, Cerrado, No aplica` |
 | fechaLimite | ISO | 3.er día hábil del mes siguiente (o viernes de la semana) |
 | fechaEntrega?, horaEntrega? | | |
 | avance | 0–100 | secciones con respuesta / secciones de la plantilla |
@@ -182,6 +182,21 @@ En observación`) y evidencia opcional.
 | moduloOrigen?, moduloDestino?, inventario? | texto | eventos de integración entre módulos |
 | equipo?, usuarioFinal?, expedienteUnico? | texto | contexto del equipo en los movimientos automáticos |
 | estadoAnterior?, estadoNuevo?, observacion?, documento? | | |
+
+## Indicadores derivados (no se almacenan)
+
+`KpiDireccion` es un **cálculo**, no una tabla: `OperatividadService` lo deriva en cada consulta
+de CONTROL_MES, BITACORA_DIARIA, EQUIPO_OPERATIVO, DOCUMENTO_GENERADO y DISTRIBUCION_SOPORTE para
+un trío (Dirección, Unidad, período). En una implementación real sería una vista materializada o
+un cálculo en consulta; guardarlo duplicaría un dato que cambia con cada entrega.
+
+| Campo | Origen |
+|---|---|
+| aplicables, entregados, pendientes, vencidos, justificados | CONTROL_MES del período que aplican a la Dirección/Unidad |
+| bitácoras enviadas / tarde / pendientes / vencidas | BITACORA_DIARIA del período |
+| equipos activos / con incidencia / descargados | EQUIPO_OPERATIVO y las respuestas de equipos de los controles |
+| responsables | DISTRIBUCION_SOPORTE vigente |
+| cumplimiento, operatividad, estado | fórmula documentada en el manual técnico |
 
 ## Relaciones principales
 

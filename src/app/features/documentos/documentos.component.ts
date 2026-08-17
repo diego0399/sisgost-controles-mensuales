@@ -11,7 +11,7 @@ import { MESES, formateaFecha, nombreMes } from '../../core/models/models';
  * Generador de documentos: catálogo de todo lo emitido por el sistema —controles entregados,
  * bitácoras, cartas de justificación y reportes consolidados— con vista previa tipo PDF,
  * descarga e impresión. Desde aquí también se generan los reportes por Dirección y el
- * consolidado mensual para jefaturas.
+ * consolidado mensual para la jefatura del área.
  */
 @Component({
   selector: 'app-documentos',
@@ -27,19 +27,44 @@ import { MESES, formateaFecha, nombreMes } from '../../core/models/models';
           </h1>
           <p class="page-sub">Documentos generados por controles, bitácoras, justificaciones y reportes.</p>
         </div>
-        @if (!auth.esTecnico()) {
-          <div class="row">
-            <select class="control" [(ngModel)]="repMes">
-              @for (m of MESES; track m; let i = $index) { <option [ngValue]="i + 1">{{ m }}</option> }
-            </select>
-            <select class="control" [(ngModel)]="repDireccion">
-              <option value="">Todas las direcciones</option>
-              @for (d of data.direcciones(); track d.id) { <option [value]="d.id">{{ d.corta }}</option> }
-            </select>
-            <button class="btn btn-gold" type="button" (click)="generarReporte()">Generar reporte del mes</button>
-          </div>
-        }
       </div>
+
+      @if (!auth.esTecnico()) {
+        <div class="card" style="margin-bottom: 18px;">
+          <div class="card-head">
+            <div>
+              <h3>Generar reporte</h3>
+              <p class="sub">Consolidado del mes o reportes formales por Dirección/Unidad</p>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="row" style="flex-wrap: wrap; gap: 8px;">
+              <select class="control" style="width: 150px;" [(ngModel)]="repMes">
+                @for (m of MESES; track m; let i = $index) { <option [ngValue]="i + 1">{{ m }}</option> }
+              </select>
+              <select class="control" style="width: 220px;" [(ngModel)]="repDireccion" (ngModelChange)="repUnidad.set('')">
+                <option value="">Todas las direcciones (consolidado)</option>
+                @for (d of data.direcciones(); track d.id) { <option [value]="d.id">{{ d.corta }} — {{ d.nombre }}</option> }
+              </select>
+              <select class="control" style="width: 200px;" [(ngModel)]="repUnidad" [disabled]="!repDireccion()">
+                <option value="">Unidad…</option>
+                @for (u of unidadesRep(); track u) { <option [value]="u">{{ u }}</option> }
+              </select>
+              <select class="control" style="width: 300px;" [(ngModel)]="repTipo" [disabled]="!repDireccion()">
+                @for (t of tiposReporte; track t) { <option [value]="t">{{ t }}</option> }
+              </select>
+              <button class="btn btn-gold" type="button" (click)="generarReporte()">
+                {{ repDireccion() ? 'Generar reporte por Dirección' : 'Generar reporte consolidado del mes' }}
+              </button>
+            </div>
+            <p class="muted" style="font-size: 12.5px; margin-top: 10px;">
+              Los reportes por Dirección/Unidad incluyen los KPIs del período, los controles aplicables,
+              las bitácoras, el inventario operativo y la conclusión del estado operativo. Se abren en la
+              vista formal, lista para imprimir o descargar.
+            </p>
+          </div>
+        </div>
+      }
 
       <div class="grid grid-4" style="margin-bottom: 18px;">
         <div class="kpi"><div class="kpi-label">Documentos</div><div class="kpi-value">{{ visibles().length }}</div><div class="kpi-hint">emitidos por el sistema</div></div>
@@ -121,8 +146,21 @@ export class DocumentosComponent {
   protected readonly limite = signal(40);
   protected readonly repMes = signal(new Date().getMonth() + 1);
   protected readonly repDireccion = signal('');
+  protected readonly repUnidad = signal('');
+  protected readonly repTipo = signal('Reporte mensual por Dirección');
 
-  protected readonly tipos = ['Control mensual', 'Bitácora diaria', 'Justificación', 'Reporte mensual consolidado'];
+  protected readonly tipos = ['Control mensual', 'Bitácora diaria', 'Justificación', 'Reporte mensual consolidado',
+    'Reporte mensual por Dirección', 'Reporte anual por Dirección', 'Reporte de operatividad por Dirección',
+    'Reporte de controles pendientes por Dirección', 'Reporte de inventario operativo por Dirección',
+    'Reporte de bitácoras diarias por Dirección'];
+
+  /** Los seis reportes formales por Dirección/Unidad. */
+  protected readonly tiposReporte = ['Reporte mensual por Dirección', 'Reporte anual por Dirección',
+    'Reporte de operatividad por Dirección', 'Reporte de controles pendientes por Dirección',
+    'Reporte de inventario operativo por Dirección', 'Reporte de bitácoras diarias por Dirección',
+    'Reporte de F0387 consolidado mensual por Dirección'];
+
+  protected readonly unidadesRep = computed(() => this.data.direccionDe(this.repDireccion())?.unidades ?? []);
 
   protected readonly visibles = computed(() => {
     const u = this.auth.usuario();
@@ -145,9 +183,19 @@ export class DocumentosComponent {
   protected cuentaTipo(tipo: string): number { return this.visibles().filter((d) => d.tipo === tipo).length; }
 
   protected generarReporte(): void {
-    const doc = this.data.generarReporteMensual(2026, this.repMes(), this.repDireccion(), this.auth.usuario()!);
+    // Sin Dirección elegida se genera el consolidado; con Dirección/Unidad, el reporte formal por Dirección.
+    if (!this.repDireccion()) {
+      const doc = this.data.generarReporteMensual(2026, this.repMes(), '', this.auth.usuario()!);
+      this.verDoc.set(doc);
+      this.toast.ok('Reporte generado', `Reporte mensual consolidado de ${nombreMes(this.repMes())} 2026.`);
+      return;
+    }
+    const unidad = this.repUnidad() || this.unidadesRep()[0] || '';
+    const doc = this.data.generarReporteDireccion(this.repTipo(), {
+      anio: 2026, mes: this.repMes(), direccion: this.repDireccion(), unidad
+    }, this.auth.usuario()!);
     this.verDoc.set(doc);
-    this.toast.ok('Reporte generado', `Reporte mensual consolidado de ${nombreMes(this.repMes())} 2026.`);
+    this.toast.ok('Reporte generado', `${this.repTipo()} · ${this.data.dirUnidad(this.repDireccion(), unidad)}.`);
   }
 
   protected nombreMes(m: number): string { return nombreMes(m); }

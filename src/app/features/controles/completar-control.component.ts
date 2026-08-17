@@ -67,6 +67,14 @@ interface SeccionEdit {
       font-family: inherit; font-size: 11.5px; padding: 5px 10px; border-radius: 20px; cursor: pointer;
     }
     .chip-check.on { background: var(--navy-800); border-color: var(--navy-800); color: #fff; font-weight: 600; }
+    /* Avance semanal del control consolidado (F0387) */
+    .semanal { border-left: 3px solid var(--gold-500); }
+    .semanas { display: flex; flex-wrap: wrap; gap: 8px; }
+    .sem {
+      display: inline-flex; flex-direction: column; gap: 4px; align-items: flex-start;
+      border: 1px solid var(--line); border-radius: 9px; padding: 7px 10px; font-size: 11.5px;
+    }
+    .sem.on { border-color: var(--navy-400, #7ba3d8); background: var(--surface-2, #f8fafc); }
   `,
   template: `
     @if (control(); as c) {
@@ -183,6 +191,31 @@ interface SeccionEdit {
             </div>
           </div>
         } @else {
+          <!-- Semanal consolidado (F0387): avance por semana y un solo documento del mes. -->
+          @if (data.esSemanalConsolidado(c.codigo)) {
+            <div class="card semanal" style="margin-bottom: 14px;">
+              <div class="card-body">
+                <div class="row-between" style="gap: 12px; flex-wrap: wrap;">
+                  <div>
+                    <b>Control semanal con entrega mensual consolidada.</b>
+                    <div class="muted" style="font-size: 12.5px; max-width: 620px;">
+                      Se llena semana a semana y se guarda el avance; al cerrar el mes se genera
+                      <b>un solo documento</b> con todas las semanas, no uno por semana.
+                    </div>
+                  </div>
+                  <div class="semanas">
+                    @for (s of semanas(); track s.semana) {
+                      <span class="sem" [class.on]="s.estado !== 'Semana pendiente'">
+                        <b>Semana {{ s.semana }}</b>
+                        <ui-badge [estado]="s.estado" />
+                      </span>
+                    }
+                  </div>
+                </div>
+              </div>
+            </div>
+          }
+
           <!-- Edición: stepper por secciones. -->
           <div class="card">
             <div class="card-body">
@@ -498,6 +531,12 @@ export class CompletarControlComponent {
     'Otro (detallar en la carta)'
   ];
 
+  /** Estado de cada semana en los controles semanales consolidados (F0387). */
+  protected readonly semanas = computed(() => {
+    const c = this.control();
+    return c ? this.data.estadoSemanas(c) : [];
+  });
+
   /** Espejo mutable de la plantilla con las respuestas ya guardadas. */
   protected modelo: SeccionEdit[] = [];
   protected evidencias: EvidenciaControl[] = [];
@@ -553,8 +592,8 @@ export class CompletarControlComponent {
   protected readonly editable = computed(() => {
     const c = this.control();
     const u = this.auth.usuario();
-    if (!c || !u || u.clave === 'jefatura') return false;
-    if (!['Programado', 'Pendiente', 'En proceso'].includes(c.estado)) return false;
+    if (!c || !u || u.clave === 'coordinador') return false;
+    if (!['Programado', 'Pendiente', 'En proceso', 'Listo para entregar'].includes(c.estado)) return false;
     // Un técnico no completa controles de una Dirección/Unidad que no tiene asignada.
     return this.data.atiende(u, c.direccion, c.unidad);
   });
@@ -629,7 +668,9 @@ export class CompletarControlComponent {
   private respuestas(): RespuestaSeccion[] {
     return this.modelo.map((s) => ({
       titulo: s.plantilla.titulo,
-      campos: (s.plantilla.campos ?? []).map((c) => ({ id: c.id, valor: s.campos[c.id] ?? '' })),
+      // ngModel sobre <input type="number"> entrega un number: se normaliza a texto para que
+      // las validaciones y los documentos trabajen siempre con cadenas.
+      campos: (s.plantilla.campos ?? []).map((c) => ({ id: c.id, valor: String(s.campos[c.id] ?? '') })),
       items: (s.plantilla.items ?? []).map((i) => ({
         id: i.id, estado: s.items[i.id]?.estado ?? '',
         medicion: s.items[i.id]?.medicion || undefined, nota: s.items[i.id]?.nota || undefined
@@ -680,7 +721,7 @@ export class CompletarControlComponent {
   protected guardar(silencioso = false): void {
     const c = this.control();
     if (!c || !this.editable()) return;
-    this.data.guardarAvance(c.id, this.respuestas(), this.evidencias, c.observaciones);
+    this.data.guardarAvance(c.id, this.respuestas(), this.evidencias, c.observaciones, this.auth.usuario());
     if (!silencioso) this.toast.ok('Avance guardado', 'El formulario quedó guardado; puede continuar más tarde.');
   }
 
@@ -778,7 +819,7 @@ export class CompletarControlComponent {
   }
 
   protected camposLlenos(s: SeccionEdit): number {
-    return (s.plantilla.campos ?? []).filter((c) => (s.campos[c.id] ?? '').trim()).length;
+    return (s.plantilla.campos ?? []).filter((c) => String(s.campos[c.id] ?? '').trim()).length;
   }
   protected itemsMarcados(s: SeccionEdit): number {
     return (s.plantilla.items ?? []).filter((i) => s.items[i.id]?.estado).length;

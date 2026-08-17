@@ -3,7 +3,8 @@
  *
  * El dominio sale del análisis de la carpeta `controles/` real de la oficina departamental:
  * controles normados (F0234, F0389, F0382, F0384, F0386, F0387, F0422, mantenimientos F017x/F0288,
- * GLPI, vulnerabilidades), su frecuencia observada (semanal en F0389 y F0387, mensual en el resto,
+ * GLPI, vulnerabilidades), su frecuencia observada (semanal en F0389; semanal con entrega mensual
+ * consolidada en F0387; mensual en el resto,
  * eventual cuando dependen de actividad) y la carta de justificación de `Formatos_nuevos_2025_.docx`
  * con sus tres firmas.
  *
@@ -28,11 +29,14 @@ export interface Direccion {
 }
 
 /**
- * Roles del ecosistema SISGOST. Hardware no opera controles mensuales, pero sus usuarios existen
- * en el directorio compartido: por eso sus claves están en el tipo y el acceso se decide con
- * `moduloControles`.
+ * Roles de SISGOST — Controles Mensuales. **Hardware no participa en este módulo**: sus usuarios
+ * operan solo en Gestión de Equipos y no figuran en este directorio.
+ *
+ * · `enc-soporte` — Encargado de Soporte: es el **jefe** del área; ve todo y da seguimiento.
+ * · `coordinador` — Coordinador: consulta y seguimiento (panel, operatividad, reportes, historial,
+ *   documentos y trazabilidad); no completa controles ni administra.
  */
-export type ClaveRol = 'admin' | 'enc-soporte' | 'tec-soporte' | 'jefatura' | 'enc-hardware' | 'tec-hardware';
+export type ClaveRol = 'admin' | 'enc-soporte' | 'tec-soporte' | 'coordinador';
 
 export interface UsuarioSistema {
   usuario: string;
@@ -85,7 +89,9 @@ export interface Feriado {
 
 // ---------------------------------------------------------------------------- Catálogo de controles
 
-export type Frecuencia = 'Mensual' | 'Semanal' | 'Diaria' | 'Eventual' | 'Programado';
+export type Frecuencia = 'Mensual' | 'Semanal' | 'Diaria' | 'Eventual' | 'Programado'
+  /** Se trabaja semana a semana pero se entrega en un único documento mensual (F0387). */
+  | 'Semanal con entrega mensual consolidada';
 
 /** Campo de una sección de formulario digital. */
 export interface CampoPlantilla {
@@ -133,6 +139,8 @@ export interface EquiposPlantilla {
 export interface SeccionPlantilla {
   titulo: string;
   descripcion?: string;
+  /** Número de semana en los controles semanales con entrega mensual consolidada (F0387). */
+  semana?: number;
   campos?: CampoPlantilla[];
   items?: ItemPlantilla[];
   tabla?: TablaPlantilla;
@@ -194,7 +202,7 @@ export interface ControlCatalogo {
 // ---------------------------------------------------------------------------- Controles del período
 
 export type EstadoControl =
-  | 'Programado' | 'Pendiente' | 'En proceso' | 'En revisión' | 'Entregado'
+  | 'Programado' | 'Pendiente' | 'En proceso' | 'Listo para entregar' | 'En revisión' | 'Entregado'
   | 'Entregado tarde' | 'Vencido' | 'Justificado' | 'Observado' | 'Cerrado' | 'No aplica';
 
 export interface RespuestaCampo { id: string; valor: string; }
@@ -378,7 +386,11 @@ export interface EventoIntegracion {
 
 export interface DocumentoGenerado {
   id: string;
-  tipo: 'Control mensual' | 'Bitácora diaria' | 'Justificación' | 'Reporte mensual consolidado' | 'Reporte por Dirección';
+  tipo: 'Control mensual' | 'Bitácora diaria' | 'Justificación' | 'Reporte mensual consolidado'
+  | 'Reporte mensual por Dirección' | 'Reporte anual por Dirección'
+  | 'Reporte de controles pendientes por Dirección' | 'Reporte de operatividad por Dirección'
+  | 'Reporte de inventario operativo por Dirección' | 'Reporte de bitácoras diarias por Dirección'
+  | 'Reporte de F0387 consolidado mensual por Dirección';
   nombre: string;
   codigo: string;
   fecha: string;

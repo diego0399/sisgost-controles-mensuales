@@ -5,7 +5,8 @@ const STORAGE_KEY = 'sisgost.controles.sesion';
 
 /**
  * Sesión simulada de SISGOST — Controles Mensuales. Inician sesión los roles operativos:
- * Administrador, Encargado de Soporte, Técnico de Soporte y Jefatura (solo consulta).
+ * Administrador, Encargado de Soporte (jefe del área), Técnico de Soporte y Coordinador
+ * (consulta y seguimiento).
  * Dirección/Unidad NO es un rol: es dato organizacional de los controles.
  */
 @Injectable({ providedIn: 'root' })
@@ -15,8 +16,10 @@ export class AuthService {
   readonly esAdmin = computed(() => this.usuario()?.clave === 'admin');
   readonly esEncargado = computed(() => this.usuario()?.clave === 'enc-soporte');
   readonly esTecnico = computed(() => this.usuario()?.clave === 'tec-soporte');
-  /** Jefatura consulta indicadores y reportes; nunca completa ni entrega. */
-  readonly esConsulta = computed(() => this.usuario()?.clave === 'jefatura');
+  /** El Coordinador consulta indicadores y reportes; nunca completa ni entrega. */
+  readonly esConsulta = computed(() => this.usuario()?.clave === 'coordinador');
+  /** El Encargado de Soporte es el jefe del área. */
+  readonly esJefe = computed(() => this.usuario()?.clave === 'enc-soporte');
   /** Puede completar/entregar controles y bitácoras (técnico) o revisar (encargado). */
   readonly puedeOperar = computed(() => this.esTecnico() || this.esEncargado() || this.esAdmin());
 

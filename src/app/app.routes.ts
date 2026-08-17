@@ -14,6 +14,8 @@ export const routes: Routes = [
       { path: 'calendario', canActivate: [roleGuard], loadComponent: () => import('./features/calendario/calendario.component').then((m) => m.CalendarioComponent) },
       { path: 'historial', canActivate: [roleGuard], loadComponent: () => import('./features/historial/historial.component').then((m) => m.HistorialComponent) },
       { path: 'controles', canActivate: [roleGuard], loadComponent: () => import('./features/controles/controles.component').then((m) => m.ControlesComponent) },
+      // La ruta del detalle por Dirección va ANTES que `controles/:id`: si no, `:id` la capturaría.
+      { path: 'controles/direccion/:direccion/:unidad', canActivate: [roleGuard], loadComponent: () => import('./features/controles/direccion-detalle.component').then((m) => m.DireccionDetalleComponent) },
       { path: 'controles/:id', canActivate: [roleGuard], loadComponent: () => import('./features/controles/completar-control.component').then((m) => m.CompletarControlComponent) },
       { path: 'bitacora', canActivate: [roleGuard], loadComponent: () => import('./features/bitacora/bitacora.component').then((m) => m.BitacoraComponent) },
       { path: 'bitacora/:id', canActivate: [roleGuard], loadComponent: () => import('./features/bitacora/completar-bitacora.component').then((m) => m.CompletarBitacoraComponent) },

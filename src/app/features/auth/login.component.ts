@@ -142,7 +142,7 @@ import { HelpTipComponent } from '../../shared/ui';
             <div class="field">
               <label for="usuario">
                 Usuario del sistema
-                <ui-help texto="Inician sesión los roles operativos: Administrador, Encargado de Soporte, Técnico de Soporte y Jefatura (solo consulta). Dirección/Unidad no es un rol del sistema: es el dato organizacional al que pertenecen los controles." />
+                <ui-help texto="Inician sesión los roles del módulo: Administrador, Encargado de Soporte —jefe del área—, Técnico de Soporte y Coordinador (consulta y seguimiento). Dirección/Unidad no es un rol del sistema: es el dato organizacional al que pertenecen los controles." />
               </label>
               <select id="usuario" class="control" [(ngModel)]="usuarioSel">
                 <option value="" disabled>Seleccione su usuario…</option>

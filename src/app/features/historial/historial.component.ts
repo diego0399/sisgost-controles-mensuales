@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 import { DataService } from '../../core/services/data.service';
+import { OperatividadService } from '../../core/services/operatividad.service';
 import { ToastService } from '../../core/services/toast.service';
 import { BadgeComponent } from '../../shared/ui';
 import { DocumentoComponent } from '../../shared/documento';
@@ -11,7 +12,7 @@ import { MESES, formateaFecha, nombreMes } from '../../core/models/models';
 /**
  * Historial anual: los doce meses del año con su resumen visual y el detalle filtrable
  * por Dirección, técnico, tipo de control y estado. Desde aquí se genera el reporte
- * mensual consolidado para jefaturas.
+ * mensual consolidado para la jefatura del área.
  */
 @Component({
   selector: 'app-historial',
@@ -32,6 +33,8 @@ import { MESES, formateaFecha, nombreMes } from '../../core/models/models';
     .mes-bar span { display: block; height: 100%; }
     .mes-det { font-size: 11px; color: var(--tx-2); display: flex; flex-wrap: wrap; gap: 4px 10px; }
     .pip { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 3px; }
+    .col-num { text-align: center; }
+    .fila-sel { background: var(--blue-50, #eef4fc); }
     @media (max-width: 1100px) { .meses { grid-template-columns: repeat(3, 1fr); } }
     @media (max-width: 760px) { .meses { grid-template-columns: repeat(2, 1fr); } }
   `,
@@ -76,6 +79,65 @@ import { MESES, formateaFecha, nombreMes } from '../../core/models/models';
         }
       </div>
 
+      <!-- Historial por Dirección/Unidad: operatividad mes a mes -->
+      @if (fDireccion() && parSeleccionado()) {
+        <div class="card" style="margin-top: 20px;">
+          <div class="card-head">
+            <div>
+              <h3>{{ data.dirUnidad(fDireccion(), unidadSel()) }} — Año {{ anio() }}</h3>
+              <p class="sub">
+                Operatividad mes a mes: controles entregados y justificados sobre los aplicables,
+                más el cumplimiento de la bitácora diaria donde la hay
+              </p>
+            </div>
+            <button class="btn btn-outline btn-sm" type="button" (click)="reporteAnual()">
+              Reporte anual por Dirección
+            </button>
+          </div>
+          <div class="card-body">
+            <div class="table-wrap">
+              <table class="tbl">
+                <thead><tr>
+                  <th>Mes</th><th class="col-num">Aplicables</th><th class="col-num">Entregados</th>
+                  <th class="col-num">Pendientes</th><th class="col-num">Vencidos</th><th class="col-num">Justificados</th>
+                  <th class="col-num">Bitácoras</th><th style="min-width: 140px;">Operatividad</th><th>Estado</th><th></th>
+                </tr></thead>
+                <tbody>
+                  @for (k of anual(); track $index; let i = $index) {
+                    <tr [class.fila-sel]="mesSel() === i + 1">
+                      <td><b>{{ nombreMesCorto(i + 1) }}</b></td>
+                      <td class="col-num">{{ k.aplicables }}</td>
+                      <td class="col-num">{{ k.entregados + k.entregadosTarde }}</td>
+                      <td class="col-num">{{ k.pendientes }}</td>
+                      <td class="col-num">{{ k.vencidos }}</td>
+                      <td class="col-num">{{ k.justificados }}</td>
+                      <td class="col-num">{{ k.bitacorasEnviadas + k.bitacorasTarde }} / {{ k.bitacoras }}</td>
+                      <td>
+                        @if (k.aplicables) {
+                          <div class="row" style="gap: 8px; flex-wrap: nowrap;">
+                            <b class="mono">{{ k.operatividad }} %</b>
+                            <div class="progress" style="flex: 1;" [class.ok]="k.operatividad >= 90">
+                              <span [style.width.%]="k.operatividad"></span>
+                            </div>
+                          </div>
+                        } @else { <span class="muted">—</span> }
+                      </td>
+                      <td><ui-badge [estado]="k.estado" /></td>
+                      <td><button class="btn btn-ghost btn-sm" type="button" (click)="mesSel.set(i + 1)">Ver mes</button></td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+            <div class="row" style="margin-top: 12px;">
+              <a class="btn btn-outline btn-sm" [routerLink]="['/controles/direccion', fDireccion(), unidadSel()]">
+                Ver detalle de operatividad de la Dirección/Unidad
+              </a>
+            </div>
+          </div>
+        </div>
+      }
+
       <div class="card" style="margin-top: 20px;">
         <div class="card-head">
           <div>
@@ -83,9 +145,13 @@ import { MESES, formateaFecha, nombreMes } from '../../core/models/models';
             <p class="sub">{{ filtrados().length }} de {{ delMes().length }} controles del mes</p>
           </div>
           <div class="row" style="flex-wrap: wrap;">
-            <select class="control" style="width: 190px;" [(ngModel)]="fDireccion">
+            <select class="control" style="width: 190px;" [(ngModel)]="fDireccion" (ngModelChange)="fUnidad.set('')">
               <option value="">Todas las direcciones</option>
               @for (d of data.direcciones(); track d.id) { <option [value]="d.id">{{ d.corta }} — {{ d.nombre }}</option> }
+            </select>
+            <select class="control" style="width: 175px;" [(ngModel)]="fUnidad" [disabled]="!fDireccion()">
+              <option value="">Todas las unidades</option>
+              @for (u of unidadesDe(); track u) { <option [value]="u">{{ u }}</option> }
             </select>
             <select class="control" style="width: 180px;" [(ngModel)]="fTecnico">
               <option value="">Todos los técnicos</option>
@@ -158,11 +224,13 @@ export class HistorialComponent {
   protected readonly data = inject(DataService);
   protected readonly auth = inject(AuthService);
   private readonly toast = inject(ToastService);
+  private readonly oper = inject(OperatividadService);
 
   protected readonly anios = [2026];
   protected readonly anio = signal(2026);
   protected readonly mesSel = signal(new Date().getMonth() + 1);
   protected readonly fDireccion = signal('');
+  protected readonly fUnidad = signal('');
   protected readonly fTecnico = signal('');
   protected readonly fCodigo = signal('');
   protected readonly fEstado = signal('');
@@ -184,7 +252,7 @@ export class HistorialComponent {
       tarde: del.filter((c) => c.estado === 'Entregado tarde').length,
       justificados: del.filter((c) => c.estado === 'Justificado').length,
       vencidos: del.filter((c) => c.estado === 'Vencido').length,
-      abiertos: del.filter((c) => ['Programado', 'Pendiente', 'En proceso'].includes(c.estado)).length
+      abiertos: del.filter((c) => ['Programado', 'Pendiente', 'En proceso', 'Listo para entregar'].includes(c.estado)).length
     };
   }));
 
@@ -197,6 +265,31 @@ export class HistorialComponent {
     [...new Set(this.visibles().map((c) => c.responsable))].sort());
 
   protected readonly delMes = computed(() => this.visibles().filter((c) => c.mes === this.mesSel()));
+
+  // ------------------------------------------------------------------ historial por Dirección/Unidad
+
+  /** Unidad del historial por Dirección: la elegida o la primera de la Dirección. */
+  protected readonly unidadSel = computed(() => {
+    if (this.fUnidad()) return this.fUnidad();
+    return this.data.direccionDe(this.fDireccion())?.unidades[0] ?? '';
+  });
+
+  protected readonly parSeleccionado = computed(() => !!this.fDireccion() && !!this.unidadSel());
+
+  /** Operatividad de los doce meses del año para la Dirección/Unidad seleccionada. */
+  protected readonly anual = computed(() =>
+    this.parSeleccionado() ? this.oper.anual(this.fDireccion(), this.unidadSel(), this.anio()) : []);
+
+  protected readonly unidadesDe = computed(() => this.data.direccionDe(this.fDireccion())?.unidades ?? []);
+
+  protected reporteAnual(): void {
+    const doc = this.data.generarReporteDireccion('Reporte anual por Dirección', {
+      anio: this.anio(), mes: this.mesSel(), direccion: this.fDireccion(), unidad: this.unidadSel()
+    }, this.auth.usuario()!);
+    this.verDoc.set(doc);
+    this.toast.ok('Reporte anual generado',
+      `${this.data.dirUnidad(this.fDireccion(), this.unidadSel())} · ${this.anio()}.`);
+  }
 
   /**
    * Controles activos que NO aplican a la Dirección filtrada. Se muestran como «No aplica»
@@ -220,6 +313,7 @@ export class HistorialComponent {
 
   protected readonly filtrados = computed(() => this.delMes()
     .filter((c) => !this.fDireccion() || c.direccion === this.fDireccion())
+    .filter((c) => !this.fUnidad() || c.unidad === this.fUnidad())
     .filter((c) => !this.fTecnico() || c.responsable === this.fTecnico())
     .filter((c) => !this.fCodigo() || c.codigo === this.fCodigo())
     .filter((c) => !this.fEstado() || c.estado === this.fEstado())

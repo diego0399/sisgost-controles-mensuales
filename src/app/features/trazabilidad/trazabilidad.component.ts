@@ -144,7 +144,7 @@ export class TrazabilidadComponent {
   protected readonly acciones = computed(() => [...new Set(this.visibles().map((e) => e.accion))].sort());
 
   protected esHito(accion: string): boolean {
-    return /(justificado|vencid|aceptado en gestión|agregado al inventario|descargado desde|retirado del inventario|distribución|sin soporte|técnico de configuración)/i.test(accion);
+    return /(justificado|vencid|aceptado en gestión|incorporado automáticamente|retirado automáticamente|histórico operativo|distribución|sin soporte|técnico de configuración|reporte de dirección|aplicación del control)/i.test(accion);
   }
 
   protected formatea(iso: string): string { return formateaFecha(iso); }

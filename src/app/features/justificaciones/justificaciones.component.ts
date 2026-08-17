@@ -22,7 +22,7 @@ import { formateaFecha, nombreMes } from '../../core/models/models';
           <div class="page-kicker">Operación</div>
           <h1>
             Justificaciones
-            <ui-help texto="Si un control mensual no tuvo actividad, no debe quedar simplemente vacío: se cierra con una carta de justificación basada en el formato institucional (Formatos_nuevos_2025_.docx), firmada por el técnico, el Coordinador de Soporte Técnico y la jefatura correspondiente." />
+            <ui-help texto="Si un control mensual no tuvo actividad, no debe quedar simplemente vacío: se cierra con una carta de justificación basada en el formato institucional (Formatos_nuevos_2025_.docx), firmada por el técnico, el Coordinador de Soporte Técnico y el Encargado de Soporte." />
           </h1>
           <p class="page-sub">Cartas de justificación emitidas por período y Dirección/Unidad.</p>
         </div>

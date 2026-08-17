@@ -32,6 +32,7 @@ src/app/
 │       ├── control-deadline.service.ts # 3.er día hábil del mes siguiente; límites semanales
 │       ├── equipment-integration.service.ts # eventos simulados de Gestión de Equipos
 │       ├── support-distribution.service.ts   # COMPARTIDO: distribución de soportes (existe igual en el otro módulo)
+│       ├── operatividad.service.ts     # KPIs y semáforo por Dirección/Unidad
 │       ├── data.service.ts           # almacén único + todas las reglas de negocio
 │       ├── auth.service.ts           # sesión simulada (sessionStorage)
 │       └── toast.service.ts
@@ -73,6 +74,8 @@ Validaciones (regla 30 del requerimiento):
 
 | Regla | Método |
 |---|---|
+| Un control faltante nunca se oculta | el detalle de la Dirección lista todos los aplicables del mes con su acción |
+| Campos numéricos del formulario | `respuestas()` normaliza a texto: `ngModel` sobre `type="number"` devuelve `number` |
 | No entregar control obligatorio vacío | `validarEntrega`: obligatorios, checklist completo, mínimos de tabla, evidencia |
 | Mes sin actividad → carta, no vacío | `justificarControl` exige motivo y texto; el mínimo de tabla lo sugiere |
 | No cerrar bitácora sin revisar atención al público | `validarBitacora`: 9 elementos marcados; fallas con descripción, acción y estado final |
@@ -99,7 +102,7 @@ programa; si el control trabaja con equipos (`requiereEquipos`), además exige i
 activo en el par. De ahí salen:
 
 - el **calendario y la semilla**: un control solo se programa donde aplica —el generador de la
-  semilla usa el mismo algoritmo, así que los 432 controles del set cumplen la configuración—;
+  semilla usa el mismo algoritmo, así que los 384 controles del set cumplen la configuración—;
 - el **listado de controles**: filtra por control activo y por aplicación;
 - el **historial anual**: los controles que no aplican se muestran como **No aplica**, informativo,
   nunca como pendientes ni vencidos (`controlesNoAplicablesDe`);
@@ -111,6 +114,58 @@ La edición vive en Administración → Catálogo de controles → **Editar apli
 (`actualizarAplicacion`), con vista previa de en qué Direcciones/Unidades quedaría, validación de
 aplicación vacía y traza del cambio. El catálogo se persiste en el *snapshot* porque su
 configuración es editable.
+
+## 4.2 Operatividad por Dirección/Unidad
+
+`OperatividadService` calcula los indicadores que alimentan la vista ejecutiva de Controles
+mensuales, el detalle de cada Dirección, el panel, el historial anual y los reportes. `kpi(dir,
+unidad, año, mes)` devuelve un `KpiDireccion` con controles (aplicables, entregados, tardíos,
+pendientes, vencidos, justificados, próximos a vencer), bitácoras, inventario (activos, con
+incidencia, descargados del mes), documentos, cumplimiento, operatividad y estado.
+
+```text
+controles     = (entregados + entregados tarde + justificados) / aplicables
+bitácoras     = (enviadas + enviadas tarde) / bitácoras del período
+operatividad  = controles                          (sin bitácora)
+              = controles · 0.7 + bitácoras · 0.3   (con bitácora)
+cumplimiento  = (entregados a tiempo + justificados) / aplicables
+```
+
+Semáforo: 90–100 % Operativa · 75–89 % En observación · < 75 % Crítica, más
+`Sin soporte asignado`, `Sin controles aplicables` y `En curso`. Este último evita semaforizar
+un período cuyo plazo aún corre: `ControlDeadlineService.periodoCerrado()` decide, y
+`ultimoPeriodoCerrado()` es el período con el que abren las vistas ejecutivas.
+
+Otros métodos: `kpis(filtro)` (todas las Direcciones/Unidades visibles, con filtros de Dirección,
+Unidad, técnico y nivel), `anual(dir, unidad, año)` para el historial, `resumen(filtro)` para el
+panel, `cargaSoportes(filtro)` y `equiposConIncidencia(...)`. El componente presentacional
+`ui-kpi-direcciones` (shared) dibuja los mismos KPIs en tarjetas o en tabla comparativa.
+
+Los **reportes por Dirección** (`DataService.generarReporteDireccion`) son seis: mensual, anual,
+de operatividad, de controles pendientes, de inventario operativo y de bitácoras diarias.
+`DocumentoComponent.seccionesReporteDireccion` arma su hoja con datos generales, resumen de
+indicadores, el detalle propio de cada tipo y la conclusión del estado operativo.
+
+## 4.3 Controles semanales con entrega mensual consolidada (F0387)
+
+La frecuencia `Semanal con entrega mensual consolidada` marca los controles que se trabajan por
+semana pero producen **un solo documento del mes**. Su plantilla lleva secciones con `semana: n`
+(1–5) más el cierre del mes; cada semana pide estado, fecha, equipos revisados, resultado,
+responsable y observaciones.
+
+| Método (`DataService`) | Qué hace |
+|---|---|
+| `esSemanalConsolidado(codigo)` | Distingue este tipo de control |
+| `estadoSemanas(control)` | Estado interno de cada semana (pendiente / completada / observada / no aplica) |
+| `estadoTrasAvance(...)` | Pendiente → En proceso → **Listo para entregar** cuando todas las semanas están declaradas |
+| `validarEntrega` | Una semana «no aplica» solo exige su estado; el resto de sus campos no |
+| `entregarControl` | Genera **un** documento del mes y registra «F0387 consolidado mensual generado» |
+
+Cada semana que se cierra deja su propia traza («F0387 semana completada»). El formulario muestra
+una banda con el avance semanal y el reporte **F0387 consolidado mensual por Dirección** imprime
+las cinco semanas en una sola hoja.
+
+Nota: el **F0389** sigue siendo semanal puro (una hoja por semana), porque así es su formato real.
 
 ## 5. Formularios digitales dirigidos por datos
 
@@ -213,7 +268,7 @@ Si el otro módulo no está levantado, el enlace simplemente no abre: son dos de
 
 Generada por script (no a mano) para que cada `fechaLimite` salga del mismo algoritmo de
 días hábiles que usa la aplicación, y sobre la organización compartida con Gestión de Equipos:
-**416 controles** de enero a agosto de 2026 (mensuales, semanales F0389/F0387, eventuales y
+**384 controles** de enero a agosto de 2026 (mensuales, semanales F0389, el F0387 consolidado, eventuales y
 programados) con estados realistas —entregados, tardíos, vencidos, justificados, observado y
 abiertos—, **48 bitácoras** de los últimos 12 días hábiles, 3 cartas de justificación con el
 texto real de `Formatos_nuevos_2025_.docx`, ~417 documentos y ~560 eventos de trazabilidad.

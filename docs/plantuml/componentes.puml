@@ -7,6 +7,7 @@ package "features (pantallas lazy)" {
   [Calendario]
   [Historial anual]
   [Controles / Completar control]
+  [Detalle por Dirección]
   [Bitácora / Completar bitácora]
   [Justificaciones]
   [Inventario operativo]
@@ -18,6 +19,7 @@ package "features (pantallas lazy)" {
 package "shared" {
   [ui-documento] as DOC
   [ui-visor-documento] as VISOR
+  [ui-kpi-direcciones] as KPIS
   [ui-icon / ui-badge / ui-modal / ui-help] as UI
 }
 
@@ -29,6 +31,7 @@ package "core/services" {
   [EquipmentIntegrationService] as INT
   [SupportDistributionService
 <<compartido con Gestión de Equipos>>] as SDS
+  [OperatividadService] as OPS
   [AuthService] as AUTH
   [ToastService] as TOAST
 }
@@ -38,6 +41,17 @@ database "assets/data/*.json\n+ localStorage" as STORE
 [Controles / Completar control] --> DATA
 [Bitácora / Completar bitácora] --> DATA
 [Panel ejecutivo] --> DATA
+[Panel ejecutivo] --> OPS
+[Panel ejecutivo] --> KPIS
+[Controles / Completar control] --> OPS
+[Controles / Completar control] --> KPIS
+[Detalle por Dirección] --> OPS
+[Detalle por Dirección] --> DOC
+[Historial anual] --> OPS
+[Inventario operativo] --> OPS
+OPS --> DATA
+OPS --> CDS
+DOC --> OPS
 [Panel ejecutivo] --> CDS
 [Calendario] --> HOL
 [Calendario] --> CDS

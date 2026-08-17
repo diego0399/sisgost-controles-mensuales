@@ -75,14 +75,17 @@ import { URL_GESTION_EQUIPOS } from '../../core/config/modulos';
         <div class="card">
           <div class="card-head">
             <div>
-              <h3>Usuarios del ecosistema SISGOST</h3>
-              <p class="sub">{{ conAcceso().length }} con acceso a Controles Mensuales · {{ sinAcceso().length }} operan solo en Gestión de Equipos</p>
+              <h3>Usuarios de Controles Mensuales</h3>
+              <p class="sub">
+                {{ conAcceso().length }} usuarios · los mismos de SISGOST — Gestión de Equipos.
+                El personal de <b>Hardware</b> no participa en este módulo: opera solo en Gestión de Equipos.
+              </p>
             </div>
           </div>
           <div class="card-body">
             <div class="table-wrap">
               <table class="tbl">
-                <thead><tr><th>Usuario</th><th>Nombre</th><th>Rol</th><th>Unidad</th><th>Acceso a este módulo</th></tr></thead>
+                <thead><tr><th>Usuario</th><th>Nombre</th><th>Rol</th><th>Unidad</th><th>Alcance</th></tr></thead>
                 <tbody>
                   @for (u of data.usuarios(); track u.usuario) {
                     <tr [class.chip-off]="!u.moduloControles">
@@ -90,10 +93,7 @@ import { URL_GESTION_EQUIPOS } from '../../core/config/modulos';
                       <td><b>{{ u.nombre }}</b><div class="muted" style="font-size: 11.5px;">{{ u.cargo }}</div></td>
                       <td><ui-badge [estado]="u.rol" /></td>
                       <td>{{ u.unidad }}</td>
-                      <td>
-                        @if (u.moduloControles) { <span class="badge ok">Controles Mensuales</span> }
-                        @else { <span class="badge">Solo Gestión de Equipos</span> }
-                      </td>
+                      <td style="max-width: 280px; font-size: 12.5px;">{{ alcance(u) }}</td>
                     </tr>
                   }
                 </tbody>
@@ -172,7 +172,26 @@ export class AdminComponent {
   protected readonly modalReset = signal(false);
 
   protected readonly conAcceso = computed(() => this.data.usuarios().filter((u) => u.moduloControles));
-  protected readonly sinAcceso = computed(() => this.data.usuarios().filter((u) => !u.moduloControles));
+
+  /** Qué puede hacer cada rol en este módulo (resumen para la tabla de usuarios). */
+  protected alcance(u: { clave: string; usuario: string }): string {
+    switch (u.clave) {
+      case 'admin':
+        return u.usuario === 'demo.admin'
+          ? 'Configuración completa y restablecimiento de los datos de demostración.'
+          : 'Usuarios, catálogo de controles, aplicación, feriados y datos de demostración.';
+      case 'enc-soporte':
+        return 'Jefe del área: ve todas las Direcciones/Unidades, la operatividad, los pendientes y vencidos, el historial y los reportes.';
+      case 'coordinador':
+        return 'Consulta y seguimiento: panel, operatividad por Dirección, historial, reportes, documentos y trazabilidad.';
+      default: {
+        const pares = this.data.paresDe(u.usuario);
+        return pares.length
+          ? `Opera ${pares.length} Dirección/Unidad asignada(s): ${pares.map((p) => this.data.cortaDireccion(p.direccion) + ' · ' + p.unidad).join('; ')}.`
+          : 'Sin Direcciones/Unidades asignadas en la distribución de soportes.';
+      }
+    }
+  }
 
   /** Una fila por Dirección/Unidad: es la unidad mínima de la distribución y del inventario. */
   protected readonly filas = computed(() => this.data.pares().map((p) => ({

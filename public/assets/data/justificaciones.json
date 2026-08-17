@@ -18,17 +18,17 @@
     "estado": "Registrada"
    },
    {
-    "nombre": "Carlos González",
+    "nombre": "Carlos Durán",
     "cargo": "Coordinador de Soporte Técnico",
     "estado": "Registrada"
    },
    {
-    "nombre": "Yancy Claribel Moreno",
+    "nombre": "Carlos González",
     "cargo": "Jefe del Departamento de Soporte Técnico",
     "estado": "Registrada"
    }
   ],
-  "documento": "DOC-2026-0185"
+  "documento": "DOC-2026-0169"
  },
  {
   "id": "JUS-2026-0002",
@@ -49,17 +49,17 @@
     "estado": "Registrada"
    },
    {
-    "nombre": "Carlos González",
+    "nombre": "Carlos Durán",
     "cargo": "Coordinador de Soporte Técnico",
     "estado": "Registrada"
    },
    {
-    "nombre": "Yancy Claribel Moreno",
+    "nombre": "Carlos González",
     "cargo": "Jefe del Departamento de Soporte Técnico",
     "estado": "Registrada"
    }
   ],
-  "documento": "DOC-2026-0295"
+  "documento": "DOC-2026-0267"
  },
  {
   "id": "JUS-2026-0003",
@@ -80,16 +80,16 @@
     "estado": "Registrada"
    },
    {
-    "nombre": "Carlos González",
+    "nombre": "Carlos Durán",
     "cargo": "Coordinador de Soporte Técnico",
     "estado": "Registrada"
    },
    {
-    "nombre": "Jorge Luis Loucel",
-    "cargo": "Jefe del Departamento de Operaciones Informáticas",
+    "nombre": "Carlos González",
+    "cargo": "Jefe del Departamento de Soporte Técnico",
     "estado": "Pendiente"
    }
   ],
-  "documento": "DOC-2026-0384"
+  "documento": "DOC-2026-0338"
  }
 ]
