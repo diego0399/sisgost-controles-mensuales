@@ -156,6 +156,39 @@ export interface TelefonosPlantilla {
   ayuda?: string;
 }
 
+/**
+ * Ítem del checklist de seguridad TIC que se verifica **equipo por equipo** (F0382). El formato
+ * físico agrupa sus nueve ítems según a qué equipos aplican: los de usuario interno, los de
+ * consulta al público y los que se revisan en ambos.
+ */
+export interface ItemSeguridad {
+  id: string;
+  nombre: string;
+  /** Grupo del formato: «Usuarios internos», «Usuarios externos» o «Ambos equipos». */
+  grupo: string;
+}
+
+/**
+ * Sección que verifica una **muestra de equipos** del inventario operativo ítem por ítem. Es la
+ * traducción digital del cuadro del F0382: cinco filas de equipo, nueve columnas de ítem y, por
+ * cada incumplimiento, su observación (Obs), su acción correctiva (AC) y su estado final.
+ *
+ * Los equipos no se teclean: se eligen del inventario operativo de la Dirección/Unidad del
+ * control, que a su vez proviene de las entregas aceptadas en Gestión de Equipos.
+ */
+export interface ChecklistEquiposPlantilla {
+  /** Cuántos equipos exige el formato (F0382: 5). */
+  cantidad: number;
+  items: ItemSeguridad[];
+  /** Respuestas admitidas por ítem; la primera es la conforme. */
+  cumplimiento: string[];
+  /** Estados finales de un incumplimiento (Corregido, Pendiente, Escalado, En seguimiento). */
+  estadosItem: string[];
+  /** Clasificación del equipo dentro del formato (interno, público, ambos). */
+  clasificaciones: string[];
+  ayuda?: string;
+}
+
 /** Sección de un formulario digital; el «stepper» de completar control recorre estas secciones. */
 export interface SeccionPlantilla {
   titulo: string;
@@ -168,6 +201,9 @@ export interface SeccionPlantilla {
   equipos?: EquiposPlantilla;
   equiposIp?: EquiposIpPlantilla;
   telefonos?: TelefonosPlantilla;
+  checklistEquipos?: ChecklistEquiposPlantilla;
+  /** Paso de solo lectura con los datos del control programado (F0382, paso 1). */
+  datosControl?: boolean;
 }
 
 /**
@@ -267,6 +303,35 @@ export interface RespuestaTelefono {
   observaciones: string;
 }
 
+/** Respuesta a un ítem de seguridad dentro de un equipo verificado (F0382). */
+export interface RespuestaItemSeguridad {
+  id: string;
+  /** Cumple · No cumple · No aplica. */
+  cumplimiento: string;
+  /** Descripción del incumplimiento; obligatoria con «No cumple». */
+  descripcion: string;
+  /** Acción correctiva (AC del formato); obligatoria con «No cumple». */
+  accionCorrectiva: string;
+  /** Estado final del incumplimiento; obligatorio con «No cumple». */
+  estadoItem: string;
+  /** Fecha de la acción correctiva, como la pide el formato. */
+  fechaAccion: string;
+  /** Justificación; obligatoria con «No aplica». */
+  justificacion: string;
+}
+
+/**
+ * Equipo de la muestra verificado en el F0382. Solo se guarda el número de inventario: los datos
+ * del equipo se leen del inventario operativo, nunca se copian a mano.
+ */
+export interface RespuestaEquipoChecklist {
+  inventario: string;
+  /** Clasificación del formato: usuario interno, consulta al público o ambos. */
+  clasificacion: string;
+  observaciones: string;
+  items: RespuestaItemSeguridad[];
+}
+
 export interface RespuestaSeccion {
   titulo: string;
   campos?: RespuestaCampo[];
@@ -275,6 +340,7 @@ export interface RespuestaSeccion {
   equipos?: RespuestaEquipo[];
   equiposIp?: RespuestaEquipoIp[];
   telefonos?: RespuestaTelefono[];
+  checklistEquipos?: RespuestaEquipoChecklist[];
 }
 
 export interface EvidenciaControl { nombre: string; descripcion: string; fecha: string; }

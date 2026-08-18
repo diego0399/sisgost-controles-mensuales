@@ -93,6 +93,36 @@ el panel ejecutivo cuenta «controles aplicables del mes» y avisa cuando una Di
 **tiene controles aplicables pero no tiene Técnico de Soporte asignado**; y los controles que
 trabajan con equipos solo se programan donde hay inventario operativo activo.
 
+## Inventario operativo compartido con Gestión de Equipos
+
+Un equipo entra al inventario operativo **solo** cuando el Usuario Final acepta la conformidad en
+Gestión de Equipos, y sale cuando allí se registra su descargo. Las dos cosas ocurren **solas**:
+en Controles Mensuales no hay botón que incorporar ni que aplicar.
+
+El transporte es una clave única de `localStorage`, `sisgost_operational_inventory`, gobernada por
+`SharedInventoryService` —**el mismo archivo en los dos proyectos**, como la distribución de
+soportes—. Gestión de Equipos escribe al aceptar y al descargar; Controles Mensuales lee al cargar,
+al recibir el aviso `storage` de otra pestaña y cuando el Administrador usa la acción de
+demostración «Sincronizar inventario desde Gestión de Equipos».
+
+**Un detalle que hay que conocer:** `localStorage` está aislado **por origen**, y el puerto forma
+parte del origen. Con Gestión de Equipos en el 4200 y Controles Mensuales en el 4300, la clave
+compartida por sí sola no cruza. Por eso Gestión de Equipos publica `puente-inventario.html` en su
+propio origen y Controles Mensuales lo carga en un iframe oculto para pedirle el inventario por
+`postMessage`. Resultado:
+
+| Escenario | Qué pasa |
+|---|---|
+| Los dos módulos en el mismo origen | La clave compartida basta; el puente no hace falta |
+| Puertos distintos y Gestión de Equipos levantado | El puente los conecta y el equipo aparece |
+| Gestión de Equipos apagado | Controles Mensuales sigue con lo que ya había sincronizado |
+
+Reglas antiduplicado: mismo número de inventario, mismo expediente único y misma Dirección/Unidad
+**actualizan** el registro; si nada cambió no se reescribe nada y queda constancia del intento
+evitado; un ciclo nuevo del mismo equipo deja el anterior como **Histórico** sin borrarlo. El
+equipo aparece **únicamente** en la Dirección/Unidad del requerimiento aceptado, y su soporte
+responsable lo decide la distribución de soportes vigente.
+
 ## Período activo: el mes actual
 
 Todas las pantallas que trabajan por período —controles mensuales, vista por Dirección, detalle de
@@ -145,10 +175,39 @@ La bitácora de la última sesión de trabajo (rondas 74 a 77: integración, inv
 automático, operatividad por Dirección, meses pendientes, F0387 con IP y F0389 consolidado) está
 en [docs/bitacora-sesion-2026-08-16-17.md](docs/bitacora-sesion-2026-08-16-17.md).
 
+## F0382: verificación de seguridad sobre una muestra de equipos
+
+El **F0382 — Check list de verificación de políticas y controles de seguridad de TIC** se llena
+como el formato físico: un cuadro de **cinco equipos** y, para cada uno, los **nueve ítems** de
+seguridad del documento original con su resultado, su observación, su acción correctiva y su
+estado final.
+
+Los equipos **no se escriben**: se eligen del **inventario operativo** de la Dirección/Unidad del
+control con un buscador que filtra por número de inventario, nombre del equipo, usuario final, IP,
+tipo, marca, modelo o unidad. Al elegir uno, el formulario autocompleta inventario, usuario,
+nombre del equipo, tipo, marca, modelo, serie, IP, Dirección, Unidad y estado operativo; lo que el
+inventario no tiene se rotula «Dato no registrado en inventario operativo» y no se inventa.
+
+El formulario recorre cinco pasos: **datos generales del control** (solo lectura), **selección de
+equipos desde inventario**, **verificación de ítems por equipo**, **observaciones generales** y
+**resumen y entrega**.
+
+| Ítem marcado como | El formulario exige |
+|---|---|
+| Cumple | Nada más |
+| No cumple | Descripción del incumplimiento, acción correctiva, estado final y fecha |
+| No aplica | Justificación |
+
+Reglas de entrega: cinco equipos, sin repetir, todos activos y de la Dirección/Unidad del control,
+con todos sus ítems respondidos. El **estado final de cada equipo** (Completado / Pendiente) no se
+teclea: se deriva de sus ítems. Los nueve ítems conservan la agrupación del formato —cinco para
+equipos de usuario interno, tres para los de consulta al público y uno para ambos—, así que a cada
+equipo se le piden solo los que le corresponden según su clasificación.
+
 ## Catálogo de controles modelado
 
 Modelado desde la carpeta real `controles/`: F0234 (ingreso a cuartos de servidores),
-F0389 (infraestructura del cuarto de servidores, **semanal con entrega mensual consolidada**), F0382 (políticas de seguridad
+F0389 (infraestructura del cuarto de servidores, **semanal con entrega mensual consolidada**), F0382 (políticas de seguridad, **muestra de 5 equipos**)
 TIC), F0384 (inventario de cintas), F0386 (traslado de cintas, eventual/justificable),
 F0387 (sincronización de hora, **semanal con entrega mensual consolidada**), F0422 (inventario de equipos), F0174
 (mantenimiento preventivo), F0288 (correctivo, eventual/justificable), GLPI (tiquetes,

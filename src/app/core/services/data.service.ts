@@ -3,12 +3,15 @@ import {
   ActividadDia, AplicacionControl, AreaTecnica, BitacoraDiaria, ControlCatalogo, ControlMes,
   Direccion, DistribucionSoporte, DocumentoGenerado, EquipoOperativo, ESTADOS_ACTIVOS,
   EstadoControl, EventoIntegracion, EventoTrazabilidad, Justificacion, RespuestaSeccion,
-  RevisionAtencion, SeccionPlantilla, UsuarioSistema, isoLocal, nombreMes
+  ItemSeguridad, RespuestaEquipoChecklist, RespuestaItemSeguridad, RevisionAtencion,
+  SeccionPlantilla, UsuarioSistema, isoLocal, nombreMes
 } from '../models/models';
 import { HolidayService } from './holiday.service';
 import { BusinessDayService } from './business-day.service';
 import { ControlDeadlineService } from './control-deadline.service';
 import { SupportDistributionService } from './support-distribution.service';
+import { EquipoOperativoCompartido, SharedInventoryService } from './shared-inventory.service';
+import { SharedInventoryBridgeService } from './shared-inventory-bridge.service';
 
 const STORAGE_KEY = 'sisgost.controles.v1';
 
@@ -53,6 +56,10 @@ export class DataService {
   private readonly feriadosSrv = inject(HolidayService);
   private readonly habiles = inject(BusinessDayService);
   private readonly plazos = inject(ControlDeadlineService);
+  /** Inventario operativo compartido: lo escribe Gestión de Equipos al aceptar la conformidad. */
+  private readonly compartido = inject(SharedInventoryService);
+  /** Puente hacia el otro origen: los dos módulos corren en puertos distintos. */
+  private readonly puente = inject(SharedInventoryBridgeService);
   /** Registro compartido con Gestión de Equipos. */
   readonly soportes = inject(SupportDistributionService);
 
@@ -137,6 +144,10 @@ export class DataService {
     // El inventario operativo se pone al día ANTES de reconciliar: los equipos que Gestión de
     // Equipos aceptó o descargó ya deben estar reflejados cuando se calcula lo demás.
     this.sincronizarInventario();
+    // Y se consulta al otro módulo por si escribió estando en otro origen (puertos distintos).
+    void this.puente.consultar().then((n) => { if (n) this.sincronizarInventario(); });
+    // Si otra pestaña del mismo origen escribe el compartido, se refleja en el acto.
+    this.compartido.escuchar(() => this.sincronizarInventario());
     this.reconciliarVencidos();
     this.asegurarBitacorasDeHoy();
     this.persistir();
@@ -325,7 +336,9 @@ export class DataService {
   }
 
   /** ¿El control trabaja sobre los equipos del inventario operativo? */
-  requiereEquipos(c: ControlCatalogo): boolean { return c.plantilla.some((s) => !!s.equipos); }
+  requiereEquipos(c: ControlCatalogo): boolean {
+    return c.plantilla.some((s) => !!s.equipos || !!s.checklistEquipos);
+  }
 
   /** ¿Aplica este control en esa Dirección/Unidad? */
   aplicaEn(codigo: string, direccionId: string, unidad: string): boolean {
@@ -507,6 +520,82 @@ export class DataService {
         });
       }
     }
+    // Los controles con muestra de equipos (F0382) dejan traza de qué equipos entraron y salieron
+    // y de cada verificación e incumplimiento registrado.
+    if (antes && despues && this.checklistDe(despues.codigo)) this.trazarMuestra(antes, despues, u);
+  }
+
+  /** Diferencia la muestra de equipos entre dos versiones del control y deja sus eventos. */
+  private trazarMuestra(antes: ControlMes, despues: ControlMes, u: UsuarioSistema | null): void {
+    const p = this.checklistDe(despues.codigo)!;
+    const muestra = (c: ControlMes) =>
+      (c.secciones.find((x) => x.titulo === p.titulo)?.checklistEquipos ?? []).filter((e) => e.inventario.trim());
+    const previa = muestra(antes);
+    const actual = muestra(despues);
+    const base = {
+      direccion: despues.direccion, unidad: despues.unidad, tipoControl: despues.codigo,
+      mes: despues.mes, anio: despues.anio, moduloOrigen: MODULO_CONTROLES
+    };
+    /** Datos del equipo para la traza; salen del inventario operativo, no del formulario. */
+    const datos = (inventario: string) => {
+      const eq = this.equipoDe(inventario);
+      return {
+        inventario,
+        equipo: eq ? `${eq.nombreEquipo || eq.tipo} · ${eq.marca} ${eq.modelo}` : 'Equipo no registrado en inventario operativo',
+        usuarioFinal: eq?.usuarioFinal ?? '',
+        expedienteUnico: eq?.expedienteUnico ?? ''
+      };
+    };
+
+    for (const eq of actual) {
+      if (previa.some((x) => x.inventario === eq.inventario)) continue;
+      this.registrarEvento(u, {
+        ...base, ...datos(eq.inventario), accion: 'Equipo seleccionado desde inventario',
+        observacion: `El equipo se incorporó a la muestra del ${despues.codigo} de ${nombreMes(despues.mes)} ${despues.anio} como ${eq.clasificacion || 'equipo sin clasificar'}.`
+      });
+    }
+    for (const eq of previa) {
+      if (actual.some((x) => x.inventario === eq.inventario)) continue;
+      this.registrarEvento(u, {
+        ...base, ...datos(eq.inventario), accion: 'Equipo removido del control',
+        observacion: `El equipo salió de la muestra del ${despues.codigo} de ${nombreMes(despues.mes)} ${despues.anio}.`
+      });
+    }
+    for (const eq of actual) {
+      const antesEq = previa.find((x) => x.inventario === eq.inventario);
+      const verificados = this.itemsVerificados(p, eq);
+      const verificadosAntes = antesEq ? this.itemsVerificados(p, antesEq) : 0;
+      const aplicables = this.itemsDeClasificacion(p, eq.clasificacion).length;
+      if (verificados > verificadosAntes && verificados === aplicables) {
+        this.registrarEvento(u, {
+          ...base, ...datos(eq.inventario), accion: 'Ítems de seguridad verificados',
+          estadoAnterior: antesEq ? this.estadoFinalEquipo(p, antesEq) : 'Pendiente',
+          estadoNuevo: this.estadoFinalEquipo(p, eq),
+          observacion: `${verificados} de ${aplicables} ítems verificados; ${this.itemsIncumplidos(eq).length} incumplimiento(s).`
+        });
+      }
+      for (const item of this.itemsIncumplidos(eq)) {
+        const previo = antesEq?.items.find((x) => x.id === item.id);
+        if (previo?.cumplimiento !== 'No cumple') {
+          this.registrarEvento(u, {
+            ...base, ...datos(eq.inventario), accion: 'Incumplimiento registrado',
+            observacion: `${this.nombreItemSeguridad(p, item.id)}: ${item.descripcion || 'sin descripción'}.`
+          });
+        }
+        if (item.accionCorrectiva.trim() && previo?.accionCorrectiva.trim() !== item.accionCorrectiva.trim()) {
+          this.registrarEvento(u, {
+            ...base, ...datos(eq.inventario), accion: 'Acción correctiva registrada',
+            estadoNuevo: item.estadoItem,
+            observacion: `${this.nombreItemSeguridad(p, item.id)}: ${item.accionCorrectiva}${item.fechaAccion ? ` (fecha ${item.fechaAccion})` : ''}.`
+          });
+        }
+      }
+    }
+  }
+
+  /** Nombre del ítem de seguridad dentro de la plantilla de la muestra. */
+  nombreItemSeguridad(p: SeccionPlantilla, id: string): string {
+    return p.checklistEquipos?.items.find((i) => i.id === id)?.nombre ?? id;
   }
 
   // ------------------------------------------------------------------ controles semanales consolidados
@@ -581,7 +670,8 @@ export class DataService {
         || ((r.filas?.length ?? 0) > 0)
         || (r.equipos?.some((x) => x.incluido && x.estado) ?? false)
         || (r.equiposIp?.some((x) => x.ip.trim() || x.hora.trim()) ?? false)
-        || (r.telefonos?.some((x) => x.numero.trim() || x.hora.trim()) ?? false);
+        || (r.telefonos?.some((x) => x.numero.trim() || x.hora.trim()) ?? false)
+        || (r.checklistEquipos?.some((x) => x.inventario.trim()) ?? false);
       if (tiene) conRespuesta++;
     }
     return Math.round((conRespuesta / plantilla.length) * 100);
@@ -632,6 +722,7 @@ export class DataService {
       }
       if (p.equiposIp && !semanaNoAplica) faltas.push(...this.faltasEquiposIp(p, r, c));
       if (p.telefonos && !semanaNoAplica) faltas.push(...this.faltasTelefonos(p, r));
+      if (p.checklistEquipos) faltas.push(...this.faltasChecklistEquipos(p, r, c));
     }
     if (cat?.requiereEvidencia && !c.evidencias.length) faltas.push('Este control requiere al menos una evidencia.');
     return faltas;
@@ -664,6 +755,112 @@ export class DataService {
       if (!e.hora.trim()) {
         faltas.push(`${p.titulo}: debe seleccionar la hora de verificación para cada equipo.`);
       }
+    }
+    return faltas;
+  }
+
+  // ---------------------------------------------------------------- muestra de equipos (F0382)
+
+  /** Mensajes de la verificación por muestra; se reutilizan en el formulario y en la entrega. */
+  readonly MSG_EQUIPO_REPETIDO = 'Este equipo ya fue seleccionado en el control.';
+  readonly MSG_EQUIPO_AJENO = 'El equipo seleccionado no pertenece a la Dirección/Unidad del control.';
+
+  /** Sección de muestra del control, si la tiene (F0382). */
+  checklistDe(codigo: string): SeccionPlantilla | undefined {
+    return this.catalogoDe(codigo)?.plantilla.find((p) => !!p.checklistEquipos);
+  }
+
+  /**
+   * Equipos que el técnico puede elegir para la muestra: los ACTIVOS de la Dirección/Unidad del
+   * control, filtrados por el texto del buscador (inventario, nombre, usuario, IP, tipo, marca,
+   * modelo o unidad). Nunca aparecen equipos de otra Dirección/Unidad ni descargados.
+   */
+  equiposParaMuestra(c: ControlMes, texto = ''): EquipoOperativo[] {
+    const q = texto.trim().toLowerCase();
+    const activos = this.equiposDeControl(c);
+    if (!q) return activos;
+    return activos.filter((e) => [e.inventario, e.nombreEquipo, e.usuarioFinal, e.ip ?? '', e.tipo,
+      e.marca, e.modelo, e.unidad, e.serie].join(' ').toLowerCase().includes(q));
+  }
+
+  /** ¿Ese equipo puede entrar en la muestra del control? Devuelve el motivo del rechazo o ''. */
+  bloqueoEquipoMuestra(c: ControlMes, inventario: string, yaElegidos: string[]): string {
+    if (yaElegidos.includes(inventario)) return this.MSG_EQUIPO_REPETIDO;
+    return this.equiposDeControl(c).some((e) => e.inventario === inventario) ? '' : this.MSG_EQUIPO_AJENO;
+  }
+
+  /** Ítems del checklist que aplican a un equipo según su clasificación en el formato. */
+  itemsDeClasificacion(p: SeccionPlantilla, clasificacion: string): ItemSeguridad[] {
+    const items = p.checklistEquipos?.items ?? [];
+    const ambos = p.checklistEquipos?.clasificaciones[2] ?? 'Ambos equipos';
+    if (!clasificacion || clasificacion === ambos) return items;
+    return items.filter((i) => i.grupo === clasificacion || i.grupo === ambos);
+  }
+
+  /** Ítems del equipo marcados como «No cumple». */
+  itemsIncumplidos(eq: RespuestaEquipoChecklist): RespuestaItemSeguridad[] {
+    return eq.items.filter((i) => i.cumplimiento === 'No cumple');
+  }
+
+  /** Cuántos ítems aplicables del equipo ya tienen respuesta. */
+  itemsVerificados(p: SeccionPlantilla, eq: RespuestaEquipoChecklist): number {
+    const aplicables = this.itemsDeClasificacion(p, eq.clasificacion).map((i) => i.id);
+    return eq.items.filter((i) => aplicables.includes(i.id) && i.cumplimiento).length;
+  }
+
+  /**
+   * Estado final del equipo, la columna «Completado / Pendiente» del formato: se deriva de los
+   * ítems, no se teclea. Queda «Pendiente» mientras falte responder algo o quede un incumplimiento
+   * sin corregir.
+   */
+  estadoFinalEquipo(p: SeccionPlantilla, eq: RespuestaEquipoChecklist): string {
+    const aplicables = this.itemsDeClasificacion(p, eq.clasificacion);
+    if (!eq.inventario || this.itemsVerificados(p, eq) < aplicables.length) return 'Pendiente';
+    return this.itemsIncumplidos(eq).every((i) => i.estadoItem === 'Corregido') ? 'Completado' : 'Pendiente';
+  }
+
+  /**
+   * Reglas de la muestra del F0382: cantidad exacta de equipos, sin repetir, todos activos y de la
+   * Dirección/Unidad del control, con sus ítems respondidos; los incumplimientos exigen
+   * descripción, acción correctiva y estado, y los «No aplica», justificación.
+   */
+  private faltasChecklistEquipos(p: SeccionPlantilla, r: RespuestaSeccion | undefined, c: ControlMes): string[] {
+    const faltas: string[] = [];
+    const pedidos = p.checklistEquipos!.cantidad;
+    const filas = (r?.checklistEquipos ?? []).slice(0, pedidos);
+    const elegidos = filas.filter((e) => e.inventario.trim());
+    if (elegidos.length < pedidos) {
+      faltas.push(`Debe seleccionar ${pedidos} equipos activos para completar el control ${c.codigo}.`);
+    }
+    const vistos = new Set<string>();
+    const activos = this.equiposDeControl(c);
+    let incompletos = 0;
+    for (const eq of elegidos) {
+      const etiqueta = `${p.titulo} · equipo ${eq.inventario}`;
+      if (vistos.has(eq.inventario)) { faltas.push(`${etiqueta}: ${this.MSG_EQUIPO_REPETIDO}`); continue; }
+      vistos.add(eq.inventario);
+      if (!activos.some((a) => a.inventario === eq.inventario)) {
+        faltas.push(`${etiqueta}: ${this.MSG_EQUIPO_AJENO}`);
+        continue;
+      }
+      if (!eq.clasificacion) faltas.push(`${etiqueta}: indique si es equipo de usuario interno o de consulta al público.`);
+      const aplicables = this.itemsDeClasificacion(p, eq.clasificacion);
+      if (this.itemsVerificados(p, eq) < aplicables.length) { incompletos++; continue; }
+      for (const item of aplicables) {
+        const resp = eq.items.find((x) => x.id === item.id);
+        if (!resp) continue;
+        if (resp.cumplimiento === 'No cumple') {
+          if (!resp.descripcion.trim()) faltas.push(`${etiqueta}: describa el incumplimiento del ${item.nombre.split(' — ')[0]}.`);
+          if (!resp.accionCorrectiva.trim()) faltas.push(`${etiqueta}: registre la acción correctiva del ${item.nombre.split(' — ')[0]}.`);
+          if (!resp.estadoItem.trim()) faltas.push(`${etiqueta}: indique el estado final del ${item.nombre.split(' — ')[0]}.`);
+        }
+        if (resp.cumplimiento === 'No aplica' && !resp.justificacion.trim()) {
+          faltas.push(`${etiqueta}: debe justificar por qué el ${item.nombre.split(' — ')[0]} no aplica para el equipo seleccionado.`);
+        }
+      }
+    }
+    if (incompletos) {
+      faltas.push(`Debe completar la verificación de seguridad para los ${pedidos} equipos seleccionados (${incompletos} sin terminar).`);
     }
     return faltas;
   }
@@ -840,7 +1037,8 @@ export class DataService {
    * Devuelve cuántos movimientos se aplicaron en esta pasada.
    */
   sincronizarInventario(): number {
-    let aplicados = 0;
+    // Primero, lo que Gestión de Equipos publicó en el inventario operativo compartido.
+    let aplicados = this.aplicarInventarioCompartido();
     for (const ev of this.eventosIntegracion()) {
       if (ev.aplicado) continue;
       if (ev.tipo === 'Entrega aceptada') this.onEquipmentAccepted(ev);
@@ -853,6 +1051,139 @@ export class DataService {
   }
 
   /** Contexto común de los eventos de trazabilidad de integración. */
+  /**
+   * Vuelca el inventario operativo compartido al inventario del módulo. Es idempotente: un ciclo
+   * ya reflejado con los mismos datos no vuelve a tocarse ni deja traza. Devuelve cuántos
+   * movimientos se aplicaron.
+   */
+  private aplicarInventarioCompartido(): number {
+    const compartidos = this.compartido.leer();
+    if (!compartidos.length) return 0;
+    let movimientos = 0;
+    for (const c of compartidos) {
+      const equipo = this.deCompartido(c);
+      const previo = this.cicloEquivalente(equipo.inventario, equipo.expedienteUnico, equipo.ciclo);
+
+      if (!previo) {
+        // Un ciclo nuevo cierra el ciclo abierto anterior del mismo número de inventario.
+        const abiertos = this.inventario().filter((e) => e.inventario === equipo.inventario
+          && e.estado !== 'Descargado' && e.estado !== 'Histórico');
+        if (abiertos.length && equipo.estado !== 'Descargado') {
+          this.inventario.update((l) => l.map((e) => (abiertos.some((a) => a.ciclo === e.ciclo)
+            ? { ...e, estado: 'Histórico' as const } : e)));
+          for (const a of abiertos) {
+            this.registrarEvento(null, {
+              ...this.trazaCompartido(c), accion: 'Equipo movido a histórico operativo',
+              estadoAnterior: a.estado, estadoNuevo: 'Histórico',
+              observacion: `El equipo inicia un nuevo ciclo en ${this.dirUnidad(equipo.direccion, equipo.unidad)}; el registro anterior de ${this.dirUnidad(a.direccion, a.unidad)} se conserva como histórico.`
+            });
+          }
+        }
+        this.inventario.update((l) => [equipo, ...l]);
+        this.registrarEvento(null, {
+          ...this.trazaCompartido(c),
+          accion: equipo.estado === 'Descargado'
+            ? 'Equipo retirado del inventario operativo por descargo'
+            : 'Equipo incorporado automáticamente al inventario operativo de Controles Mensuales',
+          estadoAnterior: 'Aceptado en Gestión de Equipos', estadoNuevo: equipo.estado,
+          observacion: `${this.dirUnidad(equipo.direccion, equipo.unidad)} · usuario final ${equipo.usuarioFinal}${equipo.ip ? ` · IP ${equipo.ip}` : ' · sin reserva de IP'}. Sincronizado desde el inventario operativo compartido (${c.fechaSincronizacion}).`
+        });
+        movimientos++;
+        continue;
+      }
+
+      // Ya estaba: solo se toca si cambió algo real.
+      const cambios = this.diferenciasEquipo(previo, equipo);
+      if (!cambios.length) continue;
+      this.inventario.update((l) => l.map((e) => (e.ciclo === previo.ciclo ? { ...e, ...equipo, ciclo: previo.ciclo } : e)));
+      this.registrarEvento(null, {
+        ...this.trazaCompartido(c),
+        accion: previo.estado !== equipo.estado && equipo.estado === 'Descargado'
+          ? 'Equipo retirado del inventario operativo por descargo'
+          : 'Equipo actualizado en inventario operativo',
+        estadoAnterior: previo.estado, estadoNuevo: equipo.estado,
+        observacion: `Cambió: ${cambios.join(', ')}. Sincronizado desde el inventario operativo compartido (${c.fechaSincronizacion}).`
+      });
+      movimientos++;
+    }
+    if (movimientos) this.persistir();
+    return movimientos;
+  }
+
+  /**
+   * Ficha ya registrada que corresponde a la MISMA pertenencia: mismo ciclo, o mismo número de
+   * inventario y mismo expediente único todavía abierto. Evita que la cola simulada de eventos y
+   * el inventario compartido dupliquen el mismo equipo.
+   */
+  private cicloEquivalente(inventario: string, expedienteUnico: string, ciclo: string): EquipoOperativo | undefined {
+    return this.inventario().find((e) => e.ciclo === ciclo)
+      ?? this.inventario().find((e) => e.inventario === inventario
+        && !!expedienteUnico && e.expedienteUnico === expedienteUnico
+        && e.estado !== 'Histórico');
+  }
+
+  /** Traduce la ficha compartida al modelo del módulo (la Dirección viaja por nombre, no por id). */
+  private deCompartido(c: EquipoOperativoCompartido): EquipoOperativo {
+    const estado: EquipoOperativo['estado'] = c.estadoOperativo === 'Activo en Dirección/Unidad'
+      ? 'Activo en Dirección/Unidad'
+      : c.estadoOperativo === 'Histórico' ? 'Histórico' : 'Descargado';
+    const direccion = this.idDireccion(c.direccion);
+    return {
+      ciclo: c.id,
+      inventario: c.numeroInventario,
+      tipo: c.tipoEquipo, marca: c.marca, modelo: c.modelo, serie: c.serie,
+      nombreEquipo: c.nombreEquipo,
+      ip: c.ip || undefined, mac: c.mac || undefined,
+      usuarioFinal: c.usuarioFinal, carne: '—', correoInstitucional: c.correoUsuarioFinal,
+      direccion, unidad: c.unidad,
+      tecnicoConfiguracion: c.tecnicoConfiguracion,
+      // El responsable lo manda la distribución vigente; la copia recibida es el respaldo.
+      soporteResponsable: this.responsableDe(direccion, c.unidad, c.tecnicoConfiguracion) || c.soporteResponsable,
+      fechaAceptacion: c.fechaAceptacion,
+      expediente: c.expediente, expedienteUnico: c.expedienteUnico,
+      estado, garantia: c.garantia, origen: c.origen || MODULO_EQUIPOS,
+      fechaDescargo: c.fechaDescargo, motivoDescargo: c.motivoDescargo,
+      accionPosterior: c.accionPosterior
+    };
+  }
+
+  /** Qué cambió entre la ficha guardada y la recibida; vacío = nada que sincronizar. */
+  private diferenciasEquipo(previo: EquipoOperativo, nuevo: EquipoOperativo): string[] {
+    const campos: [keyof EquipoOperativo, string][] = [
+      ['estado', 'estado operativo'], ['direccion', 'Dirección'], ['unidad', 'Unidad'],
+      ['usuarioFinal', 'usuario final'], ['ip', 'IP'], ['mac', 'MAC'],
+      ['nombreEquipo', 'nombre del equipo'], ['soporteResponsable', 'soporte responsable'],
+      ['garantia', 'garantía'], ['fechaDescargo', 'fecha de descargo']
+    ];
+    return campos
+      .filter(([k]) => (previo[k] ?? '') !== (nuevo[k] ?? ''))
+      .map(([, etiqueta]) => etiqueta);
+  }
+
+  /** Datos de traza de un movimiento del inventario compartido. */
+  private trazaCompartido(c: EquipoOperativoCompartido): Partial<EventoTrazabilidad> {
+    return {
+      direccion: this.idDireccion(c.direccion), unidad: c.unidad,
+      moduloOrigen: MODULO_EQUIPOS, moduloDestino: MODULO_CONTROLES,
+      inventario: c.numeroInventario,
+      equipo: `${c.nombreEquipo || c.tipoEquipo} · ${c.marca} ${c.modelo}`,
+      usuarioFinal: c.usuarioFinal, expedienteUnico: c.expedienteUnico
+    };
+  }
+
+  /** Estado del puente con Gestión de Equipos (para la nota del inventario operativo). */
+  readonly puenteEstado = this.puente.estado;
+  readonly puenteRecibidos = this.puente.recibidos;
+
+  /** Vuelve a consultar al otro módulo. La acción de depuración del inventario la usa. */
+  async reconsultarInventarioCompartido(): Promise<number> {
+    await this.puente.consultar();
+    return this.sincronizarInventario();
+  }
+
+  /** Cuántos ciclos hay en el inventario operativo compartido de este origen. */
+  equiposCompartidos(): number { return this.compartido.leer().length; }
+
   private trazaEquipo(ev: EventoIntegracion): Partial<EventoTrazabilidad> {
     return {
       direccion: ev.equipo.direccion, unidad: ev.equipo.unidad, inventario: ev.equipo.inventario,
@@ -870,8 +1201,9 @@ export class DataService {
    */
   private onEquipmentAccepted(ev: EventoIntegracion): void {
     const previos = this.inventario().filter((e) => e.inventario === ev.equipo.inventario);
-    const mismoCiclo = previos.find((e) => e.ciclo === ev.equipo.ciclo);
-    if (mismoCiclo) return; // ya procesado: no duplicar
+    // Ya procesado —por este camino o por el inventario compartido—: no se duplica.
+    const mismoCiclo = this.cicloEquivalente(ev.equipo.inventario, ev.equipo.expedienteUnico, ev.equipo.ciclo);
+    if (mismoCiclo) return;
     const abiertos = previos.filter((e) => e.estado !== 'Descargado' && e.estado !== 'Histórico');
     const equipo: EquipoOperativo = {
       ...ev.equipo,
@@ -892,7 +1224,7 @@ export class DataService {
     }
     this.inventario.update((l) => [equipo, ...l]);
     this.registrarEvento(null, {
-      ...this.trazaEquipo(ev), accion: 'Equipo incorporado automáticamente desde Gestión de Equipos',
+      ...this.trazaEquipo(ev), accion: 'Equipo incorporado automáticamente al inventario operativo de Controles Mensuales',
       estadoAnterior: 'Entregado', estadoNuevo: 'Activo en Dirección/Unidad',
       observacion: `El Usuario Final aceptó la conformidad (${ev.expedienteUnico || ev.expediente}); el equipo se incorporó automáticamente al inventario operativo de ${this.dirUnidad(equipo.direccion, equipo.unidad)} con sus datos técnicos${equipo.ip ? ` (IP ${equipo.ip})` : ' (sin reserva de IP)'}. Soporte responsable: ${equipo.soporteResponsable || 'sin asignar'}.`
     });

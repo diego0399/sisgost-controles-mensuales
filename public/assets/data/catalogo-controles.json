@@ -666,116 +666,104 @@
   "requiereFirma": true,
   "permiteJustificacion": false,
   "activo": true,
-  "descripcion": "Verificación por equipo de los nueve ítems de seguridad TIC: antivirus, bloqueo de USB, credenciales en navegadores, estándar de nombres, sesiones autorizadas, accesos restringidos y orden del cableado.",
+  "descripcion": "Verificación mensual de las políticas y controles de seguridad de TIC sobre una muestra de CINCO equipos activos de la Dirección/Unidad. Cada equipo se elige del inventario operativo y se revisa con los nueve ítems del formato; los incumplimientos exigen observación, acción correctiva y estado final.",
   "plantilla": [
    {
-    "titulo": "Ítems de verificación aplicados",
-    "descripcion": "Los nueve ítems del formato se verifican en cada equipo de la muestra.",
-    "items": [
-     {
-      "id": "i1",
-      "nombre": "Ítem 1 — Antivirus instalado y actualizado",
-      "estados": [
-       "Aplicado",
-       "Con incumplimientos",
-       "No aplica"
-      ]
-     },
-     {
-      "id": "i2",
-      "nombre": "Ítem 2 — No reconoce USB externa (lectura/escritura)",
-      "estados": [
-       "Aplicado",
-       "Con incumplimientos",
-       "No aplica"
-      ]
-     },
-     {
-      "id": "i3",
-      "nombre": "Ítem 3 — No almacena usuarios y claves en los navegadores",
-      "estados": [
-       "Aplicado",
-       "Con incumplimientos",
-       "No aplica"
-      ]
-     },
-     {
-      "id": "i4",
-      "nombre": "Ítem 4 — Nombre de equipo conforme a estándares",
-      "estados": [
-       "Aplicado",
-       "Con incumplimientos",
-       "No aplica"
-      ]
-     },
-     {
-      "id": "i5",
-      "nombre": "Ítem 5 — Sesiones de usuarios autorizados en cada equipo",
-      "estados": [
-       "Aplicado",
-       "Con incumplimientos",
-       "No aplica"
-      ]
-     },
-     {
-      "id": "i6",
-      "nombre": "Ítem 6 — Acceso restringido a directorios internos de C",
-      "estados": [
-       "Aplicado",
-       "Con incumplimientos",
-       "No aplica"
-      ]
-     },
-     {
-      "id": "i7",
-      "nombre": "Ítem 7 — Solo sitios autorizados en equipos de consulta al público",
-      "estados": [
-       "Aplicado",
-       "Con incumplimientos",
-       "No aplica"
-      ]
-     },
-     {
-      "id": "i8",
-      "nombre": "Ítem 8 — Usuario de red de consulta al público según Dpto./Área",
-      "estados": [
-       "Aplicado",
-       "Con incumplimientos",
-       "No aplica"
-      ]
-     },
-     {
-      "id": "i9",
-      "nombre": "Ítem 9 — Cables de red y eléctricos ordenados",
-      "estados": [
-       "Aplicado",
-       "Con incumplimientos",
-       "No aplica"
-      ]
-     }
-    ]
+    "titulo": "Datos generales del control",
+    "descripcion": "Datos del control programado. No se digitan: salen del calendario, de la distribución de soportes y del catálogo.",
+    "datosControl": true
    },
    {
     "titulo": "Equipos verificados",
-    "tabla": {
-     "columnas": [
-      "N° de inventario",
-      "Nombre del usuario",
-      "Nombre del equipo",
-      "Ítems incumplidos",
-      "Acción correctiva",
-      "Estado final"
+    "descripcion": "Muestra de cinco equipos activos de la Dirección/Unidad, elegidos del inventario operativo.",
+    "checklistEquipos": {
+     "cantidad": 5,
+     "items": [
+      {
+       "id": "i1",
+       "nombre": "Ítem 1 — Antivirus instalado y actualizado",
+       "grupo": "Usuarios internos (PC institucional)"
+      },
+      {
+       "id": "i2",
+       "nombre": "Ítem 2 — No reconoce USB externa (lectura / escritura)",
+       "grupo": "Usuarios internos (PC institucional)"
+      },
+      {
+       "id": "i3",
+       "nombre": "Ítem 3 — No almacena usuarios y claves en los navegadores",
+       "grupo": "Usuarios internos (PC institucional)"
+      },
+      {
+       "id": "i4",
+       "nombre": "Ítem 4 — Nombre de equipo de acuerdo a estándares",
+       "grupo": "Usuarios internos (PC institucional)"
+      },
+      {
+       "id": "i5",
+       "nombre": "Ítem 5 — Sesiones de usuarios autorizados en cada equipo",
+       "grupo": "Usuarios internos (PC institucional)"
+      },
+      {
+       "id": "i6",
+       "nombre": "Ítem 6 — Acceso restringido a directorios internos de C",
+       "grupo": "Usuarios externos (PC de consulta al público)"
+      },
+      {
+       "id": "i7",
+       "nombre": "Ítem 7 — Acceso únicamente a sitios autorizados para consulta al público",
+       "grupo": "Usuarios externos (PC de consulta al público)"
+      },
+      {
+       "id": "i8",
+       "nombre": "Ítem 8 — Acceso únicamente a usuario de red de consulta al público destinado para Dpto./Área",
+       "grupo": "Usuarios externos (PC de consulta al público)"
+      },
+      {
+       "id": "i9",
+       "nombre": "Ítem 9 — Revisión de cables de red y eléctricos (ordenados)",
+       "grupo": "Ambos equipos"
+      }
      ],
-     "minimo": 1
+     "cumplimiento": [
+      "Cumple",
+      "No cumple",
+      "No aplica"
+     ],
+     "estadosItem": [
+      "Corregido",
+      "Pendiente",
+      "Escalado",
+      "En seguimiento"
+     ],
+     "clasificaciones": [
+      "Usuarios internos (PC institucional)",
+      "Usuarios externos (PC de consulta al público)",
+      "Ambos equipos"
+     ],
+     "ayuda": "El formato pide cinco equipos. El Técnico de Soporte decide cuáles, pero solo puede elegir equipos activos de la Dirección/Unidad del control."
     }
    },
    {
-    "titulo": "Observaciones",
+    "titulo": "Observaciones generales",
+    "descripcion": "Cierre del control: lo que no corresponde a un equipo concreto.",
     "campos": [
      {
       "id": "obs",
-      "etiqueta": "Observaciones y acciones correctivas pendientes",
+      "etiqueta": "Observaciones generales",
+      "tipo": "area",
+      "obligatorio": true
+     },
+     {
+      "id": "recomendaciones",
+      "etiqueta": "Recomendaciones",
       "tipo": "area"
+     },
+     {
+      "id": "seguimiento",
+      "etiqueta": "Acciones de seguimiento",
+      "tipo": "area",
+      "ayuda": "Qué queda pendiente de verificar el próximo mes y quién le da seguimiento."
      }
     ]
    }

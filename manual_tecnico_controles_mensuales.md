@@ -195,6 +195,57 @@ La IP llega del ecosistema: `EquipoOperativo` guarda `ip` y `mac`, y Gestión de
 incluye en la ficha del inventario operativo (`fichaControles`) tomándolas de la reserva del F0302
 al aceptar la conformidad. Un equipo sin reserva de IP no puede verificarse en el F0387.
 
+## 4.4 Verificación por muestra de equipos (F0382)
+
+El bloque `checklistEquipos` de `SeccionPlantilla` declara cuántos equipos exige el formato, sus
+ítems (`ItemSeguridad`, con el grupo del documento original), las respuestas admitidas, los estados
+finales del incumplimiento y las clasificaciones de equipo. Las respuestas viajan en
+`RespuestaSeccion.checklistEquipos` (`RespuestaEquipoChecklist` → `RespuestaItemSeguridad`), y del
+equipo **solo se guarda el número de inventario**: los demás datos se leen del inventario operativo
+al dibujar y al imprimir, de modo que nunca quedan copias desactualizadas.
+
+| Método (`DataService`) | Qué hace |
+|---|---|
+| `checklistDe(codigo)` | Sección de muestra del control, si la tiene |
+| `equiposParaMuestra(control, texto)` | Equipos activos de la Dirección/Unidad filtrados por el buscador |
+| `bloqueoEquipoMuestra(...)` | Motivo por el que un equipo no puede entrar: repetido o de otra Dirección/Unidad |
+| `itemsDeClasificacion(seccion, clasificacion)` | Ítems que aplican a ese equipo según el grupo del formato |
+| `itemsVerificados` / `itemsIncumplidos` | Avance y hallazgos del equipo |
+| `estadoFinalEquipo(...)` | Completado / Pendiente derivado de los ítems, no tecleado |
+| `faltasChecklistEquipos(...)` | Cantidad exacta, sin repetidos, pertenencia, ítems respondidos, AC y justificaciones |
+
+El formulario divide la sección en **dos pasos** (`PasoForm`): «Selección de equipos desde
+inventario» y «Verificación de ítems por equipo». Cambiar el equipo de un hueco descarta su
+verificación anterior, porque los ítems son de ese equipo y no del hueco.
+
+`trazarMuestra` compara la muestra antes y después de cada guardado y emite «Equipo seleccionado
+desde inventario», «Equipo removido del control», «Ítems de seguridad verificados»,
+«Incumplimiento registrado» y «Acción correctiva registrada», cada uno con el número de inventario,
+el equipo y su usuario final.
+
+Nota de datos: el formato exige cinco equipos, así que el inventario operativo mantiene al menos
+esa cantidad activa en cada Dirección/Unidad donde el control aplica.
+
+## 4.5 Inventario operativo compartido entre módulos
+
+`SharedInventoryService` (archivo idéntico en los dos proyectos) es el contrato: la clave
+`sisgost_operational_inventory` y la ficha `EquipoOperativoCompartido` con el ciclo
+`OP-<inventario>-<expediente único>`.
+
+| Lado | Qué hace |
+|---|---|
+| Gestión de Equipos | `syncAcceptedEquipmentToOperationalInventory` al aceptar la conformidad; `registrarDescargo` al descargar |
+| Controles Mensuales | `aplicarInventarioCompartido()` dentro de `sincronizarInventario()`, al cargar y ante el evento `storage` |
+| Puente | `SharedInventoryBridgeService` + `puente-inventario.html`, porque `localStorage` no cruza puertos |
+
+`deCompartido()` traduce la ficha al modelo del módulo: la Dirección viaja por **nombre** y se
+resuelve a su id con `idDireccion`, y el soporte responsable lo decide `responsableDe` con la
+distribución vigente (la copia recibida es solo respaldo). `cicloEquivalente()` evita que el mismo
+equipo se duplique cuando llega por los dos caminos posibles —el inventario compartido y la cola
+simulada de eventos de la semilla—: la equivalencia es número de inventario + expediente único, no
+el identificador de ciclo. `diferenciasEquipo()` decide si hay algo real que actualizar, de modo
+que recargar la pantalla no genera movimientos ni trazas de más.
+
 ## 5. Formularios digitales dirigidos por datos
 
 Cada control del catálogo define su **plantilla** (`SeccionPlantilla[]`): campos tipados
@@ -301,7 +352,7 @@ programados) con estados realistas —entregados, tardíos, vencidos, justificad
 abiertos—, **48 bitácoras** de los últimos 12 días hábiles, 3 cartas de justificación con el
 texto real de `Formatos_nuevos_2025_.docx`, ~339 documentos y ~455 eventos de trazabilidad.
 
-El **inventario operativo (25 equipos)** se deriva de Gestión de Equipos: los equipos que aquel
+El **inventario operativo (40 equipos)** se deriva de Gestión de Equipos: los equipos que aquel
 módulo ya tiene aceptados se copian con su mismo número de inventario, expediente y técnico de
 configuración; el resto es la flota histórica de las mismas Direcciones/Unidades, con el soporte
 responsable resuelto por la distribución compartida. Cada equipo activo lleva su **IP** y su

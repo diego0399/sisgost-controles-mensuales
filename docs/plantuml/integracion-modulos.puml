@@ -24,6 +24,7 @@ package "SISGOST — Controles Mensuales\n(localhost:4300)" as CM {
   [Inventario operativo] as INV
   [Controles con equipos\nF0422 · F0174 · F0288 · VULN] as CTL
   [F0387 · verificación por IP\n3 equipos y 3 extensiones por semana] as F87
+  [F0387 · verificación por IP\n3 equipos y 3 extensiones por semana] as F87
   [Bitácora diaria] as BIT
   [Trazabilidad] as TRZ
 }
@@ -47,6 +48,7 @@ ACE --> INV : **entrega aceptada**\nse incorpora AUTOMÁTICAMENTE con sus\ndatos
 ACE ..> DES
 DES --> INV : **descargo**\nsale AUTOMÁTICAMENTE del\ninventario activo
 INV --> CTL : equipos activos de la\nDirección/Unidad
+INV --> F87 : **IP** de los equipos activos\nde esa Dirección/Unidad
 INV --> F87 : **IP** de los equipos activos\nde esa Dirección/Unidad
 CTL --> TRZ
 INV --> TRZ : módulo origen → módulo destino,\nequipo, estado anterior y nuevo

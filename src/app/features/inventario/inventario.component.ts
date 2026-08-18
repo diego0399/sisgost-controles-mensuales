@@ -5,6 +5,7 @@ import { AuthService } from '../../core/services/auth.service';
 import { DataService, MODULO_CONTROLES, MODULO_EQUIPOS } from '../../core/services/data.service';
 import { EquipmentIntegrationService } from '../../core/services/equipment-integration.service';
 import { OperatividadService } from '../../core/services/operatividad.service';
+import { ToastService } from '../../core/services/toast.service';
 import { BadgeComponent, HelpTipComponent, ModalComponent } from '../../shared/ui';
 import { IconComponent } from '../../shared/icon';
 import { EquipoOperativo, formateaFecha, nombreMes } from '../../core/models/models';
@@ -19,6 +20,10 @@ import { EquipoOperativo, formateaFecha, nombreMes } from '../../core/models/mod
   selector: 'app-inventario',
   imports: [FormsModule, RouterLink, BadgeComponent, HelpTipComponent, ModalComponent, IconComponent],
   styles: `
+    .nota-origen {
+      margin-top: 6px; font-size: 12.5px; color: var(--tx-3);
+      display: flex; flex-wrap: wrap; align-items: center; gap: 8px; max-width: 780px;
+    }
     /* Tres filtros en una línea: sin anchos fijos se estiran y recortan el texto. */
     .filtros { display: flex; flex-wrap: wrap; gap: 8px; justify-content: flex-end; }
     .filtros .control { width: 210px; }
@@ -43,7 +48,28 @@ import { EquipoOperativo, formateaFecha, nombreMes } from '../../core/models/mod
             <ui-help texto="Cuando el flujo de Gestión de Equipos finaliza con aceptación del Usuario Final, el equipo pasa al inventario operativo de la Dirección/Unidad solicitante. Un descargo posterior lo retira del inventario activo. Este inventario alimenta F0422, el mantenimiento preventivo y el análisis de vulnerabilidades." />
           </h1>
           <p class="page-sub">Equipos activos por Dirección/Unidad, conectados con SISGOST — Gestión de Equipos.</p>
+          <p class="nota-origen">
+            Los equipos activos provienen de <b>SISGOST — Gestión de Equipos</b> después de la
+            aceptación del Usuario Final.
+            @switch (data.puenteEstado()) {
+              @case ('conectado') {
+                <span class="badge ok plain">Inventario compartido leído · {{ data.puenteRecibidos() }} equipo(s)</span>
+              }
+              @case ('consultando') { <span class="badge plain">Consultando el módulo de Equipos…</span> }
+              @case ('sin-conexion') {
+                <span class="badge warn plain" title="El otro módulo no respondió: se muestra lo ya sincronizado.">
+                  Módulo de Equipos no disponible
+                </span>
+              }
+            }
+          </p>
         </div>
+        @if (auth.esAdmin()) {
+          <button class="btn btn-outline btn-sm" type="button" [disabled]="sincronizando()" (click)="resincronizar()">
+            <ui-icon name="refresh" [size]="13" />
+            {{ sincronizando() ? 'Sincronizando…' : 'Sincronizar inventario desde Gestión de Equipos' }}
+          </button>
+        }
       </div>
 
       <!-- Movimientos ya sincronizados: informativos, sin acciones manuales. -->
@@ -196,7 +222,13 @@ import { EquipoOperativo, formateaFecha, nombreMes } from '../../core/models/mod
                     <td><button class="btn btn-ghost btn-sm" type="button" (click)="detalle.set(e)">Detalle</button></td>
                   </tr>
                 } @empty {
-                  <tr><td colspan="9" class="muted">Sin equipos para los filtros seleccionados.</td></tr>
+                  <tr><td colspan="9" class="muted">
+                    @if (fDireccion() || fUnidad()) {
+                      No hay equipos activos sincronizados desde Gestión de Equipos para esta Dirección/Unidad.
+                    } @else {
+                      Sin equipos para los filtros seleccionados.
+                    }
+                  </td></tr>
                 }
               </tbody>
             </table>
@@ -291,6 +323,22 @@ export class InventarioComponent {
   protected readonly auth = inject(AuthService);
   protected readonly integracion = inject(EquipmentIntegrationService);
   private readonly oper = inject(OperatividadService);
+  private readonly toast = inject(ToastService);
+
+  /**
+   * Vuelve a consultar el inventario compartido. El flujo normal es automático —al cargar y
+   * cuando el otro módulo escribe—; esta acción existe solo para demostración y depuración.
+   */
+  protected readonly sincronizando = signal(false);
+  protected async resincronizar(): Promise<void> {
+    this.sincronizando.set(true);
+    const movimientos = await this.data.reconsultarInventarioCompartido();
+    this.sincronizando.set(false);
+    this.toast.ok('Inventario consultado',
+      movimientos
+        ? movimientos + ' movimiento(s) aplicados desde el inventario operativo compartido.'
+        : 'El inventario operativo ya estaba al día: no había movimientos nuevos.');
+  }
 
   protected readonly busca = signal('');
   protected readonly fDireccion = signal('');

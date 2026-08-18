@@ -1,6 +1,6 @@
 # Bitácora de sesión — SISGOST Controles Mensuales
 
-**Sesión del 16 y 17 de agosto de 2026 · rondas 74 a 77.**
+**Sesión del 16 al 18 de agosto de 2026 · rondas 74 a 79.**
 
 Registro de lo que se pidió y lo que quedó hecho en esta conversación, para poder retomar el
 trabajo sin releer el historial. El punto de control completo del proyecto sigue siendo
@@ -126,18 +126,76 @@ uno con su hora; y que el **F0389** se maneje con la misma lógica de consolidad
 
 ---
 
+## Ronda 78 — F0382 fiel al formato, con muestra de cinco equipos
+
+**Se pidió** revisar el documento original del F0382 en `controles/` y rehacer el formulario para
+que respete su estructura: cinco equipos elegidos del **inventario operativo** de la
+Dirección/Unidad, con buscador y autocompletado, verificación de los ítems del documento equipo por
+equipo, acción correctiva para lo que no cumple, justificación para lo que no aplica, documento
+formal y efecto en historial, KPIs y trazabilidad.
+
+**Quedó hecho**
+
+- Estructura tomada del PDF real (FORMATO CONTROLADO F0382 V2/v3): cuadro de cinco equipos, nueve
+  ítems con su cumplimiento, columna de observación y acción correctiva con fecha, y estado final.
+  Los ítems conservan la agrupación del formato: cinco para equipos de usuario interno, tres para
+  los de consulta al público y uno para ambos.
+- Formulario en cinco pasos, con buscador de inventario (filtra por inventario, nombre, usuario,
+  IP, tipo, marca, modelo y unidad), autocompletado de once datos y el rótulo «Dato no registrado
+  en inventario operativo» para lo que el inventario no tiene.
+- Validaciones: cinco equipos, sin repetir, activos y de la Dirección/Unidad del control, con todos
+  sus ítems respondidos; «No cumple» exige descripción, acción correctiva, estado y fecha; «No
+  aplica» exige justificación. El estado final de cada equipo se deriva de sus ítems.
+- Trazabilidad de la muestra (selección, retiro, verificación, incumplimiento y acción correctiva)
+  y documento formal con el cuadro de los cinco equipos y el detalle de cada uno.
+- Inventario operativo ampliado a 40 equipos (39 activos) para que toda unidad donde aplica el
+  control tenga al menos cinco.
+
+Verificación: batería **340/0**, cinco suites de navegador sin avisos ni errores de consola y
+`npm run build` limpio en Controles Mensuales. Gestión de Equipos no se modificó en esta ronda.
+
+## Ronda 79 — Integración real del inventario operativo
+
+**Se pidió** corregir la integración: al aceptar la conformidad en Gestión de Equipos, el equipo no
+aparecía en Controles Mensuales. Debía usarse un almacenamiento compartido de prototipo
+(`sisgost_operational_inventory`), sin botones manuales, sin duplicados, respetando la
+Dirección/Unidad y con descargo automático.
+
+**Causa raíz**
+
+La «integración» de Controles Mensuales solo consumía una cola simulada de la semilla: Gestión de
+Equipos no escribía nada. Y hay un obstáculo de fondo comprobado en la prueba: `localStorage` está
+aislado **por origen**, y el puerto forma parte del origen, así que lo escrito en el 4200 no se ve
+desde el 4300.
+
+**Quedó hecho**
+
+- `SharedInventoryService`, archivo idéntico en los dos proyectos, con la clave acordada, la ficha
+  completa y las reglas antiduplicado (actualizar, no reescribir sin cambios, histórico al abrir
+  ciclo nuevo).
+- Gestión de Equipos escribe al aceptar la conformidad y cierra la ficha al registrar el descargo.
+- Controles Mensuales lee al cargar, ante el evento `storage` y con una acción de depuración solo
+  para el Administrador; traduce la Dirección a su id y recalcula el soporte con la distribución.
+- Puente `puente-inventario.html` + `SharedInventoryBridgeService` para cruzar los dos puertos.
+- Trazas unificadas de incorporación, actualización, retiro e histórico, con módulo origen y destino.
+
+Verificación con los dos servidores levantados: la aceptación real escribe la ficha, Controles
+Mensuales la ve solo en su Dirección/Unidad, sin duplicar al recargar, con su IP, usable en F0422 y
+F0382; el descargo la retira y la conserva como histórico. Batería **373/0**, seis suites de
+navegador sin avisos, `npm run build` correcto en los dos módulos.
+
 ## Estado al cierre de la sesión
 
 | Comprobación | Resultado |
 |---|---|
-| Batería sobre fuente y semilla | **297 casos, 0 fallos** |
-| Suites de navegador (5) | **sin avisos ni errores de consola** |
+| Batería sobre fuente y semilla | **373 casos, 0 fallos** |
+| Suites de navegador (6) | **sin avisos ni errores de consola** |
 | `npm run build` · Controles Mensuales | limpio |
 | `npm run build` · Gestión de Equipos | correcto, con sus 3 avisos de presupuesto preexistentes |
 
 Semilla vigente: **336 controles** de enero a agosto de 2026, ninguno con campo `semana`; F0387 y
 F0389 con 16 controles cada uno y un máximo de **un documento por Dirección/Unidad y mes**;
-25 equipos en el inventario operativo, 339 documentos y 455 eventos de trazabilidad.
+40 equipos en el inventario operativo (39 activos), 339 documentos y 455 eventos de trazabilidad.
 
 ### Notas para retomar
 

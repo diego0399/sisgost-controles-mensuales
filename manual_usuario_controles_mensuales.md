@@ -145,6 +145,31 @@ acondicionado, UPS, alarma, sensores, limpieza y planta eléctrica) con sus medi
 del mes recoge las verificaciones periódicas —extintor, librera, acceso digital, objetos extraños—
 y el resultado general del mes.
 
+### F0382: cinco equipos tomados del inventario
+
+El **F0382** se llena en cinco pasos. El primero solo muestra los datos del control programado
+—código, período, Dirección/Unidad, técnico responsable y fecha límite—, que no se digitan.
+
+En el segundo paso aparecen los **cinco huecos** que el formato exige. Cada uno tiene el botón
+**Seleccionar desde inventario**, que abre el buscador con los equipos **activos de esa
+Dirección/Unidad**; puede buscar por número de inventario, nombre del equipo, usuario final, IP,
+tipo, marca, modelo o unidad. Un equipo ya elegido aparece marcado como «Ya seleccionado» y no
+puede repetirse, y no se ofrecen equipos de otras Direcciones/Unidades ni descargados. Al elegir
+uno se muestran sus datos tomados del inventario; solo debe indicar si es un equipo de **usuario
+interno** o de **consulta al público**, porque de eso dependen los ítems que se le piden.
+
+En el tercer paso, cada equipo tiene su botón **Verificar ítems**: se abre la lista de ítems de
+seguridad para marcar **Cumple**, **No cumple** o **No aplica**. Si marca *No cumple*, el
+formulario pide la descripción del incumplimiento, la acción correctiva, su estado final
+(Corregido, Pendiente, Escalado o En seguimiento) y la fecha. Si marca *No aplica*, pide la
+justificación. La tabla resume cada equipo con sus ítems incumplidos, su acción correctiva y su
+estado final, y ofrece **Ver detalle**, **Cambiar equipo** y **Quitar equipo**.
+
+El cuarto paso recoge observaciones generales, recomendaciones y acciones de seguimiento. El
+quinto muestra el resumen —equipos seleccionados, verificados, ítems que cumplen, que no cumplen y
+que no aplican, y acciones correctivas registradas— y permite entregar, lo que genera el documento
+formal con el cuadro de los cinco equipos y el detalle de cada uno.
+
 ### Justificar un mes sin actividad
 
 Si el control lo permite (GLPI, F0386, F0288…), el botón **Justificar sin actividad** abre la

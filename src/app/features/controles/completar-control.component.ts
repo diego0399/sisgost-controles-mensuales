@@ -9,8 +9,9 @@ import { BadgeComponent, HelpTipComponent, ModalComponent } from '../../shared/u
 import { DocumentoComponent } from '../../shared/documento';
 import { IconComponent } from '../../shared/icon';
 import {
-  ControlMes, EvidenciaControl, RespuestaEquipo, RespuestaEquipoIp, RespuestaSeccion,
-  RespuestaTelefono, SeccionPlantilla, formateaFecha, isoLocal, nombreMes
+  ControlMes, EvidenciaControl, ItemSeguridad, RespuestaEquipo, RespuestaEquipoChecklist,
+  RespuestaEquipoIp, RespuestaItemSeguridad, RespuestaSeccion, RespuestaTelefono, SeccionPlantilla,
+  formateaFecha, isoLocal, nombreMes
 } from '../../core/models/models';
 
 /** Estado editable de una sección del formulario (espejo mutable de la plantilla). */
@@ -25,6 +26,16 @@ interface SeccionEdit {
   equiposIp: RespuestaEquipoIp[];
   /** Teléfonos o extensiones verificados (F0387). */
   telefonos: RespuestaTelefono[];
+  /** Muestra de equipos verificada ítem por ítem (F0382): tantos huecos como pida el formato. */
+  checklistEquipos: RespuestaEquipoChecklist[];
+}
+
+/** Un paso del formulario. Una sección de muestra ocupa dos: elegir equipos y verificarlos. */
+interface PasoForm {
+  titulo: string;
+  /** Índice de la sección de la plantilla, o -1 en evidencias y resumen. */
+  seccion: number;
+  fase: 'seccion' | 'muestra' | 'verificacion' | 'evidencias' | 'resumen';
 }
 
 /**
@@ -83,6 +94,27 @@ interface SeccionEdit {
     .ip-fila { display: grid; grid-template-columns: 1fr 160px; gap: 12px; align-items: start; }
     .tel-fila { display: grid; grid-template-columns: 1fr 1fr 1fr 140px; gap: 12px; align-items: start; }
     .ip-datos { margin-top: 10px; }
+    /* Muestra de equipos verificada ítem por ítem (F0382) */
+    .slot { border: 1px dashed var(--line-strong); border-radius: 10px; padding: 12px 14px; margin-bottom: 10px; }
+    .slot.on { border-style: solid; border-color: var(--navy-400, #7ba3d8); background: var(--surface-2, #f8fafc); }
+    .slot-cab { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; flex-wrap: wrap; }
+    .slot-num { font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: var(--tx-3); }
+    .eq-elegido { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 8px 16px; margin-top: 10px; }
+    .eq-elegido .d { font-size: 12.5px; }
+    .eq-elegido .d dt { font-size: 10.5px; letter-spacing: .05em; text-transform: uppercase; color: var(--tx-3); }
+    .eq-elegido .d dd { margin: 0; color: var(--navy-900); font-weight: 600; }
+    .sin-dato { color: var(--tx-3); font-weight: 400; font-style: italic; }
+    .buscador-eq { max-height: 420px; overflow: auto; }
+    .fila-eq { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 10px 4px; border-bottom: 1px dashed var(--line); }
+    .fila-eq:last-child { border-bottom: 0; }
+    .item-seg { border: 1px solid var(--line); border-radius: 10px; padding: 11px 13px; margin-bottom: 9px; }
+    .item-seg.mal { border-left: 3px solid var(--danger); }
+    .item-seg.na { border-left: 3px solid var(--gold-500); }
+    .item-seg-cab { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; flex-wrap: wrap; }
+    .item-seg .grupo { font-size: 11px; color: var(--tx-3); }
+    .avance-eq { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+    .avance-eq .a { border: 1px solid var(--line); border-radius: 9px; padding: 7px 10px; font-size: 11.5px; }
+    .avance-eq .a.ok { border-color: var(--ok); }
     @media (max-width: 760px) {
       .ip-fila, .tel-fila { grid-template-columns: 1fr; }
     }
@@ -187,6 +219,56 @@ interface SeccionEdit {
                       </table>
                     </div>
                   }
+                  @if (conChecklist(s).length) {
+                    <div class="table-wrap" style="margin: 8px 0;">
+                      <table class="tbl">
+                        <thead><tr>
+                          <th>N.º</th><th>N° de inventario</th><th>Nombre del usuario</th><th>Nombre del equipo</th>
+                          <th>IP</th><th>Clasificación</th><th class="col-num">Ítems incumplidos</th><th>Estado final</th>
+                        </tr></thead>
+                        <tbody>
+                          @for (eq of conChecklist(s); track eq.inventario; let i = $index) {
+                            <tr>
+                              <td>{{ i + 1 }}</td>
+                              <td class="mono">{{ eq.inventario }}</td>
+                              <td>{{ equipoDe(eq.inventario)?.usuarioFinal || '—' }}</td>
+                              <td>{{ equipoDe(eq.inventario)?.nombreEquipo || '—' }}</td>
+                              <td class="mono">{{ equipoDe(eq.inventario)?.ip || '—' }}</td>
+                              <td>{{ eq.clasificacion || '—' }}</td>
+                              <td class="col-num">{{ data.itemsIncumplidos(eq).length }}</td>
+                              <td><ui-badge [estado]="estadoFinalLectura(s.titulo, eq)" /></td>
+                            </tr>
+                          }
+                        </tbody>
+                      </table>
+                    </div>
+                    @for (eq of conChecklist(s); track eq.inventario) {
+                      <div class="sec-title">Equipo {{ eq.inventario }} — {{ equipoDe(eq.inventario)?.nombreEquipo || 'sin nombre registrado' }}</div>
+                      <div style="display: grid; gap: 4px; margin: 8px 0;">
+                        @for (i of eq.items; track i.id) {
+                          @if (i.cumplimiento) {
+                            <div class="row-between" style="font-size: 13px; align-items: flex-start;">
+                              <span style="max-width: 620px;">
+                                {{ nombreItem(s.titulo, i.id) }}
+                                @if (i.cumplimiento === 'No cumple') {
+                                  <div class="muted" style="font-size: 12px;">
+                                    {{ i.descripcion }} · Acción correctiva: {{ i.accionCorrectiva }}
+                                    @if (i.fechaAccion) { ({{ formatea(i.fechaAccion) }}) }
+                                    · {{ i.estadoItem }}
+                                  </div>
+                                }
+                                @if (i.cumplimiento === 'No aplica' && i.justificacion) {
+                                  <div class="muted" style="font-size: 12px;">Justificación: {{ i.justificacion }}</div>
+                                }
+                              </span>
+                              <ui-badge [estado]="i.cumplimiento" />
+                            </div>
+                          }
+                        }
+                      </div>
+                      @if (eq.observaciones) { <p class="muted" style="font-size: 12.5px;">{{ eq.observaciones }}</p> }
+                    }
+                  }
                   @if (conIp(s).length) {
                     <div class="table-wrap" style="margin: 8px 0;">
                       <table class="tbl">
@@ -268,10 +350,10 @@ interface SeccionEdit {
           <div class="card">
             <div class="card-body">
               <div class="stepper">
-                @for (p of pasos(); track p; let i = $index) {
+                @for (p of pasos(); track p.titulo + $index; let i = $index) {
                   <div class="step" [class.done]="i < paso()" [class.now]="i === paso()">
                     <span class="dot">{{ i + 1 }}</span>
-                    <span class="lbl">{{ p }}</span>
+                    <span class="lbl">{{ p.titulo }}</span>
                   </div>
                 }
               </div>
@@ -281,7 +363,7 @@ interface SeccionEdit {
           <div class="card" style="margin-top: 14px;">
             <div class="card-head">
               <div>
-                <h3>{{ pasos()[paso()] }}</h3>
+                <h3>{{ pasoActual().titulo }}</h3>
                 @if (esResumen()) { <p class="sub">Verifique la información antes de entregar; la entrega genera el documento formal.</p> }
                 @else if (seccionActual()?.plantilla?.descripcion) { <p class="sub">{{ seccionActual()?.plantilla?.descripcion }}</p> }
               </div>
@@ -359,11 +441,154 @@ interface SeccionEdit {
                     @if (s.plantilla.equipos) { {{ equiposRevisados(s) }} de {{ equiposActivos().length }} equipo(s) del inventario operativo revisado(s). }
                     @if (s.plantilla.equiposIp; as pip) { {{ equiposIpLlenos(s) }} de {{ pip.cantidad }} equipo(s) verificados por IP con hora. }
                     @if (s.plantilla.telefonos; as ptel) { {{ telefonosLlenos(s) }} de {{ ptel.cantidad }} teléfono(s)/extensión(es) con hora. }
+                    @if (s.plantilla.checklistEquipos; as pchk) {
+                      {{ elegidos(s) }} de {{ pchk.cantidad }} equipo(s) seleccionado(s);
+                      {{ verificadosCompletos(s) }} verificado(s) por completo.
+                      Ítems: {{ cuentaCumplimiento(s, 'Cumple') }} cumplen,
+                      {{ cuentaCumplimiento(s, 'No cumple') }} no cumplen,
+                      {{ cuentaCumplimiento(s, 'No aplica') }} no aplican;
+                      {{ accionesRegistradas(s) }} acción(es) correctiva(s) registrada(s).
+                    }
                   </p>
                 }
               }
 
               @else if (seccionActual(); as s) {
+                <!-- Paso 1 del F0382: datos del control programado, en solo lectura. -->
+                @if (s.plantilla.datosControl) {
+                  <dl class="dl">
+                    <div><dt>Código del formato</dt><dd class="mono">{{ c.codigo }} · {{ catalogo()?.version }}</dd></div>
+                    <div><dt>Nombre del control</dt><dd>{{ catalogo()?.nombre }}</dd></div>
+                    <div><dt>Frecuencia</dt><dd>{{ data.etiquetaFrecuencia(c.codigo) }}</dd></div>
+                    <div><dt>Período</dt><dd>{{ nombreMes(c.mes) }} {{ c.anio }}</dd></div>
+                    <div><dt>Mes</dt><dd>{{ nombreMes(c.mes) }}</dd></div>
+                    <div><dt>Año</dt><dd class="mono">{{ c.anio }}</dd></div>
+                    <div><dt>Dirección</dt><dd>{{ data.nombreDireccion(c.direccion) }}</dd></div>
+                    <div><dt>Unidad</dt><dd>{{ c.unidad }}</dd></div>
+                    <div><dt>Técnico responsable</dt><dd>{{ c.responsable }}</dd></div>
+                    <div><dt>Fecha límite</dt><dd class="mono">{{ formatea(c.fechaLimite) }}</dd></div>
+                    <div><dt>Estado del control</dt><dd><ui-badge [estado]="c.estado" /></dd></div>
+                    <div><dt>Equipos activos en la Dirección/Unidad</dt><dd>{{ equiposActivos().length }}</dd></div>
+                  </dl>
+                  <p class="muted" style="margin-top: 12px;">
+                    Estos datos vienen del control programado: no se digitan aquí. Si algo no
+                    corresponde, corrija la programación o la distribución de soportes.
+                  </p>
+                }
+
+                <!-- Paso 2 del F0382: selección de la muestra desde el inventario operativo. -->
+                @if (s.plantilla.checklistEquipos; as pchk) {
+                  @if (esMuestra()) {
+                    <div class="alert" style="margin-bottom: 12px;">
+                      <span class="alert-ico">i</span>
+                      <span>
+                        El formato exige <b>{{ pchk.cantidad }} equipos</b>. Elíjalos del
+                        <b>inventario operativo</b> de {{ data.dirUnidad(c.direccion, c.unidad) }}:
+                        {{ equiposActivos().length }} equipo(s) activo(s) disponibles.
+                        @if (pchk.ayuda) { {{ pchk.ayuda }} }
+                      </span>
+                    </div>
+                    @for (eq of s.checklistEquipos; track $index; let i = $index) {
+                      <div class="slot" [class.on]="!!eq.inventario">
+                        <div class="slot-cab">
+                          <div>
+                            <div class="slot-num">Equipo {{ i + 1 }} de {{ pchk.cantidad }}</div>
+                            @if (equipoDe(eq.inventario); as info) {
+                              <b>{{ info.nombreEquipo || info.tipo }}</b>
+                              <span class="mono muted"> · {{ info.inventario }}</span>
+                            } @else {
+                              <span class="muted">Sin equipo seleccionado</span>
+                            }
+                          </div>
+                          <div class="row">
+                            <button class="btn btn-outline btn-sm" type="button" (click)="abrirSelector(i)">
+                              <ui-icon name="search" [size]="13" />
+                              {{ eq.inventario ? 'Cambiar equipo' : 'Seleccionar desde inventario' }}
+                            </button>
+                            @if (eq.inventario) {
+                              <button class="btn btn-ghost btn-sm" type="button" (click)="quitarEquipo(s, i)">Quitar equipo</button>
+                            }
+                          </div>
+                        </div>
+                        @if (equipoDe(eq.inventario); as info) {
+                          <div class="eq-elegido">
+                            <div class="d"><dt>N° de inventario</dt><dd class="mono">{{ info.inventario }}</dd></div>
+                            <div class="d"><dt>Nombre del usuario</dt><dd>{{ info.usuarioFinal || sinDato }}</dd></div>
+                            <div class="d"><dt>Nombre del equipo</dt><dd>{{ info.nombreEquipo || sinDato }}</dd></div>
+                            <div class="d"><dt>Tipo de equipo</dt><dd>{{ info.tipo }}</dd></div>
+                            <div class="d"><dt>Marca</dt><dd>{{ info.marca || sinDato }}</dd></div>
+                            <div class="d"><dt>Modelo</dt><dd>{{ info.modelo || sinDato }}</dd></div>
+                            <div class="d"><dt>Serie</dt><dd class="mono">{{ info.serie || sinDato }}</dd></div>
+                            <div class="d"><dt>IP</dt><dd class="mono">{{ info.ip || sinDato }}</dd></div>
+                            <div class="d"><dt>Dirección</dt><dd>{{ data.nombreDireccion(info.direccion) }}</dd></div>
+                            <div class="d"><dt>Unidad</dt><dd>{{ info.unidad }}</dd></div>
+                            <div class="d"><dt>Estado operativo</dt><dd>{{ info.estado }}</dd></div>
+                          </div>
+                          <div class="field" style="margin-top: 12px; max-width: 460px;">
+                            <label [for]="'clas-' + i">
+                              Clasificación en el formato <span style="color: var(--danger)">*</span>
+                              <ui-help texto="El formato agrupa sus ítems: cinco aplican a equipos de usuario interno, tres a los de consulta al público y uno a ambos." />
+                            </label>
+                            <select [id]="'clas-' + i" class="control" [(ngModel)]="eq.clasificacion">
+                              <option value="">Seleccione…</option>
+                              @for (o of pchk.clasificaciones; track o) { <option [value]="o">{{ o }}</option> }
+                            </select>
+                          </div>
+                        }
+                      </div>
+                    }
+                  }
+
+                  <!-- Paso 3 del F0382: verificación de los ítems, equipo por equipo. -->
+                  @if (esVerificacion()) {
+                    <div class="avance-eq">
+                      @for (eq of s.checklistEquipos; track $index; let i = $index) {
+                        <span class="a" [class.ok]="eq.inventario && verificados(s, i) === aplicables(s, i)">
+                          <b>Equipo {{ i + 1 }}</b>:
+                          @if (!eq.inventario) { sin seleccionar }
+                          @else if (!eq.clasificacion) { falta clasificar }
+                          @else { {{ verificados(s, i) }} de {{ aplicables(s, i) }} ítems verificados }
+                        </span>
+                      }
+                    </div>
+                    <div class="table-wrap">
+                      <table class="tbl">
+                        <thead><tr>
+                          <th>N.º</th><th>N° de inventario</th><th>Nombre del usuario</th><th>Nombre del equipo</th>
+                          <th>IP</th><th>Tipo</th><th class="col-num">Ítems incumplidos</th>
+                          <th>Acción correctiva</th><th>Estado final</th><th>Acciones</th>
+                        </tr></thead>
+                        <tbody>
+                          @for (eq of s.checklistEquipos; track $index; let i = $index) {
+                            <tr>
+                              <td>{{ i + 1 }}</td>
+                              @if (equipoDe(eq.inventario); as info) {
+                                <td class="mono">{{ info.inventario }}</td>
+                                <td>{{ info.usuarioFinal || sinDato }}</td>
+                                <td>{{ info.nombreEquipo || sinDato }}</td>
+                                <td class="mono">{{ info.ip || sinDato }}</td>
+                                <td>{{ info.tipo }}</td>
+                                <td class="col-num" [class.mal]="incumplidos(s, i) > 0">{{ incumplidos(s, i) }}</td>
+                                <td style="max-width: 220px;">{{ accionesDe(s, i) || '—' }}</td>
+                                <td><ui-badge [estado]="estadoFinal(s, i)" /></td>
+                                <td style="white-space: nowrap;">
+                                  <button class="btn btn-primary btn-sm" type="button" (click)="verificar(i)">Verificar ítems</button>
+                                  <button class="btn btn-ghost btn-sm" type="button" (click)="detalleEquipo.set(eq.inventario)">Ver detalle</button>
+                                  <button class="btn btn-ghost btn-sm" type="button" (click)="abrirSelector(i)">Cambiar equipo</button>
+                                  <button class="btn btn-ghost btn-sm" type="button" (click)="quitarEquipo(s, i)">Quitar equipo</button>
+                                </td>
+                              } @else {
+                                <td colspan="8" class="muted">Sin equipo seleccionado.</td>
+                                <td><button class="btn btn-outline btn-sm" type="button" (click)="abrirSelector(i)">Seleccionar</button></td>
+                              }
+                            </tr>
+                          }
+                        </tbody>
+                      </table>
+                    </div>
+                  }
+                }
+
                 @if (s.plantilla.campos?.length) {
                   <div class="form-grid">
                     @for (campo of s.plantilla.campos; track campo.id) {
@@ -594,6 +819,162 @@ interface SeccionEdit {
           </div>
         }
 
+        <!-- Selector de equipos del inventario operativo (F0382) -->
+        @if (slotEquipo() >= 0 && seccionMuestra(); as sm) {
+          <ui-modal titulo="Seleccionar equipo desde inventario"
+            [sub]="'Equipos activos de ' + data.dirUnidad(c.direccion, c.unidad)"
+            (cerrar)="slotEquipo.set(-1)">
+            <div class="field">
+              <label for="busca-eq">Buscar equipo</label>
+              <input id="busca-eq" class="control" [ngModel]="busqueda()" (ngModelChange)="busqueda.set($event)"
+                placeholder="Número de inventario, nombre del equipo, usuario final, IP, tipo, marca, modelo o unidad…" />
+              <span class="hint">
+                Solo se listan equipos activos de esta Dirección/Unidad: el inventario operativo proviene
+                de las entregas aceptadas en Gestión de Equipos.
+              </span>
+            </div>
+            <div class="buscador-eq" style="margin-top: 12px;">
+              @for (eq of equiposBuscados(); track eq.ciclo) {
+                <div class="fila-eq">
+                  <div>
+                    <b>{{ eq.nombreEquipo || eq.tipo }}</b>
+                    <span class="mono muted"> · {{ eq.inventario }}</span>
+                    <div class="muted" style="font-size: 12px;">
+                      {{ eq.tipo }} {{ eq.marca }} {{ eq.modelo }} · {{ eq.usuarioFinal }}
+                      @if (eq.ip) { · IP <span class="mono">{{ eq.ip }}</span> }
+                      · {{ eq.unidad }} · {{ eq.estado }}
+                    </div>
+                  </div>
+                  @if (yaElegido(sm, eq.inventario) && !esDelSlot(sm, eq.inventario)) {
+                    <span class="badge warn" [title]="data.MSG_EQUIPO_REPETIDO">Ya seleccionado</span>
+                  } @else {
+                    <button class="btn btn-primary btn-sm" type="button" (click)="elegirEquipo(sm, eq.inventario)">
+                      Seleccionar
+                    </button>
+                  }
+                </div>
+              } @empty {
+                <p class="muted">
+                  Ningún equipo activo de esta Dirección/Unidad coincide con la búsqueda.
+                </p>
+              }
+            </div>
+          </ui-modal>
+        }
+
+        <!-- Verificación de ítems de un equipo (F0382) -->
+        @if (slotVerificar() >= 0 && seccionMuestra(); as sm) {
+          @if (sm.checklistEquipos[slotVerificar()]; as eq) {
+            <ui-modal [titulo]="'Verificación de ítems · equipo ' + (slotVerificar() + 1)"
+              [sub]="(equipoDe(eq.inventario)?.nombreEquipo || 'Sin equipo') + ' · ' + (eq.inventario || '—')"
+              (cerrar)="slotVerificar.set(-1)">
+              @if (!eq.inventario) {
+                <p class="muted">Seleccione primero un equipo del inventario operativo.</p>
+              } @else if (!eq.clasificacion) {
+                <div class="alert warn">
+                  <span class="alert-ico">!</span>
+                  <span>Indique la clasificación del equipo en el paso anterior: de ella dependen los ítems que aplican.</span>
+                </div>
+              } @else {
+                <dl class="dl" style="margin-bottom: 14px;">
+                  <div><dt>Inventario</dt><dd class="mono">{{ eq.inventario }}</dd></div>
+                  <div><dt>Usuario</dt><dd>{{ equipoDe(eq.inventario)?.usuarioFinal || sinDato }}</dd></div>
+                  <div><dt>Nombre del equipo</dt><dd>{{ equipoDe(eq.inventario)?.nombreEquipo || sinDato }}</dd></div>
+                  <div><dt>IP</dt><dd class="mono">{{ equipoDe(eq.inventario)?.ip || sinDato }}</dd></div>
+                  <div><dt>Dirección/Unidad</dt><dd>{{ data.dirUnidad(c.direccion, c.unidad) }}</dd></div>
+                  <div><dt>Clasificación</dt><dd>{{ eq.clasificacion }}</dd></div>
+                </dl>
+                @for (item of itemsDelEquipo(sm, slotVerificar()); track item.id) {
+                  @if (respuestaItem(eq, item.id); as ri) {
+                    <div class="item-seg" [class.mal]="ri.cumplimiento === 'No cumple'" [class.na]="ri.cumplimiento === 'No aplica'">
+                      <div class="item-seg-cab">
+                        <div>
+                          <div>{{ item.nombre }}</div>
+                          <div class="grupo">{{ item.grupo }}</div>
+                        </div>
+                        <span class="opciones">
+                          @for (op of sm.plantilla.checklistEquipos?.cumplimiento ?? []; track op) {
+                            <button type="button" [class.on]="ri.cumplimiento === op" (click)="marcaItem(ri, op)">{{ op }}</button>
+                          }
+                        </span>
+                      </div>
+                      @if (ri.cumplimiento === 'No cumple') {
+                        <div class="form-grid" style="margin-top: 10px;">
+                          <div class="field span-2">
+                            <label [for]="'desc-' + item.id">Descripción del incumplimiento <span style="color: var(--danger)">*</span></label>
+                            <textarea [id]="'desc-' + item.id" class="control" rows="2" [(ngModel)]="ri.descripcion"></textarea>
+                          </div>
+                          <div class="field span-2">
+                            <label [for]="'ac-' + item.id">Acción correctiva <span style="color: var(--danger)">*</span></label>
+                            <textarea [id]="'ac-' + item.id" class="control" rows="2" [(ngModel)]="ri.accionCorrectiva"></textarea>
+                          </div>
+                          <div class="field">
+                            <label [for]="'est-' + item.id">Estado final <span style="color: var(--danger)">*</span></label>
+                            <select [id]="'est-' + item.id" class="control" [(ngModel)]="ri.estadoItem">
+                              <option value="">Seleccione…</option>
+                              @for (o of sm.plantilla.checklistEquipos?.estadosItem ?? []; track o) { <option [value]="o">{{ o }}</option> }
+                            </select>
+                          </div>
+                          <div class="field">
+                            <label [for]="'fec-' + item.id">Fecha de la acción correctiva</label>
+                            <input [id]="'fec-' + item.id" class="control" type="date" [(ngModel)]="ri.fechaAccion" />
+                          </div>
+                        </div>
+                      }
+                      @if (ri.cumplimiento === 'No aplica') {
+                        <div class="field" style="margin-top: 10px;">
+                          <label [for]="'jus-' + item.id">Justificación <span style="color: var(--danger)">*</span></label>
+                          <textarea [id]="'jus-' + item.id" class="control" rows="2" [(ngModel)]="ri.justificacion"
+                            placeholder="Debe justificar por qué este ítem no aplica para el equipo seleccionado."></textarea>
+                        </div>
+                      }
+                    </div>
+                  }
+                }
+                <div class="field" style="margin-top: 12px;">
+                  <label for="obs-eq">Observaciones del equipo</label>
+                  <textarea id="obs-eq" class="control" rows="2" [(ngModel)]="eq.observaciones"></textarea>
+                </div>
+              }
+              <div class="row" style="justify-content: space-between; margin-top: 16px;">
+                <span class="muted">
+                  Estado final del equipo: <b>{{ estadoFinal(sm, slotVerificar()) }}</b>
+                </span>
+                <button class="btn btn-primary" type="button" (click)="cerrarVerificacion()">Guardar verificación</button>
+              </div>
+            </ui-modal>
+          }
+        }
+
+        <!-- Ficha del equipo, tal como está en el inventario operativo -->
+        @if (detalleEquipo(); as inv) {
+          @if (equipoDe(inv); as info) {
+            <ui-modal [titulo]="info.nombreEquipo || info.tipo"
+              [sub]="'Ficha del inventario operativo · ' + info.inventario" (cerrar)="detalleEquipo.set('')">
+              <dl class="dl">
+                <div><dt>N° de inventario</dt><dd class="mono">{{ info.inventario }}</dd></div>
+                <div><dt>Nombre del usuario</dt><dd>{{ info.usuarioFinal || sinDato }}</dd></div>
+                <div><dt>Nombre del equipo</dt><dd>{{ info.nombreEquipo || sinDato }}</dd></div>
+                <div><dt>Tipo de equipo</dt><dd>{{ info.tipo }}</dd></div>
+                <div><dt>Marca y modelo</dt><dd>{{ info.marca }} {{ info.modelo }}</dd></div>
+                <div><dt>Serie</dt><dd class="mono">{{ info.serie || sinDato }}</dd></div>
+                <div><dt>IP</dt><dd class="mono">{{ info.ip || sinDato }}</dd></div>
+                <div><dt>MAC</dt><dd class="mono">{{ info.mac || sinDato }}</dd></div>
+                <div><dt>Dirección</dt><dd>{{ data.nombreDireccion(info.direccion) }}</dd></div>
+                <div><dt>Unidad</dt><dd>{{ info.unidad }}</dd></div>
+                <div><dt>Estado operativo</dt><dd><ui-badge [estado]="info.estado" /></dd></div>
+                <div><dt>Soporte responsable</dt><dd>{{ info.soporteResponsable || sinDato }}</dd></div>
+                <div><dt>Expediente único</dt><dd class="mono">{{ info.expedienteUnico || sinDato }}</dd></div>
+                <div><dt>Fecha de aceptación</dt><dd class="mono">{{ formatea(info.fechaAceptacion) }}</dd></div>
+              </dl>
+              <p class="muted" style="margin-top: 12px;">
+                Datos tomados del inventario operativo, alimentado por las entregas aceptadas en
+                SISGOST — Gestión de Equipos. No se editan desde el control.
+              </p>
+            </ui-modal>
+          }
+        }
+
         <!-- Modal de justificación -->
         @if (modalJustificar()) {
           <ui-modal titulo="Carta de justificación" [sub]="'Cierra el control sin actividad: ' + c.codigo + ' · ' + nombreMes(c.mes) + ' ' + c.anio" (cerrar)="modalJustificar.set(false)">
@@ -659,6 +1040,14 @@ export class CompletarControlComponent {
 
   protected readonly paso = signal(0);
   protected readonly verDoc = signal('');
+  /** Hueco de la muestra cuyo selector de inventario está abierto; -1 = cerrado (F0382). */
+  protected readonly slotEquipo = signal(-1);
+  /** Hueco cuya verificación de ítems está abierta; -1 = cerrado (F0382). */
+  protected readonly slotVerificar = signal(-1);
+  protected readonly busqueda = signal('');
+  protected readonly detalleEquipo = signal('');
+  /** Texto único para lo que el inventario operativo no tiene registrado. */
+  protected readonly sinDato = 'Dato no registrado en inventario operativo';
   protected readonly modalJustificar = signal(false);
   protected readonly modalRevision = signal(false);
 
@@ -738,8 +1127,28 @@ export class CompletarControlComponent {
             hora: t?.hora ?? '', observaciones: t?.observaciones ?? ''
           });
         }
+        // Muestra del F0382: siempre tantos huecos como pida el formato, con todos sus ítems
+        // listos para responder. Del equipo solo se guarda el inventario: lo demás lo pone el
+        // inventario operativo al dibujar.
+        const checklistEquipos: RespuestaEquipoChecklist[] = [];
+        for (let i = 0; i < (p.checklistEquipos?.cantidad ?? 0); i++) {
+          const g = r?.checklistEquipos?.[i];
+          checklistEquipos.push({
+            inventario: g?.inventario ?? '',
+            clasificacion: g?.clasificacion ?? '',
+            observaciones: g?.observaciones ?? '',
+            items: (p.checklistEquipos?.items ?? []).map((it) => {
+              const ri = g?.items?.find((x) => x.id === it.id);
+              return {
+                id: it.id, cumplimiento: ri?.cumplimiento ?? '', descripcion: ri?.descripcion ?? '',
+                accionCorrectiva: ri?.accionCorrectiva ?? '', estadoItem: ri?.estadoItem ?? '',
+                fechaAccion: ri?.fechaAccion ?? '', justificacion: ri?.justificacion ?? ''
+              };
+            })
+          });
+        }
         return {
-          plantilla: p, campos, items, equipos, equiposIp, telefonos,
+          plantilla: p, campos, items, equipos, equiposIp, telefonos, checklistEquipos,
           filas: (r?.filas ?? []).map((f) => [...f])
         };
       });
@@ -775,19 +1184,36 @@ export class CompletarControlComponent {
       && ['Entregado', 'Entregado tarde', 'En revisión', 'Observado'].includes(c.estado);
   }
 
-  protected readonly pasos = computed(() => {
-    const nombres = (this.catalogo()?.plantilla ?? []).map((p) => p.titulo);
-    if (this.catalogo()?.requiereEvidencia) nombres.push('Evidencias');
-    nombres.push('Resumen y entrega');
-    return nombres;
+  /**
+   * Pasos del formulario. Cada sección de la plantilla es un paso, salvo la sección de muestra
+   * (F0382), que se abre en dos: primero se eligen los equipos del inventario y después se
+   * verifican sus ítems.
+   */
+  protected readonly pasos = computed<PasoForm[]>(() => {
+    const lista: PasoForm[] = [];
+    (this.catalogo()?.plantilla ?? []).forEach((p, i) => {
+      if (p.checklistEquipos) {
+        lista.push({ titulo: 'Selección de equipos desde inventario', seccion: i, fase: 'muestra' });
+        lista.push({ titulo: 'Verificación de ítems por equipo', seccion: i, fase: 'verificacion' });
+      } else {
+        lista.push({ titulo: p.titulo, seccion: i, fase: 'seccion' });
+      }
+    });
+    if (this.catalogo()?.requiereEvidencia) lista.push({ titulo: 'Evidencias', seccion: -1, fase: 'evidencias' });
+    lista.push({ titulo: 'Resumen y entrega', seccion: -1, fase: 'resumen' });
+    return lista;
   });
 
-  protected esResumen(): boolean { return this.paso() === this.pasos().length - 1; }
-  protected esEvidencias(): boolean {
-    return !!this.catalogo()?.requiereEvidencia && this.paso() === this.pasos().length - 2;
+  protected pasoActual(): PasoForm {
+    return this.pasos()[this.paso()] ?? this.pasos()[this.pasos().length - 1];
   }
+  protected esResumen(): boolean { return this.pasoActual().fase === 'resumen'; }
+  protected esEvidencias(): boolean { return this.pasoActual().fase === 'evidencias'; }
+  protected esMuestra(): boolean { return this.pasoActual().fase === 'muestra'; }
+  protected esVerificacion(): boolean { return this.pasoActual().fase === 'verificacion'; }
   protected seccionActual(): SeccionEdit | undefined {
-    return this.esResumen() || this.esEvidencias() ? undefined : this.modelo[this.paso()];
+    const p = this.pasoActual();
+    return p.seccion >= 0 ? this.modelo[p.seccion] : undefined;
   }
 
   protected siguiente(): void {
@@ -857,8 +1283,160 @@ export class CompletarControlComponent {
           resultado: String(t.resultado ?? ''), hora: String(t.hora ?? ''),
           observaciones: String(t.observaciones ?? '')
         }))
+        : undefined,
+      checklistEquipos: s.plantilla.checklistEquipos
+        ? s.checklistEquipos.map((e) => ({
+          inventario: String(e.inventario ?? '').trim(),
+          clasificacion: String(e.clasificacion ?? ''),
+          observaciones: String(e.observaciones ?? ''),
+          items: e.items.map((i) => ({
+            id: i.id, cumplimiento: String(i.cumplimiento ?? ''),
+            descripcion: String(i.descripcion ?? ''), accionCorrectiva: String(i.accionCorrectiva ?? ''),
+            estadoItem: String(i.estadoItem ?? ''), fechaAccion: String(i.fechaAccion ?? ''),
+            justificacion: String(i.justificacion ?? '')
+          }))
+        }))
         : undefined
     }));
+  }
+
+  // ------------------------------------------------------------------ muestra de equipos (F0382)
+
+  /** Sección de muestra del formulario, si el control la tiene. */
+  protected seccionMuestra(): SeccionEdit | undefined {
+    return this.modelo.find((m) => !!m.plantilla.checklistEquipos);
+  }
+
+  /** Ficha del equipo en el inventario operativo; undefined si el hueco está vacío. */
+  protected equipoDe(inventario: string) {
+    return inventario ? this.data.equipoDe(inventario) : undefined;
+  }
+
+  /** Equipos activos de la Dirección/Unidad que coinciden con la búsqueda del modal. */
+  protected readonly equiposBuscados = computed(() => {
+    const c = this.control();
+    return c ? this.data.equiposParaMuestra(c, this.busqueda()) : [];
+  });
+
+  protected abrirSelector(i: number): void {
+    this.busqueda.set('');
+    this.slotEquipo.set(i);
+  }
+
+  protected yaElegido(s: SeccionEdit, inventario: string): boolean {
+    return s.checklistEquipos.some((e) => e.inventario === inventario);
+  }
+  protected esDelSlot(s: SeccionEdit, inventario: string): boolean {
+    return s.checklistEquipos[this.slotEquipo()]?.inventario === inventario;
+  }
+
+  /** Coloca el equipo elegido en su hueco. El mismo equipo no puede ocupar dos huecos. */
+  protected elegirEquipo(s: SeccionEdit, inventario: string): void {
+    const c = this.control();
+    const i = this.slotEquipo();
+    const hueco = s.checklistEquipos[i];
+    if (!c || !hueco) return;
+    const otros = s.checklistEquipos.filter((_, k) => k !== i).map((e) => e.inventario);
+    const bloqueo = this.data.bloqueoEquipoMuestra(c, inventario, otros);
+    if (bloqueo) {
+      this.toast.warn('Equipo no admitido', bloqueo);
+      return;
+    }
+    // Cambiar de equipo descarta la verificación anterior: los ítems son de ese equipo, no del hueco.
+    if (hueco.inventario && hueco.inventario !== inventario) this.limpiaItems(hueco);
+    hueco.inventario = inventario;
+    const eq = this.data.equipoDe(inventario);
+    if (!hueco.clasificacion) {
+      const clas = s.plantilla.checklistEquipos?.clasificaciones ?? [];
+      // Los equipos de consulta al público se reconocen por su usuario final en el inventario.
+      hueco.clasificacion = /consulta|público|publico/i.test(eq?.usuarioFinal ?? '') ? clas[1] ?? '' : clas[0] ?? '';
+    }
+    this.slotEquipo.set(-1);
+    this.guardar(true);
+    this.toast.ok('Equipo agregado a la muestra',
+      (eq?.nombreEquipo || eq?.tipo || inventario) + ' · ' + inventario + '.');
+  }
+
+  protected quitarEquipo(s: SeccionEdit, i: number): void {
+    const hueco = s.checklistEquipos[i];
+    if (!hueco?.inventario) return;
+    const inventario = hueco.inventario;
+    hueco.inventario = '';
+    hueco.clasificacion = '';
+    hueco.observaciones = '';
+    this.limpiaItems(hueco);
+    this.guardar(true);
+    this.toast.ok('Equipo retirado', inventario + ' salió de la muestra del control.');
+  }
+
+  private limpiaItems(hueco: RespuestaEquipoChecklist): void {
+    for (const it of hueco.items) {
+      it.cumplimiento = '';
+      it.descripcion = '';
+      it.accionCorrectiva = '';
+      it.estadoItem = '';
+      it.fechaAccion = '';
+      it.justificacion = '';
+    }
+  }
+
+  protected verificar(i: number): void { this.slotVerificar.set(i); }
+
+  protected cerrarVerificacion(): void {
+    this.slotVerificar.set(-1);
+    this.guardar(true);
+  }
+
+  /** Ítems que aplican al equipo del hueco según su clasificación en el formato. */
+  protected itemsDelEquipo(s: SeccionEdit, i: number): ItemSeguridad[] {
+    const eq = s.checklistEquipos[i];
+    return eq ? this.data.itemsDeClasificacion(s.plantilla, eq.clasificacion) : [];
+  }
+
+  protected respuestaItem(eq: RespuestaEquipoChecklist, id: string): RespuestaItemSeguridad | undefined {
+    return eq.items.find((x) => x.id === id);
+  }
+
+  /** Marcar un cumplimiento limpia lo que ya no corresponde (AC si vuelve a cumplir, etc.). */
+  protected marcaItem(ri: RespuestaItemSeguridad, valor: string): void {
+    ri.cumplimiento = ri.cumplimiento === valor ? '' : valor;
+    if (ri.cumplimiento !== 'No cumple') {
+      ri.descripcion = '';
+      ri.accionCorrectiva = '';
+      ri.estadoItem = '';
+      ri.fechaAccion = '';
+    }
+    if (ri.cumplimiento !== 'No aplica') ri.justificacion = '';
+  }
+
+  protected verificados(s: SeccionEdit, i: number): number {
+    const eq = s.checklistEquipos[i];
+    return eq ? this.data.itemsVerificados(s.plantilla, eq) : 0;
+  }
+  protected aplicables(s: SeccionEdit, i: number): number {
+    return this.itemsDelEquipo(s, i).length;
+  }
+  protected incumplidos(s: SeccionEdit, i: number): number {
+    const eq = s.checklistEquipos[i];
+    return eq ? this.data.itemsIncumplidos(eq).length : 0;
+  }
+  protected estadoFinal(s: SeccionEdit, i: number): string {
+    const eq = s.checklistEquipos[i];
+    return eq ? this.data.estadoFinalEquipo(s.plantilla, eq) : 'Pendiente';
+  }
+  /** Acciones correctivas del equipo, resumidas para la columna de la tabla. */
+  protected accionesDe(s: SeccionEdit, i: number): string {
+    const eq = s.checklistEquipos[i];
+    if (!eq) return '';
+    return this.data.itemsIncumplidos(eq).map((x) => x.accionCorrectiva).filter(Boolean).join(' · ');
+  }
+  /** Cuántos huecos de la muestra ya tienen equipo. */
+  protected elegidos(s: SeccionEdit): number {
+    return s.checklistEquipos.filter((e) => e.inventario).length;
+  }
+  /** Cuántos equipos de la muestra tienen su verificación terminada. */
+  protected verificadosCompletos(s: SeccionEdit): number {
+    return s.checklistEquipos.filter((e, i) => e.inventario && this.verificados(s, i) === this.aplicables(s, i)).length;
   }
 
   // ------------------------------------------------------------------ equipos verificados por IP
@@ -1023,6 +1601,20 @@ export class CompletarControlComponent {
     return this.catalogo()?.plantilla.find((p) => p.titulo === titulo)?.tabla?.columnas ?? [];
   }
 
+  /** Equipos de la muestra registrados en una sección ya entregada (F0382). */
+  protected conChecklist(s: RespuestaSeccion): RespuestaEquipoChecklist[] {
+    return (s.checklistEquipos ?? []).filter((e) => e.inventario.trim());
+  }
+  /** Nombre del ítem de seguridad, tomado de la plantilla del catálogo. */
+  protected nombreItem(titulo: string, id: string): string {
+    const p = this.catalogo()?.plantilla.find((x) => x.titulo === titulo);
+    return p ? this.data.nombreItemSeguridad(p, id) : id;
+  }
+  protected estadoFinalLectura(titulo: string, eq: RespuestaEquipoChecklist): string {
+    const p = this.catalogo()?.plantilla.find((x) => x.titulo === titulo);
+    return p ? this.data.estadoFinalEquipo(p, eq) : 'Pendiente';
+  }
+
   /** Filas con IP registrada de una sección ya entregada (vista de solo lectura). */
   protected conIp(s: RespuestaSeccion): RespuestaEquipoIp[] {
     return (s.equiposIp ?? []).filter((e) => e.ip.trim());
@@ -1037,6 +1629,18 @@ export class CompletarControlComponent {
   }
   protected telefonosLlenos(s: SeccionEdit): number {
     return s.telefonos.filter((t) => t.numero.trim() && t.hora.trim()).length;
+  }
+
+  /** Ítems de toda la muestra con ese cumplimiento (resumen del paso final). */
+  protected cuentaCumplimiento(s: SeccionEdit, valor: string): number {
+    return s.checklistEquipos
+      .filter((e) => e.inventario)
+      .reduce((n, e) => n + e.items.filter((i) => i.cumplimiento === valor).length, 0);
+  }
+  protected accionesRegistradas(s: SeccionEdit): number {
+    return s.checklistEquipos
+      .filter((e) => e.inventario)
+      .reduce((n, e) => n + e.items.filter((i) => i.accionCorrectiva.trim()).length, 0);
   }
 
   protected camposLlenos(s: SeccionEdit): number {

@@ -129,6 +129,8 @@ export class DocumentoComponent {
       { etiqueta: 'Estado del control', valor: c.estado }
     ])];
     for (const p of cat?.plantilla ?? []) {
+      // El paso de datos del control no se imprime: sus datos ya encabezan la hoja.
+      if (p.datosControl) continue;
       const r = c.secciones.find((s) => s.titulo === p.titulo);
       const s: SeccionDoc = { titulo: p.titulo };
       if (p.campos?.length) {
@@ -157,9 +159,51 @@ export class DocumentoComponent {
           s.texto = 'Sin registros en el período. El detalle consta en las observaciones del control.';
         }
       }
+      // Secciones que se imprimen DESPUÉS de la sección a la que pertenecen.
+      const anexos: SeccionDoc[] = [];
+      // Muestra de equipos verificada ítem por ítem (F0382): primero el cuadro del formato con
+      // sus cinco equipos y, debajo, el detalle de cada uno con sus incumplimientos.
+      if (p.checklistEquipos) {
+        const muestra = (r?.checklistEquipos ?? []).filter((e) => e.inventario.trim());
+        if (muestra.length) {
+          s.columnas = ['N.º', 'N° de inventario', 'Nombre del usuario', 'Nombre del equipo', 'IP',
+            'Clasificación', 'Ítems incumplidos', 'Acción correctiva', 'Estado final'];
+          s.filas = muestra.map((e, i) => {
+            const eq = this.data.equipoDe(e.inventario);
+            const malos = this.data.itemsIncumplidos(e);
+            return [
+              String(i + 1), e.inventario, eq?.usuarioFinal ?? '—', eq?.nombreEquipo ?? '—',
+              eq?.ip ?? '—', e.clasificacion || '—',
+              malos.length ? malos.map((m) => this.data.nombreItemSeguridad(p, m.id).split(' — ')[0]).join(', ') : 'Ninguno',
+              malos.map((m) => m.accionCorrectiva).filter(Boolean).join(' · ') || '—',
+              this.data.estadoFinalEquipo(p, e)
+            ];
+          });
+          s.nota = 'Muestra de equipos activos de la Dirección/Unidad tomada del inventario operativo, proveniente de las entregas aceptadas en SISGOST — Gestión de Equipos.';
+          for (const e of muestra) {
+            const eq = this.data.equipoDe(e.inventario);
+            anexos.push({
+              titulo: `Equipo ${e.inventario} · ${eq?.nombreEquipo ?? 'sin nombre registrado'}`,
+              columnas: ['Ítem verificado', 'Resultado', 'Observación (Obs)', 'Acción correctiva (AC)', 'Fecha', 'Estado final'],
+              filas: e.items.filter((i) => i.cumplimiento).map((i) => [
+                this.data.nombreItemSeguridad(p, i.id), i.cumplimiento,
+                i.descripcion || i.justificacion || '—', i.accionCorrectiva || '—',
+                i.fechaAccion ? formateaFecha(i.fechaAccion) : '—', i.estadoItem || '—'
+              ]),
+              nota: [
+                `${eq?.usuarioFinal ?? 'Usuario no registrado'} · ${eq?.tipo ?? ''} ${eq?.marca ?? ''} ${eq?.modelo ?? ''}`.trim(),
+                eq?.ip ? `IP ${eq.ip}` : 'Sin IP registrada',
+                e.clasificacion,
+                e.observaciones
+              ].filter(Boolean).join(' · ')
+            });
+          }
+        } else {
+          s.texto = 'No se registraron equipos en la muestra del período.';
+        }
+      }
       // Equipos verificados por su IP y teléfonos/extensiones (F0387). Van justo después de la
       // semana a la que pertenecen: el documento del mes lleva las cinco semanas en una sola hoja.
-      const anexos: SeccionDoc[] = [];
       if (p.equiposIp) {
         const conIp = (r?.equiposIp ?? []).filter((e) => e.ip.trim());
         if (conIp.length) {
