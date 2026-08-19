@@ -246,6 +246,32 @@ simulada de eventos de la semilla—: la equivalencia es número de inventario +
 el identificador de ciclo. `diferenciasEquipo()` decide si hay algo real que actualizar, de modo
 que recargar la pantalla no genera movimientos ni trazas de más.
 
+## 4.6 Sincronización automática
+
+`DataService.autoSyncControls(anio, mes, usuario?)` es la única función que decide qué controles
+deben existir en un mes y de quién son. Devuelve un `ResumenAutoSync` con lo que movió.
+
+| Paso | Regla |
+|---|---|
+| Qué debe existir | Controles activos de frecuencia mensual o consolidada, en los pares que devuelve `paresAplicables` |
+| Pasó a aplicar | Se crea Pendiente con el responsable de la distribución; si existía como «No aplica», se reabre |
+| Dejó de aplicar | Se marca «No aplica» si sigue abierto; entregado, cerrado o justificado no se toca |
+| Responsables | Se recalculan solo en los controles abiertos |
+| Período vencido | No se crean controles nuevos, solo se marcan los que dejaron de corresponder |
+
+Las claves son estables: `claveControl(codigo, anio, mes, direccionId, unidad)` e
+`idTecnico(nombre)`. Nada se compara por el texto que se ve en pantalla.
+
+Disparadores: `actualizarAplicacion` y `sincronizarTrasDistribucion` la llaman al guardar, y
+`AutoSyncService.periodo(anio, mes)` la llama desde un `effect` en las pantallas de período —así
+se dispara también al cambiar de mes, de año o de usuario en «Ver como»—. `AutoSyncService`
+recuerda la última combinación sincronizada para no repetir trabajo; `invalidar()` fuerza la
+siguiente pasada tras guardar en administración.
+
+El inventario tiene su equivalente, `autoSyncOperationalInventory()`, que corre al cargar el
+módulo y al abrir el inventario operativo. **No hay botones**: ni de sincronizar, ni de regenerar,
+ni de incorporar equipos, ni de aplicar descargos.
+
 ## 5. Formularios digitales dirigidos por datos
 
 Cada control del catálogo define su **plantilla** (`SeccionPlantilla[]`): campos tipados

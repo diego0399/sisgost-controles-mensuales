@@ -1,7 +1,8 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, effect, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
+import { AutoSyncService } from '../../core/services/auto-sync.service';
 import { DataService } from '../../core/services/data.service';
 import { ControlDeadlineService } from '../../core/services/control-deadline.service';
 import { OperatividadService } from '../../core/services/operatividad.service';
@@ -240,6 +241,11 @@ export class HistorialComponent {
   protected readonly fCodigo = signal('');
   protected readonly fEstado = signal('');
   protected readonly verDoc = signal('');
+
+  /** Sincronización automática del período visible: sin botones, se dispara sola. */
+  private readonly autoSync = inject(AutoSyncService);
+  private readonly sincroniza = effect(() => this.autoSync.periodo(this.anio(), this.mesSel()));
+
 
   protected readonly estados = ['Programado', 'Pendiente', 'En proceso', 'En revisión', 'Entregado',
     'Entregado tarde', 'Vencido', 'Justificado', 'Observado', 'Cerrado'];

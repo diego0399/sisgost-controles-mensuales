@@ -2,7 +2,7 @@ import { Injectable, computed, inject, signal } from '@angular/core';
 import {
   ActividadDia, AplicacionControl, AreaTecnica, BitacoraDiaria, ControlCatalogo, ControlMes,
   Direccion, DistribucionSoporte, DocumentoGenerado, EquipoOperativo, ESTADOS_ACTIVOS,
-  EstadoControl, EventoIntegracion, EventoTrazabilidad, Justificacion, RespuestaSeccion,
+  EstadoControl, EventoIntegracion, EventoTrazabilidad, Frecuencia, Justificacion, RespuestaSeccion,
   ItemSeguridad, RespuestaEquipoChecklist, RespuestaItemSeguridad, RevisionAtencion,
   SeccionPlantilla, UsuarioSistema, isoLocal, nombreMes
 } from '../models/models';
@@ -14,6 +14,14 @@ import { EquipoOperativoCompartido, SharedInventoryService } from './shared-inve
 import { SharedInventoryBridgeService } from './shared-inventory-bridge.service';
 
 const STORAGE_KEY = 'sisgost.controles.v1';
+
+/** Qué movió una pasada de sincronización automática del período. */
+export interface ResumenAutoSync {
+  creados: number;
+  noAplica: number;
+  reabiertos: number;
+  responsables: number;
+}
 
 /** Hora límite institucional de la bitácora diaria. */
 export const HORA_LIMITE_BITACORA = '17:00';
@@ -1036,6 +1044,159 @@ export class DataService {
    * idempotente —un evento ya procesado no vuelve a aplicarse ni duplica el equipo—.
    * Devuelve cuántos movimientos se aplicaron en esta pasada.
    */
+  // ------------------------------------------------------------------ sincronización automática
+
+  /**
+   * Frecuencias que el sistema programa por sí mismo cada mes. Las eventuales y las programadas
+   * dependen de que ocurra algo (un traslado de cintas, un mantenimiento correctivo), así que
+   * nunca se crean solas: aparecen cuando el hecho existe.
+   */
+  private readonly FRECUENCIAS_PROGRAMABLES: Frecuencia[] = ['Mensual', 'Semanal con entrega mensual consolidada'];
+
+  /** Estados de un control que ya cerró su ciclo: la sincronización nunca los toca. */
+  private readonly ESTADOS_HISTORICOS: EstadoControl[] = ['Entregado', 'Entregado tarde', 'Cerrado', 'Justificado'];
+
+  /**
+   * Clave estable de un control del período. No se compara por textos visibles: se arma con el
+   * código del formato, el período y el par Dirección/Unidad, que es el identificador que ambos
+   * módulos comparten.
+   */
+  claveControl(codigo: string, anio: number, mes: number, direccionId: string, unidad: string): string {
+    return `${codigo}|${anio}-${String(mes).padStart(2, '0')}|${direccionId}|${unidad}`;
+  }
+
+  /** Identificador estable del técnico a partir de su nombre o de su texto «Nombre — Rol». */
+  idTecnico(nombreOTexto: string): string {
+    const nombre = this.soportes.soloNombre(nombreOTexto) || nombreOTexto;
+    return this.usuarios().find((u) => u.nombre === nombre)?.usuario ?? '';
+  }
+
+  /**
+   * **Sincronización automática del período.** Es la única función que decide qué controles deben
+   * existir en un mes y de quién son. Se ejecuta sola: al abrir cualquier pantalla de período, al
+   * cambiar de mes o de año, al editar «Aplica a» del catálogo y al modificar la distribución de
+   * soportes. Nunca hay un botón que la dispare.
+   *
+   * Es idempotente: si nada cambió no toca nada ni deja trazas, de modo que abrir una pantalla dos
+   * veces no duplica controles ni ensucia la trazabilidad.
+   *
+   * Reglas:
+   * · Un control que **pasa a aplicar** se crea como Pendiente y se asigna al soporte responsable.
+   * · Un control que **deja de aplicar** se marca «No aplica» si sigue abierto; si ya se entregó,
+   *   cerró o justificó se conserva como histórico y no se toca.
+   * · El **responsable** de los controles abiertos se recalcula con la distribución vigente; los
+   *   ya entregados conservan a quien los entregó.
+   * · No se inventan obligaciones retroactivas: en un período cuyo plazo ya venció no se crean
+   *   controles nuevos, solo se marcan los que dejaron de aplicar.
+   */
+  autoSyncControls(anio: number, mes: number, u: UsuarioSistema | null = null): ResumenAutoSync {
+    const resumen: ResumenAutoSync = { creados: 0, noAplica: 0, reabiertos: 0, responsables: 0 };
+    const hoy = isoLocal(new Date());
+    const periodoAbierto = !this.plazos.periodoCerrado(anio, mes, hoy);
+    const periodo = `${anio}-${String(mes).padStart(2, '0')}`;
+
+    // Lo que el catálogo dice que debe existir este mes, por clave estable.
+    const debidos = new Map<string, { codigo: string; direccion: string; unidad: string }>();
+    for (const cat of this.catalogo()) {
+      if (!cat.activo || !this.FRECUENCIAS_PROGRAMABLES.includes(cat.frecuencia)) continue;
+      for (const par of this.paresAplicables(cat.codigo)) {
+        debidos.set(this.claveControl(cat.codigo, anio, mes, par.direccion, par.unidad),
+          { codigo: cat.codigo, direccion: par.direccion, unidad: par.unidad });
+      }
+    }
+
+    const delPeriodo = this.controles().filter((c) => c.anio === anio && c.mes === mes);
+    const existentes = new Map(delPeriodo.map((c) =>
+      [this.claveControl(c.codigo, c.anio, c.mes, c.direccion, c.unidad), c]));
+
+    // 1. Controles que ahora aplican y no existían, o que existían marcados «No aplica».
+    for (const [clave, d] of debidos) {
+      const previo = existentes.get(clave);
+      if (previo && previo.estado !== 'No aplica') continue;
+      if (previo) {
+        const responsable = this.responsableDe(d.direccion, d.unidad) || previo.responsable;
+        this.actualizaControl(previo.id, (c) => ({ ...c, estado: 'Pendiente', responsable }));
+        this.registrarEvento(u, {
+          direccion: d.direccion, unidad: d.unidad, tipoControl: d.codigo, mes, anio,
+          accion: 'Control actualizado automáticamente',
+          estadoAnterior: 'No aplica', estadoNuevo: 'Pendiente',
+          observacion: `${d.codigo} volvió a aplicar en ${this.dirUnidad(d.direccion, d.unidad)} según la configuración vigente del catálogo; el control del período ${periodo} se reabrió como pendiente.`
+        });
+        resumen.reabiertos++;
+        continue;
+      }
+      if (!periodoAbierto) continue; // no se crean obligaciones en un período ya vencido
+      const nuevo: ControlMes = {
+        id: this.idNuevo('CTL'), codigo: d.codigo, anio, mes,
+        direccion: d.direccion, unidad: d.unidad,
+        responsable: this.responsableDe(d.direccion, d.unidad),
+        estado: 'Pendiente',
+        fechaLimite: this.plazos.fechaLimiteMensual(anio, mes),
+        avance: 0, secciones: [], evidencias: [], observaciones: ''
+      };
+      this.controles.update((l) => [...l, nuevo]);
+      this.registrarEvento(u, {
+        direccion: d.direccion, unidad: d.unidad, tipoControl: d.codigo, mes, anio,
+        accion: 'Control creado automáticamente',
+        estadoNuevo: 'Pendiente',
+        observacion: `${d.codigo} pasó a aplicar en ${this.dirUnidad(d.direccion, d.unidad)}; se programó el control de ${nombreMes(mes)} ${anio} con fecha límite ${nuevo.fechaLimite} y responsable ${nuevo.responsable || 'sin asignar'}.`
+      });
+      resumen.creados++;
+    }
+
+    // 2. Controles que dejaron de aplicar.
+    for (const [clave, c] of existentes) {
+      if (debidos.has(clave)) continue;
+      const cat = this.catalogoDe(c.codigo);
+      // Los eventuales y programados no los gobierna «Aplica a»: existen porque hubo actividad.
+      if (cat && !this.FRECUENCIAS_PROGRAMABLES.includes(cat.frecuencia)) continue;
+      if (this.ESTADOS_HISTORICOS.includes(c.estado) || c.estado === 'No aplica') continue;
+      this.actualizaControl(c.id, (x) => ({ ...x, estado: 'No aplica' }));
+      this.registrarEvento(u, {
+        direccion: c.direccion, unidad: c.unidad, tipoControl: c.codigo, mes, anio,
+        accion: 'Control marcado como No aplica automáticamente',
+        estadoAnterior: c.estado, estadoNuevo: 'No aplica',
+        observacion: `${c.codigo} dejó de aplicar en ${this.dirUnidad(c.direccion, c.unidad)} según la configuración vigente; deja de contarse como pendiente y como vencido.`
+      });
+      resumen.noAplica++;
+    }
+
+    // 3. Responsables de los controles todavía abiertos, según la distribución vigente.
+    for (const c of this.controles().filter((x) => x.anio === anio && x.mes === mes)) {
+      if (this.ESTADOS_HISTORICOS.includes(c.estado) || c.estado === 'No aplica') continue;
+      const responsable = this.responsableDe(c.direccion, c.unidad);
+      if (!responsable || responsable === c.responsable) continue;
+      const anterior = c.responsable;
+      this.actualizaControl(c.id, (x) => ({ ...x, responsable }));
+      this.registrarEvento(u, {
+        direccion: c.direccion, unidad: c.unidad, tipoControl: c.codigo, mes, anio,
+        accion: 'Responsable actualizado automáticamente',
+        estadoAnterior: anterior || 'sin asignar', estadoNuevo: responsable,
+        observacion: `La distribución de soportes de ${this.dirUnidad(c.direccion, c.unidad)} cambió: el control ${c.codigo} de ${nombreMes(mes)} ${anio}, que sigue abierto, pasó a ${responsable}.`
+      });
+      resumen.responsables++;
+    }
+
+    const movimientos = resumen.creados + resumen.noAplica + resumen.reabiertos + resumen.responsables;
+    if (movimientos) {
+      this.persistir();
+      // Los KPIs son `computed` sobre estas señales: recalcularlos es consecuencia de guardar.
+      this.registrarEvento(u, {
+        mes, anio, accion: 'Sincronización automática ejecutada',
+        observacion: `Período ${periodo}: ${resumen.creados} control(es) creados, ${resumen.reabiertos} reabiertos, ${resumen.noAplica} marcados «No aplica» y ${resumen.responsables} con responsable actualizado. KPIs recalculados automáticamente.`
+      });
+    }
+    return resumen;
+  }
+
+  /**
+   * **Sincronización automática del inventario operativo.** Vuelca lo que Gestión de Equipos
+   * publicó en el inventario compartido y aplica la cola simulada de eventos. Corre sola al cargar
+   * el módulo, al abrir el inventario operativo y cuando el otro módulo escribe; es idempotente y
+   * no necesita ninguna acción del usuario.
+   */
+  autoSyncOperationalInventory(): number { return this.sincronizarInventario(); }
+
   sincronizarInventario(): number {
     // Primero, lo que Gestión de Equipos publicó en el inventario operativo compartido.
     let aplicados = this.aplicarInventarioCompartido();
@@ -1369,7 +1530,18 @@ export class DataService {
       moduloOrigen: MODULO_CONTROLES, moduloDestino: MODULO_EQUIPOS,
       observacion: `Desde esta fecha, Gestión de Equipos ofrece a ${tec.nombre} como Técnico de Configuración para los requerimientos de esta Dirección/Unidad.`
     });
+    // Los controles abiertos del período pasan solos al nuevo responsable.
+    this.sincronizarTrasDistribucion(u);
     return null;
+  }
+
+  /**
+   * Recalcula el período tras un cambio en la distribución. Se llama al asignar y al desactivar:
+   * guardar la distribución es lo único que hace el usuario, el resto ocurre aquí.
+   */
+  private sincronizarTrasDistribucion(u: UsuarioSistema): void {
+    const p = this.plazos.periodoActivo();
+    this.autoSyncControls(p.anio, p.mes, u);
   }
 
   /**
@@ -1409,6 +1581,8 @@ export class DataService {
       moduloOrigen: MODULO_CONTROLES, moduloDestino: MODULO_EQUIPOS,
       observacion: `Gestión de Equipos deja de ofrecer a ${this.soportes.soloNombre(actual.tecnico)} como Técnico de Configuración de esta Dirección/Unidad.`
     });
+    // Los controles abiertos quedan con el responsable que corresponda ahora.
+    this.sincronizarTrasDistribucion(u);
     return null;
   }
 
@@ -1455,6 +1629,9 @@ export class DataService {
       estadoAnterior: antes, estadoNuevo: despues,
       observacion: `${codigo}: ${aplicacion.modo.toLowerCase()}. ${aplicacion.observaciones}`.trim()
     });
+    // El período se recalcula aquí mismo: guardar la configuración YA sincroniza los controles.
+    const p = this.plazos.periodoActivo();
+    this.autoSyncControls(p.anio, p.mes, u);
     return null;
   }
 }

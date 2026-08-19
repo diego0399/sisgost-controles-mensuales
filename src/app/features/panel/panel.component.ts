@@ -1,6 +1,7 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, effect, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
+import { AutoSyncService } from '../../core/services/auto-sync.service';
 import { DataService } from '../../core/services/data.service';
 import { BusinessDayService } from '../../core/services/business-day.service';
 import { ControlDeadlineService } from '../../core/services/control-deadline.service';
@@ -211,6 +212,9 @@ export class PanelComponent {
   protected readonly esHabilHoy = this.habiles.esHabil(this.hoy);
   /** Período activo del sistema: el panel siempre habla del mes en curso. */
   private readonly periodo = this.plazos.periodoActivo(this.hoy);
+  /** El panel también pone al día el período al abrirse; no hay nada que pulsar. */
+  private readonly autoSync = inject(AutoSyncService);
+  private readonly sincroniza = effect(() => this.autoSync.periodo(this.periodo.anio, this.periodo.mes));
   protected readonly mesActual = `${nombreMes(this.periodo.mes)} ${this.periodo.anio}`;
   protected readonly limiteMes = formateaFecha(this.plazos.fechaLimiteMensual(this.periodo.anio, this.periodo.mes));
 

@@ -51,6 +51,14 @@ Al seleccionar un mes se abre el detalle filtrable por **Dirección, técnico, t
 y estado**, con fecha límite, fecha de entrega, responsable y acceso al documento generado.
 El Encargado puede **generar el reporte mensual consolidado** para presentarlo a jefaturas.
 
+## 3.1 Nada que sincronizar a mano
+
+El sistema no tiene botones de sincronizar, regenerar ni recalcular. Cuando el Administrador
+cambia dónde aplica un control, o cuando cambia la distribución de soportes, basta con **guardar**:
+los controles del período, sus responsables y los indicadores quedan al día en ese mismo momento, y
+el aviso en pantalla lo dice. Lo mismo ocurre con el inventario operativo, que se actualiza solo a
+partir de lo que se acepta o se descarga en Gestión de Equipos.
+
 ## 4. Controles mensuales
 
 La pantalla se organiza **por Dirección/Unidad**, que es como se atienden los controles, y abre

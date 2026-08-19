@@ -1,7 +1,8 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, effect, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
+import { AutoSyncService } from '../../core/services/auto-sync.service';
 import { DataService } from '../../core/services/data.service';
 import { BusinessDayService } from '../../core/services/business-day.service';
 import { ControlDeadlineService } from '../../core/services/control-deadline.service';
@@ -226,6 +227,11 @@ export class ControlesComponent {
   protected readonly fEstado = signal('');
   protected readonly fNivel = signal<EstadoOperatividad | ''>('');
   protected readonly verDoc = signal('');
+
+  /** Sincronización automática del período visible: sin botones, se dispara sola. */
+  private readonly autoSync = inject(AutoSyncService);
+  private readonly sincroniza = effect(() => this.autoSync.periodo(this.anio(), this.mes()));
+
 
   /** La vista por Dirección es la predeterminada; la general queda a un clic. */
   protected readonly vista = signal<'direccion' | 'general'>('direccion');

@@ -1,6 +1,7 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, effect, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
+import { AutoSyncService } from '../../core/services/auto-sync.service';
 import { DataService } from '../../core/services/data.service';
 import { HolidayService } from '../../core/services/holiday.service';
 import { BusinessDayService } from '../../core/services/business-day.service';
@@ -159,6 +160,11 @@ export class CalendarioComponent {
   private readonly activo = this.plazos.periodoActivo();
   protected readonly anio = signal(this.activo.anio);
   protected readonly mes = signal(this.activo.mes);
+
+  /** Sincronización automática del período visible: sin botones, se dispara sola. */
+  private readonly autoSync = inject(AutoSyncService);
+  private readonly sincroniza = effect(() => this.autoSync.periodo(this.anio(), this.mes()));
+
 
   protected mueve(paso: number): void {
     let m = this.mes() + paso;

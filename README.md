@@ -93,6 +93,30 @@ el panel ejecutivo cuenta «controles aplicables del mes» y avisa cuando una Di
 **tiene controles aplicables pero no tiene Técnico de Soporte asignado**; y los controles que
 trabajan con equipos solo se programan donde hay inventario operativo activo.
 
+## Todo se sincroniza solo
+
+El módulo **no tiene ninguna acción manual de sincronizar, regenerar ni recalcular**. Lo único que
+hace el usuario es guardar su cambio; el resto ocurre en el mismo acto.
+
+| Cuándo | Qué pasa sin pulsar nada |
+|---|---|
+| Se guarda «Aplica a» en el catálogo | Se recalcula el período: se crean los controles que pasaron a aplicar, se marcan «No aplica» los que dejaron de corresponder y se conservan los históricos |
+| Se guarda o desactiva una asignación de la distribución | Los controles **abiertos** pasan al nuevo responsable; los entregados conservan a quien los entregó |
+| Se abre una pantalla de período | Pasada silenciosa del período visible (controles + inventario operativo) |
+| Se cambia mes, año, Dirección/Unidad, técnico o el usuario de «Ver como» | La pasada se repite para lo que ahora se mira |
+| Gestión de Equipos acepta una conformidad o registra un descargo | El equipo entra o sale del inventario operativo por sí solo |
+
+La función central es `autoSyncControls(anio, mes)`, y la del inventario,
+`autoSyncOperationalInventory()`. Las dos son **idempotentes**: si nada cambió no escriben nada y
+no dejan traza, así que navegar entre pantallas no duplica controles ni ensucia la trazabilidad.
+
+Las comparaciones se hacen con **claves estables** —código del formato, período y par
+Dirección/Unidad— y nunca con textos visibles.
+
+Una decisión que conviene conocer: en un período **cuyo plazo ya venció** la sincronización no
+crea controles nuevos (no se inventan obligaciones retroactivas); ahí solo marca «No aplica» lo
+que dejó de corresponder.
+
 ## Inventario operativo compartido con Gestión de Equipos
 
 Un equipo entra al inventario operativo **solo** cuando el Usuario Final acepta la conformidad en

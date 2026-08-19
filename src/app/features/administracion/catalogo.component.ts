@@ -1,6 +1,7 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../core/services/auth.service';
+import { AutoSyncService } from '../../core/services/auto-sync.service';
 import { DataService } from '../../core/services/data.service';
 import { ToastService } from '../../core/services/toast.service';
 import { BadgeComponent, HelpTipComponent, ModalComponent } from '../../shared/ui';
@@ -270,6 +271,7 @@ export class CatalogoComponent {
   protected readonly data = inject(DataService);
   protected readonly auth = inject(AuthService);
   private readonly toast = inject(ToastService);
+  private readonly autoSync = inject(AutoSyncService);
 
   protected readonly frecuencias: Frecuencia[] = ['Mensual', 'Semanal',
     'Semanal con entrega mensual consolidada', 'Diaria', 'Eventual', 'Programado'];
@@ -360,6 +362,9 @@ export class CatalogoComponent {
       return;
     }
     this.aplicacion.set(null);
-    this.toast.ok('Aplicación actualizada', 'La aplicación del control fue actualizada correctamente.');
+    // Guardar YA recalculó el período: el aviso lo dice, no pide pulsar nada más.
+    this.autoSync.invalidar();
+    this.toast.ok('Aplicación actualizada',
+      'La aplicación del control fue actualizada y los controles del período fueron sincronizados automáticamente.');
   }
 }

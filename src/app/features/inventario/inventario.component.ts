@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, effect, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
@@ -64,12 +64,6 @@ import { EquipoOperativo, formateaFecha, nombreMes } from '../../core/models/mod
             }
           </p>
         </div>
-        @if (auth.esAdmin()) {
-          <button class="btn btn-outline btn-sm" type="button" [disabled]="sincronizando()" (click)="resincronizar()">
-            <ui-icon name="refresh" [size]="13" />
-            {{ sincronizando() ? 'Sincronizando…' : 'Sincronizar inventario desde Gestión de Equipos' }}
-          </button>
-        }
       </div>
 
       <!-- Movimientos ya sincronizados: informativos, sin acciones manuales. -->
@@ -326,19 +320,13 @@ export class InventarioComponent {
   private readonly toast = inject(ToastService);
 
   /**
-   * Vuelve a consultar el inventario compartido. El flujo normal es automático —al cargar y
-   * cuando el otro módulo escribe—; esta acción existe solo para demostración y depuración.
+   * El inventario operativo se pone al día **solo**: al abrir la pantalla se consulta el módulo de
+   * Equipos y se aplica lo que haya llegado. No hay botón de sincronizar ni de aplicar descargo.
    */
-  protected readonly sincronizando = signal(false);
-  protected async resincronizar(): Promise<void> {
-    this.sincronizando.set(true);
-    const movimientos = await this.data.reconsultarInventarioCompartido();
-    this.sincronizando.set(false);
-    this.toast.ok('Inventario consultado',
-      movimientos
-        ? movimientos + ' movimiento(s) aplicados desde el inventario operativo compartido.'
-        : 'El inventario operativo ya estaba al día: no había movimientos nuevos.');
-  }
+  private readonly sincroniza = effect(() => {
+    if (!this.data.listo()) return;
+    void this.data.reconsultarInventarioCompartido();
+  });
 
   protected readonly busca = signal('');
   protected readonly fDireccion = signal('');

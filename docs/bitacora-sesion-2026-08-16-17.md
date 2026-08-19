@@ -1,6 +1,6 @@
 # Bitácora de sesión — SISGOST Controles Mensuales
 
-**Sesión del 16 al 18 de agosto de 2026 · rondas 74 a 79.**
+**Sesión del 16 al 19 de agosto de 2026 · rondas 74 a 80.**
 
 Registro de lo que se pidió y lo que quedó hecho en esta conversación, para poder retomar el
 trabajo sin releer el historial. El punto de control completo del proyecto sigue siendo
@@ -184,12 +184,36 @@ Mensuales la ve solo en su Dirección/Unidad, sin duplicar al recargar, con su I
 F0382; el descargo la retira y la conserva como histórico. Batería **373/0**, seis suites de
 navegador sin avisos, `npm run build` correcto en los dos módulos.
 
+## Ronda 80 — Sincronización automática, sin acciones manuales
+
+**Se pidió** que no exista ningún botón manual de sincronizar, regenerar o recalcular, y que todo
+ocurra solo: al editar «Aplica a», al cambiar la distribución, al abrir una pantalla, al cambiar de
+mes o de usuario, y en el inventario operativo.
+
+**Quedó hecho**
+
+- Retirada la única acción manual que existía (la de depuración del inventario, agregada en la
+  ronda anterior). El botón «Sincronizar controles del periodo» que menciona el requerimiento nunca
+  existió, pero el hueco de fondo sí era real: guardar «Aplica a» o la distribución no recalculaba
+  nada.
+- Nueva función central `autoSyncControls(anio, mes)`: crea lo que pasó a aplicar, reabre lo que
+  vuelve a aplicar, marca «No aplica» lo que dejó de corresponder, conserva los históricos y
+  recalcula responsables solo de los controles abiertos. Claves estables, sin comparar textos.
+- Nuevo `AutoSyncService` que dispara la pasada desde las pantallas de período, y por tanto también
+  al cambiar mes, año o el usuario de «Ver como». Idempotente.
+- `autoSyncOperationalInventory()` para el inventario, invocado al cargar y al abrir la pantalla.
+- Trazas automáticas de cada movimiento y mensaje explícito al guardar en el catálogo.
+
+Verificación: 9 pantallas sin acciones manuales; los tres casos de configuración y los dos de
+inventario resueltos sin pulsar nada; 0 controles duplicados e idempotencia comprobada. Batería
+**403/0**, siete suites de navegador sin avisos y `npm run build` limpio.
+
 ## Estado al cierre de la sesión
 
 | Comprobación | Resultado |
 |---|---|
-| Batería sobre fuente y semilla | **373 casos, 0 fallos** |
-| Suites de navegador (6) | **sin avisos ni errores de consola** |
+| Batería sobre fuente y semilla | **403 casos, 0 fallos** |
+| Suites de navegador (7) | **sin avisos ni errores de consola** |
 | `npm run build` · Controles Mensuales | limpio |
 | `npm run build` · Gestión de Equipos | correcto, con sus 3 avisos de presupuesto preexistentes |
 

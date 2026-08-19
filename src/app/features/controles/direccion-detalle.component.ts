@@ -2,6 +2,7 @@ import { Component, computed, effect, inject, input, signal } from '@angular/cor
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
+import { AutoSyncService } from '../../core/services/auto-sync.service';
 import { DataService } from '../../core/services/data.service';
 import { BusinessDayService } from '../../core/services/business-day.service';
 import { ControlDeadlineService } from '../../core/services/control-deadline.service';
@@ -344,6 +345,11 @@ export class DireccionDetalleComponent {
   protected readonly anio = signal(this.periodo.anio);
   protected readonly mes = signal(this.periodo.mes);
   protected readonly verDoc = signal('');
+
+  /** Sincronización automática del período visible: sin botones, se dispara sola. */
+  private readonly autoSync = inject(AutoSyncService);
+  private readonly sincroniza = effect(() => this.autoSync.periodo(this.anio(), this.mes()));
+
 
   /** Deja constancia de la consulta de operatividad, una vez por Dirección/Unidad y período. */
   private consultado = '';
