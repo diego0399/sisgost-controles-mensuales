@@ -161,6 +161,33 @@ export class DocumentoComponent {
       }
       // Secciones que se imprimen DESPUÉS de la sección a la que pertenecen.
       const anexos: SeccionDoc[] = [];
+      // Bitácora de ingresos al cuarto de servidores (F0234): el cuadro del formato, o la
+      // constancia expresa de que el período no tuvo ingresos.
+      if (p.ingresos) {
+        const registros = (r?.ingresos ?? []).filter((x) => !this.data.ingresoVacio(x));
+        if (registros.length) {
+          s.columnas = ['N.º', 'Fecha', 'Hora de entrada', 'Hora de salida', 'Carné', 'Nombre de quien ingresa',
+            'Cargo o institución', 'Tipo de personal', 'Acompañante o visita', 'Anexa documento',
+            'Actividad o motivo de la visita'];
+          s.filas = registros.map((x, i) => [
+            String(i + 1), x.fecha ? formateaFecha(x.fecha) : '—', x.horaEntrada || '—', x.horaSalida || '—',
+            x.carne || '—', x.nombre || '—', x.cargo || '—', x.tipoPersonal || '—',
+            x.acompanante ? `${x.acompanante}${x.carneAcompanante ? ' · ' + x.carneAcompanante : ''}` : '—',
+            x.anexaDocumento || '—', x.motivo || '—'
+          ]);
+          s.nota = 'Un registro por cada ingreso al cuarto de servidores, con su hora de entrada y de salida.';
+          const conObservacion = registros.filter((x) => x.observacion.trim());
+          if (conObservacion.length) {
+            anexos.push({
+              titulo: 'Observaciones de los registros de ingreso',
+              columnas: ['Fecha', 'Nombre de quien ingresa', 'Observación'],
+              filas: conObservacion.map((x) => [x.fecha ? formateaFecha(x.fecha) : '—', x.nombre || '—', x.observacion])
+            });
+          }
+        } else {
+          s.texto = 'Durante el periodo evaluado no se registraron ingresos al cuarto de servidores.';
+        }
+      }
       // Muestra de equipos verificada ítem por ítem (F0382): primero el cuadro del formato con
       // sus cinco equipos y, debajo, el detalle de cada uno con sus incumplimientos.
       if (p.checklistEquipos) {

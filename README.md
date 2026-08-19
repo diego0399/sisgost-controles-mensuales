@@ -199,6 +199,33 @@ La bitácora de la última sesión de trabajo (rondas 74 a 77: integración, inv
 automático, operatividad por Dirección, meses pendientes, F0387 con IP y F0389 consolidado) está
 en [docs/bitacora-sesion-2026-08-16-17.md](docs/bitacora-sesion-2026-08-16-17.md).
 
+## F0234: bitácora de ingresos al cuarto de servidores
+
+El **F0234** se llena como el formato controlado V4: una entrada por cada visita al cuarto de
+servidores, con fecha, hora de entrada y de salida, carné y nombre del personal autorizado, carné y
+nombre del acompañante, si es personal técnico de la DTI, interno del CNR o externo, si anexa
+documento y la actividad o motivo de la visita.
+
+En pantalla **no es una tabla horizontal**: cada ingreso se agrega desde un formulario propio y la
+tabla solo resume lo registrado, con **Ver detalle**, **Editar** y **Eliminar** por fila. Los tipos
+de dato son los correctos —fecha con calendario, horas con selector de hora, motivo como catálogo y
+observación multilínea—, y cada registro se valida antes de entrar:
+
+| Regla | Mensaje |
+|---|---|
+| Falta la fecha, la hora de entrada o la de salida | «Debe ingresar la fecha del registro.» / «…la hora de entrada.» / «…la hora de salida.» |
+| Salida anterior a la entrada | «La hora de salida no puede ser menor que la hora de entrada.» |
+| Falta el nombre, el cargo o el motivo | «Debe ingresar el nombre de quien ingresa.» / «…el cargo o institución.» / «…el motivo del ingreso.» |
+| Queda un registro a medias | «Complete o elimine los registros incompletos antes de entregar el control.» |
+
+**Mes sin ingresos.** Si en el mes no hubo ninguna visita, se declara explícitamente: entonces no
+se piden registros, pero **sí** se exige la observación que lo sustente, y el documento lo dice con
+todas sus letras: *«Durante el periodo evaluado no se registraron ingresos al cuarto de
+servidores.»* El control nunca queda simplemente vacío.
+
+El paso de **verificación de cierre** pregunta si se verificó el cierre (Sí / No / No aplica), con
+su fecha, hora y responsable, y pide justificación cuando la respuesta no es «Sí».
+
 ## F0382: verificación de seguridad sobre una muestra de equipos
 
 El **F0382 — Check list de verificación de políticas y controles de seguridad de TIC** se llena

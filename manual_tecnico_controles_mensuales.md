@@ -226,6 +226,25 @@ el equipo y su usuario final.
 Nota de datos: el formato exige cinco equipos, así que el inventario operativo mantiene al menos
 esa cantidad activa en cada Dirección/Unidad donde el control aplica.
 
+## 4.4.1 Bitácora de ingresos (F0234)
+
+El bloque `ingresos` de `SeccionPlantilla` declara los motivos y los tipos de personal del
+formato; las respuestas viajan en `RespuestaSeccion.ingresos` (`RespuestaIngreso`, con
+`horaEntrada`/`horaSalida`, carné propio y del acompañante, `anexaDocumento` y `motivo`).
+
+| Método (`DataService`) | Qué hace |
+|---|---|
+| `ingresosDe(codigo)` | Sección de bitácora del control, si la tiene |
+| `faltasIngreso(registro)` | Reglas del registro, con el mensaje exacto de cada una |
+| `ingresoVacio(registro)` | Un registro en blanco no cuenta como incompleto |
+| `mesSinIngresos(control)` | Si se declaró que el mes no tuvo visitas |
+| `faltasIngresos(...)` | O hay registros completos, o el mes se declara sin ingresos con observación |
+
+El formulario trabaja sobre un **borrador**: el registro solo entra a la lista cuando se guarda, y
+el modal muestra en vivo lo que falta. `trazarIngresos` compara la bitácora antes y después de
+cada guardado y emite «Registro de ingreso agregado», «…editado», «…eliminado» y «Mes sin ingresos
+marcado», identificando cada registro por fecha + hora de entrada + nombre.
+
 ## 4.5 Inventario operativo compartido entre módulos
 
 `SharedInventoryService` (archivo idéntico en los dos proyectos) es el contrato: la clave

@@ -13,27 +13,85 @@
   "secciones": [
    {
     "titulo": "Registros de ingreso del mes",
-    "filas": [
-     [
-      "08/01/2026",
-      "09:40",
-      "10:15",
-      "Técnico del Departamento de Operaciones",
-      "CNR — Operaciones Informáticas",
-      "Retiro y entrega de cintas de respaldo"
-     ],
-     [
-      "19/01/2026",
-      "14:05",
-      "14:30",
-      "Personal de limpieza autorizado",
-      "Servicios generales",
-      "Limpieza programada del cuarto de servidores"
-     ]
+    "campos": [
+     {
+      "id": "sin-ingresos",
+      "valor": "No"
+     }
+    ],
+    "ingresos": [
+     {
+      "fecha": "2026-01-08",
+      "horaEntrada": "09:40",
+      "horaSalida": "10:15",
+      "carne": "03291",
+      "nombre": "José Ortiz Santos",
+      "cargo": "CNR — Departamento de Operaciones Informáticas",
+      "tipoPersonal": "Personal interno CNR",
+      "acompanante": "Wendy Carranza",
+      "carneAcompanante": "04077",
+      "anexaDocumento": "Sí",
+      "motivo": "Traslado de cintas de respaldo",
+      "observacion": "Retiro y entrega de cintas del ciclo mensual."
+     },
+     {
+      "fecha": "2026-01-19",
+      "horaEntrada": "14:05",
+      "horaSalida": "14:30",
+      "carne": "—",
+      "nombre": "Personal de limpieza autorizado",
+      "cargo": "Servicios generales",
+      "tipoPersonal": "Personal externo al CNR",
+      "acompanante": "Wendy Carranza",
+      "carneAcompanante": "04077",
+      "anexaDocumento": "No",
+      "motivo": "Limpieza programada",
+      "observacion": ""
+     },
+     {
+      "fecha": "2026-01-24",
+      "horaEntrada": "08:15",
+      "horaSalida": "09:05",
+      "carne": "04077",
+      "nombre": "Wendy Carranza",
+      "cargo": "CNR — Soporte Técnico",
+      "tipoPersonal": "Personal técnico DTI",
+      "acompanante": "",
+      "carneAcompanante": "",
+      "anexaDocumento": "No",
+      "motivo": "Mantenimiento preventivo",
+      "observacion": "Revisión de aire acondicionado y UPS."
+     }
     ]
    },
    {
     "titulo": "Verificación de cierre",
+    "campos": [
+     {
+      "id": "cierre",
+      "valor": "Sí"
+     },
+     {
+      "id": "fecha-cierre",
+      "valor": "2026-01-31"
+     },
+     {
+      "id": "hora-cierre",
+      "valor": "17:10"
+     },
+     {
+      "id": "responsable-cierre",
+      "valor": "Wendy Carranza"
+     },
+     {
+      "id": "justifica-cierre",
+      "valor": ""
+     },
+     {
+      "id": "obs-cierre",
+      "valor": "Cuarto de servidores cerrado y bitácora remitida."
+     }
+    ],
     "items": [
      {
       "id": "libro",
@@ -50,7 +108,15 @@
     "campos": [
      {
       "id": "obs",
-      "valor": "Ingresos registrados en el libro de acceso y remitidos según normativa."
+      "valor": "Se registraron 3 ingresos, todos con personal autorizado y acompañamiento cuando correspondía."
+     },
+     {
+      "id": "incidentes",
+      "valor": ""
+     },
+     {
+      "id": "recomendaciones",
+      "valor": ""
      }
     ]
    }
@@ -81,27 +147,85 @@
   "secciones": [
    {
     "titulo": "Registros de ingreso del mes",
-    "filas": [
-     [
-      "08/01/2026",
-      "09:40",
-      "10:15",
-      "Técnico del Departamento de Operaciones",
-      "CNR — Operaciones Informáticas",
-      "Retiro y entrega de cintas de respaldo"
-     ],
-     [
-      "19/01/2026",
-      "14:05",
-      "14:30",
-      "Personal de limpieza autorizado",
-      "Servicios generales",
-      "Limpieza programada del cuarto de servidores"
-     ]
+    "campos": [
+     {
+      "id": "sin-ingresos",
+      "valor": "No"
+     }
+    ],
+    "ingresos": [
+     {
+      "fecha": "2026-01-08",
+      "horaEntrada": "09:40",
+      "horaSalida": "10:15",
+      "carne": "03291",
+      "nombre": "José Ortiz Santos",
+      "cargo": "CNR — Departamento de Operaciones Informáticas",
+      "tipoPersonal": "Personal interno CNR",
+      "acompanante": "Wendy Carranza",
+      "carneAcompanante": "04077",
+      "anexaDocumento": "Sí",
+      "motivo": "Traslado de cintas de respaldo",
+      "observacion": "Retiro y entrega de cintas del ciclo mensual."
+     },
+     {
+      "fecha": "2026-01-19",
+      "horaEntrada": "14:05",
+      "horaSalida": "14:30",
+      "carne": "—",
+      "nombre": "Personal de limpieza autorizado",
+      "cargo": "Servicios generales",
+      "tipoPersonal": "Personal externo al CNR",
+      "acompanante": "Wendy Carranza",
+      "carneAcompanante": "04077",
+      "anexaDocumento": "No",
+      "motivo": "Limpieza programada",
+      "observacion": ""
+     },
+     {
+      "fecha": "2026-01-24",
+      "horaEntrada": "08:15",
+      "horaSalida": "09:05",
+      "carne": "04077",
+      "nombre": "Wendy Carranza",
+      "cargo": "CNR — Soporte Técnico",
+      "tipoPersonal": "Personal técnico DTI",
+      "acompanante": "",
+      "carneAcompanante": "",
+      "anexaDocumento": "No",
+      "motivo": "Mantenimiento preventivo",
+      "observacion": "Revisión de aire acondicionado y UPS."
+     }
     ]
    },
    {
     "titulo": "Verificación de cierre",
+    "campos": [
+     {
+      "id": "cierre",
+      "valor": "Sí"
+     },
+     {
+      "id": "fecha-cierre",
+      "valor": "2026-01-31"
+     },
+     {
+      "id": "hora-cierre",
+      "valor": "17:10"
+     },
+     {
+      "id": "responsable-cierre",
+      "valor": "Wendy Carranza"
+     },
+     {
+      "id": "justifica-cierre",
+      "valor": ""
+     },
+     {
+      "id": "obs-cierre",
+      "valor": "Cuarto de servidores cerrado y bitácora remitida."
+     }
+    ],
     "items": [
      {
       "id": "libro",
@@ -118,7 +242,15 @@
     "campos": [
      {
       "id": "obs",
-      "valor": "Ingresos registrados en el libro de acceso y remitidos según normativa."
+      "valor": "Se registraron 3 ingresos, todos con personal autorizado y acompañamiento cuando correspondía."
+     },
+     {
+      "id": "incidentes",
+      "valor": ""
+     },
+     {
+      "id": "recomendaciones",
+      "valor": ""
      }
     ]
    }
@@ -6283,27 +6415,85 @@
   "secciones": [
    {
     "titulo": "Registros de ingreso del mes",
-    "filas": [
-     [
-      "08/02/2026",
-      "09:40",
-      "10:15",
-      "Técnico del Departamento de Operaciones",
-      "CNR — Operaciones Informáticas",
-      "Retiro y entrega de cintas de respaldo"
-     ],
-     [
-      "19/02/2026",
-      "14:05",
-      "14:30",
-      "Personal de limpieza autorizado",
-      "Servicios generales",
-      "Limpieza programada del cuarto de servidores"
-     ]
+    "campos": [
+     {
+      "id": "sin-ingresos",
+      "valor": "No"
+     }
+    ],
+    "ingresos": [
+     {
+      "fecha": "2026-02-08",
+      "horaEntrada": "09:40",
+      "horaSalida": "10:15",
+      "carne": "03291",
+      "nombre": "José Ortiz Santos",
+      "cargo": "CNR — Departamento de Operaciones Informáticas",
+      "tipoPersonal": "Personal interno CNR",
+      "acompanante": "Wendy Carranza",
+      "carneAcompanante": "04077",
+      "anexaDocumento": "Sí",
+      "motivo": "Traslado de cintas de respaldo",
+      "observacion": "Retiro y entrega de cintas del ciclo mensual."
+     },
+     {
+      "fecha": "2026-02-19",
+      "horaEntrada": "14:05",
+      "horaSalida": "14:30",
+      "carne": "—",
+      "nombre": "Personal de limpieza autorizado",
+      "cargo": "Servicios generales",
+      "tipoPersonal": "Personal externo al CNR",
+      "acompanante": "Wendy Carranza",
+      "carneAcompanante": "04077",
+      "anexaDocumento": "No",
+      "motivo": "Limpieza programada",
+      "observacion": ""
+     },
+     {
+      "fecha": "2026-02-24",
+      "horaEntrada": "08:15",
+      "horaSalida": "09:05",
+      "carne": "04077",
+      "nombre": "Wendy Carranza",
+      "cargo": "CNR — Soporte Técnico",
+      "tipoPersonal": "Personal técnico DTI",
+      "acompanante": "",
+      "carneAcompanante": "",
+      "anexaDocumento": "No",
+      "motivo": "Mantenimiento preventivo",
+      "observacion": "Revisión de aire acondicionado y UPS."
+     }
     ]
    },
    {
     "titulo": "Verificación de cierre",
+    "campos": [
+     {
+      "id": "cierre",
+      "valor": "Sí"
+     },
+     {
+      "id": "fecha-cierre",
+      "valor": "2026-02-28"
+     },
+     {
+      "id": "hora-cierre",
+      "valor": "17:10"
+     },
+     {
+      "id": "responsable-cierre",
+      "valor": "Wendy Carranza"
+     },
+     {
+      "id": "justifica-cierre",
+      "valor": ""
+     },
+     {
+      "id": "obs-cierre",
+      "valor": "Cuarto de servidores cerrado y bitácora remitida."
+     }
+    ],
     "items": [
      {
       "id": "libro",
@@ -6320,7 +6510,15 @@
     "campos": [
      {
       "id": "obs",
-      "valor": "Ingresos registrados en el libro de acceso y remitidos según normativa."
+      "valor": "Se registraron 3 ingresos, todos con personal autorizado y acompañamiento cuando correspondía."
+     },
+     {
+      "id": "incidentes",
+      "valor": ""
+     },
+     {
+      "id": "recomendaciones",
+      "valor": ""
      }
     ]
    }
@@ -6351,27 +6549,85 @@
   "secciones": [
    {
     "titulo": "Registros de ingreso del mes",
-    "filas": [
-     [
-      "08/02/2026",
-      "09:40",
-      "10:15",
-      "Técnico del Departamento de Operaciones",
-      "CNR — Operaciones Informáticas",
-      "Retiro y entrega de cintas de respaldo"
-     ],
-     [
-      "19/02/2026",
-      "14:05",
-      "14:30",
-      "Personal de limpieza autorizado",
-      "Servicios generales",
-      "Limpieza programada del cuarto de servidores"
-     ]
+    "campos": [
+     {
+      "id": "sin-ingresos",
+      "valor": "No"
+     }
+    ],
+    "ingresos": [
+     {
+      "fecha": "2026-02-08",
+      "horaEntrada": "09:40",
+      "horaSalida": "10:15",
+      "carne": "03291",
+      "nombre": "José Ortiz Santos",
+      "cargo": "CNR — Departamento de Operaciones Informáticas",
+      "tipoPersonal": "Personal interno CNR",
+      "acompanante": "Wendy Carranza",
+      "carneAcompanante": "04077",
+      "anexaDocumento": "Sí",
+      "motivo": "Traslado de cintas de respaldo",
+      "observacion": "Retiro y entrega de cintas del ciclo mensual."
+     },
+     {
+      "fecha": "2026-02-19",
+      "horaEntrada": "14:05",
+      "horaSalida": "14:30",
+      "carne": "—",
+      "nombre": "Personal de limpieza autorizado",
+      "cargo": "Servicios generales",
+      "tipoPersonal": "Personal externo al CNR",
+      "acompanante": "Wendy Carranza",
+      "carneAcompanante": "04077",
+      "anexaDocumento": "No",
+      "motivo": "Limpieza programada",
+      "observacion": ""
+     },
+     {
+      "fecha": "2026-02-24",
+      "horaEntrada": "08:15",
+      "horaSalida": "09:05",
+      "carne": "04077",
+      "nombre": "Wendy Carranza",
+      "cargo": "CNR — Soporte Técnico",
+      "tipoPersonal": "Personal técnico DTI",
+      "acompanante": "",
+      "carneAcompanante": "",
+      "anexaDocumento": "No",
+      "motivo": "Mantenimiento preventivo",
+      "observacion": "Revisión de aire acondicionado y UPS."
+     }
     ]
    },
    {
     "titulo": "Verificación de cierre",
+    "campos": [
+     {
+      "id": "cierre",
+      "valor": "Sí"
+     },
+     {
+      "id": "fecha-cierre",
+      "valor": "2026-02-28"
+     },
+     {
+      "id": "hora-cierre",
+      "valor": "17:10"
+     },
+     {
+      "id": "responsable-cierre",
+      "valor": "Wendy Carranza"
+     },
+     {
+      "id": "justifica-cierre",
+      "valor": ""
+     },
+     {
+      "id": "obs-cierre",
+      "valor": "Cuarto de servidores cerrado y bitácora remitida."
+     }
+    ],
     "items": [
      {
       "id": "libro",
@@ -6388,7 +6644,15 @@
     "campos": [
      {
       "id": "obs",
-      "valor": "Ingresos registrados en el libro de acceso y remitidos según normativa."
+      "valor": "Se registraron 3 ingresos, todos con personal autorizado y acompañamiento cuando correspondía."
+     },
+     {
+      "id": "incidentes",
+      "valor": ""
+     },
+     {
+      "id": "recomendaciones",
+      "valor": ""
      }
     ]
    }
@@ -12311,10 +12575,42 @@
   "secciones": [
    {
     "titulo": "Registros de ingreso del mes",
-    "filas": []
+    "campos": [
+     {
+      "id": "sin-ingresos",
+      "valor": "Sí"
+     }
+    ],
+    "ingresos": []
    },
    {
     "titulo": "Verificación de cierre",
+    "campos": [
+     {
+      "id": "cierre",
+      "valor": "Sí"
+     },
+     {
+      "id": "fecha-cierre",
+      "valor": "2026-03-31"
+     },
+     {
+      "id": "hora-cierre",
+      "valor": "17:10"
+     },
+     {
+      "id": "responsable-cierre",
+      "valor": "Wendy Carranza"
+     },
+     {
+      "id": "justifica-cierre",
+      "valor": ""
+     },
+     {
+      "id": "obs-cierre",
+      "valor": "Cuarto de servidores cerrado y bitácora remitida."
+     }
+    ],
     "items": [
      {
       "id": "libro",
@@ -12331,7 +12627,15 @@
     "campos": [
      {
       "id": "obs",
-      "valor": "No se registraron ingresos al cuarto de servidores durante el mes."
+      "valor": "Durante el mes no se registraron ingresos al cuarto de servidores: no hubo mantenimientos programados ni visitas autorizadas."
+     },
+     {
+      "id": "incidentes",
+      "valor": ""
+     },
+     {
+      "id": "recomendaciones",
+      "valor": "Mantener el control mensual aunque no haya ingresos."
      }
     ]
    }
@@ -12362,10 +12666,42 @@
   "secciones": [
    {
     "titulo": "Registros de ingreso del mes",
-    "filas": []
+    "campos": [
+     {
+      "id": "sin-ingresos",
+      "valor": "Sí"
+     }
+    ],
+    "ingresos": []
    },
    {
     "titulo": "Verificación de cierre",
+    "campos": [
+     {
+      "id": "cierre",
+      "valor": "Sí"
+     },
+     {
+      "id": "fecha-cierre",
+      "valor": "2026-03-31"
+     },
+     {
+      "id": "hora-cierre",
+      "valor": "17:10"
+     },
+     {
+      "id": "responsable-cierre",
+      "valor": "Wendy Carranza"
+     },
+     {
+      "id": "justifica-cierre",
+      "valor": ""
+     },
+     {
+      "id": "obs-cierre",
+      "valor": "Cuarto de servidores cerrado y bitácora remitida."
+     }
+    ],
     "items": [
      {
       "id": "libro",
@@ -12382,7 +12718,15 @@
     "campos": [
      {
       "id": "obs",
-      "valor": "No se registraron ingresos al cuarto de servidores durante el mes."
+      "valor": "Durante el mes no se registraron ingresos al cuarto de servidores: no hubo mantenimientos programados ni visitas autorizadas."
+     },
+     {
+      "id": "incidentes",
+      "valor": ""
+     },
+     {
+      "id": "recomendaciones",
+      "valor": "Mantener el control mensual aunque no haya ingresos."
      }
     ]
    }
@@ -18547,27 +18891,85 @@
   "secciones": [
    {
     "titulo": "Registros de ingreso del mes",
-    "filas": [
-     [
-      "08/04/2026",
-      "09:40",
-      "10:15",
-      "Técnico del Departamento de Operaciones",
-      "CNR — Operaciones Informáticas",
-      "Retiro y entrega de cintas de respaldo"
-     ],
-     [
-      "19/04/2026",
-      "14:05",
-      "14:30",
-      "Personal de limpieza autorizado",
-      "Servicios generales",
-      "Limpieza programada del cuarto de servidores"
-     ]
+    "campos": [
+     {
+      "id": "sin-ingresos",
+      "valor": "No"
+     }
+    ],
+    "ingresos": [
+     {
+      "fecha": "2026-04-08",
+      "horaEntrada": "09:40",
+      "horaSalida": "10:15",
+      "carne": "03291",
+      "nombre": "José Ortiz Santos",
+      "cargo": "CNR — Departamento de Operaciones Informáticas",
+      "tipoPersonal": "Personal interno CNR",
+      "acompanante": "Wendy Carranza",
+      "carneAcompanante": "04077",
+      "anexaDocumento": "Sí",
+      "motivo": "Traslado de cintas de respaldo",
+      "observacion": "Retiro y entrega de cintas del ciclo mensual."
+     },
+     {
+      "fecha": "2026-04-19",
+      "horaEntrada": "14:05",
+      "horaSalida": "14:30",
+      "carne": "—",
+      "nombre": "Personal de limpieza autorizado",
+      "cargo": "Servicios generales",
+      "tipoPersonal": "Personal externo al CNR",
+      "acompanante": "Wendy Carranza",
+      "carneAcompanante": "04077",
+      "anexaDocumento": "No",
+      "motivo": "Limpieza programada",
+      "observacion": ""
+     },
+     {
+      "fecha": "2026-04-24",
+      "horaEntrada": "08:15",
+      "horaSalida": "09:05",
+      "carne": "04077",
+      "nombre": "Wendy Carranza",
+      "cargo": "CNR — Soporte Técnico",
+      "tipoPersonal": "Personal técnico DTI",
+      "acompanante": "",
+      "carneAcompanante": "",
+      "anexaDocumento": "No",
+      "motivo": "Mantenimiento preventivo",
+      "observacion": "Revisión de aire acondicionado y UPS."
+     }
     ]
    },
    {
     "titulo": "Verificación de cierre",
+    "campos": [
+     {
+      "id": "cierre",
+      "valor": "Sí"
+     },
+     {
+      "id": "fecha-cierre",
+      "valor": "2026-04-30"
+     },
+     {
+      "id": "hora-cierre",
+      "valor": "17:10"
+     },
+     {
+      "id": "responsable-cierre",
+      "valor": "Wendy Carranza"
+     },
+     {
+      "id": "justifica-cierre",
+      "valor": ""
+     },
+     {
+      "id": "obs-cierre",
+      "valor": "Cuarto de servidores cerrado y bitácora remitida."
+     }
+    ],
     "items": [
      {
       "id": "libro",
@@ -18584,7 +18986,15 @@
     "campos": [
      {
       "id": "obs",
-      "valor": "Ingresos registrados en el libro de acceso y remitidos según normativa."
+      "valor": "Se registraron 3 ingresos, todos con personal autorizado y acompañamiento cuando correspondía."
+     },
+     {
+      "id": "incidentes",
+      "valor": ""
+     },
+     {
+      "id": "recomendaciones",
+      "valor": ""
      }
     ]
    }
@@ -18615,27 +19025,85 @@
   "secciones": [
    {
     "titulo": "Registros de ingreso del mes",
-    "filas": [
-     [
-      "08/04/2026",
-      "09:40",
-      "10:15",
-      "Técnico del Departamento de Operaciones",
-      "CNR — Operaciones Informáticas",
-      "Retiro y entrega de cintas de respaldo"
-     ],
-     [
-      "19/04/2026",
-      "14:05",
-      "14:30",
-      "Personal de limpieza autorizado",
-      "Servicios generales",
-      "Limpieza programada del cuarto de servidores"
-     ]
+    "campos": [
+     {
+      "id": "sin-ingresos",
+      "valor": "No"
+     }
+    ],
+    "ingresos": [
+     {
+      "fecha": "2026-04-08",
+      "horaEntrada": "09:40",
+      "horaSalida": "10:15",
+      "carne": "03291",
+      "nombre": "José Ortiz Santos",
+      "cargo": "CNR — Departamento de Operaciones Informáticas",
+      "tipoPersonal": "Personal interno CNR",
+      "acompanante": "Wendy Carranza",
+      "carneAcompanante": "04077",
+      "anexaDocumento": "Sí",
+      "motivo": "Traslado de cintas de respaldo",
+      "observacion": "Retiro y entrega de cintas del ciclo mensual."
+     },
+     {
+      "fecha": "2026-04-19",
+      "horaEntrada": "14:05",
+      "horaSalida": "14:30",
+      "carne": "—",
+      "nombre": "Personal de limpieza autorizado",
+      "cargo": "Servicios generales",
+      "tipoPersonal": "Personal externo al CNR",
+      "acompanante": "Wendy Carranza",
+      "carneAcompanante": "04077",
+      "anexaDocumento": "No",
+      "motivo": "Limpieza programada",
+      "observacion": ""
+     },
+     {
+      "fecha": "2026-04-24",
+      "horaEntrada": "08:15",
+      "horaSalida": "09:05",
+      "carne": "04077",
+      "nombre": "Wendy Carranza",
+      "cargo": "CNR — Soporte Técnico",
+      "tipoPersonal": "Personal técnico DTI",
+      "acompanante": "",
+      "carneAcompanante": "",
+      "anexaDocumento": "No",
+      "motivo": "Mantenimiento preventivo",
+      "observacion": "Revisión de aire acondicionado y UPS."
+     }
     ]
    },
    {
     "titulo": "Verificación de cierre",
+    "campos": [
+     {
+      "id": "cierre",
+      "valor": "Sí"
+     },
+     {
+      "id": "fecha-cierre",
+      "valor": "2026-04-30"
+     },
+     {
+      "id": "hora-cierre",
+      "valor": "17:10"
+     },
+     {
+      "id": "responsable-cierre",
+      "valor": "Wendy Carranza"
+     },
+     {
+      "id": "justifica-cierre",
+      "valor": ""
+     },
+     {
+      "id": "obs-cierre",
+      "valor": "Cuarto de servidores cerrado y bitácora remitida."
+     }
+    ],
     "items": [
      {
       "id": "libro",
@@ -18652,7 +19120,15 @@
     "campos": [
      {
       "id": "obs",
-      "valor": "Ingresos registrados en el libro de acceso y remitidos según normativa."
+      "valor": "Se registraron 3 ingresos, todos con personal autorizado y acompañamiento cuando correspondía."
+     },
+     {
+      "id": "incidentes",
+      "valor": ""
+     },
+     {
+      "id": "recomendaciones",
+      "valor": ""
      }
     ]
    }
@@ -24812,27 +25288,85 @@
   "secciones": [
    {
     "titulo": "Registros de ingreso del mes",
-    "filas": [
-     [
-      "08/05/2026",
-      "09:40",
-      "10:15",
-      "Técnico del Departamento de Operaciones",
-      "CNR — Operaciones Informáticas",
-      "Retiro y entrega de cintas de respaldo"
-     ],
-     [
-      "19/05/2026",
-      "14:05",
-      "14:30",
-      "Personal de limpieza autorizado",
-      "Servicios generales",
-      "Limpieza programada del cuarto de servidores"
-     ]
+    "campos": [
+     {
+      "id": "sin-ingresos",
+      "valor": "No"
+     }
+    ],
+    "ingresos": [
+     {
+      "fecha": "2026-05-08",
+      "horaEntrada": "09:40",
+      "horaSalida": "10:15",
+      "carne": "03291",
+      "nombre": "José Ortiz Santos",
+      "cargo": "CNR — Departamento de Operaciones Informáticas",
+      "tipoPersonal": "Personal interno CNR",
+      "acompanante": "Wendy Carranza",
+      "carneAcompanante": "04077",
+      "anexaDocumento": "Sí",
+      "motivo": "Traslado de cintas de respaldo",
+      "observacion": "Retiro y entrega de cintas del ciclo mensual."
+     },
+     {
+      "fecha": "2026-05-19",
+      "horaEntrada": "14:05",
+      "horaSalida": "14:30",
+      "carne": "—",
+      "nombre": "Personal de limpieza autorizado",
+      "cargo": "Servicios generales",
+      "tipoPersonal": "Personal externo al CNR",
+      "acompanante": "Wendy Carranza",
+      "carneAcompanante": "04077",
+      "anexaDocumento": "No",
+      "motivo": "Limpieza programada",
+      "observacion": ""
+     },
+     {
+      "fecha": "2026-05-24",
+      "horaEntrada": "08:15",
+      "horaSalida": "09:05",
+      "carne": "04077",
+      "nombre": "Wendy Carranza",
+      "cargo": "CNR — Soporte Técnico",
+      "tipoPersonal": "Personal técnico DTI",
+      "acompanante": "",
+      "carneAcompanante": "",
+      "anexaDocumento": "No",
+      "motivo": "Mantenimiento preventivo",
+      "observacion": "Revisión de aire acondicionado y UPS."
+     }
     ]
    },
    {
     "titulo": "Verificación de cierre",
+    "campos": [
+     {
+      "id": "cierre",
+      "valor": "Sí"
+     },
+     {
+      "id": "fecha-cierre",
+      "valor": "2026-05-31"
+     },
+     {
+      "id": "hora-cierre",
+      "valor": "17:10"
+     },
+     {
+      "id": "responsable-cierre",
+      "valor": "Wendy Carranza"
+     },
+     {
+      "id": "justifica-cierre",
+      "valor": ""
+     },
+     {
+      "id": "obs-cierre",
+      "valor": "Cuarto de servidores cerrado y bitácora remitida."
+     }
+    ],
     "items": [
      {
       "id": "libro",
@@ -24849,7 +25383,15 @@
     "campos": [
      {
       "id": "obs",
-      "valor": "Ingresos registrados en el libro de acceso y remitidos según normativa."
+      "valor": "Se registraron 3 ingresos, todos con personal autorizado y acompañamiento cuando correspondía."
+     },
+     {
+      "id": "incidentes",
+      "valor": ""
+     },
+     {
+      "id": "recomendaciones",
+      "valor": ""
      }
     ]
    }
@@ -24880,27 +25422,85 @@
   "secciones": [
    {
     "titulo": "Registros de ingreso del mes",
-    "filas": [
-     [
-      "08/05/2026",
-      "09:40",
-      "10:15",
-      "Técnico del Departamento de Operaciones",
-      "CNR — Operaciones Informáticas",
-      "Retiro y entrega de cintas de respaldo"
-     ],
-     [
-      "19/05/2026",
-      "14:05",
-      "14:30",
-      "Personal de limpieza autorizado",
-      "Servicios generales",
-      "Limpieza programada del cuarto de servidores"
-     ]
+    "campos": [
+     {
+      "id": "sin-ingresos",
+      "valor": "No"
+     }
+    ],
+    "ingresos": [
+     {
+      "fecha": "2026-05-08",
+      "horaEntrada": "09:40",
+      "horaSalida": "10:15",
+      "carne": "03291",
+      "nombre": "José Ortiz Santos",
+      "cargo": "CNR — Departamento de Operaciones Informáticas",
+      "tipoPersonal": "Personal interno CNR",
+      "acompanante": "Wendy Carranza",
+      "carneAcompanante": "04077",
+      "anexaDocumento": "Sí",
+      "motivo": "Traslado de cintas de respaldo",
+      "observacion": "Retiro y entrega de cintas del ciclo mensual."
+     },
+     {
+      "fecha": "2026-05-19",
+      "horaEntrada": "14:05",
+      "horaSalida": "14:30",
+      "carne": "—",
+      "nombre": "Personal de limpieza autorizado",
+      "cargo": "Servicios generales",
+      "tipoPersonal": "Personal externo al CNR",
+      "acompanante": "Wendy Carranza",
+      "carneAcompanante": "04077",
+      "anexaDocumento": "No",
+      "motivo": "Limpieza programada",
+      "observacion": ""
+     },
+     {
+      "fecha": "2026-05-24",
+      "horaEntrada": "08:15",
+      "horaSalida": "09:05",
+      "carne": "04077",
+      "nombre": "Wendy Carranza",
+      "cargo": "CNR — Soporte Técnico",
+      "tipoPersonal": "Personal técnico DTI",
+      "acompanante": "",
+      "carneAcompanante": "",
+      "anexaDocumento": "No",
+      "motivo": "Mantenimiento preventivo",
+      "observacion": "Revisión de aire acondicionado y UPS."
+     }
     ]
    },
    {
     "titulo": "Verificación de cierre",
+    "campos": [
+     {
+      "id": "cierre",
+      "valor": "Sí"
+     },
+     {
+      "id": "fecha-cierre",
+      "valor": "2026-05-31"
+     },
+     {
+      "id": "hora-cierre",
+      "valor": "17:10"
+     },
+     {
+      "id": "responsable-cierre",
+      "valor": "Wendy Carranza"
+     },
+     {
+      "id": "justifica-cierre",
+      "valor": ""
+     },
+     {
+      "id": "obs-cierre",
+      "valor": "Cuarto de servidores cerrado y bitácora remitida."
+     }
+    ],
     "items": [
      {
       "id": "libro",
@@ -24917,7 +25517,15 @@
     "campos": [
      {
       "id": "obs",
-      "valor": "Ingresos registrados en el libro de acceso y remitidos según normativa."
+      "valor": "Se registraron 3 ingresos, todos con personal autorizado y acompañamiento cuando correspondía."
+     },
+     {
+      "id": "incidentes",
+      "valor": ""
+     },
+     {
+      "id": "recomendaciones",
+      "valor": ""
      }
     ]
    }
@@ -31082,10 +31690,42 @@
   "secciones": [
    {
     "titulo": "Registros de ingreso del mes",
-    "filas": []
+    "campos": [
+     {
+      "id": "sin-ingresos",
+      "valor": "Sí"
+     }
+    ],
+    "ingresos": []
    },
    {
     "titulo": "Verificación de cierre",
+    "campos": [
+     {
+      "id": "cierre",
+      "valor": "Sí"
+     },
+     {
+      "id": "fecha-cierre",
+      "valor": "2026-06-30"
+     },
+     {
+      "id": "hora-cierre",
+      "valor": "17:10"
+     },
+     {
+      "id": "responsable-cierre",
+      "valor": "Wendy Carranza"
+     },
+     {
+      "id": "justifica-cierre",
+      "valor": ""
+     },
+     {
+      "id": "obs-cierre",
+      "valor": "Cuarto de servidores cerrado y bitácora remitida."
+     }
+    ],
     "items": [
      {
       "id": "libro",
@@ -31102,7 +31742,15 @@
     "campos": [
      {
       "id": "obs",
-      "valor": "No se registraron ingresos al cuarto de servidores durante el mes."
+      "valor": "Durante el mes no se registraron ingresos al cuarto de servidores: no hubo mantenimientos programados ni visitas autorizadas."
+     },
+     {
+      "id": "incidentes",
+      "valor": ""
+     },
+     {
+      "id": "recomendaciones",
+      "valor": "Mantener el control mensual aunque no haya ingresos."
      }
     ]
    }
@@ -31133,10 +31781,42 @@
   "secciones": [
    {
     "titulo": "Registros de ingreso del mes",
-    "filas": []
+    "campos": [
+     {
+      "id": "sin-ingresos",
+      "valor": "Sí"
+     }
+    ],
+    "ingresos": []
    },
    {
     "titulo": "Verificación de cierre",
+    "campos": [
+     {
+      "id": "cierre",
+      "valor": "Sí"
+     },
+     {
+      "id": "fecha-cierre",
+      "valor": "2026-06-30"
+     },
+     {
+      "id": "hora-cierre",
+      "valor": "17:10"
+     },
+     {
+      "id": "responsable-cierre",
+      "valor": "Wendy Carranza"
+     },
+     {
+      "id": "justifica-cierre",
+      "valor": ""
+     },
+     {
+      "id": "obs-cierre",
+      "valor": "Cuarto de servidores cerrado y bitácora remitida."
+     }
+    ],
     "items": [
      {
       "id": "libro",
@@ -31153,7 +31833,15 @@
     "campos": [
      {
       "id": "obs",
-      "valor": "No se registraron ingresos al cuarto de servidores durante el mes."
+      "valor": "Durante el mes no se registraron ingresos al cuarto de servidores: no hubo mantenimientos programados ni visitas autorizadas."
+     },
+     {
+      "id": "incidentes",
+      "valor": ""
+     },
+     {
+      "id": "recomendaciones",
+      "valor": "Mantener el control mensual aunque no haya ingresos."
      }
     ]
    }
@@ -37321,27 +38009,85 @@
   "secciones": [
    {
     "titulo": "Registros de ingreso del mes",
-    "filas": [
-     [
-      "08/07/2026",
-      "09:40",
-      "10:15",
-      "Técnico del Departamento de Operaciones",
-      "CNR — Operaciones Informáticas",
-      "Retiro y entrega de cintas de respaldo"
-     ],
-     [
-      "19/07/2026",
-      "14:05",
-      "14:30",
-      "Personal de limpieza autorizado",
-      "Servicios generales",
-      "Limpieza programada del cuarto de servidores"
-     ]
+    "campos": [
+     {
+      "id": "sin-ingresos",
+      "valor": "No"
+     }
+    ],
+    "ingresos": [
+     {
+      "fecha": "2026-07-08",
+      "horaEntrada": "09:40",
+      "horaSalida": "10:15",
+      "carne": "03291",
+      "nombre": "José Ortiz Santos",
+      "cargo": "CNR — Departamento de Operaciones Informáticas",
+      "tipoPersonal": "Personal interno CNR",
+      "acompanante": "Wendy Carranza",
+      "carneAcompanante": "04077",
+      "anexaDocumento": "Sí",
+      "motivo": "Traslado de cintas de respaldo",
+      "observacion": "Retiro y entrega de cintas del ciclo mensual."
+     },
+     {
+      "fecha": "2026-07-19",
+      "horaEntrada": "14:05",
+      "horaSalida": "14:30",
+      "carne": "—",
+      "nombre": "Personal de limpieza autorizado",
+      "cargo": "Servicios generales",
+      "tipoPersonal": "Personal externo al CNR",
+      "acompanante": "Wendy Carranza",
+      "carneAcompanante": "04077",
+      "anexaDocumento": "No",
+      "motivo": "Limpieza programada",
+      "observacion": ""
+     },
+     {
+      "fecha": "2026-07-24",
+      "horaEntrada": "08:15",
+      "horaSalida": "09:05",
+      "carne": "04077",
+      "nombre": "Wendy Carranza",
+      "cargo": "CNR — Soporte Técnico",
+      "tipoPersonal": "Personal técnico DTI",
+      "acompanante": "",
+      "carneAcompanante": "",
+      "anexaDocumento": "No",
+      "motivo": "Mantenimiento preventivo",
+      "observacion": "Revisión de aire acondicionado y UPS."
+     }
     ]
    },
    {
     "titulo": "Verificación de cierre",
+    "campos": [
+     {
+      "id": "cierre",
+      "valor": "Sí"
+     },
+     {
+      "id": "fecha-cierre",
+      "valor": "2026-07-31"
+     },
+     {
+      "id": "hora-cierre",
+      "valor": "17:10"
+     },
+     {
+      "id": "responsable-cierre",
+      "valor": "Wendy Carranza"
+     },
+     {
+      "id": "justifica-cierre",
+      "valor": ""
+     },
+     {
+      "id": "obs-cierre",
+      "valor": "Cuarto de servidores cerrado y bitácora remitida."
+     }
+    ],
     "items": [
      {
       "id": "libro",
@@ -37358,7 +38104,15 @@
     "campos": [
      {
       "id": "obs",
-      "valor": "Ingresos registrados en el libro de acceso y remitidos según normativa."
+      "valor": "Se registraron 3 ingresos, todos con personal autorizado y acompañamiento cuando correspondía."
+     },
+     {
+      "id": "incidentes",
+      "valor": ""
+     },
+     {
+      "id": "recomendaciones",
+      "valor": ""
      }
     ]
    }
@@ -37389,27 +38143,85 @@
   "secciones": [
    {
     "titulo": "Registros de ingreso del mes",
-    "filas": [
-     [
-      "08/07/2026",
-      "09:40",
-      "10:15",
-      "Técnico del Departamento de Operaciones",
-      "CNR — Operaciones Informáticas",
-      "Retiro y entrega de cintas de respaldo"
-     ],
-     [
-      "19/07/2026",
-      "14:05",
-      "14:30",
-      "Personal de limpieza autorizado",
-      "Servicios generales",
-      "Limpieza programada del cuarto de servidores"
-     ]
+    "campos": [
+     {
+      "id": "sin-ingresos",
+      "valor": "No"
+     }
+    ],
+    "ingresos": [
+     {
+      "fecha": "2026-07-08",
+      "horaEntrada": "09:40",
+      "horaSalida": "10:15",
+      "carne": "03291",
+      "nombre": "José Ortiz Santos",
+      "cargo": "CNR — Departamento de Operaciones Informáticas",
+      "tipoPersonal": "Personal interno CNR",
+      "acompanante": "Wendy Carranza",
+      "carneAcompanante": "04077",
+      "anexaDocumento": "Sí",
+      "motivo": "Traslado de cintas de respaldo",
+      "observacion": "Retiro y entrega de cintas del ciclo mensual."
+     },
+     {
+      "fecha": "2026-07-19",
+      "horaEntrada": "14:05",
+      "horaSalida": "14:30",
+      "carne": "—",
+      "nombre": "Personal de limpieza autorizado",
+      "cargo": "Servicios generales",
+      "tipoPersonal": "Personal externo al CNR",
+      "acompanante": "Wendy Carranza",
+      "carneAcompanante": "04077",
+      "anexaDocumento": "No",
+      "motivo": "Limpieza programada",
+      "observacion": ""
+     },
+     {
+      "fecha": "2026-07-24",
+      "horaEntrada": "08:15",
+      "horaSalida": "09:05",
+      "carne": "04077",
+      "nombre": "Wendy Carranza",
+      "cargo": "CNR — Soporte Técnico",
+      "tipoPersonal": "Personal técnico DTI",
+      "acompanante": "",
+      "carneAcompanante": "",
+      "anexaDocumento": "No",
+      "motivo": "Mantenimiento preventivo",
+      "observacion": "Revisión de aire acondicionado y UPS."
+     }
     ]
    },
    {
     "titulo": "Verificación de cierre",
+    "campos": [
+     {
+      "id": "cierre",
+      "valor": "Sí"
+     },
+     {
+      "id": "fecha-cierre",
+      "valor": "2026-07-31"
+     },
+     {
+      "id": "hora-cierre",
+      "valor": "17:10"
+     },
+     {
+      "id": "responsable-cierre",
+      "valor": "Wendy Carranza"
+     },
+     {
+      "id": "justifica-cierre",
+      "valor": ""
+     },
+     {
+      "id": "obs-cierre",
+      "valor": "Cuarto de servidores cerrado y bitácora remitida."
+     }
+    ],
     "items": [
      {
       "id": "libro",
@@ -37426,7 +38238,15 @@
     "campos": [
      {
       "id": "obs",
-      "valor": "Ingresos registrados en el libro de acceso y remitidos según normativa."
+      "valor": "Se registraron 3 ingresos, todos con personal autorizado y acompañamiento cuando correspondía."
+     },
+     {
+      "id": "incidentes",
+      "valor": ""
+     },
+     {
+      "id": "recomendaciones",
+      "valor": ""
      }
     ]
    }
@@ -43526,23 +44346,55 @@
   "secciones": [
    {
     "titulo": "Registros de ingreso del mes",
-    "filas": [
-     [
-      "08/08/2026",
-      "09:40",
-      "10:15",
-      "Técnico del Departamento de Operaciones",
-      "CNR — Operaciones Informáticas",
-      "Retiro y entrega de cintas de respaldo"
-     ],
-     [
-      "19/08/2026",
-      "14:05",
-      "14:30",
-      "Personal de limpieza autorizado",
-      "Servicios generales",
-      "Limpieza programada del cuarto de servidores"
-     ]
+    "campos": [
+     {
+      "id": "sin-ingresos",
+      "valor": "No"
+     }
+    ],
+    "ingresos": [
+     {
+      "fecha": "2026-08-08",
+      "horaEntrada": "09:40",
+      "horaSalida": "10:15",
+      "carne": "03291",
+      "nombre": "José Ortiz Santos",
+      "cargo": "CNR — Departamento de Operaciones Informáticas",
+      "tipoPersonal": "Personal interno CNR",
+      "acompanante": "Wendy Carranza",
+      "carneAcompanante": "04077",
+      "anexaDocumento": "Sí",
+      "motivo": "Traslado de cintas de respaldo",
+      "observacion": "Retiro y entrega de cintas del ciclo mensual."
+     },
+     {
+      "fecha": "2026-08-19",
+      "horaEntrada": "14:05",
+      "horaSalida": "14:30",
+      "carne": "—",
+      "nombre": "Personal de limpieza autorizado",
+      "cargo": "Servicios generales",
+      "tipoPersonal": "Personal externo al CNR",
+      "acompanante": "Wendy Carranza",
+      "carneAcompanante": "04077",
+      "anexaDocumento": "No",
+      "motivo": "Limpieza programada",
+      "observacion": ""
+     },
+     {
+      "fecha": "2026-08-24",
+      "horaEntrada": "08:15",
+      "horaSalida": "09:05",
+      "carne": "04077",
+      "nombre": "Wendy Carranza",
+      "cargo": "CNR — Soporte Técnico",
+      "tipoPersonal": "Personal técnico DTI",
+      "acompanante": "",
+      "carneAcompanante": "",
+      "anexaDocumento": "No",
+      "motivo": "Mantenimiento preventivo",
+      "observacion": "Revisión de aire acondicionado y UPS."
+     }
     ]
    }
   ],

@@ -10,6 +10,7 @@ import { DocumentoComponent } from '../../shared/documento';
 import { IconComponent } from '../../shared/icon';
 import {
   ControlMes, EvidenciaControl, ItemSeguridad, RespuestaEquipo, RespuestaEquipoChecklist,
+  RespuestaIngreso,
   RespuestaEquipoIp, RespuestaItemSeguridad, RespuestaSeccion, RespuestaTelefono, SeccionPlantilla,
   formateaFecha, isoLocal, nombreMes
 } from '../../core/models/models';
@@ -28,6 +29,8 @@ interface SeccionEdit {
   telefonos: RespuestaTelefono[];
   /** Muestra de equipos verificada ítem por ítem (F0382): tantos huecos como pida el formato. */
   checklistEquipos: RespuestaEquipoChecklist[];
+  /** Bitácora de ingresos al cuarto de servidores (F0234). */
+  ingresos: RespuestaIngreso[];
 }
 
 /** Un paso del formulario. Una sección de muestra ocupa dos: elegir equipos y verificarlos. */
@@ -218,6 +221,38 @@ interface PasoForm {
                         </tbody>
                       </table>
                     </div>
+                  }
+                  @if (s.ingresos?.length || esF0234(s.titulo)) {
+                    @if (conIngresos(s).length) {
+                      <div class="table-wrap" style="margin: 8px 0;">
+                        <table class="tbl">
+                          <thead><tr>
+                            <th>N.º</th><th>Fecha</th><th>Entrada</th><th>Salida</th><th>Carné</th>
+                            <th>Nombre de quien ingresa</th><th>Cargo o institución</th>
+                            <th>Tipo de personal</th><th>Motivo del ingreso</th>
+                          </tr></thead>
+                          <tbody>
+                            @for (reg of conIngresos(s); track $index; let i = $index) {
+                              <tr>
+                                <td>{{ i + 1 }}</td>
+                                <td class="mono">{{ reg.fecha ? formatea(reg.fecha) : '—' }}</td>
+                                <td class="mono">{{ reg.horaEntrada || '—' }}</td>
+                                <td class="mono">{{ reg.horaSalida || '—' }}</td>
+                                <td class="mono">{{ reg.carne || '—' }}</td>
+                                <td>{{ reg.nombre || '—' }}</td>
+                                <td>{{ reg.cargo || '—' }}</td>
+                                <td>{{ reg.tipoPersonal || '—' }}</td>
+                                <td>{{ reg.motivo || '—' }}</td>
+                              </tr>
+                            }
+                          </tbody>
+                        </table>
+                      </div>
+                    } @else {
+                      <p class="muted">
+                        Durante el periodo evaluado no se registraron ingresos al cuarto de servidores.
+                      </p>
+                    }
                   }
                   @if (conChecklist(s).length) {
                     <div class="table-wrap" style="margin: 8px 0;">
@@ -441,6 +476,10 @@ interface PasoForm {
                     @if (s.plantilla.equipos) { {{ equiposRevisados(s) }} de {{ equiposActivos().length }} equipo(s) del inventario operativo revisado(s). }
                     @if (s.plantilla.equiposIp; as pip) { {{ equiposIpLlenos(s) }} de {{ pip.cantidad }} equipo(s) verificados por IP con hora. }
                     @if (s.plantilla.telefonos; as ptel) { {{ telefonosLlenos(s) }} de {{ ptel.cantidad }} teléfono(s)/extensión(es) con hora. }
+                    @if (s.plantilla.ingresos) {
+                      @if (sinIngresos(s)) { Mes declarado sin ingresos al cuarto de servidores. }
+                      @else { {{ ingresosLlenos(s) }} ingreso(s) registrados, {{ ingresosIncompletos(s) }} incompleto(s). }
+                    }
                     @if (s.plantilla.checklistEquipos; as pchk) {
                       {{ elegidos(s) }} de {{ pchk.cantidad }} equipo(s) seleccionado(s);
                       {{ verificadosCompletos(s) }} verificado(s) por completo.
@@ -477,6 +516,76 @@ interface PasoForm {
                 }
 
                 <!-- Paso 2 del F0382: selección de la muestra desde el inventario operativo. -->
+                <!-- Bitácora de ingresos al cuarto de servidores (F0234). -->
+                @if (s.plantilla.ingresos; as ping) {
+                  @if (sinIngresos(s)) {
+                    <div class="alert warn" style="margin: 12px 0;">
+                      <span class="alert-ico">!</span>
+                      <span>
+                        <b>Mes declarado sin ingresos.</b> No se piden registros, pero debe explicarlo
+                        en las <b>observaciones del mes</b>; así consta por qué el control se entrega vacío.
+                      </span>
+                    </div>
+                  } @else {
+                    <div class="row-between" style="margin: 14px 0 10px;">
+                      <div class="sec-title" style="margin: 0;">
+                        Ingresos registrados · {{ ingresosLlenos(s) }}
+                      </div>
+                      <button class="btn btn-primary btn-sm" type="button" (click)="nuevoIngreso(s)">
+                        <ui-icon name="plus" [size]="13" /> Agregar registro
+                      </button>
+                    </div>
+                    @if (ingresosLlenos(s)) {
+                      <div class="table-wrap">
+                        <table class="tbl">
+                          <thead><tr>
+                            <th>N.º</th><th>Fecha</th><th>Entrada</th><th>Salida</th>
+                            <th>Nombre de quien ingresa</th><th>Cargo o institución</th>
+                            <th>Motivo del ingreso</th><th>Estado</th><th>Acciones</th>
+                          </tr></thead>
+                          <tbody>
+                            @for (reg of s.ingresos; track $index; let i = $index) {
+                              @if (!data.ingresoVacio(reg)) {
+                                <tr>
+                                  <td>{{ i + 1 }}</td>
+                                  <td class="mono">{{ reg.fecha ? formatea(reg.fecha) : '—' }}</td>
+                                  <td class="mono">{{ reg.horaEntrada || '—' }}</td>
+                                  <td class="mono">{{ reg.horaSalida || '—' }}</td>
+                                  <td>{{ reg.nombre || '—' }}</td>
+                                  <td>{{ reg.cargo || '—' }}</td>
+                                  <td style="max-width: 220px;">{{ reg.motivo || '—' }}</td>
+                                  <td>
+                                    <ui-badge [estado]="data.faltasIngreso(reg).length ? 'Incompleto' : 'Completo'" />
+                                  </td>
+                                  <td style="white-space: nowrap;">
+                                    <button class="btn btn-ghost btn-sm" type="button" (click)="verIngreso.set(i)">Ver detalle</button>
+                                    <button class="btn btn-ghost btn-sm" type="button" (click)="editarIngreso(i)">Editar</button>
+                                    <button class="btn btn-ghost btn-sm" type="button" (click)="eliminarIngreso(s, i)">Eliminar</button>
+                                  </td>
+                                </tr>
+                              }
+                            }
+                          </tbody>
+                        </table>
+                      </div>
+                      @if (ingresosIncompletos(s)) {
+                        <div class="alert warn" style="margin-top: 12px;">
+                          <span class="alert-ico">!</span>
+                          <span>
+                            Hay {{ ingresosIncompletos(s) }} registro(s) incompletos.
+                            Complete o elimine los registros incompletos antes de entregar el control.
+                          </span>
+                        </div>
+                      }
+                    } @else {
+                      <p class="muted">
+                        Todavía no hay ingresos registrados. Use <b>Agregar registro</b> por cada visita
+                        al cuarto de servidores, o declare arriba que el mes no tuvo ingresos.
+                      </p>
+                    }
+                  }
+                }
+
                 @if (s.plantilla.checklistEquipos; as pchk) {
                   @if (esMuestra()) {
                     <div class="alert" style="margin-bottom: 12px;">
@@ -819,6 +928,121 @@ interface PasoForm {
           </div>
         }
 
+        <!-- Alta y edición de un ingreso al cuarto de servidores (F0234) -->
+        @if (editaIngreso() >= 0 && seccionIngresos(); as si) {
+          @if (borrador; as reg) {
+            <ui-modal [titulo]="editaIngreso() < si.ingresos.length ? 'Editar registro de ingreso' : 'Nuevo registro de ingreso'"
+              [sub]="data.dirUnidad(c.direccion, c.unidad) + ' · ' + nombreMes(c.mes) + ' ' + c.anio"
+              (cerrar)="cancelarIngreso()">
+              <div class="form-grid">
+                <div class="field">
+                  <label for="in-fecha">Fecha <span style="color: var(--danger)">*</span></label>
+                  <input id="in-fecha" class="control" type="date" [(ngModel)]="reg.fecha" />
+                </div>
+                <div class="field">
+                  <label for="in-tipo">Tipo de personal</label>
+                  <select id="in-tipo" class="control" [(ngModel)]="reg.tipoPersonal">
+                    <option value="">Seleccione…</option>
+                    @for (t of si.plantilla.ingresos?.tiposPersonal ?? []; track t) { <option [value]="t">{{ t }}</option> }
+                  </select>
+                </div>
+                <div class="field">
+                  <label for="in-entrada">Hora de entrada <span style="color: var(--danger)">*</span></label>
+                  <input id="in-entrada" class="control" type="time" [(ngModel)]="reg.horaEntrada" />
+                </div>
+                <div class="field">
+                  <label for="in-salida">Hora de salida <span style="color: var(--danger)">*</span></label>
+                  <input id="in-salida" class="control" type="time" [(ngModel)]="reg.horaSalida" />
+                </div>
+                <div class="field">
+                  <label for="in-nombre">Nombre de quien ingresa <span style="color: var(--danger)">*</span></label>
+                  <input id="in-nombre" class="control" [(ngModel)]="reg.nombre" />
+                </div>
+                <div class="field">
+                  <label for="in-carne">Carné</label>
+                  <input id="in-carne" class="control mono" [(ngModel)]="reg.carne" />
+                </div>
+                <div class="field">
+                  <label for="in-cargo">Cargo o institución <span style="color: var(--danger)">*</span></label>
+                  <input id="in-cargo" class="control" [(ngModel)]="reg.cargo" />
+                </div>
+                <div class="field">
+                  <label for="in-anexo">¿Anexa documento de respaldo?</label>
+                  <select id="in-anexo" class="control" [(ngModel)]="reg.anexaDocumento">
+                    <option value="">Seleccione…</option>
+                    <option value="Sí">Sí</option>
+                    <option value="No">No</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label for="in-acomp">Nombre del acompañante o visita</label>
+                  <input id="in-acomp" class="control" [(ngModel)]="reg.acompanante" />
+                </div>
+                <div class="field">
+                  <label for="in-carne-acomp">Carné del acompañante</label>
+                  <input id="in-carne-acomp" class="control mono" [(ngModel)]="reg.carneAcompanante" />
+                </div>
+                <div class="field span-2">
+                  <label for="in-motivo">Motivo del ingreso <span style="color: var(--danger)">*</span></label>
+                  <select id="in-motivo" class="control" [(ngModel)]="reg.motivo">
+                    <option value="">Seleccione…</option>
+                    @for (m of si.plantilla.ingresos?.motivos ?? []; track m) { <option [value]="m">{{ m }}</option> }
+                  </select>
+                </div>
+                <div class="field span-2">
+                  <label for="in-obs">Observación del registro</label>
+                  <textarea id="in-obs" class="control" rows="2" [(ngModel)]="reg.observacion"></textarea>
+                </div>
+              </div>
+              @if (faltasBorrador().length) {
+                <div class="alert warn" style="margin-top: 14px;">
+                  <span class="alert-ico">!</span>
+                  <span>
+                    <b>Falta completar:</b>
+                    <ul style="margin: 6px 0 0 16px;">
+                      @for (f of faltasBorrador(); track f) { <li>{{ f }}</li> }
+                    </ul>
+                  </span>
+                </div>
+              }
+              <div class="row" style="justify-content: flex-end; margin-top: 16px;">
+                <button class="btn btn-outline" type="button" (click)="cancelarIngreso()">Cancelar</button>
+                <button class="btn btn-primary" type="button" (click)="guardarIngreso(si)">Guardar registro</button>
+              </div>
+            </ui-modal>
+          }
+        }
+
+        <!-- Detalle de un ingreso ya registrado -->
+        @if (verIngreso() >= 0 && seccionIngresos(); as si) {
+          @if (si.ingresos[verIngreso()]; as reg) {
+            <ui-modal titulo="Registro de ingreso"
+              [sub]="(reg.fecha ? formatea(reg.fecha) : 'Sin fecha') + ' · ' + (reg.nombre || 'sin nombre')"
+              (cerrar)="verIngreso.set(-1)">
+              <dl class="dl">
+                <div><dt>Fecha</dt><dd class="mono">{{ reg.fecha ? formatea(reg.fecha) : '—' }}</dd></div>
+                <div><dt>Hora de entrada</dt><dd class="mono">{{ reg.horaEntrada || '—' }}</dd></div>
+                <div><dt>Hora de salida</dt><dd class="mono">{{ reg.horaSalida || '—' }}</dd></div>
+                <div><dt>Nombre de quien ingresa</dt><dd>{{ reg.nombre || '—' }}</dd></div>
+                <div><dt>Carné</dt><dd class="mono">{{ reg.carne || '—' }}</dd></div>
+                <div><dt>Cargo o institución</dt><dd>{{ reg.cargo || '—' }}</dd></div>
+                <div><dt>Tipo de personal</dt><dd>{{ reg.tipoPersonal || '—' }}</dd></div>
+                <div><dt>Acompañante o visita</dt><dd>{{ reg.acompanante || '—' }}</dd></div>
+                <div><dt>Carné del acompañante</dt><dd class="mono">{{ reg.carneAcompanante || '—' }}</dd></div>
+                <div><dt>Anexa documento</dt><dd>{{ reg.anexaDocumento || '—' }}</dd></div>
+                <div><dt>Motivo del ingreso</dt><dd>{{ reg.motivo || '—' }}</dd></div>
+                <div><dt>Observación</dt><dd>{{ reg.observacion || '—' }}</dd></div>
+              </dl>
+              @if (data.faltasIngreso(reg).length) {
+                <div class="alert warn" style="margin-top: 12px;">
+                  <span class="alert-ico">!</span>
+                  <span>Este registro está incompleto: {{ data.faltasIngreso(reg).join(' ') }}</span>
+                </div>
+              }
+            </ui-modal>
+          }
+        }
+
         <!-- Selector de equipos del inventario operativo (F0382) -->
         @if (slotEquipo() >= 0 && seccionMuestra(); as sm) {
           <ui-modal titulo="Seleccionar equipo desde inventario"
@@ -1149,6 +1373,7 @@ export class CompletarControlComponent {
         }
         return {
           plantilla: p, campos, items, equipos, equiposIp, telefonos, checklistEquipos,
+          ingresos: (r?.ingresos ?? []).map((x) => ({ ...x })),
           filas: (r?.filas ?? []).map((f) => [...f])
         };
       });
@@ -1296,8 +1521,89 @@ export class CompletarControlComponent {
             justificacion: String(i.justificacion ?? '')
           }))
         }))
-        : undefined
+        : undefined,
+      ingresos: s.plantilla.ingresos ? s.ingresos.map((x) => ({ ...x })) : undefined
     }));
+  }
+
+  // ------------------------------------------------------------------ ingresos al CSOD (F0234)
+
+  /** Índice del registro que se está creando o editando; -1 = modal cerrado. */
+  protected readonly editaIngreso = signal(-1);
+  /** Índice del registro cuyo detalle se está mirando; -1 = cerrado. */
+  protected readonly verIngreso = signal(-1);
+  /** Copia de trabajo: el registro solo entra a la lista cuando se guarda. */
+  protected borrador: RespuestaIngreso | null = null;
+
+  /** Sección de registros de ingreso del formulario, si el control la tiene. */
+  protected seccionIngresos(): SeccionEdit | undefined {
+    return this.modelo.find((m) => !!m.plantilla.ingresos);
+  }
+
+  /** ¿Se declaró que el mes no tuvo ingresos? */
+  protected sinIngresos(s: SeccionEdit): boolean {
+    return s.campos['sin-ingresos'] === 'Sí';
+  }
+
+  protected ingresosLlenos(s: SeccionEdit): number {
+    return s.ingresos.filter((r) => !this.data.ingresoVacio(r)).length;
+  }
+  protected ingresosIncompletos(s: SeccionEdit): number {
+    return s.ingresos.filter((r) => !this.data.ingresoVacio(r) && this.data.faltasIngreso(r).length).length;
+  }
+
+  private ingresoNuevo(): RespuestaIngreso {
+    return {
+      fecha: '', horaEntrada: '', horaSalida: '', carne: '', nombre: '', cargo: '',
+      tipoPersonal: '', acompanante: '', carneAcompanante: '', anexaDocumento: '',
+      motivo: '', observacion: ''
+    };
+  }
+
+  protected nuevoIngreso(s: SeccionEdit): void {
+    this.borrador = this.ingresoNuevo();
+    this.editaIngreso.set(s.ingresos.length);
+  }
+
+  protected editarIngreso(i: number): void {
+    const s = this.seccionIngresos();
+    if (!s?.ingresos[i]) return;
+    this.borrador = { ...s.ingresos[i] };
+    this.editaIngreso.set(i);
+  }
+
+  protected cancelarIngreso(): void {
+    this.borrador = null;
+    this.editaIngreso.set(-1);
+  }
+
+  /** Lo que le falta al borrador; el modal lo muestra en vivo. */
+  protected faltasBorrador(): string[] {
+    return this.borrador ? this.data.faltasIngreso(this.borrador) : [];
+  }
+
+  protected guardarIngreso(s: SeccionEdit): void {
+    if (!this.borrador) return;
+    const faltas = this.data.faltasIngreso(this.borrador);
+    if (faltas.length) {
+      this.toast.warn('Registro incompleto', faltas[0]);
+      return;
+    }
+    const i = this.editaIngreso();
+    if (i >= 0 && i < s.ingresos.length) s.ingresos[i] = { ...this.borrador };
+    else s.ingresos.push({ ...this.borrador });
+    this.cancelarIngreso();
+    this.guardar(true);
+    this.toast.ok('Registro guardado', 'El ingreso quedó registrado en la bitácora del mes.');
+  }
+
+  protected eliminarIngreso(s: SeccionEdit, i: number): void {
+    const reg = s.ingresos[i];
+    if (!reg) return;
+    s.ingresos.splice(i, 1);
+    this.guardar(true);
+    this.toast.ok('Registro eliminado',
+      (reg.nombre || 'El registro') + ' salió de la bitácora de ingresos del mes.');
   }
 
   // ------------------------------------------------------------------ muestra de equipos (F0382)
@@ -1599,6 +1905,15 @@ export class CompletarControlComponent {
   }
   protected columnasDe(titulo: string): string[] {
     return this.catalogo()?.plantilla.find((p) => p.titulo === titulo)?.tabla?.columnas ?? [];
+  }
+
+  /** Registros de ingreso de una sección ya entregada (F0234). */
+  protected conIngresos(s: RespuestaSeccion): RespuestaIngreso[] {
+    return (s.ingresos ?? []).filter((x) => !this.data.ingresoVacio(x));
+  }
+  /** ¿Esa sección es la bitácora de ingresos del control abierto? */
+  protected esF0234(titulo: string): boolean {
+    return !!this.catalogo()?.plantilla.find((p) => p.titulo === titulo)?.ingresos;
   }
 
   /** Equipos de la muestra registrados en una sección ya entregada (F0382). */

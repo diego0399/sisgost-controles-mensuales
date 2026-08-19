@@ -2,7 +2,7 @@
  {
   "codigo": "F0234",
   "nombre": "Control de ingreso a los cuartos de servidores del CNR",
-  "version": "V2",
+  "version": "V4",
   "frecuencia": "Mensual",
   "aplicacion": {
    "modo": "Área técnica específica",
@@ -15,25 +15,90 @@
   "requiereFirma": true,
   "permiteJustificacion": false,
   "activo": true,
-  "descripcion": "Bitácora mensual de ingresos al cuarto de servidores de la oficina: quién ingresó, cuándo y con qué motivo. Si no hubo ingresos, el control se entrega con la tabla vacía y la observación correspondiente.",
+  "descripcion": "Bitácora mensual de ingresos al cuarto de servidores y al centro de datos: quién ingresó, con qué carné, acompañado por quién, en qué horario y con qué motivo. Cada visita se registra por separado. Un mes sin ingresos se declara explícitamente y se sustenta en las observaciones.",
   "plantilla": [
    {
     "titulo": "Registros de ingreso del mes",
-    "descripcion": "Un registro por cada ingreso al cuarto de servidores. Un mes sin ingresos se entrega sin filas, dejándolo constar en las observaciones.",
-    "tabla": {
-     "columnas": [
-      "Fecha",
-      "Hora de entrada",
-      "Hora de salida",
-      "Nombre de quien ingresa",
-      "Cargo o institución",
-      "Motivo del ingreso"
+    "descripcion": "Un registro por cada ingreso al cuarto de servidores, con su hora de entrada y de salida. Si en el mes no hubo ningún ingreso, decláralo abajo y explica el motivo en las observaciones.",
+    "campos": [
+     {
+      "id": "sin-ingresos",
+      "etiqueta": "No se registraron ingresos durante el mes",
+      "tipo": "opcion",
+      "opciones": [
+       "No",
+       "Sí"
+      ],
+      "obligatorio": true,
+      "ayuda": "Con «Sí» el control se entrega sin registros, pero exige una observación que lo sustente."
+     }
+    ],
+    "ingresos": {
+     "motivos": [
+      "Mantenimiento preventivo",
+      "Mantenimiento correctivo",
+      "Revisión de aire acondicionado",
+      "Revisión de UPS o energía",
+      "Traslado de cintas de respaldo",
+      "Instalación o retiro de equipo",
+      "Revisión de cableado y conexiones",
+      "Limpieza programada",
+      "Auditoría o inspección",
+      "Otro (detallar en la observación)"
      ],
-     "minimo": 0
+     "tiposPersonal": [
+      "Personal técnico DTI",
+      "Personal interno CNR",
+      "Personal externo al CNR"
+     ],
+     "ayuda": "La hora de salida no puede ser anterior a la de entrada."
     }
    },
    {
     "titulo": "Verificación de cierre",
+    "descripcion": "Cierre del cuarto de servidores al terminar el período y remisión de la bitácora.",
+    "campos": [
+     {
+      "id": "cierre",
+      "etiqueta": "¿Se verificó el cierre del cuarto de servidores?",
+      "tipo": "opcion",
+      "opciones": [
+       "Sí",
+       "No",
+       "No aplica"
+      ],
+      "obligatorio": true
+     },
+     {
+      "id": "fecha-cierre",
+      "etiqueta": "Fecha de verificación",
+      "tipo": "fecha",
+      "obligatorio": true
+     },
+     {
+      "id": "hora-cierre",
+      "etiqueta": "Hora de verificación",
+      "tipo": "hora",
+      "obligatorio": true
+     },
+     {
+      "id": "responsable-cierre",
+      "etiqueta": "Responsable de la verificación",
+      "tipo": "texto",
+      "obligatorio": true
+     },
+     {
+      "id": "justifica-cierre",
+      "etiqueta": "Justificación (si no se verificó o no aplica)",
+      "tipo": "area",
+      "ayuda": "Obligatoria cuando la verificación se responde «No» o «No aplica»."
+     },
+     {
+      "id": "obs-cierre",
+      "etiqueta": "Observaciones de cierre",
+      "tipo": "area"
+     }
+    ],
     "items": [
      {
       "id": "libro",
@@ -57,10 +122,22 @@
    },
    {
     "titulo": "Observaciones",
+    "descripcion": "Lo que no corresponde a un ingreso concreto: incidentes, recomendaciones y el sustento del mes sin ingresos.",
     "campos": [
      {
       "id": "obs",
       "etiqueta": "Observaciones del mes",
+      "tipo": "area",
+      "obligatorio": true
+     },
+     {
+      "id": "incidentes",
+      "etiqueta": "Incidentes observados",
+      "tipo": "area"
+     },
+     {
+      "id": "recomendaciones",
+      "etiqueta": "Recomendaciones",
       "tipo": "area"
      }
     ]

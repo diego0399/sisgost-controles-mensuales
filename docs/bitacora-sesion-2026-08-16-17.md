@@ -1,6 +1,6 @@
 # Bitácora de sesión — SISGOST Controles Mensuales
 
-**Sesión del 16 al 19 de agosto de 2026 · rondas 74 a 80.**
+**Sesión del 16 al 19 de agosto de 2026 · rondas 74 a 81.**
 
 Registro de lo que se pidió y lo que quedó hecho en esta conversación, para poder retomar el
 trabajo sin releer el historial. El punto de control completo del proyecto sigue siendo
@@ -208,11 +208,32 @@ Verificación: 9 pantallas sin acciones manuales; los tres casos de configuraci�
 inventario resueltos sin pulsar nada; 0 controles duplicados e idempotencia comprobada. Batería
 **403/0**, siete suites de navegador sin avisos y `npm run build` limpio.
 
+## Ronda 81 — F0234 fiel al formato y validaciones exigidas del F0382
+
+**Se pidió** rehacer el F0234 respetando su documento original pero con una experiencia digital
+clara y validada, y asegurar que el F0382 no pueda entregarse incompleto.
+
+**Quedó hecho**
+
+- El PDF del F0234 es un escaneo sin texto: se renderizó con el visor de Chrome para poder leerlo.
+  El formato controlado es **V4** y define 13 columnas por visita, incluidos carné, acompañante,
+  clasificación del personal y si anexa documento.
+- La tabla horizontal desapareció: cada ingreso se agrega desde un formulario propio y la tabla
+  solo resume, con Ver detalle, Editar y Eliminar. Tipos de dato correctos (fecha, hora, catálogo,
+  multilínea) y todas las validaciones con los mensajes pedidos, incluida salida anterior a entrada.
+- **Mes sin ingresos**: se declara, exige observación y el documento lo dice expresamente.
+- Paso de verificación de cierre con confirmación, fecha, hora, responsable y justificación.
+- Trazabilidad de cada registro agregado, editado o eliminado, y del mes sin ingresos.
+- **F0382**: mensajes alineados al requerimiento, nuevo aviso para el equipo inactivo, y
+  comprobado que un control incompleto no se entrega ni genera documento.
+
+Verificación: batería **436/0**, siete suites de navegador sin avisos y `npm run build` limpio.
+
 ## Estado al cierre de la sesión
 
 | Comprobación | Resultado |
 |---|---|
-| Batería sobre fuente y semilla | **403 casos, 0 fallos** |
+| Batería sobre fuente y semilla | **436 casos, 0 fallos** |
 | Suites de navegador (7) | **sin avisos ni errores de consola** |
 | `npm run build` · Controles Mensuales | limpio |
 | `npm run build` · Gestión de Equipos | correcto, con sus 3 avisos de presupuesto preexistentes |

@@ -3,7 +3,7 @@ import {
   ActividadDia, AplicacionControl, AreaTecnica, BitacoraDiaria, ControlCatalogo, ControlMes,
   Direccion, DistribucionSoporte, DocumentoGenerado, EquipoOperativo, ESTADOS_ACTIVOS,
   EstadoControl, EventoIntegracion, EventoTrazabilidad, Frecuencia, Justificacion, RespuestaSeccion,
-  ItemSeguridad, RespuestaEquipoChecklist, RespuestaItemSeguridad, RevisionAtencion,
+  ItemSeguridad, RespuestaEquipoChecklist, RespuestaIngreso, RespuestaItemSeguridad, RevisionAtencion,
   SeccionPlantilla, UsuarioSistema, isoLocal, nombreMes
 } from '../models/models';
 import { HolidayService } from './holiday.service';
@@ -531,6 +531,65 @@ export class DataService {
     // Los controles con muestra de equipos (F0382) dejan traza de qué equipos entraron y salieron
     // y de cada verificación e incumplimiento registrado.
     if (antes && despues && this.checklistDe(despues.codigo)) this.trazarMuestra(antes, despues, u);
+    // La bitácora de ingresos (F0234) deja traza de cada registro agregado, editado o eliminado.
+    if (antes && despues && this.ingresosDe(despues.codigo)) this.trazarIngresos(antes, despues, u);
+  }
+
+  /** Diferencia la bitácora de ingresos entre dos versiones del control y deja sus eventos. */
+  private trazarIngresos(antes: ControlMes, despues: ControlMes, u: UsuarioSistema | null): void {
+    const p = this.ingresosDe(despues.codigo)!;
+    const registros = (c: ControlMes) =>
+      (c.secciones.find((x) => x.titulo === p.titulo)?.ingresos ?? []).filter((x) => !this.ingresoVacio(x));
+    const previos = registros(antes);
+    const actuales = registros(despues);
+    const base = {
+      direccion: despues.direccion, unidad: despues.unidad, tipoControl: despues.codigo,
+      mes: despues.mes, anio: despues.anio, moduloOrigen: MODULO_CONTROLES
+    };
+    /** Un registro se identifica por fecha + hora de entrada + nombre. */
+    const clave = (x: RespuestaIngreso) => `${x.fecha}|${x.horaEntrada}|${x.nombre}`;
+    const resumen = (x: RespuestaIngreso) =>
+      `${x.fecha || 'sin fecha'} ${x.horaEntrada || '--:--'}–${x.horaSalida || '--:--'} · ${x.nombre || 'sin nombre'} (${x.cargo || 'sin cargo'}) · ${x.motivo || 'sin motivo'}`;
+
+    const clavesPrevias = new Set(previos.map(clave));
+    const clavesActuales = new Set(actuales.map(clave));
+    for (const reg of actuales) {
+      if (clavesPrevias.has(clave(reg))) continue;
+      this.registrarEvento(u, {
+        ...base, accion: 'Registro de ingreso agregado',
+        observacion: `Ingreso al cuarto de servidores: ${resumen(reg)}.`
+      });
+    }
+    for (const reg of previos) {
+      if (clavesActuales.has(clave(reg))) continue;
+      this.registrarEvento(u, {
+        ...base, accion: 'Registro de ingreso eliminado',
+        observacion: `Salió de la bitácora del mes: ${resumen(reg)}.`
+      });
+    }
+    // Mismo registro con datos distintos: es una edición.
+    for (const reg of actuales) {
+      const previo = previos.find((x) => clave(x) === clave(reg));
+      if (!previo || JSON.stringify(previo) === JSON.stringify(reg)) continue;
+      this.registrarEvento(u, {
+        ...base, accion: 'Registro de ingreso editado',
+        estadoAnterior: resumen(previo), estadoNuevo: resumen(reg),
+        observacion: `Se corrigieron datos del ingreso de ${reg.nombre || 'sin nombre'}.`
+      });
+    }
+    // Declarar el mes sin ingresos también queda registrado.
+    const sinAntes = this.mesSinIngresos(antes);
+    const sinDespues = this.mesSinIngresos(despues);
+    if (sinAntes !== sinDespues) {
+      this.registrarEvento(u, {
+        ...base, accion: sinDespues ? 'Mes sin ingresos marcado' : 'Mes sin ingresos desmarcado',
+        estadoAnterior: sinAntes ? 'Mes sin ingresos' : 'Con ingresos registrados',
+        estadoNuevo: sinDespues ? 'Mes sin ingresos' : 'Con ingresos registrados',
+        observacion: sinDespues
+          ? `Se declaró que en ${nombreMes(despues.mes)} ${despues.anio} no hubo ingresos al cuarto de servidores de ${this.dirUnidad(despues.direccion, despues.unidad)}; debe sustentarse en las observaciones.`
+          : 'Se retiró la declaración de mes sin ingresos: el control vuelve a exigir registros.'
+      });
+    }
   }
 
   /** Diferencia la muestra de equipos entre dos versiones del control y deja sus eventos. */
@@ -679,7 +738,8 @@ export class DataService {
         || (r.equipos?.some((x) => x.incluido && x.estado) ?? false)
         || (r.equiposIp?.some((x) => x.ip.trim() || x.hora.trim()) ?? false)
         || (r.telefonos?.some((x) => x.numero.trim() || x.hora.trim()) ?? false)
-        || (r.checklistEquipos?.some((x) => x.inventario.trim()) ?? false);
+        || (r.checklistEquipos?.some((x) => x.inventario.trim()) ?? false)
+        || (r.ingresos?.some((x) => !this.ingresoVacio(x)) ?? false);
       if (tiene) conRespuesta++;
     }
     return Math.round((conRespuesta / plantilla.length) * 100);
@@ -731,6 +791,7 @@ export class DataService {
       if (p.equiposIp && !semanaNoAplica) faltas.push(...this.faltasEquiposIp(p, r, c));
       if (p.telefonos && !semanaNoAplica) faltas.push(...this.faltasTelefonos(p, r));
       if (p.checklistEquipos) faltas.push(...this.faltasChecklistEquipos(p, r, c));
+      if (p.ingresos) faltas.push(...this.faltasIngresos(p, r, c));
     }
     if (cat?.requiereEvidencia && !c.evidencias.length) faltas.push('Este control requiere al menos una evidencia.');
     return faltas;
@@ -767,11 +828,92 @@ export class DataService {
     return faltas;
   }
 
+  // ---------------------------------------------------------------- ingresos al CSOD (F0234)
+
+  /** Mensajes de la bitácora de ingresos; se reutilizan en el formulario y en la entrega. */
+  readonly MSG_SALIDA_ANTES = 'La hora de salida no puede ser menor que la hora de entrada.';
+  readonly MSG_SIN_INGRESOS =
+    'Debe ingresar una observación indicando que no se registraron ingresos durante el mes.';
+
+  /** Sección de registros de ingreso del control, si la tiene (F0234). */
+  ingresosDe(codigo: string): SeccionPlantilla | undefined {
+    return this.catalogoDe(codigo)?.plantilla.find((p) => !!p.ingresos);
+  }
+
+  /** ¿El técnico declaró que el mes no tuvo ingresos? */
+  mesSinIngresos(c: ControlMes): boolean {
+    const p = this.ingresosDe(c.codigo);
+    if (!p) return false;
+    const r = c.secciones.find((s) => s.titulo === p.titulo);
+    return (r?.campos?.find((x) => x.id === 'sin-ingresos')?.valor ?? '') === 'Sí';
+  }
+
+  /**
+   * Qué le falta a un registro de ingreso para estar completo. Devuelve la lista de campos
+   * faltantes, con el mensaje exacto de cada regla; vacía = el registro está bien.
+   */
+  faltasIngreso(reg: RespuestaIngreso): string[] {
+    const faltas: string[] = [];
+    if (!reg.fecha.trim()) faltas.push('Debe ingresar la fecha del registro.');
+    if (!reg.horaEntrada.trim()) faltas.push('Debe ingresar la hora de entrada.');
+    if (!reg.horaSalida.trim()) faltas.push('Debe ingresar la hora de salida.');
+    if (reg.horaEntrada.trim() && reg.horaSalida.trim() && reg.horaSalida < reg.horaEntrada) {
+      faltas.push(this.MSG_SALIDA_ANTES);
+    }
+    if (!reg.nombre.trim()) faltas.push('Debe ingresar el nombre de quien ingresa.');
+    if (!reg.cargo.trim()) faltas.push('Debe ingresar el cargo o institución.');
+    if (!reg.motivo.trim()) faltas.push('Debe ingresar el motivo del ingreso.');
+    return faltas;
+  }
+
+  /** ¿El registro tiene algo escrito? Un registro en blanco no cuenta como incompleto. */
+  ingresoVacio(reg: RespuestaIngreso): boolean {
+    return ![reg.fecha, reg.horaEntrada, reg.horaSalida, reg.carne, reg.nombre, reg.cargo,
+      reg.tipoPersonal, reg.acompanante, reg.carneAcompanante, reg.motivo, reg.observacion]
+      .some((v) => (v ?? '').trim());
+  }
+
+  /**
+   * Reglas de la bitácora de ingresos del F0234: o el mes tuvo ingresos —y entonces cada registro
+   * debe estar completo y coherente— o se declara que no los tuvo y se sustenta por escrito.
+   */
+  private faltasIngresos(p: SeccionPlantilla, r: RespuestaSeccion | undefined, c: ControlMes): string[] {
+    const faltas: string[] = [];
+    const registros = (r?.ingresos ?? []).filter((x) => !this.ingresoVacio(x));
+    const sinIngresos = (r?.campos?.find((x) => x.id === 'sin-ingresos')?.valor ?? '') === 'Sí';
+
+    if (sinIngresos) {
+      if (registros.length) {
+        faltas.push(`${p.titulo}: declaró que el mes no tuvo ingresos, pero hay ${registros.length} registro(s). Elimínelos o cambie la declaración.`);
+      }
+      // La observación del mes sustenta el mes sin ingresos.
+      const obs = c.secciones
+        .flatMap((s) => s.campos ?? [])
+        .find((x) => x.id === 'obs')?.valor ?? '';
+      if (!obs.trim()) faltas.push(this.MSG_SIN_INGRESOS);
+      return faltas;
+    }
+
+    if (!registros.length) {
+      faltas.push(`${p.titulo}: registre los ingresos del mes o declare que no hubo ingresos durante el mes.`);
+      return faltas;
+    }
+    for (const [i, reg] of registros.entries()) {
+      const propias = this.faltasIngreso(reg);
+      for (const f of propias) faltas.push(`${p.titulo} · registro ${i + 1}: ${f}`);
+    }
+    if (registros.some((x) => this.faltasIngreso(x).length)) {
+      faltas.push('Complete o elimine los registros incompletos antes de entregar el control.');
+    }
+    return faltas;
+  }
+
   // ---------------------------------------------------------------- muestra de equipos (F0382)
 
   /** Mensajes de la verificación por muestra; se reutilizan en el formulario y en la entrega. */
-  readonly MSG_EQUIPO_REPETIDO = 'Este equipo ya fue seleccionado en el control.';
-  readonly MSG_EQUIPO_AJENO = 'El equipo seleccionado no pertenece a la Dirección/Unidad del control.';
+  readonly MSG_EQUIPO_REPETIDO = 'Este equipo ya fue seleccionado.';
+  readonly MSG_EQUIPO_AJENO = 'Este equipo no pertenece a la Dirección/Unidad del control.';
+  readonly MSG_EQUIPO_INACTIVO = 'Este equipo no se encuentra activo en el inventario operativo.';
 
   /** Sección de muestra del control, si la tiene (F0382). */
   checklistDe(codigo: string): SeccionPlantilla | undefined {
@@ -794,7 +936,11 @@ export class DataService {
   /** ¿Ese equipo puede entrar en la muestra del control? Devuelve el motivo del rechazo o ''. */
   bloqueoEquipoMuestra(c: ControlMes, inventario: string, yaElegidos: string[]): string {
     if (yaElegidos.includes(inventario)) return this.MSG_EQUIPO_REPETIDO;
-    return this.equiposDeControl(c).some((e) => e.inventario === inventario) ? '' : this.MSG_EQUIPO_AJENO;
+    if (this.equiposDeControl(c).some((e) => e.inventario === inventario)) return '';
+    // El equipo existe pero no está activo aquí: se distingue de «no es de esta Dirección/Unidad».
+    const ficha = this.equipoDe(inventario);
+    if (ficha && ficha.direccion === c.direccion && ficha.unidad === c.unidad) return this.MSG_EQUIPO_INACTIVO;
+    return this.MSG_EQUIPO_AJENO;
   }
 
   /** Ítems del checklist que aplican a un equipo según su clasificación en el formato. */
@@ -838,7 +984,7 @@ export class DataService {
     const filas = (r?.checklistEquipos ?? []).slice(0, pedidos);
     const elegidos = filas.filter((e) => e.inventario.trim());
     if (elegidos.length < pedidos) {
-      faltas.push(`Debe seleccionar ${pedidos} equipos activos para completar el control ${c.codigo}.`);
+      faltas.push(`Debe seleccionar ${pedidos} equipos activos del inventario operativo.`);
     }
     const vistos = new Set<string>();
     const activos = this.equiposDeControl(c);
@@ -847,28 +993,29 @@ export class DataService {
       const etiqueta = `${p.titulo} · equipo ${eq.inventario}`;
       if (vistos.has(eq.inventario)) { faltas.push(`${etiqueta}: ${this.MSG_EQUIPO_REPETIDO}`); continue; }
       vistos.add(eq.inventario);
-      if (!activos.some((a) => a.inventario === eq.inventario)) {
-        faltas.push(`${etiqueta}: ${this.MSG_EQUIPO_AJENO}`);
-        continue;
-      }
+      const bloqueo = this.bloqueoEquipoMuestra(c, eq.inventario, []);
+      if (bloqueo) { faltas.push(`${etiqueta}: ${bloqueo}`); continue; }
       if (!eq.clasificacion) faltas.push(`${etiqueta}: indique si es equipo de usuario interno o de consulta al público.`);
       const aplicables = this.itemsDeClasificacion(p, eq.clasificacion);
       if (this.itemsVerificados(p, eq) < aplicables.length) { incompletos++; continue; }
       for (const item of aplicables) {
         const resp = eq.items.find((x) => x.id === item.id);
         if (!resp) continue;
+        const corto = item.nombre.split(' — ')[0];
         if (resp.cumplimiento === 'No cumple') {
-          if (!resp.descripcion.trim()) faltas.push(`${etiqueta}: describa el incumplimiento del ${item.nombre.split(' — ')[0]}.`);
-          if (!resp.accionCorrectiva.trim()) faltas.push(`${etiqueta}: registre la acción correctiva del ${item.nombre.split(' — ')[0]}.`);
-          if (!resp.estadoItem.trim()) faltas.push(`${etiqueta}: indique el estado final del ${item.nombre.split(' — ')[0]}.`);
+          if (!resp.descripcion.trim()) faltas.push(`${etiqueta}: describa el incumplimiento del ${corto}.`);
+          if (!resp.accionCorrectiva.trim()) {
+            faltas.push(`Debe registrar acción correctiva para los ítems incumplidos (${etiqueta} · ${corto}).`);
+          }
+          if (!resp.estadoItem.trim()) faltas.push(`${etiqueta}: indique el estado final del ${corto}.`);
         }
         if (resp.cumplimiento === 'No aplica' && !resp.justificacion.trim()) {
-          faltas.push(`${etiqueta}: debe justificar por qué el ${item.nombre.split(' — ')[0]} no aplica para el equipo seleccionado.`);
+          faltas.push(`Debe justificar los ítems marcados como No aplica (${etiqueta} · ${corto}).`);
         }
       }
     }
     if (incompletos) {
-      faltas.push(`Debe completar la verificación de seguridad para los ${pedidos} equipos seleccionados (${incompletos} sin terminar).`);
+      faltas.push(`Debe completar la verificación de todos los ítems para los ${pedidos} equipos seleccionados (${incompletos} sin terminar).`);
     }
     return faltas;
   }

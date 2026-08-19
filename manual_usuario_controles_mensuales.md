@@ -153,6 +153,26 @@ acondicionado, UPS, alarma, sensores, limpieza y planta eléctrica) con sus medi
 del mes recoge las verificaciones periódicas —extintor, librera, acceso digital, objetos extraños—
 y el resultado general del mes.
 
+### F0234: un registro por cada ingreso
+
+El **F0234** se llena en cinco pasos. En el primero se registran los ingresos al cuarto de
+servidores: el botón **Agregar registro** abre un formulario con la fecha, la hora de entrada y la
+de salida, el carné y el nombre de quien ingresa, su cargo o institución, si es personal técnico de
+la DTI, interno del CNR o externo, el acompañante, si anexa documento, el motivo y una observación.
+Mientras falte algo, el formulario lo enumera y no deja guardar; tampoco admite una hora de salida
+anterior a la de entrada.
+
+Lo registrado se ve en una tabla resumen con **Ver detalle**, **Editar** y **Eliminar** en cada
+fila, y una columna que avisa si el registro quedó incompleto.
+
+Si en el mes **no hubo ingresos**, marque «No se registraron ingresos durante el mes»: el control
+se entrega sin registros, pero debe explicarlo en las observaciones. El documento final lo deja
+dicho expresamente.
+
+Los pasos siguientes son la **verificación de cierre** (si se verificó, cuándo, a qué hora y quién;
+con justificación si la respuesta no es «Sí»), las **observaciones** del mes, las **evidencias** y
+el **resumen** antes de entregar.
+
 ### F0382: cinco equipos tomados del inventario
 
 El **F0382** se llena en cinco pasos. El primero solo muestra los datos del control programado

@@ -189,6 +189,20 @@ export interface ChecklistEquiposPlantilla {
   ayuda?: string;
 }
 
+/**
+ * Bitácora de ingresos al cuarto de servidores (F0234). El formato físico es una hoja por
+ * quincena con una fila por visita: fecha, hora de entrada y de salida (E/S), carné y nombre del
+ * personal autorizado, carné y nombre del acompañante, si es personal técnico de la DTI, interno
+ * del CNR o externo, si anexa documento, la actividad o motivo y las firmas.
+ */
+export interface IngresosPlantilla {
+  /** Motivos frecuentes que ofrece el formulario; el técnico puede escribir otro. */
+  motivos: string[];
+  /** Clasificación del personal que ingresa, como las columnas del formato. */
+  tiposPersonal: string[];
+  ayuda?: string;
+}
+
 /** Sección de un formulario digital; el «stepper» de completar control recorre estas secciones. */
 export interface SeccionPlantilla {
   titulo: string;
@@ -202,6 +216,7 @@ export interface SeccionPlantilla {
   equiposIp?: EquiposIpPlantilla;
   telefonos?: TelefonosPlantilla;
   checklistEquipos?: ChecklistEquiposPlantilla;
+  ingresos?: IngresosPlantilla;
   /** Paso de solo lectura con los datos del control programado (F0382, paso 1). */
   datosControl?: boolean;
 }
@@ -332,6 +347,28 @@ export interface RespuestaEquipoChecklist {
   items: RespuestaItemSeguridad[];
 }
 
+/** Un ingreso al cuarto de servidores, tal como lo pide el formato F0234. */
+export interface RespuestaIngreso {
+  fecha: string;
+  /** `HH:mm`; el formato las rotula E = Entrada y S = Salida. */
+  horaEntrada: string;
+  horaSalida: string;
+  /** Carné del personal autorizado que ingresa. */
+  carne: string;
+  nombre: string;
+  /** Cargo o institución de quien ingresa. */
+  cargo: string;
+  /** Personal técnico DTI · Personal interno CNR · Personal externo al CNR. */
+  tipoPersonal: string;
+  acompanante: string;
+  carneAcompanante: string;
+  /** Si se anexó documento de respaldo de la visita (columna «Anexa el documento» del formato). */
+  anexaDocumento: string;
+  /** Actividad o motivo de la visita. */
+  motivo: string;
+  observacion: string;
+}
+
 export interface RespuestaSeccion {
   titulo: string;
   campos?: RespuestaCampo[];
@@ -341,6 +378,7 @@ export interface RespuestaSeccion {
   equiposIp?: RespuestaEquipoIp[];
   telefonos?: RespuestaTelefono[];
   checklistEquipos?: RespuestaEquipoChecklist[];
+  ingresos?: RespuestaIngreso[];
 }
 
 export interface EvidenciaControl { nombre: string; descripcion: string; fecha: string; }
