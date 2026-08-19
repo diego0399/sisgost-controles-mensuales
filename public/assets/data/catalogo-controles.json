@@ -19,7 +19,7 @@
   "plantilla": [
    {
     "titulo": "Registros de ingreso del mes",
-    "descripcion": "Un registro por cada ingreso al cuarto de servidores, con su hora de entrada y de salida. Si en el mes no hubo ningún ingreso, decláralo abajo y explica el motivo en las observaciones.",
+    "descripcion": "Un registro por cada ingreso al cuarto de servidores, con su hora de entrada y de salida. Indique si el técnico entró solo o acompañado. Si en el mes no hubo ningún ingreso, decláralo abajo y explica el motivo en las observaciones.",
     "campos": [
      {
       "id": "sin-ingresos",
@@ -34,6 +34,10 @@
      }
     ],
     "ingresos": {
+     "tiposIngreso": [
+      "Individual",
+      "Con acompañante"
+     ],
      "motivos": [
       "Mantenimiento preventivo",
       "Mantenimiento correctivo",
@@ -51,7 +55,7 @@
       "Personal interno CNR",
       "Personal externo al CNR"
      ],
-     "ayuda": "La hora de salida no puede ser anterior a la de entrada."
+     "ayuda": "El ingreso individual lo hace solo el Técnico de Soporte; con acompañante se piden además sus datos. La hora de salida no puede ser anterior a la de entrada."
     }
    },
    {

@@ -1,6 +1,6 @@
 # Bitácora de sesión — SISGOST Controles Mensuales
 
-**Sesión del 16 al 19 de agosto de 2026 · rondas 74 a 81.**
+**Sesión del 16 al 19 de agosto de 2026 · rondas 74 a 83.**
 
 Registro de lo que se pidió y lo que quedó hecho en esta conversación, para poder retomar el
 trabajo sin releer el historial. El punto de control completo del proyecto sigue siendo
@@ -229,11 +229,73 @@ clara y validada, y asegurar que el F0382 no pueda entregarse incompleto.
 
 Verificación: batería **436/0**, siete suites de navegador sin avisos y `npm run build` limpio.
 
+## Ronda 82 — campos obligatorios del F0234 y entrega bloqueada del F0382
+
+**Se pidió** que ninguno de los dos controles pueda entregarse con campos vacíos, y en el F0234
+clasificar al acompañante y exigir la imagen del documento de respaldo cuando se declara.
+
+**Quedó hecho**
+
+- **Tipo de personal del acompañante**: tres botones de opción —Personal DTI, interno CNR, externo
+  al CNR— que aparecen en cuanto hay acompañante y son obligatorios. No es texto libre.
+- **Casilla «¿Anexa documento de respaldo?»**: sin marcar no se pide nada; marcada, la imagen es
+  obligatoria y solo se admiten PNG, JPG, JPEG o WEBP. Un archivo vacío o de otro tipo se rechaza
+  al elegirlo, la imagen se reduce a 900 px y **sale impresa en el documento**, que declara
+  «Documento de respaldo anexo.» o «No se anexó documento de respaldo.».
+- El visor de documentos aprendió a imprimir imágenes dentro de una sección (`ImagenDoc`).
+- **F0382**: observaciones generales obligatorias cuando hay incumplimientos o ítems «No aplica», y
+  un **resumen de validación** antes de entregar —equipos, ítems, acciones, justificaciones y
+  «Estado listo para entrega: Sí/No»— con la lista de lo pendiente. La entrega devuelve «No puede
+  entregar el control F0382 con campos pendientes.».
+- **Trazabilidad de lo que sale mal**: «Intento de entrega con campos pendientes», «Ítem incompleto
+  detectado», «Registro de ingreso incompleto detectado», «Documento de respaldo marcado» y
+  «…cargado», más «`código` finalizado correctamente» al cerrar bien.
+- Los registros guardados antes de esta ronda se normalizan al leerlos (`normalizaIngreso`).
+
+**Lección**: la carga de la imagen es asíncrona y el borrador es un objeto plano; en una
+aplicación sin zonas eso no repinta solo, y la vista previa aparecía una interacción tarde. Lo
+detectó la suite de navegador, no la batería.
+
+Verificación: batería **473/0**, ocho suites de navegador sin avisos ni errores de consola y
+`npm run build` limpio en ambos módulos.
+
+## Ronda 83 — el F0234 admite ingreso individual o con acompañante
+
+**Se pidió** que el F0234 se adapte a que no siempre hay acompañante: si entra solo el Técnico de
+Soporte, no deben pedirse ni exigirse los datos de nadie más.
+
+**Quedó hecho**
+
+- Nuevo campo obligatorio **Tipo de ingreso** (Individual / Con acompañante), declarado en el
+  catálogo y elegido con botones de opción al abrir el registro.
+- **Individual**: se piden fecha, horas, Técnico de Soporte —autocompletado con el usuario que
+  completa el control—, motivo y, si se marcó, la imagen del respaldo. Los campos del acompañante
+  no se dibujan ni se validan.
+- **Con acompañante**: además se exigen nombre, tipo de personal y **cargo o institución** del
+  acompañante. Volver a «Individual» borra esos datos: nada oculto queda obligatorio ni viaja
+  escondido en el registro.
+- La tabla resumen muestra tipo de ingreso, técnico, acompañante («No aplica» en las individuales),
+  tipo de personal, motivo y documento de respaldo (Sí/No).
+- El **documento** imprime el tipo de ingreso de cada visita, «No aplica» en las tres columnas del
+  acompañante cuando el ingreso fue individual, y resume cuántos ingresos fueron de cada tipo.
+- **Trazabilidad**: el alta se nombra «Registro de ingreso individual agregado» o «…con acompañante
+  agregado», todos los eventos de la bitácora guardan su `tipoIngreso`, y los que hablan del
+  control entero guardan el reparto («Individual: 2 · Con acompañante: 1»). Se agregó «Documento
+  F0234 generado».
+- Los registros guardados antes de esta ronda deducen su tipo por si traían acompañante.
+
+**Lección**: la hoja del documento pone los encabezados en mayúsculas por CSS, así que buscar una
+tabla por `innerText` no la encuentra; hay que leerla con `textContent`. Ya había pasado con
+las etiquetas de los pasos.
+
+Verificación: batería **501/0**, nueve suites de navegador sin avisos ni errores de consola y
+`npm run build` limpio en ambos módulos.
+
 ## Estado al cierre de la sesión
 
 | Comprobación | Resultado |
 |---|---|
-| Batería sobre fuente y semilla | **436 casos, 0 fallos** |
+| Batería sobre fuente y semilla | **501 casos, 0 fallos** |
 | Suites de navegador (7) | **sin avisos ni errores de consola** |
 | `npm run build` · Controles Mensuales | limpio |
 | `npm run build` · Gestión de Equipos | correcto, con sus 3 avisos de presupuesto preexistentes |

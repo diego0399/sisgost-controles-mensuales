@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject, input, signal } from '@angular/core';
+import { ChangeDetectorRef, Component, computed, effect, inject, input, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
@@ -11,7 +11,8 @@ import { IconComponent } from '../../shared/icon';
 import {
   ControlMes, EvidenciaControl, ItemSeguridad, RespuestaEquipo, RespuestaEquipoChecklist,
   RespuestaIngreso,
-  RespuestaEquipoIp, RespuestaItemSeguridad, RespuestaSeccion, RespuestaTelefono, SeccionPlantilla,
+  RespuestaEquipoIp, RespuestaItemSeguridad, RespuestaSeccion, RespuestaTelefono, ResumenMuestra,
+  SeccionPlantilla,
   formateaFecha, isoLocal, nombreMes
 } from '../../core/models/models';
 
@@ -71,6 +72,12 @@ interface PasoForm {
     .tabla-form td { padding: 4px 6px 4px 0; }
     .tabla-form input { width: 100%; }
     .resumen-check { color: var(--ok); }
+    /* Documento de respaldo del F0234 */
+    .respaldo {
+      border: 1px solid var(--line-strong); border-radius: 10px; padding: 11px 13px;
+      background: var(--surface-2, #f8fafc); display: grid; gap: 9px;
+    }
+    .respaldo img { width: 148px; border: 1px solid var(--line); border-radius: 6px; background: #fff; }
     .ev-item { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px dashed var(--line); font-size: 13px; }
     .ev-item:last-child { border-bottom: 0; }
     /* Equipos del inventario operativo dentro del formulario */
@@ -467,6 +474,33 @@ interface PasoForm {
                     @else { <span class="badge warn">Se registrará como «Entregado tarde»</span> }
                   </dd></div>
                 </dl>
+                @if (resumenMuestra(); as rm) {
+                  <div class="sec-title" style="margin-top: 16px;">Resumen de validación de la muestra</div>
+                  <dl class="dl">
+                    <div><dt>Equipos seleccionados</dt><dd class="mono">{{ rm.seleccionados }}/{{ rm.pedidos }}</dd></div>
+                    <div><dt>Equipos verificados por completo</dt><dd class="mono">{{ rm.verificados }}/{{ rm.pedidos }}</dd></div>
+                    <div><dt>Ítems cumplidos</dt><dd class="mono">{{ rm.itemsCumplidos }}</dd></div>
+                    <div><dt>Ítems incumplidos</dt><dd class="mono">{{ rm.itemsIncumplidos }}</dd></div>
+                    <div><dt>Ítems No aplica</dt><dd class="mono">{{ rm.itemsNoAplica }}</dd></div>
+                    <div><dt>Acciones correctivas registradas</dt><dd class="mono">{{ rm.accionesCorrectivas }}/{{ rm.itemsIncumplidos }}</dd></div>
+                    <div><dt>Justificaciones registradas</dt><dd class="mono">{{ rm.justificaciones }}/{{ rm.itemsNoAplica }}</dd></div>
+                    <div><dt>Observaciones generales</dt><dd>{{ rm.observaciones ? 'Completadas' : 'Pendientes' }}</dd></div>
+                    <div><dt>Estado listo para entrega</dt>
+                      <dd [style.color]="rm.listo ? 'var(--ok)' : 'var(--danger)'">{{ rm.listo ? 'Sí' : 'No' }}</dd>
+                    </div>
+                  </dl>
+                  @if (rm.faltas.length) {
+                    <div class="alert warn" style="margin-bottom: 14px;">
+                      <span class="alert-ico">!</span>
+                      <span>
+                        <b>Falta completar en la muestra de equipos:</b>
+                        <ul style="margin: 6px 0 0 16px;">
+                          @for (f of rm.faltas; track f) { <li>{{ f }}</li> }
+                        </ul>
+                      </span>
+                    </div>
+                  }
+                }
                 @for (s of modelo; track s.plantilla.titulo) {
                   <div class="sec-title">{{ s.plantilla.titulo }}</div>
                   <p class="muted" style="font-size: 12.5px;">
@@ -540,8 +574,10 @@ interface PasoForm {
                         <table class="tbl">
                           <thead><tr>
                             <th>N.º</th><th>Fecha</th><th>Entrada</th><th>Salida</th>
-                            <th>Nombre de quien ingresa</th><th>Cargo o institución</th>
-                            <th>Motivo del ingreso</th><th>Estado</th><th>Acciones</th>
+                            <th>Tipo de ingreso</th><th>Técnico de Soporte</th>
+                            <th>Acompañante</th><th>Tipo de personal</th>
+                            <th>Motivo del ingreso</th><th>Documento respaldo</th>
+                            <th>Estado</th><th>Acciones</th>
                           </tr></thead>
                           <tbody>
                             @for (reg of s.ingresos; track $index; let i = $index) {
@@ -551,9 +587,23 @@ interface PasoForm {
                                   <td class="mono">{{ reg.fecha ? formatea(reg.fecha) : '—' }}</td>
                                   <td class="mono">{{ reg.horaEntrada || '—' }}</td>
                                   <td class="mono">{{ reg.horaSalida || '—' }}</td>
+                                  <td>{{ reg.tipoIngreso || '—' }}</td>
                                   <td>{{ reg.nombre || '—' }}</td>
-                                  <td>{{ reg.cargo || '—' }}</td>
+                                  <td>
+                                    @if (data.conAcompanante(reg)) { {{ reg.acompanante || '—' }} }
+                                    @else { <span class="muted">No aplica</span> }
+                                  </td>
+                                  <td>
+                                    @if (data.conAcompanante(reg)) { {{ reg.tipoPersonalAcompanante || '—' }} }
+                                    @else { <span class="muted">No aplica</span> }
+                                  </td>
                                   <td style="max-width: 220px;">{{ reg.motivo || '—' }}</td>
+                                  <td>
+                                    @if (data.anexaRespaldo(reg)) {
+                                      @if (reg.documentoImagen) { Sí }
+                                      @else { <span class="badge warn">Sí · falta la imagen</span> }
+                                    } @else { No }
+                                  </td>
                                   <td>
                                     <ui-badge [estado]="data.faltasIngreso(reg).length ? 'Incompleto' : 'Completo'" />
                                   </td>
@@ -934,16 +984,34 @@ interface PasoForm {
             <ui-modal [titulo]="editaIngreso() < si.ingresos.length ? 'Editar registro de ingreso' : 'Nuevo registro de ingreso'"
               [sub]="data.dirUnidad(c.direccion, c.unidad) + ' · ' + nombreMes(c.mes) + ' ' + c.anio"
               (cerrar)="cancelarIngreso()">
+              <!-- De esto depende el resto del formulario: no siempre hay acompañante. -->
+              <div class="field" style="margin-bottom: 14px;">
+                <label>Tipo de ingreso <span style="color: var(--danger)">*</span></label>
+                <div id="in-tipo-ingreso" style="display: grid; gap: 5px;">
+                  @for (t of si.plantilla.ingresos?.tiposIngreso ?? []; track t) {
+                    <label class="eq-check">
+                      <input type="radio" name="tipoIngreso" [value]="t"
+                        [checked]="reg.tipoIngreso === t" (change)="cambiarTipoIngreso(reg, t)" />
+                      <span>{{ t }}</span>
+                    </label>
+                  }
+                </div>
+                <p class="muted" style="font-size: 12px; margin: 6px 0 0;">
+                  <b>Individual</b>: entra solo el Técnico de Soporte.
+                  <b>Con acompañante</b>: además se registran los datos de quien lo acompaña.
+                </p>
+              </div>
+
               <div class="form-grid">
                 <div class="field">
                   <label for="in-fecha">Fecha <span style="color: var(--danger)">*</span></label>
                   <input id="in-fecha" class="control" type="date" [(ngModel)]="reg.fecha" />
                 </div>
                 <div class="field">
-                  <label for="in-tipo">Tipo de personal</label>
-                  <select id="in-tipo" class="control" [(ngModel)]="reg.tipoPersonal">
+                  <label for="in-motivo">Motivo del ingreso <span style="color: var(--danger)">*</span></label>
+                  <select id="in-motivo" class="control" [(ngModel)]="reg.motivo">
                     <option value="">Seleccione…</option>
-                    @for (t of si.plantilla.ingresos?.tiposPersonal ?? []; track t) { <option [value]="t">{{ t }}</option> }
+                    @for (m of si.plantilla.ingresos?.motivos ?? []; track m) { <option [value]="m">{{ m }}</option> }
                   </select>
                 </div>
                 <div class="field">
@@ -954,40 +1022,106 @@ interface PasoForm {
                   <label for="in-salida">Hora de salida <span style="color: var(--danger)">*</span></label>
                   <input id="in-salida" class="control" type="time" [(ngModel)]="reg.horaSalida" />
                 </div>
+                <div class="field span-2 sec-title" style="margin: 6px 0 0;">Técnico de Soporte que ingresa</div>
                 <div class="field">
-                  <label for="in-nombre">Nombre de quien ingresa <span style="color: var(--danger)">*</span></label>
+                  <label for="in-nombre">
+                    Técnico de Soporte que ingresa <span style="color: var(--danger)">*</span>
+                  </label>
                   <input id="in-nombre" class="control" [(ngModel)]="reg.nombre" />
+                  <p class="muted" style="font-size: 12px; margin: 4px 0 0;">
+                    Rol: {{ auth.usuario()?.rol }}. Viene del usuario que completa el control; puede corregirlo.
+                  </p>
                 </div>
                 <div class="field">
                   <label for="in-carne">Carné</label>
                   <input id="in-carne" class="control mono" [(ngModel)]="reg.carne" />
                 </div>
                 <div class="field">
-                  <label for="in-cargo">Cargo o institución <span style="color: var(--danger)">*</span></label>
+                  <label for="in-cargo">Cargo</label>
                   <input id="in-cargo" class="control" [(ngModel)]="reg.cargo" />
                 </div>
                 <div class="field">
-                  <label for="in-anexo">¿Anexa documento de respaldo?</label>
-                  <select id="in-anexo" class="control" [(ngModel)]="reg.anexaDocumento">
+                  <label for="in-tipo">Tipo de personal</label>
+                  <select id="in-tipo" class="control" [(ngModel)]="reg.tipoPersonal">
                     <option value="">Seleccione…</option>
-                    <option value="Sí">Sí</option>
-                    <option value="No">No</option>
+                    @for (t of si.plantilla.ingresos?.tiposPersonal ?? []; track t) { <option [value]="t">{{ t }}</option> }
                   </select>
                 </div>
-                <div class="field">
-                  <label for="in-acomp">Nombre del acompañante o visita</label>
-                  <input id="in-acomp" class="control" [(ngModel)]="reg.acompanante" />
-                </div>
-                <div class="field">
-                  <label for="in-carne-acomp">Carné del acompañante</label>
-                  <input id="in-carne-acomp" class="control mono" [(ngModel)]="reg.carneAcompanante" />
-                </div>
+                <!-- Los datos del acompañante solo existen cuando el ingreso los tiene. -->
+                @if (data.conAcompanante(reg)) {
+                  <div class="field span-2 sec-title" style="margin: 6px 0 0;">Acompañante o visita</div>
+                  <div class="field">
+                    <label for="in-acomp">
+                      Nombre del acompañante <span style="color: var(--danger)">*</span>
+                    </label>
+                    <input id="in-acomp" class="control" [(ngModel)]="reg.acompanante" />
+                  </div>
+                  <div class="field">
+                    <label for="in-carne-acomp">Carné del acompañante</label>
+                    <input id="in-carne-acomp" class="control mono" [(ngModel)]="reg.carneAcompanante" />
+                  </div>
+                  <div class="field span-2">
+                    <label for="in-cargo-acomp">
+                      Cargo o institución del acompañante <span style="color: var(--danger)">*</span>
+                    </label>
+                    <input id="in-cargo-acomp" class="control" [(ngModel)]="reg.cargoAcompanante" />
+                  </div>
+                  <div class="field span-2">
+                    <label>
+                      Tipo de personal del acompañante <span style="color: var(--danger)">*</span>
+                    </label>
+                    <div id="in-tipo-acomp" style="display: grid; gap: 5px;">
+                      @for (t of si.plantilla.ingresos?.tiposPersonal ?? []; track t) {
+                        <label class="eq-check">
+                          <input type="radio" name="tipoAcompanante" [value]="t"
+                            [checked]="reg.tipoPersonalAcompanante === t"
+                            (change)="reg.tipoPersonalAcompanante = t" />
+                          <span>{{ t }}</span>
+                        </label>
+                      }
+                    </div>
+                  </div>
+                } @else if (reg.tipoIngreso) {
+                  <div class="field span-2">
+                    <p class="muted" style="margin: 0;">
+                      <b>Ingreso individual.</b> No se piden datos de acompañante y no se exigen para entregar el control.
+                    </p>
+                  </div>
+                }
+                <!-- Documento de respaldo: si se declara, la imagen es obligatoria. -->
                 <div class="field span-2">
-                  <label for="in-motivo">Motivo del ingreso <span style="color: var(--danger)">*</span></label>
-                  <select id="in-motivo" class="control" [(ngModel)]="reg.motivo">
-                    <option value="">Seleccione…</option>
-                    @for (m of si.plantilla.ingresos?.motivos ?? []; track m) { <option [value]="m">{{ m }}</option> }
-                  </select>
+                  <label>¿Anexa documento de respaldo?</label>
+                  <div class="respaldo">
+                    <label class="eq-check">
+                      <input id="in-anexo" type="checkbox" [checked]="data.anexaRespaldo(reg)"
+                        (change)="marcarRespaldo(reg, $event)" />
+                      <span>Sí, se anexa documento de respaldo</span>
+                    </label>
+                    @if (data.anexaRespaldo(reg)) {
+                      <div class="field">
+                        <label for="in-respaldo">
+                          Documento de respaldo <span style="color: var(--danger)">*</span>
+                        </label>
+                        <input id="in-respaldo" class="control" type="file"
+                          accept=".png,.jpg,.jpeg,.webp,image/png,image/jpeg,image/webp"
+                          (change)="respaldoElegido(reg, $event)" />
+                        <p class="muted" style="font-size: 12px; margin: 4px 0 0;">
+                          Solo imágenes PNG, JPG, JPEG o WEBP. La imagen sale impresa en el documento del control.
+                        </p>
+                      </div>
+                      @if (reg.documentoImagen) {
+                        <div class="row" style="align-items: flex-start; gap: 12px;">
+                          <img [src]="reg.documentoImagen" alt="Documento de respaldo" />
+                          <div>
+                            <div class="mono" style="font-size: 12px;">{{ reg.documentoNombre }}</div>
+                            <button class="btn btn-ghost btn-sm" type="button" (click)="quitarRespaldo(reg)">
+                              Quitar imagen
+                            </button>
+                          </div>
+                        </div>
+                      }
+                    }
+                  </div>
                 </div>
                 <div class="field span-2">
                   <label for="in-obs">Observación del registro</label>
@@ -1020,19 +1154,37 @@ interface PasoForm {
               [sub]="(reg.fecha ? formatea(reg.fecha) : 'Sin fecha') + ' · ' + (reg.nombre || 'sin nombre')"
               (cerrar)="verIngreso.set(-1)">
               <dl class="dl">
+                <div><dt>Tipo de ingreso</dt><dd>{{ reg.tipoIngreso || '—' }}</dd></div>
                 <div><dt>Fecha</dt><dd class="mono">{{ reg.fecha ? formatea(reg.fecha) : '—' }}</dd></div>
                 <div><dt>Hora de entrada</dt><dd class="mono">{{ reg.horaEntrada || '—' }}</dd></div>
                 <div><dt>Hora de salida</dt><dd class="mono">{{ reg.horaSalida || '—' }}</dd></div>
-                <div><dt>Nombre de quien ingresa</dt><dd>{{ reg.nombre || '—' }}</dd></div>
+                <div><dt>Técnico de Soporte que ingresa</dt><dd>{{ reg.nombre || '—' }}</dd></div>
                 <div><dt>Carné</dt><dd class="mono">{{ reg.carne || '—' }}</dd></div>
-                <div><dt>Cargo o institución</dt><dd>{{ reg.cargo || '—' }}</dd></div>
+                <div><dt>Cargo</dt><dd>{{ reg.cargo || '—' }}</dd></div>
                 <div><dt>Tipo de personal</dt><dd>{{ reg.tipoPersonal || '—' }}</dd></div>
-                <div><dt>Acompañante o visita</dt><dd>{{ reg.acompanante || '—' }}</dd></div>
-                <div><dt>Carné del acompañante</dt><dd class="mono">{{ reg.carneAcompanante || '—' }}</dd></div>
+                @if (data.conAcompanante(reg)) {
+                  <div><dt>Acompañante o visita</dt><dd>{{ reg.acompanante || '—' }}</dd></div>
+                  <div><dt>Carné del acompañante</dt><dd class="mono">{{ reg.carneAcompanante || '—' }}</dd></div>
+                  <div><dt>Cargo o institución del acompañante</dt><dd>{{ reg.cargoAcompanante || '—' }}</dd></div>
+                  <div><dt>Tipo de personal del acompañante</dt><dd>{{ reg.tipoPersonalAcompanante || '—' }}</dd></div>
+                } @else {
+                  <div><dt>Acompañante o visita</dt><dd>No aplica</dd></div>
+                }
                 <div><dt>Anexa documento</dt><dd>{{ reg.anexaDocumento || '—' }}</dd></div>
                 <div><dt>Motivo del ingreso</dt><dd>{{ reg.motivo || '—' }}</dd></div>
                 <div><dt>Observación</dt><dd>{{ reg.observacion || '—' }}</dd></div>
               </dl>
+              @if (data.anexaRespaldo(reg)) {
+                <div class="sec-title" style="margin-top: 14px;">Documento de respaldo</div>
+                @if (reg.documentoImagen) {
+                  <div class="row" style="align-items: flex-start; gap: 12px;">
+                    <img [src]="reg.documentoImagen" alt="Documento de respaldo" />
+                    <div class="mono" style="font-size: 12px;">{{ reg.documentoNombre }}</div>
+                  </div>
+                } @else {
+                  <p class="muted">Se declaró documento de respaldo, pero la imagen no está cargada.</p>
+                }
+              }
               @if (data.faltasIngreso(reg).length) {
                 <div class="alert warn" style="margin-top: 12px;">
                   <span class="alert-ico">!</span>
@@ -1252,6 +1404,11 @@ export class CompletarControlComponent {
   private readonly habiles = inject(BusinessDayService);
   private readonly toast = inject(ToastService);
   private readonly router = inject(Router);
+  /**
+   * La aplicación no usa zonas: lo que cambia dentro de una promesa —la lectura de la imagen del
+   * respaldo— no repinta solo. Este es el único punto del formulario que lo necesita.
+   */
+  private readonly cd = inject(ChangeDetectorRef);
 
   /** Id del control, enlazado desde la ruta. */
   readonly id = input.required<string>();
@@ -1373,7 +1530,7 @@ export class CompletarControlComponent {
         }
         return {
           plantilla: p, campos, items, equipos, equiposIp, telefonos, checklistEquipos,
-          ingresos: (r?.ingresos ?? []).map((x) => ({ ...x })),
+          ingresos: (r?.ingresos ?? []).map((x) => this.data.normalizaIngreso(x)),
           filas: (r?.filas ?? []).map((f) => [...f])
         };
       });
@@ -1552,12 +1709,98 @@ export class CompletarControlComponent {
     return s.ingresos.filter((r) => !this.data.ingresoVacio(r) && this.data.faltasIngreso(r).length).length;
   }
 
+  /**
+   * Registro en blanco. El Técnico de Soporte que ingresa viene del usuario que está completando
+   * el control —es él quien abre el cuarto de servidores—; el tipo de ingreso, en cambio, se deja
+   * sin elegir a propósito: es una decisión del registro, no un valor por omisión.
+   */
   private ingresoNuevo(): RespuestaIngreso {
+    const u = this.auth.usuario();
     return {
-      fecha: '', horaEntrada: '', horaSalida: '', carne: '', nombre: '', cargo: '',
-      tipoPersonal: '', acompanante: '', carneAcompanante: '', anexaDocumento: '',
+      tipoIngreso: '', fecha: '', horaEntrada: '', horaSalida: '', carne: '',
+      nombre: u?.nombre ?? '', cargo: u?.cargo ?? '',
+      tipoPersonal: '', acompanante: '', carneAcompanante: '', tipoPersonalAcompanante: '',
+      cargoAcompanante: '', anexaDocumento: 'No', documentoNombre: '', documentoImagen: '',
       motivo: '', observacion: ''
     };
+  }
+
+  /**
+   * Cambia el tipo de ingreso. Al volver a «Individual» se borran los datos del acompañante:
+   * un campo que deja de mostrarse no puede seguir viajando con el registro.
+   */
+  protected cambiarTipoIngreso(reg: RespuestaIngreso, tipo: string): void {
+    reg.tipoIngreso = tipo;
+    if (this.data.conAcompanante(reg)) return;
+    reg.acompanante = '';
+    reg.carneAcompanante = '';
+    reg.cargoAcompanante = '';
+    reg.tipoPersonalAcompanante = '';
+  }
+
+  /** Marca o desmarca el documento de respaldo; al desmarcarlo se descarta la imagen cargada. */
+  protected marcarRespaldo(reg: RespuestaIngreso, ev: Event): void {
+    reg.anexaDocumento = (ev.target as HTMLInputElement).checked ? 'Sí' : 'No';
+    if (reg.anexaDocumento === 'No') {
+      reg.documentoNombre = '';
+      reg.documentoImagen = '';
+    }
+  }
+
+  protected quitarRespaldo(reg: RespuestaIngreso): void {
+    reg.documentoNombre = '';
+    reg.documentoImagen = '';
+  }
+
+  /**
+   * Lee la imagen del respaldo y la guarda reducida a 900 px por lado. El prototipo guarda su
+   * estado en el navegador: una fotografía de teléfono a tamaño original no cabría.
+   */
+  protected async respaldoElegido(reg: RespuestaIngreso, ev: Event): Promise<void> {
+    const entrada = ev.target as HTMLInputElement;
+    const archivo = entrada.files?.[0];
+    if (!archivo) return;
+    if (!this.data.formatoRespaldoValido(archivo.name)) {
+      entrada.value = '';
+      this.toast.warn('Formato no admitido', this.data.MSG_RESPALDO_FORMATO);
+      return;
+    }
+    if (!archivo.size) {
+      entrada.value = '';
+      this.toast.warn('Archivo vacío', this.data.MSG_RESPALDO_IMAGEN);
+      return;
+    }
+    try {
+      reg.documentoImagen = await this.reducirImagen(archivo);
+      reg.documentoNombre = archivo.name;
+    } catch {
+      entrada.value = '';
+      this.toast.warn('No fue posible leer la imagen', this.data.MSG_RESPALDO_FORMATO);
+    }
+    this.cd.markForCheck();
+  }
+
+  private async reducirImagen(archivo: File): Promise<string> {
+    const original = await new Promise<string>((ok, mal) => {
+      const lector = new FileReader();
+      lector.onload = () => ok(lector.result as string);
+      lector.onerror = () => mal(new Error('lectura'));
+      lector.readAsDataURL(archivo);
+    });
+    const img = new Image();
+    await new Promise<void>((ok, mal) => {
+      img.onload = () => ok();
+      img.onerror = () => mal(new Error('imagen'));
+      img.src = original;
+    });
+    const escala = Math.min(1, 900 / Math.max(img.width, img.height));
+    const lienzo = document.createElement('canvas');
+    lienzo.width = Math.max(1, Math.round(img.width * escala));
+    lienzo.height = Math.max(1, Math.round(img.height * escala));
+    const ctx = lienzo.getContext('2d');
+    if (!ctx) return original;
+    ctx.drawImage(img, 0, 0, lienzo.width, lienzo.height);
+    return lienzo.toDataURL('image/jpeg', 0.72);
   }
 
   protected nuevoIngreso(s: SeccionEdit): void {
@@ -1607,6 +1850,15 @@ export class CompletarControlComponent {
   }
 
   // ------------------------------------------------------------------ muestra de equipos (F0382)
+
+  /**
+   * Cuentas de validación de la muestra para el paso de resumen. Se calculan sobre el control ya
+   * guardado, de modo que lo que se ve es exactamente lo que la entrega va a validar.
+   */
+  protected resumenMuestra(): ResumenMuestra | null {
+    const c = this.control();
+    return c ? this.data.resumenMuestra(c) : null;
+  }
 
   /** Sección de muestra del formulario, si el control la tiene. */
   protected seccionMuestra(): SeccionEdit | undefined {

@@ -200,6 +200,11 @@ export interface IngresosPlantilla {
   motivos: string[];
   /** Clasificación del personal que ingresa, como las columnas del formato. */
   tiposPersonal: string[];
+  /**
+   * Formas de la visita: el técnico entra solo o acompañado. De esto depende qué campos pide el
+   * formulario, porque el cuarto de servidores no siempre se abre para una visita externa.
+   */
+  tiposIngreso: string[];
   ayuda?: string;
 }
 
@@ -349,6 +354,8 @@ export interface RespuestaEquipoChecklist {
 
 /** Un ingreso al cuarto de servidores, tal como lo pide el formato F0234. */
 export interface RespuestaIngreso {
+  /** `Individual` (solo el Técnico de Soporte) o `Con acompañante`. Decide qué se exige. */
+  tipoIngreso: string;
   fecha: string;
   /** `HH:mm`; el formato las rotula E = Entrada y S = Salida. */
   horaEntrada: string;
@@ -356,14 +363,25 @@ export interface RespuestaIngreso {
   /** Carné del personal autorizado que ingresa. */
   carne: string;
   nombre: string;
-  /** Cargo o institución de quien ingresa. */
+  /** Cargo del Técnico de Soporte que ingresa. */
   cargo: string;
   /** Personal técnico DTI · Personal interno CNR · Personal externo al CNR. */
   tipoPersonal: string;
   acompanante: string;
   carneAcompanante: string;
+  /** Cargo o institución del acompañante; obligatorio solo en el ingreso con acompañante. */
+  cargoAcompanante: string;
+  /**
+   * Clasificación del acompañante, con el mismo catálogo que el titular. El formato clasifica a
+   * TODO el que entra, no solo a quien firma: obligatoria en cuanto hay acompañante.
+   */
+  tipoPersonalAcompanante: string;
   /** Si se anexó documento de respaldo de la visita (columna «Anexa el documento» del formato). */
   anexaDocumento: string;
+  /** Nombre del archivo del documento de respaldo; solo cuando se marcó que lo anexa. */
+  documentoNombre: string;
+  /** La imagen del respaldo, en data URL, para que salga impresa en el documento formal. */
+  documentoImagen: string;
   /** Actividad o motivo de la visita. */
   motivo: string;
   observacion: string;
@@ -379,6 +397,25 @@ export interface RespuestaSeccion {
   telefonos?: RespuestaTelefono[];
   checklistEquipos?: RespuestaEquipoChecklist[];
   ingresos?: RespuestaIngreso[];
+}
+
+/**
+ * Cuentas de la muestra del F0382 antes de entregar: lo que el paso de resumen pone sobre la mesa
+ * para que el técnico vea de un vistazo si el control está listo y, si no, qué le falta.
+ */
+export interface ResumenMuestra {
+  pedidos: number;
+  seleccionados: number;
+  /** Equipos con TODOS sus ítems aplicables respondidos. */
+  verificados: number;
+  itemsCumplidos: number;
+  itemsIncumplidos: number;
+  itemsNoAplica: number;
+  accionesCorrectivas: number;
+  justificaciones: number;
+  observaciones: boolean;
+  listo: boolean;
+  faltas: string[];
 }
 
 export interface EvidenciaControl { nombre: string; descripcion: string; fecha: string; }
@@ -592,6 +629,8 @@ export interface EventoTrazabilidad {
   documento?: string;
   moduloOrigen?: string;
   moduloDestino?: string;
+  /** Tipo de ingreso al cuarto de servidores, en los eventos del F0234. */
+  tipoIngreso?: string;
   /** Número de inventario del equipo afectado, en eventos de integración. */
   inventario?: string;
   /** Descripción del equipo y su usuario final, en eventos de integración. */

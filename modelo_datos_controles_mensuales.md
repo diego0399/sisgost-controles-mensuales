@@ -63,6 +63,7 @@ Catálogo **editable**; insumo del cálculo de días hábiles.
 | plantilla[].checklistEquipos | bloque | Muestra de N equipos del inventario verificada ítem por ítem (F0382: 5) |
 | plantilla[].datosControl | bandera | Paso de solo lectura con los datos del control programado |
 | plantilla[].telefonos | bloque | Verificación de N teléfonos/extensiones con hora (F0387: 3) |
+| plantilla[].ingresos | bloque | Bitácora de ingresos al cuarto de servidores (F0234): tipos de ingreso, motivos y tipos de personal |
 | nombre, version, descripcion | texto | |
 | frecuencia | catálogo | `Mensual, Semanal, Diaria, Eventual, Programado, Semanal con entrega mensual consolidada` |
 | aplicacion | AplicacionControl | **dónde aplica el control** (editable); ver abajo |
@@ -71,6 +72,13 @@ Catálogo **editable**; insumo del cálculo de días hábiles.
 
 `SeccionPlantilla` = título + campos tipados + ítems de checklist (estados propios y
 medición opcional) + tabla dinámica (columnas y mínimo de filas).
+
+`RespuestaIngreso` (un registro de la bitácora del F0234) = **`tipoIngreso`** (`Individual` o
+`Con acompañante`, decide qué se exige) + fecha + hora de entrada y de salida + carné, nombre y
+cargo del **Técnico de Soporte** que ingresa + su tipo de personal + acompañante con su carné, **su
+propio tipo de personal** y **su cargo o institución** + `anexaDocumento` con `documentoNombre`
+y `documentoImagen` (la imagen del respaldo, en *data URL*, reducida a 900 px) + motivo +
+observación.
 
 ### APLICACION_CONTROL (dentro de CONTROL_CATALOGO)
 | Campo | Tipo | Nota |

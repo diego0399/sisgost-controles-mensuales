@@ -240,10 +240,52 @@ formato; las respuestas viajan en `RespuestaSeccion.ingresos` (`RespuestaIngreso
 | `mesSinIngresos(control)` | Si se declaró que el mes no tuvo visitas |
 | `faltasIngresos(...)` | O hay registros completos, o el mes se declara sin ingresos con observación |
 
+`RespuestaIngreso.tipoIngreso` gobierna el registro: con `Individual` el formulario no dibuja
+los campos del acompañante y `faltasIngreso` no los pide; con `Con acompañante` (`conAcompanante`)
+se exigen nombre, tipo de personal y cargo o institución. `cambiarTipoIngreso` limpia esos campos
+al volver a individual, de modo que **nada oculto queda obligatorio ni viaja escondido** en el
+registro. Las dos formas salen del catálogo (`IngresosPlantilla.tiposIngreso`), no del código.
+
+El **documento de respaldo** es independiente del tipo de ingreso: se exige solo si el registro
+marcó que lo anexa (`anexaRespaldo`). El archivo se valida por extensión contra `FORMATOS_RESPALDO`
+(`png`, `jpg`, `jpeg`, `webp`) y la imagen viaja como *data URL* dentro del propio registro,
+reducida a 900 px por lado en el componente antes de guardarse.
+
+Los controles guardados en el navegador antes de esta versión no traen los campos nuevos:
+`normalizaIngreso` los completa al leerlos, de modo que ni las validaciones ni el documento
+tropiezan con un `undefined`. La carga de la imagen es asíncrona y el borrador es un objeto
+plano —no una señal—, así que el componente avisa al detector de cambios al terminar: la
+aplicación no usa zonas y sin ese aviso la vista previa aparecería una interacción tarde.
+
 El formulario trabaja sobre un **borrador**: el registro solo entra a la lista cuando se guarda, y
 el modal muestra en vivo lo que falta. `trazarIngresos` compara la bitácora antes y después de
-cada guardado y emite «Registro de ingreso agregado», «…editado», «…eliminado» y «Mes sin ingresos
-marcado», identificando cada registro por fecha + hora de entrada + nombre.
+cada guardado y emite «Registro de ingreso **individual** agregado» o «…**con acompañante**
+agregado», «…editado», «…eliminado» y «Mes sin ingresos marcado», identificando cada registro por
+fecha + hora de entrada + nombre.
+
+Todos los eventos de la bitácora guardan su `tipoIngreso`. Los que hablan del control entero
+—intento de entrega rechazado, control finalizado, documento generado— no tienen uno solo, así que
+guardan el **reparto** que calcula `repartoIngresos`: «Individual: 2 · Con acompañante: 1». Es la
+única respuesta honesta cuando el mes tiene de los dos.
+
+## 4.4.2 Resumen de validación de la muestra (F0382)
+
+`resumenMuestra(control)` devuelve un `ResumenMuestra` con las cuentas que el paso de resumen
+pone en pantalla: equipos seleccionados y verificados por completo, ítems por resultado, acciones
+correctivas y justificaciones registradas y si hay observaciones generales. Dos matices
+deliberados: `faltas` son las de la **muestra** (`faltasChecklistEquipos`), mientras que
+`listo` mira el **control entero** (`validarEntrega`), porque un F0382 con la muestra impecable
+tampoco se entrega sin evidencia ni observaciones. El formulario no vuelve a contar por su cuenta:
+lo que muestra es exactamente lo que la entrega va a validar.
+
+## 4.4.3 Trazabilidad de los intentos de entrega
+
+`entregarControl` ya no descarta en silencio la entrega rechazada: `trazarEntregaRechazada`
+registra «Intento de entrega con campos pendientes» conservando el estado del control, y añade el
+detalle propio de cada control —«Ítem incompleto detectado» para la muestra, «Registro de ingreso
+incompleto detectado» para la bitácora—. Del otro lado, `trazarCierreCorrecto` deja
+«`código` finalizado correctamente» con el recuento de lo entregado. Sin esos eventos la
+trazabilidad guardaría solo el final feliz.
 
 ## 4.5 Inventario operativo compartido entre módulos
 

@@ -156,14 +156,31 @@ y el resultado general del mes.
 ### F0234: un registro por cada ingreso
 
 El **F0234** se llena en cinco pasos. En el primero se registran los ingresos al cuarto de
-servidores: el botón **Agregar registro** abre un formulario con la fecha, la hora de entrada y la
-de salida, el carné y el nombre de quien ingresa, su cargo o institución, si es personal técnico de
-la DTI, interno del CNR o externo, el acompañante, si anexa documento, el motivo y una observación.
-Mientras falte algo, el formulario lo enumera y no deja guardar; tampoco admite una hora de salida
-anterior a la de entrada.
+servidores: el botón **Agregar registro** abre un formulario que empieza preguntando el **tipo de
+ingreso**.
 
-Lo registrado se ve en una tabla resumen con **Ver detalle**, **Editar** y **Eliminar** en cada
-fila, y una columna que avisa si el registro quedó incompleto.
+- **Individual**: entra solo el Técnico de Soporte. Se piden la fecha, las horas de entrada y
+  salida, el técnico —que ya viene puesto con su usuario— y el motivo. **No aparecen** los campos
+  del acompañante y **no se exigen** para entregar el control.
+- **Con acompañante**: además se piden el nombre del acompañante, su carné, su cargo o institución
+  y su tipo de personal.
+
+Si se equivoca y vuelve a «Individual», los datos del acompañante se borran solos. Mientras falte
+algo, el formulario lo enumera y no deja guardar; tampoco admite una hora de salida anterior a la
+de entrada.
+
+En el ingreso **acompañado** hay que marcar una de las tres opciones de tipo de personal —Personal
+técnico DTI, Personal interno CNR, Personal externo al CNR—: sin ella el registro no se guarda.
+
+Si la visita trae papel de respaldo, marque **«Sí, se anexa documento de respaldo»**. Entonces se
+habilita la carga de la imagen y es obligatoria: solo se admiten fotografías o escaneos en PNG,
+JPG, JPEG o WEBP, y esa imagen se imprime después en el documento del control. Si no marca la
+casilla, no se le pide ningún archivo.
+
+Lo registrado se ve en una tabla resumen que muestra, por fila, el **tipo de ingreso**, el Técnico
+de Soporte, el acompañante —«No aplica» cuando el ingreso fue individual—, el motivo y si hay
+documento de respaldo (**Sí** / **No**), con **Ver detalle**, **Editar** y **Eliminar** y una
+columna que avisa si el registro quedó incompleto.
 
 Si en el mes **no hubo ingresos**, marque «No se registraron ingresos durante el mes»: el control
 se entrega sin registros, pero debe explicarlo en las observaciones. El documento final lo deja
@@ -193,10 +210,17 @@ formulario pide la descripción del incumplimiento, la acción correctiva, su es
 justificación. La tabla resume cada equipo con sus ítems incumplidos, su acción correctiva y su
 estado final, y ofrece **Ver detalle**, **Cambiar equipo** y **Quitar equipo**.
 
-El cuarto paso recoge observaciones generales, recomendaciones y acciones de seguimiento. El
-quinto muestra el resumen —equipos seleccionados, verificados, ítems que cumplen, que no cumplen y
-que no aplican, y acciones correctivas registradas— y permite entregar, lo que genera el documento
-formal con el cuadro de los cinco equipos y el detalle de cada uno.
+El cuarto paso recoge observaciones generales, recomendaciones y acciones de seguimiento. Si la
+verificación dejó incumplimientos o ítems «No aplica», las observaciones generales **son
+obligatorias**: son el lugar donde el Encargado lee qué pasó con la muestra.
+
+El quinto paso abre con el **resumen de validación**: equipos seleccionados y verificados por
+completo sobre los cinco pedidos, ítems que cumplen, que no cumplen y que no aplican, acciones
+correctivas y justificaciones registradas sobre las que hacen falta, si las observaciones están
+completas y, al final, **«Estado listo para entrega: Sí/No»**. Mientras diga «No», debajo aparece
+la lista de lo que falta y el botón de entregar devuelve «No puede entregar el control F0382 con
+campos pendientes.». Cuando dice «Sí», la entrega genera el documento formal con el cuadro de los
+cinco equipos y el detalle de cada uno.
 
 ### Justificar un mes sin actividad
 

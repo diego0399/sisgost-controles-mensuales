@@ -4,7 +4,7 @@ import {
   Direccion, DistribucionSoporte, DocumentoGenerado, EquipoOperativo, ESTADOS_ACTIVOS,
   EstadoControl, EventoIntegracion, EventoTrazabilidad, Frecuencia, Justificacion, RespuestaSeccion,
   ItemSeguridad, RespuestaEquipoChecklist, RespuestaIngreso, RespuestaItemSeguridad, RevisionAtencion,
-  SeccionPlantilla, UsuarioSistema, isoLocal, nombreMes
+  ResumenMuestra, SeccionPlantilla, UsuarioSistema, isoLocal, nombreMes
 } from '../models/models';
 import { HolidayService } from './holiday.service';
 import { BusinessDayService } from './business-day.service';
@@ -539,7 +539,9 @@ export class DataService {
   private trazarIngresos(antes: ControlMes, despues: ControlMes, u: UsuarioSistema | null): void {
     const p = this.ingresosDe(despues.codigo)!;
     const registros = (c: ControlMes) =>
-      (c.secciones.find((x) => x.titulo === p.titulo)?.ingresos ?? []).filter((x) => !this.ingresoVacio(x));
+      (c.secciones.find((x) => x.titulo === p.titulo)?.ingresos ?? [])
+        .map((x) => this.normalizaIngreso(x))
+        .filter((x) => !this.ingresoVacio(x));
     const previos = registros(antes);
     const actuales = registros(despues);
     const base = {
@@ -549,21 +551,27 @@ export class DataService {
     /** Un registro se identifica por fecha + hora de entrada + nombre. */
     const clave = (x: RespuestaIngreso) => `${x.fecha}|${x.horaEntrada}|${x.nombre}`;
     const resumen = (x: RespuestaIngreso) =>
-      `${x.fecha || 'sin fecha'} ${x.horaEntrada || '--:--'}–${x.horaSalida || '--:--'} · ${x.nombre || 'sin nombre'} (${x.cargo || 'sin cargo'}) · ${x.motivo || 'sin motivo'}`;
+      `${x.fecha || 'sin fecha'} ${x.horaEntrada || '--:--'}–${x.horaSalida || '--:--'} · ${x.nombre || 'sin nombre'} (${x.cargo || 'sin cargo'}) · ${x.motivo || 'sin motivo'} · ${x.tipoIngreso || 'sin tipo de ingreso'}`;
 
     const clavesPrevias = new Set(previos.map(clave));
     const clavesActuales = new Set(actuales.map(clave));
     for (const reg of actuales) {
       if (clavesPrevias.has(clave(reg))) continue;
+      // El alta se nombra por su tipo: quién entró solo y quién entró acompañando a alguien.
       this.registrarEvento(u, {
-        ...base, accion: 'Registro de ingreso agregado',
-        observacion: `Ingreso al cuarto de servidores: ${resumen(reg)}.`
+        ...base, tipoIngreso: reg.tipoIngreso,
+        accion: this.conAcompanante(reg)
+          ? 'Registro de ingreso con acompañante agregado'
+          : 'Registro de ingreso individual agregado',
+        observacion: this.conAcompanante(reg)
+          ? `Ingreso al cuarto de servidores acompañado por ${reg.acompanante || 'sin nombre'} (${reg.tipoPersonalAcompanante || 'sin clasificar'}, ${reg.cargoAcompanante || 'sin cargo'}): ${resumen(reg)}.`
+          : `Ingreso al cuarto de servidores del Técnico de Soporte, sin acompañante: ${resumen(reg)}.`
       });
     }
     for (const reg of previos) {
       if (clavesActuales.has(clave(reg))) continue;
       this.registrarEvento(u, {
-        ...base, accion: 'Registro de ingreso eliminado',
+        ...base, tipoIngreso: reg.tipoIngreso, accion: 'Registro de ingreso eliminado',
         observacion: `Salió de la bitácora del mes: ${resumen(reg)}.`
       });
     }
@@ -572,10 +580,31 @@ export class DataService {
       const previo = previos.find((x) => clave(x) === clave(reg));
       if (!previo || JSON.stringify(previo) === JSON.stringify(reg)) continue;
       this.registrarEvento(u, {
-        ...base, accion: 'Registro de ingreso editado',
-        estadoAnterior: resumen(previo), estadoNuevo: resumen(reg),
+        ...base, tipoIngreso: reg.tipoIngreso, accion: 'Registro de ingreso editado',
+        estadoAnterior: previo.tipoIngreso === reg.tipoIngreso ? resumen(previo) : `${previo.tipoIngreso} · ${resumen(previo)}`,
+        estadoNuevo: previo.tipoIngreso === reg.tipoIngreso ? resumen(reg) : `${reg.tipoIngreso} · ${resumen(reg)}`,
         observacion: `Se corrigieron datos del ingreso de ${reg.nombre || 'sin nombre'}.`
       });
+    }
+    // El documento de respaldo deja dos huellas distintas: cuándo se declaró y cuándo se cargó.
+    for (const reg of actuales) {
+      const previo = previos.find((x) => clave(x) === clave(reg));
+      if (this.anexaRespaldo(reg) && !(previo && this.anexaRespaldo(previo))) {
+        this.registrarEvento(u, {
+          ...base, tipoIngreso: reg.tipoIngreso, accion: 'Documento de respaldo marcado',
+          estadoAnterior: previo ? previo.anexaDocumento || 'Sin declarar' : 'Sin declarar',
+          estadoNuevo: 'Anexa documento de respaldo',
+          observacion: `El ingreso de ${reg.nombre || 'sin nombre'} declaró documento de respaldo; la imagen es obligatoria para entregar el control.`
+        });
+      }
+      const imagenNueva = reg.documentoImagen.trim() && reg.documentoImagen !== (previo?.documentoImagen ?? '');
+      if (imagenNueva) {
+        this.registrarEvento(u, {
+          ...base, tipoIngreso: reg.tipoIngreso, accion: 'Documento de respaldo cargado',
+          estadoNuevo: this.formatoRespaldoValido(reg.documentoNombre) ? 'Imagen válida' : 'Formato no admitido',
+          observacion: `${reg.documentoNombre || 'imagen sin nombre'} adjunta al ingreso de ${reg.nombre || 'sin nombre'} del ${reg.fecha || 'sin fecha'}.`
+        });
+      }
     }
     // Declarar el mes sin ingresos también queda registrado.
     const sinAntes = this.mesSinIngresos(antes);
@@ -794,6 +823,10 @@ export class DataService {
       if (p.ingresos) faltas.push(...this.faltasIngresos(p, r, c));
     }
     if (cat?.requiereEvidencia && !c.evidencias.length) faltas.push('Este control requiere al menos una evidencia.');
+    // Los controles con muestra de equipos cierran la lista con la regla que los gobierna.
+    if (faltas.length && this.checklistDe(c.codigo)) {
+      faltas.push(`No puede entregar el control ${c.codigo} con campos pendientes.`);
+    }
     return faltas;
   }
 
@@ -834,6 +867,79 @@ export class DataService {
   readonly MSG_SALIDA_ANTES = 'La hora de salida no puede ser menor que la hora de entrada.';
   readonly MSG_SIN_INGRESOS =
     'Debe ingresar una observación indicando que no se registraron ingresos durante el mes.';
+  readonly MSG_TIPO_INGRESO = 'Debe seleccionar el tipo de ingreso.';
+  readonly MSG_TECNICO = 'Debe ingresar el nombre del Técnico de Soporte que ingresa.';
+  readonly MSG_ACOMPANANTE = 'Debe ingresar el nombre del acompañante.';
+  readonly MSG_TIPO_ACOMPANANTE = 'Debe seleccionar el tipo de personal del acompañante.';
+  readonly MSG_CARGO_ACOMPANANTE = 'Debe ingresar el cargo o institución del acompañante.';
+
+  /** El ingreso que hace el técnico solo, sin visita que acompañar. */
+  readonly INGRESO_INDIVIDUAL = 'Individual';
+  readonly INGRESO_ACOMPANADO = 'Con acompañante';
+
+  /** ¿El registro declaró que la visita entró acompañada? */
+  conAcompanante(reg: RespuestaIngreso): boolean {
+    return reg.tipoIngreso === this.INGRESO_ACOMPANADO;
+  }
+  readonly MSG_RESPALDO_IMAGEN = 'Debe adjuntar la imagen del documento de respaldo.';
+  readonly MSG_RESPALDO_FORMATO =
+    'El documento de respaldo debe ser una imagen en formato PNG, JPG, JPEG o WEBP.';
+  readonly MSG_RESPALDO_INDICADO = 'Debe adjuntar el documento de respaldo indicado.';
+  readonly MSG_REGISTROS_INCOMPLETOS =
+    'Complete o elimine los registros incompletos antes de entregar el control.';
+
+  /** El respaldo del formato es un documento fotografiado o escaneado: solo imágenes. */
+  readonly FORMATOS_RESPALDO = ['png', 'jpg', 'jpeg', 'webp'];
+
+  /** ¿El archivo del respaldo es una de las imágenes admitidas? */
+  formatoRespaldoValido(nombre: string): boolean {
+    return this.FORMATOS_RESPALDO.includes((nombre.split('.').pop() ?? '').trim().toLowerCase());
+  }
+
+  /** ¿El registro declaró que anexa documento de respaldo? */
+  anexaRespaldo(reg: RespuestaIngreso): boolean {
+    return reg.anexaDocumento === 'Sí';
+  }
+
+  /**
+   * Un registro con todos sus campos presentes. Los controles guardados en el navegador antes de
+   * que el formato pidiera clasificar al acompañante y anexar el respaldo no traen esos campos:
+   * se completan al leerlos para que las validaciones no tropiecen con un `undefined`.
+   *
+   * El tipo de ingreso se deduce de los registros anteriores a esta versión —si tenían
+   * acompañante, era un ingreso acompañado— pero solo cuando falta del todo: un borrador nuevo
+   * llega con el tipo en blanco a propósito, para que el técnico lo elija.
+   */
+  normalizaIngreso(reg: Partial<RespuestaIngreso>): RespuestaIngreso {
+    return {
+      tipoIngreso: reg.tipoIngreso
+        ?? ((reg.acompanante ?? '').trim() ? this.INGRESO_ACOMPANADO : this.INGRESO_INDIVIDUAL),
+      fecha: reg.fecha ?? '', horaEntrada: reg.horaEntrada ?? '', horaSalida: reg.horaSalida ?? '',
+      carne: reg.carne ?? '', nombre: reg.nombre ?? '', cargo: reg.cargo ?? '',
+      tipoPersonal: reg.tipoPersonal ?? '', acompanante: reg.acompanante ?? '',
+      carneAcompanante: reg.carneAcompanante ?? '', tipoPersonalAcompanante: reg.tipoPersonalAcompanante ?? '',
+      cargoAcompanante: reg.cargoAcompanante ?? '',
+      anexaDocumento: reg.anexaDocumento ?? 'No', documentoNombre: reg.documentoNombre ?? '',
+      documentoImagen: reg.documentoImagen ?? '', motivo: reg.motivo ?? '', observacion: reg.observacion ?? ''
+    };
+  }
+
+  /** Registros no vacíos de la bitácora, ya normalizados. */
+  private registrosDe(c: ControlMes, p: SeccionPlantilla): RespuestaIngreso[] {
+    return (c.secciones.find((s) => s.titulo === p.titulo)?.ingresos ?? [])
+      .map((x) => this.normalizaIngreso(x))
+      .filter((x) => !this.ingresoVacio(x));
+  }
+
+  /**
+   * Cómo se reparten los ingresos del mes entre individuales y acompañados. Los eventos de la
+   * bitácora que hablan del control entero —y no de un registro— guardan este reparto como su
+   * «tipo de ingreso»: es la única respuesta honesta cuando el mes tiene de los dos.
+   */
+  private repartoIngresos(registros: RespuestaIngreso[]): string {
+    const acompanados = registros.filter((x) => this.conAcompanante(x)).length;
+    return `Individual: ${registros.length - acompanados} · Con acompañante: ${acompanados}`;
+  }
 
   /** Sección de registros de ingreso del control, si la tiene (F0234). */
   ingresosDe(codigo: string): SeccionPlantilla | undefined {
@@ -852,7 +958,8 @@ export class DataService {
    * Qué le falta a un registro de ingreso para estar completo. Devuelve la lista de campos
    * faltantes, con el mensaje exacto de cada regla; vacía = el registro está bien.
    */
-  faltasIngreso(reg: RespuestaIngreso): string[] {
+  faltasIngreso(crudo: RespuestaIngreso): string[] {
+    const reg = this.normalizaIngreso(crudo);
     const faltas: string[] = [];
     if (!reg.fecha.trim()) faltas.push('Debe ingresar la fecha del registro.');
     if (!reg.horaEntrada.trim()) faltas.push('Debe ingresar la hora de entrada.');
@@ -860,17 +967,30 @@ export class DataService {
     if (reg.horaEntrada.trim() && reg.horaSalida.trim() && reg.horaSalida < reg.horaEntrada) {
       faltas.push(this.MSG_SALIDA_ANTES);
     }
-    if (!reg.nombre.trim()) faltas.push('Debe ingresar el nombre de quien ingresa.');
-    if (!reg.cargo.trim()) faltas.push('Debe ingresar el cargo o institución.');
+    if (!reg.nombre.trim()) faltas.push(this.MSG_TECNICO);
     if (!reg.motivo.trim()) faltas.push('Debe ingresar el motivo del ingreso.');
+    // El tipo de ingreso decide qué más se pide: lo que no se muestra, no se exige.
+    if (!reg.tipoIngreso.trim()) faltas.push(this.MSG_TIPO_INGRESO);
+    if (this.conAcompanante(reg)) {
+      if (!reg.acompanante.trim()) faltas.push(this.MSG_ACOMPANANTE);
+      if (!reg.tipoPersonalAcompanante.trim()) faltas.push(this.MSG_TIPO_ACOMPANANTE);
+      if (!reg.cargoAcompanante.trim()) faltas.push(this.MSG_CARGO_ACOMPANANTE);
+    }
+    // El respaldo solo se exige si el propio registro dijo que lo anexa.
+    if (this.anexaRespaldo(reg)) {
+      if (!reg.documentoNombre.trim() || !reg.documentoImagen.trim()) faltas.push(this.MSG_RESPALDO_IMAGEN);
+      else if (!this.formatoRespaldoValido(reg.documentoNombre)) faltas.push(this.MSG_RESPALDO_FORMATO);
+    }
     return faltas;
   }
 
   /** ¿El registro tiene algo escrito? Un registro en blanco no cuenta como incompleto. */
-  ingresoVacio(reg: RespuestaIngreso): boolean {
+  ingresoVacio(crudo: RespuestaIngreso): boolean {
+    const reg = this.normalizaIngreso(crudo);
     return ![reg.fecha, reg.horaEntrada, reg.horaSalida, reg.carne, reg.nombre, reg.cargo,
-      reg.tipoPersonal, reg.acompanante, reg.carneAcompanante, reg.motivo, reg.observacion]
-      .some((v) => (v ?? '').trim());
+      reg.tipoPersonal, reg.acompanante, reg.carneAcompanante, reg.tipoPersonalAcompanante,
+      reg.cargoAcompanante, reg.motivo, reg.observacion, reg.documentoNombre]
+      .some((v) => (v ?? '').trim()) && reg.anexaDocumento !== 'Sí';
   }
 
   /**
@@ -902,8 +1022,12 @@ export class DataService {
       const propias = this.faltasIngreso(reg);
       for (const f of propias) faltas.push(`${p.titulo} · registro ${i + 1}: ${f}`);
     }
+    // El respaldo marcado y no cargado se nombra aparte: es el error que más se escapa.
+    if (registros.some((x) => this.anexaRespaldo(x) && !x.documentoImagen.trim())) {
+      faltas.push(this.MSG_RESPALDO_INDICADO);
+    }
     if (registros.some((x) => this.faltasIngreso(x).length)) {
-      faltas.push('Complete o elimine los registros incompletos antes de entregar el control.');
+      faltas.push(this.MSG_REGISTROS_INCOMPLETOS);
     }
     return faltas;
   }
@@ -1017,7 +1141,51 @@ export class DataService {
     if (incompletos) {
       faltas.push(`Debe completar la verificación de todos los ítems para los ${pedidos} equipos seleccionados (${incompletos} sin terminar).`);
     }
+    // Un control con hallazgos no puede quedarse sin observaciones generales: es donde el
+    // Encargado lee qué pasó con los equipos de la muestra.
+    const malos = elegidos.reduce((n, e) => n + this.itemsIncumplidos(e).length, 0);
+    const noAplica = elegidos.reduce((n, e) => n + e.items.filter((i) => i.cumplimiento === 'No aplica').length, 0);
+    if (malos || noAplica) {
+      const obs = c.secciones.flatMap((s) => s.campos ?? []).find((x) => x.id === 'obs')?.valor ?? '';
+      if (!obs.trim()) {
+        faltas.push(`Debe completar las observaciones generales: la verificación registró ${malos} ítem(s) incumplido(s) y ${noAplica} marcado(s) como No aplica.`);
+      }
+    }
     return faltas;
+  }
+
+  /**
+   * Cuentas de la muestra para el paso de resumen del F0382: cuántos equipos hay, cuántos quedaron
+   * verificados de punta a punta, cómo se repartieron los ítems y si el control está listo.
+   * No valida nada por su cuenta: la lista de faltas es la misma de la entrega.
+   */
+  resumenMuestra(c: ControlMes): ResumenMuestra | null {
+    const p = this.checklistDe(c.codigo);
+    if (!p) return null;
+    const r = c.secciones.find((s) => s.titulo === p.titulo);
+    const pedidos = p.checklistEquipos!.cantidad;
+    const elegidos = (r?.checklistEquipos ?? []).slice(0, pedidos).filter((e) => e.inventario.trim());
+    const items = elegidos.flatMap((e) => {
+      const aplicables = this.itemsDeClasificacion(p, e.clasificacion).map((i) => i.id);
+      return e.items.filter((i) => aplicables.includes(i.id));
+    });
+    const obs = c.secciones.flatMap((s) => s.campos ?? []).find((x) => x.id === 'obs')?.valor ?? '';
+    // Las faltas que se enumeran son las de la muestra; «listo» mira el control entero, porque
+    // un F0382 con la muestra impecable tampoco se entrega sin evidencia ni observaciones.
+    const faltas = this.faltasChecklistEquipos(p, r, c);
+    return {
+      pedidos,
+      seleccionados: elegidos.length,
+      verificados: elegidos.filter((e) => this.itemsVerificados(p, e) === this.itemsDeClasificacion(p, e.clasificacion).length).length,
+      itemsCumplidos: items.filter((i) => i.cumplimiento === 'Cumple').length,
+      itemsIncumplidos: items.filter((i) => i.cumplimiento === 'No cumple').length,
+      itemsNoAplica: items.filter((i) => i.cumplimiento === 'No aplica').length,
+      accionesCorrectivas: items.filter((i) => i.cumplimiento === 'No cumple' && i.accionCorrectiva.trim()).length,
+      justificaciones: items.filter((i) => i.cumplimiento === 'No aplica' && i.justificacion.trim()).length,
+      observaciones: !!obs.trim(),
+      listo: !this.validarEntrega(c).length,
+      faltas
+    };
   }
 
   /** Reglas de los teléfonos/extensiones verificados (F0387): número, resultado y hora de cada uno. */
@@ -1044,7 +1212,10 @@ export class DataService {
     if (!c) return { ok: false, faltas: ['El control no existe.'] };
     if (!this.atiende(u, c.direccion, c.unidad)) return { ok: false, faltas: [this.MSG_FUERA_DE_DISTRIBUCION] };
     const faltas = this.validarEntrega(c);
-    if (faltas.length) return { ok: false, faltas };
+    if (faltas.length) {
+      this.trazarEntregaRechazada(c, faltas, u);
+      return { ok: false, faltas };
+    }
     const hoy = isoLocal(new Date());
     const estado = this.plazos.evaluaEntrega(c, hoy);
     const doc = this.generaDocumento({
@@ -1062,6 +1233,8 @@ export class DataService {
       estadoAnterior: c.estado, estadoNuevo: estado, documento: doc,
       observacion: estado === 'Entregado tarde' ? 'Entrega registrada fuera del plazo de los primeros tres días hábiles.' : undefined
     });
+    // Los controles con reglas propias cierran su ciclo con una constancia legible en el historial.
+    this.trazarCierreCorrecto(c, doc, u);
     // El semanal consolidado deja constancia de que su documento del mes es uno solo.
     if (this.esSemanalConsolidado(c.codigo)) {
       const semanas = this.estadoSemanas(this.controlPorId(id)!);
@@ -1072,6 +1245,83 @@ export class DataService {
       });
     }
     return { ok: true, faltas: [], estado };
+  }
+
+  /**
+   * Deja constancia del intento de entrega que el sistema rechazó. Sin esto, el técnico corrige y
+   * nadie sabe nunca que el control estuvo incompleto: la trazabilidad guardaría solo el final feliz.
+   */
+  private trazarEntregaRechazada(c: ControlMes, faltas: string[], u: UsuarioSistema | null): void {
+    const base = {
+      direccion: c.direccion, unidad: c.unidad, tipoControl: c.codigo, mes: c.mes, anio: c.anio,
+      moduloOrigen: MODULO_CONTROLES, estadoAnterior: c.estado, estadoNuevo: c.estado
+    };
+    const pIngresos = this.ingresosDe(c.codigo);
+    this.registrarEvento(u, {
+      ...base, accion: 'Intento de entrega con campos pendientes',
+      tipoIngreso: pIngresos ? this.repartoIngresos(this.registrosDe(c, pIngresos)) : undefined,
+      observacion: `${c.codigo} de ${nombreMes(c.mes)} ${c.anio}: la entrega se rechazó por ${faltas.length} punto(s) pendiente(s). ${faltas.slice(0, 3).join(' ')}`
+    });
+    // Detalle por control: qué quedó a medias, no solo cuántos avisos salieron.
+    const pChk = this.checklistDe(c.codigo);
+    if (pChk) {
+      const r = c.secciones.find((s) => s.titulo === pChk.titulo);
+      const elegidos = (r?.checklistEquipos ?? []).filter((e) => e.inventario.trim());
+      const pendientes = elegidos.filter((e) => this.itemsVerificados(pChk, e) < this.itemsDeClasificacion(pChk, e.clasificacion).length);
+      if (pendientes.length || elegidos.length < pChk.checklistEquipos!.cantidad) {
+        this.registrarEvento(u, {
+          ...base, accion: 'Ítem incompleto detectado',
+          observacion: `${elegidos.length} de ${pChk.checklistEquipos!.cantidad} equipos seleccionados; ${pendientes.length} con ítems sin responder${pendientes.length ? `: ${pendientes.map((e) => e.inventario).join(', ')}` : ''}.`
+        });
+      }
+    }
+    const pIng = this.ingresosDe(c.codigo);
+    if (pIng) {
+      const registros = this.registrosDe(c, pIng);
+      const malos = registros.filter((x) => this.faltasIngreso(x).length);
+      if (malos.length) {
+        this.registrarEvento(u, {
+          ...base, tipoIngreso: this.repartoIngresos(registros),
+          accion: 'Registro de ingreso incompleto detectado',
+          observacion: `${malos.length} de ${registros.length} registro(s) de ingreso sin completar: ${malos.map((x) => x.nombre || 'sin nombre').join(', ')}.`
+        });
+      }
+    }
+  }
+
+  /** Constancia de cierre de los controles con reglas propias (bitácora de ingresos y muestra). */
+  private trazarCierreCorrecto(c: ControlMes, doc: string, u: UsuarioSistema | null): void {
+    const base = {
+      direccion: c.direccion, unidad: c.unidad, tipoControl: c.codigo, mes: c.mes, anio: c.anio,
+      moduloOrigen: MODULO_CONTROLES, documento: doc
+    };
+    const pIng = this.ingresosDe(c.codigo);
+    if (pIng) {
+      const registros = this.registrosDe(c, pIng);
+      const reparto = this.repartoIngresos(registros);
+      this.registrarEvento(u, {
+        ...base, accion: `${c.codigo} finalizado correctamente`,
+        estadoNuevo: 'Sin campos pendientes', tipoIngreso: reparto,
+        observacion: this.mesSinIngresos(c)
+          ? `${nombreMes(c.mes)} ${c.anio} se declaró sin ingresos al cuarto de servidores y quedó sustentado en las observaciones.`
+          : `${registros.length} registro(s) de ingreso completos (${reparto}), ${registros.filter((x) => this.anexaRespaldo(x)).length} con documento de respaldo anexo.`
+      });
+      this.registrarEvento(u, {
+        ...base, accion: `Documento ${c.codigo} generado`, tipoIngreso: reparto,
+        observacion: `Bitácora de ingresos de ${nombreMes(c.mes)} ${c.anio} de ${this.dirUnidad(c.direccion, c.unidad)} impresa en el formato controlado.`
+      });
+    }
+    const pChk = this.checklistDe(c.codigo);
+    if (pChk) {
+      const r = c.secciones.find((s) => s.titulo === pChk.titulo);
+      const elegidos = (r?.checklistEquipos ?? []).filter((e) => e.inventario.trim());
+      const malos = elegidos.reduce((n, e) => n + this.itemsIncumplidos(e).length, 0);
+      this.registrarEvento(u, {
+        ...base, accion: `${c.codigo} finalizado correctamente`,
+        estadoNuevo: 'Sin campos pendientes',
+        observacion: `${elegidos.length} equipos verificados por completo; ${malos} ítem(s) incumplido(s) con su acción correctiva registrada.`
+      });
+    }
   }
 
   /** Cierra un control sin actividad mediante carta de justificación (regla: nunca queda vacío). */

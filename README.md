@@ -206,6 +206,18 @@ servidores, con fecha, hora de entrada y de salida, carné y nombre del personal
 nombre del acompañante, si es personal técnico de la DTI, interno del CNR o externo, si anexa
 documento y la actividad o motivo de la visita.
 
+**No siempre hay acompañante.** Cada registro empieza declarando su **tipo de ingreso**:
+
+| Tipo de ingreso | Qué se pide |
+|---|---|
+| **Individual** | El Técnico de Soporte entra solo: fecha, horas, técnico, motivo y —si la marcó— la imagen del respaldo. Los campos del acompañante ni se muestran ni se exigen. |
+| **Con acompañante** | Lo anterior más el **nombre**, el **tipo de personal** y el **cargo o institución** de quien acompaña. |
+
+El técnico que ingresa viene autocompletado con el usuario que está completando el control —es
+quien abre el cuarto de servidores— y puede corregirse. Al volver de «Con acompañante» a
+«Individual» los datos del acompañante se borran: un campo que deja de mostrarse no puede seguir
+viajando con el registro, y nada oculto queda como obligatorio.
+
 En pantalla **no es una tabla horizontal**: cada ingreso se agrega desde un formulario propio y la
 tabla solo resume lo registrado, con **Ver detalle**, **Editar** y **Eliminar** por fila. Los tipos
 de dato son los correctos —fecha con calendario, horas con selector de hora, motivo como catálogo y
@@ -215,13 +227,31 @@ observación multilínea—, y cada registro se valida antes de entrar:
 |---|---|
 | Falta la fecha, la hora de entrada o la de salida | «Debe ingresar la fecha del registro.» / «…la hora de entrada.» / «…la hora de salida.» |
 | Salida anterior a la entrada | «La hora de salida no puede ser menor que la hora de entrada.» |
-| Falta el nombre, el cargo o el motivo | «Debe ingresar el nombre de quien ingresa.» / «…el cargo o institución.» / «…el motivo del ingreso.» |
+| No se declaró el tipo de ingreso | «Debe seleccionar el tipo de ingreso.» |
+| Falta el técnico o el motivo | «Debe ingresar el nombre del Técnico de Soporte que ingresa.» / «…el motivo del ingreso.» |
+| El ingreso es acompañado y falta el acompañante | «Debe ingresar el nombre del acompañante.» / «Debe seleccionar el tipo de personal del acompañante.» / «Debe ingresar el cargo o institución del acompañante.» |
+| Se anexa respaldo y no se sube la imagen | «Debe adjuntar la imagen del documento de respaldo.» / «Debe adjuntar el documento de respaldo indicado.» |
+| El respaldo no es una imagen | «El documento de respaldo debe ser una imagen en formato PNG, JPG, JPEG o WEBP.» |
 | Queda un registro a medias | «Complete o elimine los registros incompletos antes de entregar el control.» |
 
 **Mes sin ingresos.** Si en el mes no hubo ninguna visita, se declara explícitamente: entonces no
 se piden registros, pero **sí** se exige la observación que lo sustente, y el documento lo dice con
 todas sus letras: *«Durante el periodo evaluado no se registraron ingresos al cuarto de
 servidores.»* El control nunca queda simplemente vacío.
+
+**El acompañante también se clasifica.** El formato clasifica a todo el que entra, no solo a quien
+firma: en el ingreso acompañado aparecen los tres botones de opción —Personal técnico DTI, Personal
+interno CNR, Personal externo al CNR— y son obligatorios. No es texto libre.
+
+**Documento de respaldo.** Vale igual para los dos tipos de ingreso. Una casilla —«Sí, se anexa
+documento de respaldo»— decide si se pide archivo. Sin marcar, no se exige nada. Marcada, la imagen es **obligatoria** y solo se admiten
+**PNG, JPG, JPEG o WEBP**: un archivo vacío o de otro tipo se rechaza al elegirlo y el registro no
+se guarda sin la imagen. La imagen se reduce a 900 px por lado antes de guardarse —el prototipo
+guarda su estado en el navegador— y **sale impresa en el documento del control**, que declara
+«Documento de respaldo anexo.» o «No se anexó documento de respaldo.» según corresponda. El cuadro
+de ingresos imprime el **tipo de ingreso** de cada visita y, en las individuales, «No aplica» en las
+tres columnas del acompañante: el formato no admite celdas en blanco que puedan leerse como un
+olvido.
 
 El paso de **verificación de cierre** pregunta si se verificó el cierre (Sí / No / No aplica), con
 su fecha, hora y responsable, y pide justificación cuando la respuesta no es «Sí».
@@ -248,6 +278,14 @@ equipos desde inventario**, **verificación de ítems por equipo**, **observacio
 | Cumple | Nada más |
 | No cumple | Descripción del incumplimiento, acción correctiva, estado final y fecha |
 | No aplica | Justificación |
+
+Antes de entregar, el paso de resumen muestra el **resumen de validación de la muestra**: equipos
+seleccionados y verificados por completo sobre los cinco pedidos, ítems que cumplen, que no cumplen
+y que no aplican, acciones correctivas y justificaciones registradas sobre las que hacen falta, si
+las observaciones generales están completas y, cerrando, **«Estado listo para entrega: Sí/No»**. Si
+la respuesta es «No», debajo se enumera lo que falta y la entrega devuelve «No puede entregar el
+control F0382 con campos pendientes.». Un control con hallazgos —incumplimientos o ítems «No
+aplica»— tampoco se entrega con las observaciones generales en blanco.
 
 Reglas de entrega: cinco equipos, sin repetir, todos activos y de la Dirección/Unidad del control,
 con todos sus ítems respondidos. El **estado final de cada equipo** (Completado / Pendiente) no se

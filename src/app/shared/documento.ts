@@ -164,18 +164,49 @@ export class DocumentoComponent {
       // Bitácora de ingresos al cuarto de servidores (F0234): el cuadro del formato, o la
       // constancia expresa de que el período no tuvo ingresos.
       if (p.ingresos) {
-        const registros = (r?.ingresos ?? []).filter((x) => !this.data.ingresoVacio(x));
+        const registros = (r?.ingresos ?? []).map((x) => this.data.normalizaIngreso(x))
+          .filter((x) => !this.data.ingresoVacio(x));
         if (registros.length) {
-          s.columnas = ['N.º', 'Fecha', 'Hora de entrada', 'Hora de salida', 'Carné', 'Nombre de quien ingresa',
-            'Cargo o institución', 'Tipo de personal', 'Acompañante o visita', 'Anexa documento',
-            'Actividad o motivo de la visita'];
-          s.filas = registros.map((x, i) => [
-            String(i + 1), x.fecha ? formateaFecha(x.fecha) : '—', x.horaEntrada || '—', x.horaSalida || '—',
-            x.carne || '—', x.nombre || '—', x.cargo || '—', x.tipoPersonal || '—',
-            x.acompanante ? `${x.acompanante}${x.carneAcompanante ? ' · ' + x.carneAcompanante : ''}` : '—',
-            x.anexaDocumento || '—', x.motivo || '—'
-          ]);
-          s.nota = 'Un registro por cada ingreso al cuarto de servidores, con su hora de entrada y de salida.';
+          s.columnas = ['N.º', 'Fecha', 'Hora de entrada', 'Hora de salida', 'Tipo de ingreso', 'Carné',
+            'Técnico de Soporte que ingresa', 'Cargo', 'Tipo de personal', 'Acompañante o visita',
+            'Tipo de personal del acompañante', 'Cargo o institución del acompañante',
+            'Anexa documento', 'Actividad o motivo de la visita'];
+          s.filas = registros.map((x, i) => {
+            // En el ingreso individual las tres columnas del acompañante se imprimen «No aplica»:
+            // el formato no admite celdas en blanco que puedan leerse como un olvido.
+            const acompanado = this.data.conAcompanante(x);
+            return [
+              String(i + 1), x.fecha ? formateaFecha(x.fecha) : '—', x.horaEntrada || '—', x.horaSalida || '—',
+              x.tipoIngreso || '—', x.carne || '—', x.nombre || '—', x.cargo || '—', x.tipoPersonal || '—',
+              acompanado ? `${x.acompanante || 'Sin nombre'}${x.carneAcompanante ? ' · ' + x.carneAcompanante : ''}` : 'No aplica',
+              acompanado ? (x.tipoPersonalAcompanante || 'Sin clasificar') : 'No aplica',
+              acompanado ? (x.cargoAcompanante || 'Sin cargo registrado') : 'No aplica',
+              x.anexaDocumento || '—', x.motivo || '—'
+            ];
+          });
+          const individuales = registros.filter((x) => !this.data.conAcompanante(x)).length;
+          s.nota = `Un registro por cada ingreso al cuarto de servidores, con su hora de entrada y de salida. ${individuales} ingreso(s) individual(es) del Técnico de Soporte y ${registros.length - individuales} con acompañante.`;
+          // Los documentos de respaldo se imprimen con la hoja: el formato los declara anexos.
+          const conRespaldo = registros.filter((x) => x.anexaDocumento === 'Sí');
+          const respaldo: SeccionDoc = {
+            titulo: 'Documentos de respaldo',
+            texto: conRespaldo.length
+              ? 'Documento de respaldo anexo.'
+              : 'No se anexó documento de respaldo.'
+          };
+          if (conRespaldo.length) {
+            respaldo.columnas = ['Fecha', 'Nombre de quien ingresa', 'Archivo anexo'];
+            respaldo.filas = conRespaldo.map((x) => [
+              x.fecha ? formateaFecha(x.fecha) : '—', x.nombre || '—',
+              x.documentoNombre || 'Imagen sin nombre de archivo'
+            ]);
+            respaldo.imagenes = conRespaldo.filter((x) => x.documentoImagen).map((x) => ({
+              titulo: x.documentoNombre || 'Documento de respaldo',
+              datos: x.documentoImagen,
+              pie: `Ingreso de ${x.nombre || 'sin nombre'} · ${x.fecha ? formateaFecha(x.fecha) : 'sin fecha'}`
+            }));
+          }
+          anexos.push(respaldo);
           const conObservacion = registros.filter((x) => x.observacion.trim());
           if (conObservacion.length) {
             anexos.push({

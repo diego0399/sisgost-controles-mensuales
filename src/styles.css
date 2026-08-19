@@ -477,6 +477,13 @@ details.acc.subtle { border-style: dashed; background: var(--surface-2); }
 .hoja-sec .s-nota { font-size: 11px; color: #72859b; margin-top: 7px; font-style: italic; }
 .hoja-sec .s-texto { font-size: 13px; white-space: pre-wrap; }
 
+/* Imágenes anexas dentro de una sección: los respaldos del F0234 salen impresos con la hoja. */
+.hoja-anexos { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 10px; }
+.hoja-anexo { margin: 0; border: 1px solid #c3cedd; padding: 7px; background: #fff; break-inside: avoid; }
+.hoja-anexo img { display: block; width: 100%; max-height: 240px; object-fit: contain; background: #f3f6fa; }
+.hoja-anexo figcaption { font-size: 10.5px; color: #4b5d73; margin-top: 6px; display: grid; gap: 2px; }
+.hoja-anexo figcaption b { color: #1b2430; font-size: 11px; }
+
 .hoja-campos { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 3px 26px; }
 .hoja-campos .c { display: grid; grid-template-columns: 41% 1fr; gap: 10px; padding: 3px 0; border-bottom: 1px dotted #dde4ee; }
 .hoja-campos .c.ancho { grid-column: 1 / -1; grid-template-columns: 20% 1fr; }

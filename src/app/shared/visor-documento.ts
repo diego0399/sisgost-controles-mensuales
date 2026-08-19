@@ -29,8 +29,18 @@ export interface SeccionDoc {
   filas?: string[][];
   items?: ItemDoc[];
   texto?: string;
+  /** Imágenes anexas que se imprimen al pie de la sección. */
+  imagenes?: ImagenDoc[];
   /** Línea al pie de la sección: aclaraciones del propio documento. */
   nota?: string;
+}
+
+/** Imagen impresa dentro de una sección del documento (respaldos anexos, capturas). */
+export interface ImagenDoc {
+  titulo: string;
+  /** Data URL de la imagen; el prototipo guarda el respaldo reducido en el propio control. */
+  datos: string;
+  pie?: string;
 }
 
 /** Firma registrada en el documento (simulada: este es un prototipo). */
@@ -199,6 +209,21 @@ const POSITIVOS = new Set(['Realizada', 'Realizado', 'Verificado', 'Sí', 'Si', 
                 }
 
                 @if (s.texto) { <p class="s-texto">{{ s.texto }}</p> }
+
+                @if (s.imagenes?.length) {
+                  <div class="hoja-anexos">
+                    @for (im of s.imagenes; track im.titulo) {
+                      <figure class="hoja-anexo">
+                        <img [src]="im.datos" [alt]="im.titulo" />
+                        <figcaption>
+                          <b>{{ im.titulo }}</b>
+                          @if (im.pie) { <span>{{ im.pie }}</span> }
+                        </figcaption>
+                      </figure>
+                    }
+                  </div>
+                }
+
                 @if (s.nota) { <p class="s-nota">{{ s.nota }}</p> }
               </section>
             }
