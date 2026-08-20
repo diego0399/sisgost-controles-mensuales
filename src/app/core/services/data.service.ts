@@ -127,6 +127,7 @@ export class DataService {
       this.documentos.set(guardado.documentos);
       this.trazabilidad.set(guardado.trazabilidad);
       this.soportes.cargar(guardado.distribucion);
+      this.alinearDistribucionCompartida();
       // Una foto anterior a la aplicación configurable no trae catálogo: entonces manda el JSON.
       if (guardado.catalogo?.length && guardado.catalogo.every((c) => !!c.aplicacion)) {
         this.catalogo.set(guardado.catalogo);
@@ -150,6 +151,7 @@ export class DataService {
       this.documentos.set(documentos);
       this.trazabilidad.set(trazas);
       this.soportes.cargar(distribucion);
+      this.alinearDistribucionCompartida();
     }
 
     // El inventario operativo se pone al día ANTES de reconciliar: los equipos que Gestión de
@@ -179,6 +181,36 @@ export class DataService {
     }
   }
 
+  /**
+   * Deja la distribución de este módulo y la fuente compartida diciendo lo mismo.
+   *
+   * Si ya hay algo compartido en este origen **manda lo compartido**: es lo que se editó por
+   * última vez y sobrevive a que se borre la foto local. Si no hay nada, se publica lo que trae
+   * la semilla, que es la única forma de sembrar la demostración sin pisar cambios del usuario.
+   */
+  private alinearDistribucionCompartida(): void {
+    if (this.soportes.compartida.existe()) {
+      this.soportes.adoptarDelOrigen();
+      return;
+    }
+    this.soportes.publicar();
+  }
+
+  /**
+   * Publica el cambio para el otro módulo y lo deja trazado. Se llama al guardar, nunca desde un
+   * botón: Gestión de Equipos lee esta clave al arrancar, al entrar al expediente único, al abrir
+   * el selector de técnico y cada vez que recupera el foco.
+   */
+  private publicarDistribucion(u: UsuarioSistema | null, detalle: string): void {
+    const marca = this.soportes.publicar();
+    this.registrarEvento(u, {
+      accion: 'Distribución guardada en fuente compartida',
+      moduloOrigen: MODULO_CONTROLES, moduloDestino: MODULO_EQUIPOS,
+      estadoNuevo: `${this.soportes.activas().length} responsabilidad(es) vigente(s)`,
+      observacion: `${detalle} Publicada en «${this.soportes.compartida.clave}» (${marca}); Gestión de Equipos la lee sin ninguna acción manual.`
+    });
+  }
+
   private persistir(): void {
     const s: Snapshot = {
       controles: this.controles(), bitacoras: this.bitacoras(), justificaciones: this.justificaciones(),
@@ -196,6 +228,14 @@ export class DataService {
    */
   restablecerDemostracion(): void {
     localStorage.removeItem(STORAGE_KEY);
+    // La distribución compartida también se repone: si se quedara la editada, el arranque la
+    // adoptaría y el restablecimiento no habría restablecido nada. Es un reset pedido a mano,
+    // nunca automático.
+    try {
+      localStorage.removeItem(this.soportes.compartida.clave);
+      localStorage.removeItem(this.soportes.compartida.claveActualizada);
+      localStorage.removeItem(this.soportes.compartida.claveVersion);
+    } catch { /* sin localStorage no hay nada que reponer */ }
     location.reload();
   }
 
@@ -1996,6 +2036,7 @@ export class DataService {
     };
     this.soportes.agregar(nuevo);
     this.persistir();
+    this.publicarDistribucion(u, `${tec.nombre} atiende ${nombreDir} / ${datos.unidad}.`);
     const base = { direccion: this.idDireccion(datos.direccion), unidad: datos.unidad, tecnicoAfectado: tec.nombre };
     this.registrarEvento(u, {
       ...base, accion: 'Dirección/Unidad agregada a soporte',
@@ -2072,6 +2113,7 @@ export class DataService {
     }
     this.persistir();
     const quien = this.soportes.soloNombre(actual.tecnico);
+    this.publicarDistribucion(u, `${quien} deja de atender ${actual.direccion} / ${actual.unidad}.`);
     const base = { direccion: idDir, unidad: actual.unidad, tecnicoAfectado: quien, motivo: motivo.trim() };
     this.registrarEvento(u, {
       ...base, accion: 'Dirección/Unidad desactivada para soporte',

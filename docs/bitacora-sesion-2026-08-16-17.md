@@ -1,6 +1,6 @@
 # Bitácora de sesión — SISGOST Controles Mensuales
 
-**Sesión del 16 al 19 de agosto de 2026 · rondas 74 a 84.**
+**Sesión del 16 al 19 de agosto de 2026 · rondas 74 a 85.**
 
 Registro de lo que se pidió y lo que quedó hecho en esta conversación, para poder retomar el
 trabajo sin releer el historial. El punto de control completo del proyecto sigue siendo
@@ -340,12 +340,60 @@ comparación por ID, que es más silencioso.
 Verificación: batería **571/0**, once suites de navegador sin avisos ni errores de consola
 (incluidas las dos nuevas, una por módulo) y `npm run build` limpio en ambos.
 
+## Ronda 85 — la distribución de soportes llega de verdad al otro módulo
+
+**Se reportó** una falla concreta: al agregar a Wendy Carranza como responsable de una
+Dirección/Unidad en Controles Mensuales y guardar, Gestión de Equipos seguía sin ofrecerla como
+Técnico de Configuración.
+
+**Causa.** No era el filtro, que ya comparaba bien por IDs: era que **cada módulo guardaba su
+propia copia** de la distribución dentro de su foto de estado. `localStorage` está aislado por
+origen y los módulos corren en 4200 y 4300, que son orígenes distintos, así que lo escrito en uno
+no se veía nunca desde el otro. Gestión de Equipos trabajaba con la copia de su semilla.
+
+**Quedó hecho**
+
+- **Fuente compartida** (`shared-distribution.service.ts`, idéntico en los dos proyectos):
+  `sisgost_support_distribution` con `…_updated_at`, `…_version`
+  (`2026-08-19-shared-distribution-fix`) y el evento `sisgost-support-distribution-updated`. Cada
+  asignación viaja con IDs **y** nombres, así que quien recibe no vuelve a resolver ningún texto.
+- **Controles Mensuales publica** al guardar —alta y baja— y deja la traza «Distribución guardada
+  en fuente compartida». Al arrancar, si ya hay algo compartido manda lo compartido; si no, se
+  publica la semilla. Restablecer la demostración repone también esas claves.
+- **Gestión de Equipos lee** con `SupportDistributionBridgeService`
+  (`getCurrentDistribution`, `getSupportTechniciansByDirectionUnit`, `canTechnicianSupportUnit`,
+  `refreshDistributionFromStorage`, `listenForDistributionChanges`): al arrancar, al entrar al
+  Expediente único, al abrir el selector de técnico, al cambiar de requerimiento o de usuario, y
+  ante `storage`, el evento del ecosistema, el aviso del puente y el foco de la ventana.
+- **Puente entre orígenes**: Controles Mensuales publica `puente-distribucion.html`, espejo del
+  `puente-inventario.html` que ya publicaba Gestión de Equipos para el camino contrario.
+- **Se quitó la lista de reserva.** Cuando la Dirección/Unidad no tenía distribución, Gestión de
+  Equipos ofrecía a *todos* los técnicos para correcciones, garantías y descargos. Ahora no se
+  ofrece a nadie fuera de la distribución; lo único que se conserva es al técnico que **ya lleva
+  el caso**, para que un proceso abierto no quede sin quién lo continúe.
+- **El mensaje del bloqueo dice dónde arreglarlo** y se escribe una sola vez, en el servicio:
+  «…Debe configurar la Distribución de Soportes en Controles Mensuales antes de crear el
+  Expediente único.»
+- **El caso de bloqueo es demostrable**: `SOL-2026-0161` quedó en el Archivo Registral —la unidad
+  sin soporte vigente— con equipo asignado. No es un callejón sin salida: asignarle un soporte en
+  Controles Mensuales lo desbloquea sin recargar nada.
+
+**Lo que la prueba enseñó**: Controles Mensuales **no deja** quitar al último responsable de una
+Dirección/Unidad con equipos activos, así que el caso «sin soporte asignado» no se puede fabricar
+desde la pantalla; hay que tener en los datos una unidad que ya esté sin soporte. Es la regla
+correcta y se comprueba ahora explícitamente.
+
+Verificación: batería **614/0**; suite nueva con **las dos aplicaciones abiertas a la vez** que
+recorre los cinco casos del requerimiento —alta, baja, cambio de responsable, pestaña ya abierta
+sin recargar y bloqueo sin soporte—, más las trece suites anteriores, todas sin avisos ni errores
+de consola; `npm run build` limpio en ambos módulos.
+
 ## Estado al cierre de la sesión
 
 | Comprobación | Resultado |
 |---|---|
-| Batería sobre fuente y semilla | **571 casos, 0 fallos** |
-| Suites de navegador (11) | **sin avisos ni errores de consola** |
+| Batería sobre fuente y semilla | **614 casos, 0 fallos** |
+| Suites de navegador (14) | **sin avisos ni errores de consola** |
 | `npm run build` · Controles Mensuales | limpio |
 | `npm run build` · Gestión de Equipos | correcto, con sus 3 avisos de presupuesto preexistentes |
 

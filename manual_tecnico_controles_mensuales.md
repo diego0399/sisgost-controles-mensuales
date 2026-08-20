@@ -396,7 +396,35 @@ ocurre una sola vez.
 Guardar un cambio en la distribución dispara `sincronizarTrasDistribucion(u, cambio)`, que llama a
 `autoSyncControls` del período activo y deja la traza «Controles recalculados automáticamente por
 cambio de distribución» con el resumen de lo movido. **No hay ningún botón** que lo dispare, aquí ni
-en ninguna otra pantalla. Los eventos de la distribución —consulta, alta, baja, duplicado
+en ninguna otra pantalla.
+
+### 7.2.b `SharedDistributionService` — la distribución sale del módulo
+
+`support-distribution.service.ts` resuelve las consultas, pero por sí solo no cruzaba de módulo:
+cada aplicación guardaba su copia dentro de su propia foto de estado y un cambio hecho aquí no
+llegaba nunca allá. El transporte vive en `shared-distribution.service.ts` —también idéntico en
+los dos proyectos—:
+
+| Clave / evento | Para qué |
+|---|---|
+| `sisgost_support_distribution` | La distribución completa, con IDs **y** nombres |
+| `sisgost_support_distribution_updated_at` | ISO de la última escritura |
+| `sisgost_support_distribution_version` | `2026-08-19-shared-distribution-fix`; una versión distinta se migra, nunca se borra en silencio |
+| `sisgost-support-distribution-updated` | `CustomEvent` para avisar dentro del mismo origen |
+
+`publicar()` vuelca `registros()` a esa clave; `adoptar()` hace el camino inverso y **solo
+devuelve `true` si algo cambió**, porque se consulta muchas veces y casi nunca hay novedad. Al
+arrancar, `alinearDistribucionCompartida()` aplica la regla del ecosistema: si ya hay algo
+compartido manda lo compartido —es lo último que se editó y sobrevive a que se borre la foto
+local—; si no hay nada, se publica la semilla. Restablecer la demostración repone también estas
+claves, porque si no el arranque volvería a adoptar lo editado y el restablecimiento no habría
+restablecido nada.
+
+Los dos módulos corren en orígenes distintos (4300 y 4200) y `localStorage` está aislado por
+origen, así que este módulo publica `public/puente-distribucion.html`: una página en su propio
+origen que responde por `postMessage` a quien le pregunte desde un origen autorizado, y que empuja
+un aviso cuando la clave cambia. Es el espejo de `puente-inventario.html`, que publica Gestión de
+Equipos para el camino contrario. Los eventos de la distribución —consulta, alta, baja, duplicado
 bloqueado, responsabilidad modificada, perfil actualizado, recálculo y aplicación en Gestión de
 Equipos— guardan además `tecnicoAfectado` y `motivo`.
 

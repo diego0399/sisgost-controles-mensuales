@@ -1,5 +1,6 @@
-import { Injectable, computed, signal } from '@angular/core';
+import { Injectable, computed, inject, signal } from '@angular/core';
 import { DistribucionSoporte } from '../models/models';
+import { AsignacionSoporteCompartida, SharedDistributionService } from './shared-distribution.service';
 
 /**
  * Dirección del catálogo organizacional, tal como la publica `assets/data/direcciones.json`.
@@ -39,6 +40,9 @@ export interface DireccionOrganizacion {
  */
 @Injectable({ providedIn: 'root' })
 export class SupportDistributionService {
+  /** Transporte entre módulos: `localStorage` bajo la clave del ecosistema. */
+  readonly compartida = inject(SharedDistributionService);
+
   /** Registro compartido completo, incluidas las asignaciones desactivadas (historial). */
   readonly registros = signal<DistribucionSoporte[]>([]);
 
@@ -231,6 +235,86 @@ export class SupportDistributionService {
     this.registros.update((l) => l.map((d) => (d.id === id
       ? { ...d, activo: true, desactivadaPor: undefined, fechaDesactivacion: undefined, motivoDesactivacion: undefined }
       : d)));
+  }
+
+  // ------------------------------------------------------------------ fuente compartida
+
+  /** El rol con el que se guardó el técnico («Nombre — Rol»); '' si no lo trae. */
+  rolDe(tecnico: string): string {
+    const partes = (tecnico ?? '').split('—');
+    return partes.length > 1 ? partes.slice(1).join('—').trim() : '';
+  }
+
+  /** Una asignación, en la forma con la que viaja entre módulos. */
+  aCompartida(d: DistribucionSoporte): AsignacionSoporteCompartida {
+    const normal = this.normalizar(d);
+    return {
+      id: normal.id,
+      tecnicoId: normal.tecnicoId,
+      tecnicoNombre: this.soloNombre(normal.tecnico),
+      tecnicoRol: this.rolDe(normal.tecnico) || 'Técnico de Soporte',
+      direccionId: normal.direccionId,
+      direccionNombre: normal.direccion,
+      unidadId: normal.unidadId,
+      unidadNombre: normal.unidad,
+      activo: normal.activo,
+      fechaInicio: normal.fecha,
+      horaInicio: normal.hora,
+      observaciones: normal.observacion,
+      asignadoPor: normal.asignadoPor,
+      desactivadaPor: normal.desactivadaPor,
+      fechaDesactivacion: normal.fechaDesactivacion,
+      motivoDesactivacion: normal.motivoDesactivacion
+    };
+  }
+
+  /** El camino de vuelta: lo recibido se reconstruye sin volver a resolver ningún texto. */
+  desdeCompartida(a: AsignacionSoporteCompartida): DistribucionSoporte {
+    return {
+      id: a.id,
+      tecnicoId: a.tecnicoId,
+      direccionId: a.direccionId,
+      unidadId: a.unidadId,
+      direccion: a.direccionNombre,
+      unidad: a.unidadNombre,
+      tecnico: `${a.tecnicoNombre} — ${a.tecnicoRol}`,
+      asignadoPor: a.asignadoPor,
+      fecha: a.fechaInicio,
+      hora: a.horaInicio ?? '',
+      activo: a.activo,
+      observacion: a.observaciones ?? '',
+      desactivadaPor: a.desactivadaPor,
+      fechaDesactivacion: a.fechaDesactivacion,
+      motivoDesactivacion: a.motivoDesactivacion
+    };
+  }
+
+  /**
+   * Publica el registro completo en la fuente compartida. Lo llama Controles Mensuales cada vez
+   * que se guarda un cambio: es lo que hace que Gestión de Equipos vea la distribución nueva sin
+   * que nadie pulse nada. Devuelve la marca de tiempo escrita.
+   */
+  publicar(): string {
+    return this.compartida.guardar(this.registros().map((d) => this.aCompartida(d)));
+  }
+
+  /**
+   * Adopta lo que venga de la fuente compartida. Devuelve `true` solo si algo cambió, para que
+   * quien llama sepa si tiene que recalcular o puede quedarse quieto: se consulta muchas veces
+   * (al arrancar, al enfocar la ventana, al abrir un formulario) y casi siempre no hay novedad.
+   */
+  adoptar(lista: AsignacionSoporteCompartida[]): boolean {
+    if (!lista.length) return false;
+    const nuevos = lista.map((a) => this.normalizar(this.desdeCompartida(a)));
+    const igual = JSON.stringify(nuevos) === JSON.stringify(this.registros());
+    if (igual) return false;
+    this.registros.set(nuevos);
+    return true;
+  }
+
+  /** Adopta lo guardado en ESTE origen, si lo hay. */
+  adoptarDelOrigen(): boolean {
+    return this.adoptar(this.compartida.leer());
   }
 
   /** Siguiente correlativo `DIST-AAAA-NNNN`. */

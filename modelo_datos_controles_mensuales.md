@@ -43,8 +43,12 @@ bitácoras, inventario y distribución.
 | desactivadaPor?, fechaDesactivacion?, motivoDesactivacion? | | historial de la baja; el motivo es obligatorio |
 | observacion | texto | motivo de la asignación o de la baja |
 
-**Compartida.** Se administra en Controles Mensuales y Gestión de Equipos la consume para
-filtrar el Técnico de Configuración del expediente único.
+**Compartida de verdad.** Se administra en Controles Mensuales, que la publica en
+`sisgost_support_distribution` (con `…_updated_at` y `…_version`), y Gestión de Equipos la lee
+de ahí para filtrar el Técnico de Configuración del expediente único. En la clave compartida cada
+asignación viaja con **IDs y nombres** —`tecnicoId`/`tecnicoNombre`, `direccionId`/`direccionNombre`,
+`unidadId`/`unidadNombre`, `activo`, `fechaInicio`, `observaciones`—, de modo que quien recibe no
+tiene que volver a resolver ningún texto contra su catálogo.
 
 Gobierna: asignación de controles y bitácoras, alcance del técnico, alerta de dirección sin
 soporte.

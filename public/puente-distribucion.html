@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<title>SISGOST · Puente de la distribución de soportes</title>
+</head>
+<body>
+<!--
+  Puente de la distribución de soportes compartida.
+
+  Controles Mensuales y Gestión de Equipos corren en puertos distintos (4300 y 4200), y
+  `localStorage` está aislado POR ORIGEN: el puerto forma parte del origen, así que una clave
+  escrita en 4300 no se ve desde 4200. Esta página vive en el origen de Controles Mensuales —que
+  es donde la distribución se edita— y sirve de ventanilla: Gestión de Equipos la carga en un
+  iframe oculto y le pide, por `postMessage`, el contenido de la clave compartida.
+
+  Es el espejo de `puente-inventario.html`, que Gestión de Equipos publica para el camino
+  contrario (el inventario operativo viaja de Equipos a Controles).
+
+  No hay backend: solo se lee `localStorage` del propio origen.
+-->
+<script>
+  (function () {
+    var CLAVE = 'sisgost_support_distribution';
+    var CLAVE_FECHA = 'sisgost_support_distribution_updated_at';
+    var CLAVE_VERSION = 'sisgost_support_distribution_version';
+    // Orígenes autorizados a consultar el puente (los módulos del ecosistema en desarrollo).
+    var PERMITIDOS = [
+      'http://localhost:4200', 'http://127.0.0.1:4200',
+      'http://localhost:4300', 'http://127.0.0.1:4300',
+      'http://localhost:4310'
+    ];
+
+    function leer() {
+      try {
+        var crudo = localStorage.getItem(CLAVE);
+        var lista = crudo ? JSON.parse(crudo) : [];
+        return Array.isArray(lista) ? lista : [];
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function marca(clave) {
+      try {
+        return localStorage.getItem(clave) || '';
+      } catch (e) {
+        return '';
+      }
+    }
+
+    function responder(origen, mensaje) {
+      if (!parent || parent === window) return;
+      parent.postMessage(mensaje, origen);
+    }
+
+    window.addEventListener('message', function (ev) {
+      if (PERMITIDOS.indexOf(ev.origin) === -1) return;
+      var datos = ev.data || {};
+      if (datos.tipo === 'sisgost:leer-distribucion') {
+        responder(ev.origin, {
+          tipo: 'sisgost:distribucion',
+          peticion: datos.peticion,
+          asignaciones: leer(),
+          actualizadoEl: marca(CLAVE_FECHA),
+          version: marca(CLAVE_VERSION),
+          origenModulo: 'SISGOST — Controles Mensuales'
+        });
+      }
+    });
+
+    // Si la clave cambia mientras el puente está cargado, se avisa sin esperar a que pregunten:
+    // es lo que permite que Gestión de Equipos reaccione con la otra pestaña abierta.
+    window.addEventListener('storage', function (ev) {
+      if (ev.key !== CLAVE && ev.key !== CLAVE_FECHA) return;
+      for (var j = 0; j < PERMITIDOS.length; j++) {
+        responder(PERMITIDOS[j], {
+          tipo: 'sisgost:distribucion-cambiada',
+          actualizadoEl: marca(CLAVE_FECHA)
+        });
+      }
+    });
+
+    // Avisa que el puente quedó listo; el padre puede pedir la distribución desde ese momento.
+    for (var i = 0; i < PERMITIDOS.length; i++) {
+      if (parent && parent !== window) parent.postMessage({ tipo: 'sisgost:puente-distribucion-listo' }, PERMITIDOS[i]);
+    }
+  })();
+</script>
+</body>
+</html>

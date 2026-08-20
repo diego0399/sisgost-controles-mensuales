@@ -75,6 +75,17 @@ el perfil del técnico, la vista por Dirección, el inventario visible y lo que 
 ofrece como Técnico de Configuración, y lo anuncia con «La distribución de soportes fue actualizada
 y los controles se recalcularon automáticamente.»
 
+**Cómo llega el cambio a Gestión de Equipos.** Guardar publica la distribución completa en la
+fuente compartida del ecosistema —`sisgost_support_distribution`, con su marca de tiempo y su
+versión de contrato— y avisa. Gestión de Equipos la lee al arrancar, al entrar al Expediente único,
+al abrir el selector de Técnico de Configuración, al cambiar de requerimiento o de usuario, y cada
+vez que el navegador avisa de un cambio o la ventana recupera el foco.
+
+Como los dos módulos corren en puertos distintos —y `localStorage` está aislado por origen—,
+Controles Mensuales publica además `puente-distribucion.html` en su propio origen: Gestión de
+Equipos lo carga en un iframe oculto y le pide la clave por `postMessage`. Es el espejo del puente
+que Gestión de Equipos ya publicaba para el inventario operativo, que viaja en sentido contrario.
+
 ## Reglas institucionales implementadas
 
 - **Primeros 3 días hábiles.** Los controles mensuales del período `M` vencen el tercer día
