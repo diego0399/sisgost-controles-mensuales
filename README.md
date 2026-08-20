@@ -49,6 +49,32 @@ La contraseña es libre (prototipo). **Dirección/Unidad no es un rol del sistem
 organizacional al que pertenecen los controles, y quién atiende cada una lo decide la
 distribución de soportes.
 
+### La distribución se edita desde la persona
+
+La pantalla **Administración → Distribución de soportes** se organiza por Técnico de Soporte: cada
+tarjeta muestra su rol, su estado, todas las Direcciones/Unidades que atiende y su carga del
+período, con **Ver detalle** y **Editar responsabilidades**. Dentro de la ficha se agregan
+Direcciones/Unidades —Dirección, Unidad, fecha de inicio, estado y observaciones— y se desactivan
+una a una con motivo obligatorio. Las mismas responsabilidades pueden verse por Dirección/Unidad o
+en la tabla completa.
+
+**Todo se compara por IDs estables**, no por el texto visible: cada asignación guarda
+`tecnicoId` (`wendy-carranza`), `direccionId` (`DIR-REGS`) y `unidadId`
+(`DIR-REGS::registro-de-la-propiedad`). Comparar nombres era el origen real de las
+desincronizaciones —«Dirección de Registro» contra «Dirección de Registros»— y una asignación mal
+comparada deja a un técnico sin ver sus controles o le abre los de otra Dirección.
+
+| Rol | Qué puede hacer aquí |
+|---|---|
+| Administrador · Encargado de Soporte | Editar: agregar, desactivar y consultar |
+| Coordinador | Consultar toda la distribución |
+| Técnico de Soporte | Consultar **solo** las Direcciones/Unidades que atiende |
+
+No hay ningún botón de sincronizar: al guardar, el sistema recalcula los controles del período,
+el perfil del técnico, la vista por Dirección, el inventario visible y lo que Gestión de Equipos
+ofrece como Técnico de Configuración, y lo anuncia con «La distribución de soportes fue actualizada
+y los controles se recalcularon automáticamente.»
+
 ## Reglas institucionales implementadas
 
 - **Primeros 3 días hábiles.** Los controles mensuales del período `M` vencen el tercer día
@@ -314,6 +340,7 @@ hay usuarios, Direcciones/Unidades ni equipos duplicados con otro nombre.
 | Usuarios y roles | Directorio compartido (`usuarios-sistema.json`) | Ambos módulos |
 | Direcciones y unidades | Catálogo organizacional | Ambos módulos |
 | **Distribución de soportes** | **Controles Mensuales** (Administración → Distribución de soportes) | Ambos módulos |
+| Catálogo organizacional (`direcciones.json`) | Controles Mensuales | Ambos módulos: resuelve nombre → ID estable |
 | Equipos | Gestión de Equipos (preparación → configuración → entrega → aceptación) | Controles Mensuales, como inventario operativo |
 
 Flujo del equipo:

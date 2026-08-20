@@ -20,9 +20,9 @@ export interface NavGrupo {
  * · **Encargado de Soporte** (jefe del área): ve todas las Direcciones/Unidades, la operatividad,
  *   los pendientes y vencidos, el historial, los reportes y la distribución de soportes.
  * · **Técnico de Soporte**: opera lo suyo (controles, bitácora, justificaciones e inventario de
- *   sus Direcciones/Unidades).
+ *   sus Direcciones/Unidades) y consulta —sin editar— la distribución de las que atiende.
  * · **Coordinador**: consulta y seguimiento — panel, operatividad por Dirección, historial,
- *   documentos y trazabilidad. No completa controles ni administra.
+ *   documentos, trazabilidad y distribución de soportes. No completa controles ni administra.
  */
 /** Todos los roles del módulo. */
 const TODOS: ClaveRol[] = ['admin', 'enc-soporte', 'tec-soporte', 'coordinador'];
@@ -59,7 +59,10 @@ export const NAVEGACION: NavGrupo[] = [
     items: [
       { ruta: '/administracion', titulo: 'Usuarios y direcciones', icono: 'users', roles: ['admin'] },
       { ruta: '/catalogo', titulo: 'Catálogo de controles', icono: 'layers', roles: ['admin', 'enc-soporte'] },
-      { ruta: '/distribucion', titulo: 'Distribución de soportes', icono: 'assign', roles: ['admin', 'enc-soporte'] },
+      // La distribución la CONSULTAN los cuatro roles —el técnico, limitado a lo suyo; el
+      // Coordinador, sin editar—; modificarla sigue siendo del Encargado de Soporte y el
+      // Administrador, y eso lo decide la pantalla, no el menú.
+      { ruta: '/distribucion', titulo: 'Distribución de soportes', icono: 'assign', roles: TODOS },
       { ruta: '/feriados', titulo: 'Feriados', icono: 'flag', roles: ['admin'] }
     ]
   }

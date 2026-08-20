@@ -306,11 +306,32 @@ destino y el número de inventario afectado.
   guardar una aplicación vacía. Lo que se configure aquí decide qué controles aparecen en el
   calendario de cada Dirección/Unidad: donde el control no aplica, queda como **No aplica** y no
   cuenta como pendiente ni vence.
-- **Distribución de soportes**: qué técnico responde por cada Dirección/Unidad. Permite asignar
-  y desactivar asignaciones y consultarlas **por Dirección/Unidad** o **por soporte**. Una
-  Dirección/Unidad sin soporte activo genera la alerta del panel. **Esta pantalla gobierna
-  también a Gestión de Equipos**: allí solo pueden recibir equipos para configurar los técnicos
-  responsables de la Dirección/Unidad del requerimiento.
+- **Distribución de soportes**: qué técnico responde por cada Dirección/Unidad, **vista desde la
+  persona**. Cada Técnico de Soporte tiene una tarjeta con su rol, su estado, todas las
+  Direcciones/Unidades que atiende y su carga del período; desde ella se abre **Ver detalle** o
+  **Editar responsabilidades**.
+
+  En la ficha de edición se ve cada responsabilidad con su fecha de inicio, su estado y sus
+  observaciones, cuántos controles del período y cuántos equipos le corresponden, y el historial de
+  las que se desactivaron. Con **Agregar Dirección/Unidad** se suma otra —Dirección, Unidad, fecha
+  de inicio, estado y observaciones—; con **Desactivar** se retira, y el sistema **exige el
+  motivo**: «Debe ingresar el motivo por el cual se desactiva esta responsabilidad.» Nada se borra,
+  para que los controles y equipos registrados mientras estuvo vigente sigan teniendo a quién
+  apuntar.
+
+  El mismo registro puede consultarse **por Dirección/Unidad** —con **Agregar soporte** y
+  **Desactivar** en cada una— o en la tabla completa. Una Dirección/Unidad sin soporte activo genera
+  la alerta del panel. No se permite asignar dos veces la misma Dirección/Unidad activa a la misma
+  persona: «Esta Dirección/Unidad ya se encuentra asignada a este Técnico de Soporte.»
+
+  **Esta pantalla gobierna también a Gestión de Equipos**: allí solo pueden recibir equipos para
+  configurar los técnicos responsables de la Dirección/Unidad del requerimiento. Al guardar no hay
+  que sincronizar nada: «La distribución de soportes fue actualizada y los controles se recalcularon
+  automáticamente.»
+
+  El **Coordinador** la consulta sin editarla y el **Técnico de Soporte** solo ve las
+  Direcciones/Unidades de las que es responsable: quien decide qué le toca revisar no puede ser él
+  mismo.
 - **Feriados** (Administrador): catálogo editable nacional y de San Salvador, con la tabla de
   **fechas límite resultantes** del año para ver el efecto de cada cambio.
 
@@ -330,3 +351,7 @@ destino y el número de inventario afectado.
 - «Debe seleccionar al menos una Dirección, Unidad o área donde aplica este control.»
 - «La aplicación del control fue actualizada correctamente.»
 - «La Dirección/Unidad tiene controles aplicables, pero no posee Técnico de Soporte asignado.»
+- «Esta Dirección/Unidad ya se encuentra asignada a este Técnico de Soporte.»
+- «Debe ingresar el motivo por el cual se desactiva esta responsabilidad.»
+- «Solo se pueden asignar usuarios con rol Técnico de Soporte.»
+- «La distribución de soportes fue actualizada y los controles se recalcularon automáticamente.»

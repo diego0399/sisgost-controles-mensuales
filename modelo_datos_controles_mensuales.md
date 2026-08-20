@@ -33,11 +33,14 @@ bitácoras, inventario y distribución.
 | Campo | Tipo | Nota |
 |---|---|---|
 | id | PK | `DIST-2026-0001` |
-| direccion, unidad | texto | Dirección/Unidad atendida (par exacto) |
+| **tecnicoId** | FK estable | `wendy-carranza` — slug del nombre; con él se compara, no con el texto |
+| **direccionId** | FK estable | `DIR-REGS` — id del catálogo organizacional |
+| **unidadId** | FK estable | `DIR-REGS::registro-de-la-propiedad` — la unidad cuelga de su Dirección |
+| direccion, unidad | texto | Dirección/Unidad atendida, para mostrar |
 | tecnico | texto | «Nombre — Rol», resuelve a USUARIO_SISTEMA |
-| asignadoPor, fecha, hora | | quién y cuándo la registró |
+| asignadoPor, fecha, hora | | quién la registró · `fecha` es la **fecha de inicio**, que decide quien asigna |
 | activo | bool | nunca se borra: se desactiva |
-| desactivadaPor?, fechaDesactivacion? | | historial de la baja |
+| desactivadaPor?, fechaDesactivacion?, motivoDesactivacion? | | historial de la baja; el motivo es obligatorio |
 | observacion | texto | motivo de la asignación o de la baja |
 
 **Compartida.** Se administra en Controles Mensuales y Gestión de Equipos la consume para
@@ -193,6 +196,7 @@ En observación`) y evidencia opcional.
 | accion | texto | «Control entregado», «Bitácora enviada tarde», «Equipo agregado al inventario operativo de Controles Mensuales»… |
 | moduloOrigen?, moduloDestino?, inventario? | texto | eventos de integración entre módulos |
 | equipo?, usuarioFinal?, expedienteUnico? | texto | contexto del equipo en los movimientos automáticos |
+| tecnicoAfectado?, motivo? | texto | eventos de la distribución de soportes |
 | estadoAnterior?, estadoNuevo?, observacion?, documento? | | |
 
 ## Indicadores derivados (no se almacenan)

@@ -367,13 +367,38 @@ distingue quién opera aquí (Soporte, Jefatura, Administración) de quién oper
 
 El **mismo archivo** existe en `src/app/core/services/support-distribution.service.ts` de los dos
 proyectos y es dueño de la señal `registros`. Ofrece `deDireccionUnidad`, `tecnicosDe`,
-`deTecnico`, `atiende`, `responsableDe`, `pares` y las escrituras planas (`agregar`, `modificar`,
-`desactivar`). Las reglas de cada módulo quedan en su propio `DataService`:
+`deTecnico`, `todasDeTecnico`, `historialDe`, `atiende`, `duplicada`, `responsableDe`, `pares` y
+las escrituras planas (`agregar`, `modificar`, `desactivar`, `activar`). Las reglas de cada módulo
+quedan en su propio `DataService`:
+
+**Todo se compara por IDs estables.** Cada asignación guarda `tecnicoId`, `direccionId` y
+`unidadId`; los nombres quedan solo para mostrarlos. El servicio los deriva con `slug()`
+—minúsculas, sin tildes, con guiones— y con el **catálogo organizacional** que los dos módulos
+cargan al arrancar (`cargarOrganizacion`, desde `direcciones.json`, publicado ahora también en
+Gestión de Equipos):
+
+| ID | Forma | Ejemplo |
+|---|---|---|
+| `tecnicoId` | slug del nombre | `wendy-carranza` |
+| `direccionId` | id del catálogo | `DIR-REGS` |
+| `unidadId` | `<direccionId>::<slug(unidad)>` | `DIR-REGS::registro-de-la-propiedad` |
+
+`idDireccion()` acepta el id, la forma corta o el nombre institucional, de modo que quien consulta
+puede seguir pasando lo que tenga a mano; lo que se **guarda y se compara** es siempre el id.
+`normalizar()` completa los IDs de los registros anteriores al cargarlos: la migración por texto
+ocurre una sola vez.
 
 | Módulo | Uso |
 |---|---|
 | Controles Mensuales | **Administra** la distribución; asigna controles y bitácoras, filtra el inventario operativo y decide qué ve cada técnico |
 | Gestión de Equipos | **Consume**: `atiendeDireccionUnidad` y `soporteResponsableDe` delegan aquí, y `bloqueoExpedienteUnico` impide elegir un Técnico de Configuración que no atienda la Dirección/Unidad del requerimiento |
+
+Guardar un cambio en la distribución dispara `sincronizarTrasDistribucion(u, cambio)`, que llama a
+`autoSyncControls` del período activo y deja la traza «Controles recalculados automáticamente por
+cambio de distribución» con el resumen de lo movido. **No hay ningún botón** que lo dispare, aquí ni
+en ninguna otra pantalla. Los eventos de la distribución —consulta, alta, baja, duplicado
+bloqueado, responsabilidad modificada, perfil actualizado, recálculo y aplicación en Gestión de
+Equipos— guardan además `tecnicoAfectado` y `motivo`.
 
 La pantalla de distribución de Gestión de Equipos quedó en **modo consulta**
 (`puedeGestionar = computed(() => false)`) con un aviso y enlace a este módulo: dos pantallas que

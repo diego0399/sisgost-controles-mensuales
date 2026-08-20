@@ -63,6 +63,13 @@ export interface UsuarioSistema {
  */
 export interface DistribucionSoporte {
   id: string;
+  /**
+   * IDs estables de la responsabilidad. Todo se compara por ellos: los nombres visibles se
+   * escriben de más de una forma y compararlos era el origen de las desincronizaciones.
+   */
+  tecnicoId: string;
+  direccionId: string;
+  unidadId: string;
   direccion: string;
   unidad: string;
   /** Técnico de Soporte responsable, en formato «Nombre — Rol». */
@@ -75,6 +82,8 @@ export interface DistribucionSoporte {
   observacion: string;
   desactivadaPor?: string;
   fechaDesactivacion?: string;
+  /** Por qué se dejó de atender esa Dirección/Unidad; obligatorio al desactivar. */
+  motivoDesactivacion?: string;
 }
 
 // ---------------------------------------------------------------------------- Calendario
@@ -631,6 +640,10 @@ export interface EventoTrazabilidad {
   moduloDestino?: string;
   /** Tipo de ingreso al cuarto de servidores, en los eventos del F0234. */
   tipoIngreso?: string;
+  /** Técnico de Soporte sobre el que recae el cambio, en los eventos de la distribución. */
+  tecnicoAfectado?: string;
+  /** Motivo declarado del cambio (obligatorio al desactivar una responsabilidad). */
+  motivo?: string;
   /** Número de inventario del equipo afectado, en eventos de integración. */
   inventario?: string;
   /** Descripción del equipo y su usuario final, en eventos de integración. */

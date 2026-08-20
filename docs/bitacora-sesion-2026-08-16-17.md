@@ -1,6 +1,6 @@
 # Bitácora de sesión — SISGOST Controles Mensuales
 
-**Sesión del 16 al 19 de agosto de 2026 · rondas 74 a 83.**
+**Sesión del 16 al 19 de agosto de 2026 · rondas 74 a 84.**
 
 Registro de lo que se pidió y lo que quedó hecho en esta conversación, para poder retomar el
 trabajo sin releer el historial. El punto de control completo del proyecto sigue siendo
@@ -291,12 +291,61 @@ las etiquetas de los pasos.
 Verificación: batería **501/0**, nueve suites de navegador sin avisos ni errores de consola y
 `npm run build` limpio en ambos módulos.
 
+## Ronda 84 — la distribución de soportes se edita desde la persona
+
+**Se pidió** una Distribución de soportes práctica y editable: poder ver, editar y agregar todas
+las Direcciones/Unidades de las que un Técnico de Soporte es responsable desde una sola pantalla,
+que el cambio se propague solo, que nada se compare por texto, y que Gestión de Equipos tenga
+suficientes solicitudes de CPU y Laptop para demostrar la integración.
+
+**Quedó hecho**
+
+- **IDs estables en el servicio compartido.** Cada asignación guarda `tecnicoId`
+  (`wendy-carranza`), `direccionId` (`DIR-REGS`) y `unidadId`
+  (`DIR-REGS::registro-de-la-propiedad`), y todas las consultas comparan por ellos. Los dos
+  módulos cargan el mismo catálogo organizacional (`direcciones.json`, publicado ahora también en
+  Gestión de Equipos), que es quien resuelve nombre → ID. `normalizar()` completa los registros
+  anteriores al cargarlos.
+- **Pantalla por persona.** Tarjeta por Técnico de Soporte con rol, estado, sus
+  Direcciones/Unidades y su carga del período, con **Ver detalle** y **Editar responsabilidades**.
+  La ficha muestra la carga, los controles del período, las bitácoras y el inventario visible, y
+  lista cada responsabilidad con su fecha de inicio, estado, observaciones y el historial de las
+  desactivadas. Desde ahí se agrega otra Dirección/Unidad —con fecha de inicio y estado— y se
+  desactiva con motivo obligatorio.
+- **Validaciones con los mensajes exactos** del requerimiento, incluido el duplicado, que se
+  comprueba por ID y deja traza del intento bloqueado.
+- **Permisos**: los cuatro roles consultan la pantalla; solo el Encargado de Soporte y el
+  Administrador editan; el Técnico de Soporte queda limitado a lo suyo.
+- **Sincronización automática**: guardar recalcula el período, el perfil del técnico, la vista por
+  Dirección, el inventario visible y lo que Gestión de Equipos ofrece como Técnico de
+  Configuración. No hay ningún botón que lo dispare.
+- **Datos de demostración**: 32 requerimientos (16 de CPU y 16 de Laptop) repartidos por las
+  Direcciones/Unidades del catálogo y en seis estados distintos, y 32 equipos con CPU y Laptops
+  nuevos y usados; siempre hay equipos disponibles de los cuatro tipos y requerimientos sin equipo
+  que los reciban. La solicitud declara **solo el tipo requerido**: la condición Nuevo/Usado
+  aparece únicamente en el equipo asignado, y su filtro sigue viviendo en el Inventario de
+  Hardware.
+
+**Defecto real encontrado por la suite**: en Gestión de Equipos el catálogo organizacional solo se
+cargaba en el camino de la primera carga. Al rehidratar desde `localStorage` quedaba vacío,
+`idDireccion()` no podía resolver «Gerencia de Tecnología» a `DIR-GTEC` y **ninguna
+Dirección/Unidad encontraba a sus técnicos**: el expediente único decía que no había nadie
+asignado. Ahora se carga siempre y aparte, como el catálogo institucional, y las asignaciones ya
+cargadas se renormalizan cuando llega.
+
+**Lección**: un ID estable solo es estable si el catálogo que lo resuelve se carga en **todos** los
+caminos de arranque. Cargarlo en uno solo cambia un fallo de comparación por texto por uno de
+comparación por ID, que es más silencioso.
+
+Verificación: batería **571/0**, once suites de navegador sin avisos ni errores de consola
+(incluidas las dos nuevas, una por módulo) y `npm run build` limpio en ambos.
+
 ## Estado al cierre de la sesión
 
 | Comprobación | Resultado |
 |---|---|
-| Batería sobre fuente y semilla | **501 casos, 0 fallos** |
-| Suites de navegador (7) | **sin avisos ni errores de consola** |
+| Batería sobre fuente y semilla | **571 casos, 0 fallos** |
+| Suites de navegador (11) | **sin avisos ni errores de consola** |
 | `npm run build` · Controles Mensuales | limpio |
 | `npm run build` · Gestión de Equipos | correcto, con sus 3 avisos de presupuesto preexistentes |
 

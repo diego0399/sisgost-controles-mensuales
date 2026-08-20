@@ -1,6 +1,9 @@
 [
   {
     "id": "DIST-2026-0001",
+    "tecnicoId": "wendy-carranza",
+    "direccionId": "DIR-REGS",
+    "unidadId": "DIR-REGS::registro-de-la-propiedad",
     "direccion": "Dirección de Registros",
     "unidad": "Registro de la Propiedad",
     "tecnico": "Wendy Carranza — Técnico de Soporte",
@@ -12,6 +15,9 @@
   },
   {
     "id": "DIST-2026-0002",
+    "tecnicoId": "mateo-martinez",
+    "direccionId": "DIR-REGS",
+    "unidadId": "DIR-REGS::registro-de-la-propiedad",
     "direccion": "Dirección de Registros",
     "unidad": "Registro de la Propiedad",
     "tecnico": "Mateo Martínez — Técnico de Soporte",
@@ -23,6 +29,9 @@
   },
   {
     "id": "DIST-2026-0003",
+    "tecnicoId": "wendy-carranza",
+    "direccionId": "DIR-REGS",
+    "unidadId": "DIR-REGS::registro-de-comercio",
     "direccion": "Dirección de Registros",
     "unidad": "Registro de Comercio",
     "tecnico": "Wendy Carranza — Técnico de Soporte",
@@ -34,6 +43,9 @@
   },
   {
     "id": "DIST-2026-0004",
+    "tecnicoId": "wendy-carranza",
+    "direccionId": "DIR-GTEC",
+    "unidadId": "DIR-GTEC::gerencia-de-tecnologia",
     "direccion": "Gerencia de Tecnología",
     "unidad": "Gerencia de Tecnología",
     "tecnico": "Wendy Carranza — Técnico de Soporte",
@@ -45,6 +57,9 @@
   },
   {
     "id": "DIST-2026-0005",
+    "tecnicoId": "wendy-carranza",
+    "direccionId": "DIR-RPRH",
+    "unidadId": "DIR-RPRH::rprh",
     "direccion": "Dirección del RPRH",
     "unidad": "RPRH",
     "tecnico": "Wendy Carranza — Técnico de Soporte",
@@ -56,6 +71,9 @@
   },
   {
     "id": "DIST-2026-0006",
+    "tecnicoId": "mateo-martinez",
+    "direccionId": "DIR-REG",
+    "unidadId": "DIR-REG::direccion-de-registro",
     "direccion": "Dirección de Registro",
     "unidad": "Dirección de Registro",
     "tecnico": "Mateo Martínez — Técnico de Soporte",
@@ -67,6 +85,9 @@
   },
   {
     "id": "DIST-2026-0007",
+    "tecnicoId": "mateo-martinez",
+    "direccionId": "DIR-IGN",
+    "unidadId": "DIR-IGN::ign",
     "direccion": "Dirección del IGN",
     "unidad": "IGN",
     "tecnico": "Mateo Martínez — Técnico de Soporte",
@@ -78,6 +99,9 @@
   },
   {
     "id": "DIST-2026-0008",
+    "tecnicoId": "mateo-martinez",
+    "direccionId": "DIR-ISPI",
+    "unidadId": "DIR-ISPI::ispi",
     "direccion": "Dirección del ISPI",
     "unidad": "ISPI",
     "tecnico": "Mateo Martínez — Técnico de Soporte",
@@ -89,6 +113,9 @@
   },
   {
     "id": "DIST-2026-0009",
+    "tecnicoId": "diana-portillo",
+    "direccionId": "DIR-GTEC",
+    "unidadId": "DIR-GTEC::gerencia-de-tecnologia",
     "direccion": "Gerencia de Tecnología",
     "unidad": "Gerencia de Tecnología",
     "tecnico": "Diana Portillo — Técnico de Soporte",
@@ -100,6 +127,9 @@
   },
   {
     "id": "DIST-2026-0010",
+    "tecnicoId": "diana-portillo",
+    "direccionId": "DIR-REGS",
+    "unidadId": "DIR-REGS::registro-de-la-propiedad",
     "direccion": "Dirección de Registros",
     "unidad": "Registro de la Propiedad",
     "tecnico": "Diana Portillo — Técnico de Soporte",
@@ -111,6 +141,9 @@
   },
   {
     "id": "DIST-2026-0011",
+    "tecnicoId": "diana-portillo",
+    "direccionId": "DIR-REG",
+    "unidadId": "DIR-REG::direccion-de-registro",
     "direccion": "Dirección de Registro",
     "unidad": "Dirección de Registro",
     "tecnico": "Diana Portillo — Técnico de Soporte",
@@ -122,6 +155,9 @@
   },
   {
     "id": "DIST-2026-0012",
+    "tecnicoId": "diana-portillo",
+    "direccionId": "DIR-IGN",
+    "unidadId": "DIR-IGN::ign",
     "direccion": "Dirección del IGN",
     "unidad": "IGN",
     "tecnico": "Diana Portillo — Técnico de Soporte",
@@ -133,6 +169,9 @@
   },
   {
     "id": "DIST-2026-0013",
+    "tecnicoId": "diana-portillo",
+    "direccionId": "DIR-RPRH",
+    "unidadId": "DIR-RPRH::rprh",
     "direccion": "Dirección del RPRH",
     "unidad": "RPRH",
     "tecnico": "Diana Portillo — Técnico de Soporte",
@@ -144,6 +183,9 @@
   },
   {
     "id": "DIST-2026-0014",
+    "tecnicoId": "wendy-carranza",
+    "direccionId": "DIR-REGS",
+    "unidadId": "DIR-REGS::archivo-registral",
     "direccion": "Dirección de Registros",
     "unidad": "Archivo Registral",
     "tecnico": "Wendy Carranza — Técnico de Soporte",
@@ -153,6 +195,7 @@
     "activo": false,
     "observacion": "Desactivada: redistribución de carga del Registro de la Propiedad. La unidad quedó pendiente de reasignación de soporte.",
     "desactivadaPor": "Carlos González — Encargado de Soporte",
-    "fechaDesactivacion": "2026-07-31"
+    "fechaDesactivacion": "2026-07-31",
+    "motivoDesactivacion": "La unidad quedó sin equipos activos tras el traslado del archivo registral; la responsabilidad se reasignará cuando vuelva a tener inventario."
   }
 ]

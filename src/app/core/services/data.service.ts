@@ -111,6 +111,9 @@ export class DataService {
     ]);
     this.usuarios.set(usuarios);
     this.direcciones.set(direcciones);
+    // El catálogo organizacional entra al servicio compartido ANTES que la distribución: es quien
+    // resuelve el nombre de una Dirección/Unidad a su ID estable.
+    this.soportes.cargarOrganizacion(direcciones);
     this.areas.set(areas);
     this.catalogo.set(catalogo);
 
@@ -1883,9 +1886,69 @@ export class DataService {
 
   // ------------------------------------------------------------------ administración de la distribución
 
-  /** Solo el Encargado de Soporte y el Administrador gestionan la distribución. */
+  // Mensajes de la distribución, escritos una sola vez y verificados por la batería.
+  readonly MSG_DIST_TECNICO = 'Debe seleccionar un Técnico de Soporte.';
+  readonly MSG_DIST_DIRECCION = 'Debe seleccionar una Dirección.';
+  readonly MSG_DIST_UNIDAD = 'Debe seleccionar una Unidad.';
+  readonly MSG_DIST_DUPLICADA = 'Esta Dirección/Unidad ya se encuentra asignada a este Técnico de Soporte.';
+  readonly MSG_DIST_MOTIVO = 'Debe ingresar el motivo por el cual se desactiva esta responsabilidad.';
+  readonly MSG_DIST_SOLO_SOPORTE = 'Solo se pueden asignar usuarios con rol Técnico de Soporte.';
+  readonly MSG_DIST_PERMISO = 'Solo el Encargado de Soporte o el Administrador pueden gestionar la distribución de soportes.';
+  readonly MSG_DIST_SINCRONIZADA = 'La distribución de soportes fue actualizada y los controles se recalcularon automáticamente.';
+
+  /**
+   * Solo el Encargado de Soporte y el Administrador gestionan la distribución. El Coordinador y
+   * los Técnicos de Soporte la consultan: un técnico que pudiera editar su propia distribución
+   * decidiría qué le toca revisar, que es justo lo que el control interno no permite.
+   */
   puedeGestionarDistribucion(u: UsuarioSistema | null): boolean {
     return u?.clave === 'enc-soporte' || u?.clave === 'admin';
+  }
+
+  /** Todos ven la pantalla; el Técnico de Soporte, limitado a lo suyo. */
+  puedeConsultarDistribucion(u: UsuarioSistema | null): boolean { return !!u; }
+
+  /** El Técnico de Soporte solo consulta sus propias Direcciones/Unidades. */
+  soloVeLoSuyo(u: UsuarioSistema | null): boolean { return u?.clave === 'tec-soporte'; }
+
+  /**
+   * Carga de un Técnico de Soporte: lo que hoy responde por sus Direcciones/Unidades vigentes.
+   * Es el resumen que la pantalla de edición muestra antes de agregarle o quitarle una más.
+   */
+  cargaDeSoporte(usuarioOTecnico: string): {
+    pares: { direccion: string; unidad: string }[];
+    controlesPeriodo: number; pendientes: number; entregados: number; vencidos: number;
+    bitacoras: number; equipos: number;
+  } {
+    const u = this.usuarios().find((x) => x.usuario === usuarioOTecnico);
+    const quien = u ? u.nombre : usuarioOTecnico;
+    const pares = this.soportes.deTecnico(quien)
+      .map((d) => ({ direccion: this.idDireccion(d.direccion), unidad: d.unidad }));
+    const suyo = (x: { direccion: string; unidad: string }) =>
+      pares.some((p) => p.direccion === x.direccion && p.unidad === x.unidad);
+    const p = this.plazos.periodoActivo();
+    const delPeriodo = this.controles().filter((c) => c.anio === p.anio && c.mes === p.mes && suyo(c));
+    return {
+      pares,
+      controlesPeriodo: delPeriodo.length,
+      pendientes: delPeriodo.filter((c) => ['Pendiente', 'Programado', 'En proceso', 'Listo para entregar'].includes(c.estado)).length,
+      entregados: delPeriodo.filter((c) => c.estado === 'Entregado').length,
+      vencidos: delPeriodo.filter((c) => c.estado === 'Vencido').length,
+      bitacoras: this.bitacoras().filter((b) => suyo(b) && b.estado !== 'Enviada').length,
+      equipos: pares.reduce((n, x) => n + this.equiposActivosDe(x.direccion, x.unidad).length, 0)
+    };
+  }
+
+  /** Controles del período de una Dirección/Unidad concreta, para el detalle de la responsabilidad. */
+  controlesDeResponsabilidad(direccionId: string, unidad: string): ControlMes[] {
+    const p = this.plazos.periodoActivo();
+    return this.controles().filter((c) => c.anio === p.anio && c.mes === p.mes
+      && c.direccion === direccionId && c.unidad === unidad);
+  }
+
+  /** Bitácoras abiertas de una Dirección/Unidad. */
+  bitacorasDeResponsabilidad(direccionId: string, unidad: string): BitacoraDiaria[] {
+    return this.bitacoras().filter((b) => b.direccion === direccionId && b.unidad === unidad);
   }
 
   /**
@@ -1893,52 +1956,95 @@ export class DataService {
    * a ver y completar sus controles y bitácoras; en Gestión de Equipos pasa a estar disponible
    * como Técnico de Configuración para los requerimientos de esa Dirección/Unidad.
    */
-  asignarDistribucion(datos: { direccion: string; unidad: string; tecnico: string; observacion: string },
-    u: UsuarioSistema): string | null {
-    if (!this.puedeGestionarDistribucion(u)) {
-      return 'Solo el Encargado de Soporte o el Administrador pueden gestionar la distribución de soportes.';
-    }
-    if (!datos.direccion || !datos.unidad) return 'Debe indicar la Dirección y la Unidad.';
-    if (!datos.tecnico) return 'Debe seleccionar el Técnico de Soporte responsable.';
-    const tec = this.usuarios().find((x) => datos.tecnico.includes(x.nombre));
-    if (!tec || tec.clave !== 'tec-soporte') {
-      return 'La distribución solo admite Técnicos de Soporte: Hardware no atiende Direcciones/Unidades.';
-    }
+  asignarDistribucion(datos: {
+    direccion: string; unidad: string; tecnico: string; observacion: string;
+    fechaInicio?: string; activo?: boolean;
+  }, u: UsuarioSistema): string | null {
+    if (!this.puedeGestionarDistribucion(u)) return this.MSG_DIST_PERMISO;
+    if (!datos.tecnico) return this.MSG_DIST_TECNICO;
+    if (!datos.direccion) return this.MSG_DIST_DIRECCION;
+    if (!datos.unidad) return this.MSG_DIST_UNIDAD;
+    const tec = this.usuarios().find((x) => x.usuario === datos.tecnico)
+      ?? this.usuarios().find((x) => this.soportes.idTecnico(datos.tecnico) === this.soportes.idTecnico(x.nombre));
+    // Hardware y el Coordinador no atienden Direcciones/Unidades: no son Técnicos de Soporte.
+    if (!tec || tec.clave !== 'tec-soporte') return this.MSG_DIST_SOLO_SOPORTE;
+    if (tec.estado !== 'Activo') return 'No se puede asignar un Técnico de Soporte inactivo.';
     const nombreDir = this.nombreDireccion(datos.direccion);
-    if (this.soportes.atiende(datos.tecnico, nombreDir, datos.unidad)) {
-      return `${tec.nombre} ya atiende ${nombreDir} / ${datos.unidad}.`;
+    // El duplicado se comprueba por ID, no por el texto con el que esté escrita la asignación.
+    if (this.soportes.duplicada(tec.nombre, datos.direccion, datos.unidad)) {
+      this.registrarEvento(u, {
+        direccion: this.idDireccion(datos.direccion), unidad: datos.unidad,
+        accion: 'Intento de duplicado bloqueado', tecnicoAfectado: tec.nombre,
+        observacion: `${tec.nombre} ya atiende ${nombreDir} / ${datos.unidad}; no se registró una segunda responsabilidad vigente sobre la misma Dirección/Unidad.`
+      });
+      return this.MSG_DIST_DUPLICADA;
     }
     const ahora = new Date();
+    const activo = datos.activo !== false;
     const nuevo: DistribucionSoporte = {
       id: this.soportes.siguienteId(ahora.getFullYear()),
+      tecnicoId: this.soportes.idTecnico(tec.nombre),
+      direccionId: this.soportes.idDireccion(datos.direccion),
+      unidadId: this.soportes.idUnidad(datos.direccion, datos.unidad),
       direccion: nombreDir, unidad: datos.unidad, tecnico: `${tec.nombre} — ${tec.rol}`,
-      asignadoPor: `${u.nombre} — ${u.rol}`, fecha: isoLocal(ahora), hora: ahora.toTimeString().slice(0, 5),
-      activo: true, observacion: datos.observacion.trim()
+      asignadoPor: `${u.nombre} — ${u.rol}`,
+      // La fecha de inicio la decide quien asigna: una responsabilidad puede empezar antes de
+      // que alguien tenga tiempo de registrarla.
+      fecha: datos.fechaInicio?.trim() || isoLocal(ahora),
+      hora: ahora.toTimeString().slice(0, 5),
+      activo, observacion: datos.observacion.trim()
     };
     this.soportes.agregar(nuevo);
     this.persistir();
+    const base = { direccion: this.idDireccion(datos.direccion), unidad: datos.unidad, tecnicoAfectado: tec.nombre };
     this.registrarEvento(u, {
-      direccion: datos.direccion, unidad: datos.unidad, accion: 'Distribución de soporte modificada',
-      moduloOrigen: MODULO_CONTROLES, estadoNuevo: `${tec.nombre} asignado`,
-      observacion: `${tec.nombre} atiende ${nombreDir} / ${datos.unidad}. ${nuevo.observacion}`.trim()
+      ...base, accion: 'Dirección/Unidad agregada a soporte',
+      moduloOrigen: MODULO_CONTROLES,
+      estadoAnterior: 'Sin asignar', estadoNuevo: activo ? 'Activa' : 'Inactiva',
+      observacion: `${tec.nombre} atiende ${nombreDir} / ${datos.unidad} desde el ${nuevo.fecha}. ${nuevo.observacion}`.trim()
     });
     this.registrarEvento(u, {
-      direccion: datos.direccion, unidad: datos.unidad, accion: 'Distribución aplicada en Gestión de Equipos',
-      moduloOrigen: MODULO_CONTROLES, moduloDestino: MODULO_EQUIPOS,
-      observacion: `Desde esta fecha, Gestión de Equipos ofrece a ${tec.nombre} como Técnico de Configuración para los requerimientos de esta Dirección/Unidad.`
+      ...base, accion: 'Responsabilidad de soporte modificada',
+      estadoNuevo: `${this.soportes.deTecnico(tec.nombre).length} Dirección/Unidad atendida(s)`,
+      observacion: `Se agregó una Dirección/Unidad a la responsabilidad de ${tec.nombre}.`
     });
+    this.registrarEvento(u, {
+      ...base, accion: 'Perfil del soporte actualizado automáticamente',
+      observacion: `${tec.nombre} pasa a ver los controles, la bitácora y el inventario operativo de ${nombreDir} / ${datos.unidad} sin ninguna acción adicional.`
+    });
+    if (activo) {
+      this.registrarEvento(u, {
+        ...base, accion: 'Distribución aplicada en Gestión de Equipos',
+        moduloOrigen: MODULO_CONTROLES, moduloDestino: MODULO_EQUIPOS,
+        observacion: `Desde esta fecha, Gestión de Equipos ofrece a ${tec.nombre} como Técnico de Configuración para los requerimientos de esta Dirección/Unidad.`
+      });
+    }
     // Los controles abiertos del período pasan solos al nuevo responsable.
-    this.sincronizarTrasDistribucion(u);
+    this.sincronizarTrasDistribucion(u, `${tec.nombre} atiende ${nombreDir} / ${datos.unidad}`);
     return null;
+  }
+
+  /** Deja constancia de que alguien consultó la distribución de un Técnico de Soporte. */
+  registrarConsultaDistribucion(tecnico: string, u: UsuarioSistema | null): void {
+    const pares = this.soportes.deTecnico(tecnico);
+    this.registrarEvento(u, {
+      accion: 'Distribución de soporte consultada', tecnicoAfectado: this.soportes.soloNombre(tecnico),
+      observacion: `${this.soportes.soloNombre(tecnico)} atiende ${pares.length} Dirección/Unidad vigente(s): ${pares.map((d) => this.soportes.etiqueta(d.direccion, d.unidad)).join('; ') || 'ninguna'}.`
+    });
   }
 
   /**
    * Recalcula el período tras un cambio en la distribución. Se llama al asignar y al desactivar:
    * guardar la distribución es lo único que hace el usuario, el resto ocurre aquí.
    */
-  private sincronizarTrasDistribucion(u: UsuarioSistema): void {
+  private sincronizarTrasDistribucion(u: UsuarioSistema, cambio: string): void {
     const p = this.plazos.periodoActivo();
-    this.autoSyncControls(p.anio, p.mes, u);
+    const resumen = this.autoSyncControls(p.anio, p.mes, u);
+    this.registrarEvento(u, {
+      mes: p.mes, anio: p.anio,
+      accion: 'Controles recalculados automáticamente por cambio de distribución',
+      observacion: `${cambio}. Período ${nombreMes(p.mes)} ${p.anio}: ${resumen.creados} control(es) creado(s), ${resumen.reabiertos} reabierto(s), ${resumen.noAplica} marcado(s) «No aplica» y ${resumen.responsables} responsable(s) actualizado(s). No hay ningún botón que lo dispare: ocurre al guardar.`
+    });
   }
 
   /**
@@ -1946,13 +2052,11 @@ export class DataService {
    * estuvo vigente siguen apuntando a ella.
    */
   desactivarDistribucion(id: string, motivo: string, u: UsuarioSistema): string | null {
-    if (!this.puedeGestionarDistribucion(u)) {
-      return 'Solo el Encargado de Soporte o el Administrador pueden gestionar la distribución de soportes.';
-    }
+    if (!this.puedeGestionarDistribucion(u)) return this.MSG_DIST_PERMISO;
     const actual = this.distribucion().find((d) => d.id === id);
     if (!actual) return 'No se encontró la asignación indicada.';
     if (!actual.activo) return 'La asignación ya está desactivada.';
-    if (!motivo.trim()) return 'Debe indicar el motivo por el que se desactiva la asignación.';
+    if (!motivo.trim()) return this.MSG_DIST_MOTIVO;
     const idDir = this.idDireccion(actual.direccion);
     const equipos = this.equiposActivosDe(idDir, actual.unidad);
     const quedan = this.soportes.deDireccionUnidad(actual.direccion, actual.unidad).filter((d) => d.id !== id);
@@ -1967,19 +2071,30 @@ export class DataService {
         && e.estado !== 'Descargado' ? { ...e, soporteResponsable: nuevo } : e)));
     }
     this.persistir();
+    const quien = this.soportes.soloNombre(actual.tecnico);
+    const base = { direccion: idDir, unidad: actual.unidad, tecnicoAfectado: quien, motivo: motivo.trim() };
     this.registrarEvento(u, {
-      direccion: idDir, unidad: actual.unidad, accion: 'Distribución de soporte modificada',
+      ...base, accion: 'Dirección/Unidad desactivada para soporte',
+      estadoAnterior: 'Activa', estadoNuevo: 'Desactivada',
+      observacion: `${quien} deja de atender ${actual.direccion} / ${actual.unidad}. Responsable(s) que quedan: ${quedan.map((d) => this.soportes.soloNombre(d.tecnico)).join(' · ') || 'ninguno'}.`
+    });
+    this.registrarEvento(u, {
+      ...base, accion: 'Responsabilidad de soporte modificada',
       estadoAnterior: this.soportes.soloNombre(actual.tecnico),
       estadoNuevo: quedan.length ? quedan.map((d) => this.soportes.soloNombre(d.tecnico)).join(' · ') : 'Sin soporte asignado',
       observacion: motivo.trim()
     });
     this.registrarEvento(u, {
-      direccion: idDir, unidad: actual.unidad, accion: 'Distribución aplicada en Gestión de Equipos',
+      ...base, accion: 'Perfil del soporte actualizado automáticamente',
+      observacion: `${quien} deja de ver los controles nuevos, la bitácora y el inventario operativo de esta Dirección/Unidad. Lo ya entregado se conserva como historial.`
+    });
+    this.registrarEvento(u, {
+      ...base, accion: 'Distribución aplicada en Gestión de Equipos',
       moduloOrigen: MODULO_CONTROLES, moduloDestino: MODULO_EQUIPOS,
-      observacion: `Gestión de Equipos deja de ofrecer a ${this.soportes.soloNombre(actual.tecnico)} como Técnico de Configuración de esta Dirección/Unidad.`
+      observacion: `Gestión de Equipos deja de ofrecer a ${quien} como Técnico de Configuración de esta Dirección/Unidad.`
     });
     // Los controles abiertos quedan con el responsable que corresponda ahora.
-    this.sincronizarTrasDistribucion(u);
+    this.sincronizarTrasDistribucion(u, `${quien} deja de atender ${actual.direccion} / ${actual.unidad}`);
     return null;
   }
 
