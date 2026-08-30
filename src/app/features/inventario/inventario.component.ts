@@ -11,7 +11,7 @@ import { IconComponent } from '../../shared/icon';
 import { EquipoOperativo, formateaFecha, nombreMes } from '../../core/models/models';
 
 /**
- * Inventario operativo por Dirección/Unidad: los equipos activos que alimentan controles como
+ * Inventario operativo por Dirección/Registro: los equipos activos que alimentan controles como
  * F0422, mantenimiento preventivo y vulnerabilidades. Crece con las entregas aceptadas en
  * Gestión de Equipos y disminuye con los descargos, **automáticamente**: esta pantalla no tiene
  * acciones manuales de incorporación ni de descargo, solo muestra lo ya sincronizado.
@@ -45,9 +45,9 @@ import { EquipoOperativo, formateaFecha, nombreMes } from '../../core/models/mod
           <div class="page-kicker">Operación</div>
           <h1>
             Inventario operativo
-            <ui-help texto="Cuando el flujo de Gestión de Equipos finaliza con aceptación del Usuario Final, el equipo pasa al inventario operativo de la Dirección/Unidad solicitante. Un descargo posterior lo retira del inventario activo. Este inventario alimenta F0422, el mantenimiento preventivo y el análisis de vulnerabilidades." />
+            <ui-help texto="Cuando el flujo de Gestión de Equipos finaliza con aceptación del Usuario Final, el equipo pasa al inventario operativo de la Dirección/Registro solicitante. Un descargo posterior lo retira del inventario activo. Este inventario alimenta F0422, el mantenimiento preventivo y el análisis de vulnerabilidades." />
           </h1>
-          <p class="page-sub">Equipos activos por Dirección/Unidad, conectados con SISGOST — Gestión de Equipos.</p>
+          <p class="page-sub">Equipos activos por Zona, Departamento y Dirección/Registro, conectados con SISGOST — Gestión de Equipos.</p>
           <p class="nota-origen">
             Los equipos activos provienen de <b>SISGOST — Gestión de Equipos</b> después de la
             aceptación del Usuario Final.
@@ -111,17 +111,17 @@ import { EquipoOperativo, formateaFecha, nombreMes } from '../../core/models/mod
       </div>
 
       <div class="grid grid-4" style="margin-bottom: 18px;">
-        <div class="kpi"><div class="kpi-label">Equipos activos</div><div class="kpi-value">{{ cuenta('Activo en Dirección/Unidad') }}</div><div class="kpi-hint">en inventario operativo</div></div>
+        <div class="kpi"><div class="kpi-label">Equipos activos</div><div class="kpi-value">{{ cuenta('Activo en Dirección/Registro') }}</div><div class="kpi-hint">en inventario operativo</div></div>
         <div class="kpi"><div class="kpi-label">En garantía / revisión</div><div class="kpi-value">{{ cuenta('En garantía') + cuenta('Pendiente de revisión') }}</div><div class="kpi-hint">requieren seguimiento</div></div>
         <div class="kpi"><div class="kpi-label">Descargados e históricos</div><div class="kpi-value">{{ cuenta('Descargado') + cuenta('Histórico') }}</div><div class="kpi-hint">fuera del inventario activo</div></div>
         <div class="kpi"><div class="kpi-label">Movimientos sincronizados</div><div class="kpi-value">{{ integracion.totalSincronizados() }}</div><div class="kpi-hint">{{ integracion.aceptaciones() }} aceptaciones · {{ integracion.descargos() }} descargos</div></div>
       </div>
 
-      <!-- Resumen del inventario por Dirección/Unidad -->
+      <!-- Resumen del inventario por Dirección/Registro -->
       <div class="card" style="margin-bottom: 18px;">
         <div class="card-head">
           <div>
-            <h3>Inventario por Dirección/Unidad</h3>
+            <h3>Inventario por ámbito territorial</h3>
             <p class="sub">Equipos activos, incidencias y su relación con el F0422 y la bitácora del período</p>
           </div>
           <a class="btn btn-ghost btn-sm" routerLink="/controles">Ver operatividad</a>
@@ -130,14 +130,15 @@ import { EquipoOperativo, formateaFecha, nombreMes } from '../../core/models/mod
           <div class="table-wrap">
             <table class="tbl">
               <thead><tr>
-                <th>Dirección/Unidad</th><th>Soporte responsable</th>
+                <th>Zona</th><th>Departamento / Dirección·Registro</th><th>Soporte responsable</th>
                 <th class="col-num">Equipos activos</th><th class="col-num">Con incidencias</th>
                 <th class="col-num">Descargados del mes</th><th>Último F0422</th><th>Última bitácora</th><th></th>
               </tr></thead>
               <tbody>
                 @for (k of porDireccion(); track k.direccion + k.unidad) {
                   <tr>
-                    <td><b>{{ k.corta }}</b> · {{ k.unidad }}</td>
+                    <td>{{ k.zona }}</td>
+                    <td><b>{{ k.nombre }}</b> · {{ k.unidad }}</td>
                     <td>
                       @if (k.responsables.length) { {{ k.responsables.join(' · ') }} }
                       @else { <span class="badge danger">Sin asignar</span> }
@@ -152,7 +153,7 @@ import { EquipoOperativo, formateaFecha, nombreMes } from '../../core/models/mod
                     </td>
                   </tr>
                 } @empty {
-                  <tr><td colspan="8" class="muted">Sin Direcciones/Unidades visibles.</td></tr>
+                  <tr><td colspan="9" class="muted">Sin ámbitos territoriales visibles.</td></tr>
                 }
               </tbody>
             </table>
@@ -163,7 +164,7 @@ import { EquipoOperativo, formateaFecha, nombreMes } from '../../core/models/mod
       <div class="card">
         <div class="card-head">
           <div>
-            <h3>Equipos por Dirección/Unidad</h3>
+            <h3>Equipos por Departamento y Dirección/Registro</h3>
             <p class="sub">
               {{ filtrados().length }} equipos ·
               {{ verHistorico() ? 'incluye descargados e históricos' : 'solo equipos activos' }}
@@ -176,8 +177,8 @@ import { EquipoOperativo, formateaFecha, nombreMes } from '../../core/models/mod
             </label>
             <input class="control" placeholder="Buscar inventario o usuario…" [(ngModel)]="busca" />
             <select class="control" [(ngModel)]="fDireccion" (ngModelChange)="fUnidad.set('')">
-              <option value="">Todas las direcciones</option>
-              @for (d of data.direcciones(); track d.id) { <option [value]="d.id">{{ d.corta }} — {{ d.nombre }}</option> }
+              <option value="">Todos los departamentos</option>
+              @for (d of data.direcciones(); track d.id) { <option [value]="d.id">{{ d.nombre }}</option> }
             </select>
             <select class="control" [(ngModel)]="fUnidad">
               <option value="">Todas las unidades</option>
@@ -192,7 +193,7 @@ import { EquipoOperativo, formateaFecha, nombreMes } from '../../core/models/mod
         <div class="card-body">
           <div class="table-wrap">
             <table class="tbl">
-              <thead><tr><th>N° inventario</th><th>Equipo</th><th>Usuario final</th><th>Dirección/Unidad</th><th>Soporte responsable</th><th>Garantía</th><th>Último control</th><th>Estado</th><th></th></tr></thead>
+              <thead><tr><th>N° inventario</th><th>Equipo</th><th>Usuario final</th><th>Zona</th><th>Departamento / Dirección·Registro</th><th>Soporte responsable</th><th>Garantía</th><th>Último control</th><th>Estado</th><th></th></tr></thead>
               <tbody>
                 @for (e of filtrados(); track e.ciclo) {
                   <tr>
@@ -205,7 +206,8 @@ import { EquipoOperativo, formateaFecha, nombreMes } from '../../core/models/mod
                       </div>
                     </td>
                     <td>{{ e.usuarioFinal }}</td>
-                    <td>{{ data.cortaDireccion(e.direccion) }} · {{ e.unidad }}</td>
+                    <td>{{ data.zonaDe(e.direccion) }}</td>
+                    <td>{{ data.nombreDireccion(e.direccion) }} · {{ e.unidad }}</td>
                     <td>{{ data.soportes.soloNombre(e.soporteResponsable) || '—' }}</td>
                     <td style="max-width: 150px;">{{ e.garantia }}</td>
                     <td>
@@ -216,9 +218,9 @@ import { EquipoOperativo, formateaFecha, nombreMes } from '../../core/models/mod
                     <td><button class="btn btn-ghost btn-sm" type="button" (click)="detalle.set(e)">Detalle</button></td>
                   </tr>
                 } @empty {
-                  <tr><td colspan="9" class="muted">
+                  <tr><td colspan="10" class="muted">
                     @if (fDireccion() || fUnidad()) {
-                      No hay equipos activos sincronizados desde Gestión de Equipos para esta Dirección/Unidad.
+                      No hay equipos activos sincronizados desde Gestión de Equipos para este ámbito territorial.
                     } @else {
                       Sin equipos para los filtros seleccionados.
                     }
@@ -238,7 +240,9 @@ import { EquipoOperativo, formateaFecha, nombreMes } from '../../core/models/mod
             <div><dt>IP reservada</dt><dd class="mono">{{ e.ip || 'Sin reserva de IP' }}</dd></div>
             <div><dt>MAC</dt><dd class="mono">{{ e.mac || '—' }}</dd></div>
             <div><dt>Usuario final</dt><dd>{{ e.usuarioFinal }}@if (e.carne !== '—') { (carné {{ e.carne }}) }</dd></div>
-            <div><dt>Dirección/Unidad</dt><dd>{{ data.nombreDireccion(e.direccion) }} — {{ e.unidad }}</dd></div>
+            <div><dt>Zona</dt><dd>{{ data.zonaDe(e.direccion) }}</dd></div>
+            <div><dt>Departamento</dt><dd>{{ data.nombreDireccion(e.direccion) }}</dd></div>
+            <div><dt>Dirección / Registro</dt><dd>{{ e.unidad }}</dd></div>
             <div><dt>Técnico de configuración</dt><dd>{{ e.tecnicoConfiguracion || '—' }}</dd></div>
             <div><dt>Soporte responsable</dt><dd>
               @if (e.soporteResponsable) { {{ e.soporteResponsable }} }
@@ -260,7 +264,7 @@ import { EquipoOperativo, formateaFecha, nombreMes } from '../../core/models/mod
             <div class="sec-title">Ciclos operativos anteriores</div>
             <div class="table-wrap">
               <table class="tbl">
-                <thead><tr><th>Dirección/Unidad</th><th>Usuario final</th><th>Aceptación</th><th>Expediente</th><th>Estado</th></tr></thead>
+                <thead><tr><th>Departamento / Dirección·Registro</th><th>Usuario final</th><th>Aceptación</th><th>Expediente</th><th>Estado</th></tr></thead>
                 <tbody>
                   @for (p of ciclosPrevios(); track p.ciclo) {
                     <tr>
@@ -280,7 +284,7 @@ import { EquipoOperativo, formateaFecha, nombreMes } from '../../core/models/mod
           @if (historial().length) {
             <div class="table-wrap">
               <table class="tbl">
-                <thead><tr><th>Control</th><th>Período</th><th>Dirección/Unidad</th><th>Responsable</th><th>Estado</th></tr></thead>
+                <thead><tr><th>Control</th><th>Período</th><th>Departamento / Dirección·Registro</th><th>Responsable</th><th>Estado</th></tr></thead>
                 <tbody>
                   @for (c of historial(); track c.id) {
                     <tr>
@@ -303,7 +307,7 @@ import { EquipoOperativo, formateaFecha, nombreMes } from '../../core/models/mod
             <span>Registro proveniente de <b>{{ e.origen }}</b>: el equipo se incorporó
               <b>automáticamente</b> al inventario operativo tras la aceptación del Usuario
               Final{{ e.expedienteUnico ? ' (' + e.expedienteUnico + ')' : '' }}, y saldrá igual de
-              automático cuando allí se registre su descargo. Su Dirección/Unidad y su soporte
+              automático cuando allí se registre su descargo. Su Dirección/Registro y su soporte
               responsable no se editan aquí: cambian en Gestión de Equipos y en la distribución de
               soportes.</span>
           </div>
@@ -336,12 +340,12 @@ export class InventarioComponent {
   protected readonly verHistorico = signal(false);
   protected readonly detalle = signal<EquipoOperativo | null>(null);
 
-  protected readonly estados = ['Activo en Dirección/Unidad', 'Descargado', 'En garantía',
+  protected readonly estados = ['Activo en Dirección/Registro', 'Descargado', 'En garantía',
     'Pendiente de revisión', 'Reingresado a Hardware', 'No disponible', 'Histórico'];
   protected readonly MODULO_EQUIPOS = MODULO_EQUIPOS;
   protected readonly MODULO_CONTROLES = MODULO_CONTROLES;
 
-  /** El Técnico de Soporte solo ve los equipos de las Direcciones/Unidades que atiende. */
+  /** El Técnico de Soporte solo ve los equipos de las Direcciones/Registros que atiende. */
   private readonly visibles = computed(() => this.data.inventarioVisible(this.auth.usuario()));
 
   /** Historial de controles del equipo abierto en el detalle. */
@@ -370,14 +374,14 @@ export class InventarioComponent {
     .filter((e) => !this.fDireccion() || e.direccion === this.fDireccion())
     .map((e) => e.unidad))].sort());
 
-  /** Resumen del inventario por Dirección/Unidad, con los mismos KPIs de la vista ejecutiva. */
+  /** Resumen del inventario por Dirección/Registro, con los mismos KPIs de la vista ejecutiva. */
   protected readonly porDireccion = computed(() => {
     const hoy = new Date();
     return this.oper.kpis({ anio: hoy.getFullYear(), mes: hoy.getMonth() + 1 })
       .sort((a, b) => b.equiposIncidencia - a.equiposIncidencia || b.equiposActivos - a.equiposActivos);
   });
 
-  /** Filtra la tabla de equipos por la Dirección/Unidad elegida en el resumen. */
+  /** Filtra la tabla de equipos por la Dirección/Registro elegida en el resumen. */
   protected verSolo(direccion: string, unidad: string): void {
     this.fDireccion.set(direccion);
     this.fUnidad.set(unidad);

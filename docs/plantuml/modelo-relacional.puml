@@ -1,273 +1,435 @@
 @startuml modelo-relacional
-title SISGOST — Controles Mensuales · Modelo relacional (propuesta de implementación)
+title SISGOST — Controles Mensuales · Modelo relacional (propuesta para implementación real)
 hide circle
+skinparam shadowing false
+skinparam backgroundColor #FFFFFF
 skinparam linetype ortho
+skinparam class {
+  BackgroundColor #F4F7FB
+  BorderColor #2F5597
+  ArrowColor #2F5597
+}
 
-entity direccion {
-  * id_direccion : varchar <<PK>>
+' ============================================================ Organización y seguridad
+entity rol {
+  * clave : varchar(16) <<PK>>
   --
-  nombre : varchar
-  corta : varchar(6)
+  nombre : varchar(60)
+  descripcion : text
+}
+entity usuario_sistema {
+  * usuario : varchar(40) <<PK>>
+  --
+  nombre : varchar(120)
+  iniciales : varchar(4)
+  clave_rol : varchar(16) <<FK rol>>
+  cargo : varchar(120)
+  unidad_organizativa : varchar(60)
+  estado : varchar(10)
+  modulo_controles : boolean
+}
+entity direccion {
+  * id_direccion : varchar(16) <<PK>>
+  --
+  nombre : varchar(120) <<UNIQUE>>
+  corta : varchar(8)
   activa : boolean
 }
 entity unidad {
-  * id_unidad : serial <<PK>>
+  * id_unidad : varchar(80) <<PK>>
   --
-  id_direccion : varchar <<FK>>
-  nombre : varchar
-}
-entity usuario_sistema {
-  * usuario : varchar <<PK>>
-  --
-  nombre : varchar
-  clave_rol : varchar <<FK rol>>
-  cargo : varchar
-  unidad : varchar
-  estado : varchar
-  modulo_controles : boolean
-}
-entity rol {
-  * clave : varchar <<PK>>
-  --
-  nombre : varchar
+  id_direccion : varchar(16) <<FK>>
+  nombre : varchar(120)
+  activa : boolean
+  ..
+  id_unidad = id_direccion || '::' || slug(nombre)
 }
 entity distribucion_soporte {
-  * id_distribucion : varchar <<PK>>
+  * id_distribucion : varchar(20) <<PK>>
   --
-  id_direccion : varchar <<FK>>
-  id_unidad : int <<FK>>
-  usuario : varchar <<FK>>
-  asignado_por : varchar
-  fecha : date
-  hora : time
+  usuario : varchar(40) <<FK usuario_sistema>>
+  id_direccion : varchar(16) <<FK>>
+  id_unidad : varchar(80) <<FK>>
+  asignado_por : varchar(40) <<FK usuario_sistema>>
+  fecha_inicio : date
+  hora_inicio : time
   activo : boolean
-  desactivada_por : varchar <<null>>
-  fecha_desactivacion : date <<null>>
   observacion : text
+  desactivada_por : varchar(40) <<FK, null>>
+  fecha_desactivacion : date <<null>>
+  motivo_desactivacion : text <<null>>
+  ..
+  UNIQUE (usuario, id_unidad) WHERE activo
+  CHECK (clave_rol del usuario = 'tec-soporte')
 }
 entity feriado {
   * id_feriado : serial <<PK>>
   --
   fecha : date
-  nombre : varchar
-  ambito : varchar
+  nombre : varchar(120)
+  ambito : varchar(20)
+  ..
+  UNIQUE (fecha, ambito)
 }
+
+' ============================================================ Catálogo de controles
 entity control_catalogo {
-  * codigo : varchar <<PK>>
+  * codigo : varchar(12) <<PK>>
   --
-  nombre : varchar
-  version : varchar
-  frecuencia : varchar
-  modo_aplicacion : varchar
-  id_area : varchar <<FK, null>>
-  observaciones_aplicacion : text
+  nombre : varchar(160)
+  version : varchar(8)
+  frecuencia : varchar(48)
+  descripcion : text
   requiere_evidencia : boolean
   requiere_firma : boolean
   permite_justificacion : boolean
   activo : boolean
-  plantilla : jsonb
+  modo_aplicacion : varchar(32)
+  id_area : varchar(16) <<FK area_tecnica, null>>
+  observaciones_aplicacion : text
 }
-entity area_tecnica {
-  * id_area : varchar <<PK>>
+entity control_plantilla_seccion {
+  * id_seccion : serial <<PK>>
   --
-  nombre : varchar
-  descripcion : text
+  codigo : varchar(12) <<FK control_catalogo>>
+  orden : int
+  titulo : varchar(160)
+  tipo : varchar(32)
+  definicion : jsonb
+  ..
+  jsonb solo para la **forma** del formulario;
+  las respuestas se normalizan aparte.
 }
 entity control_aplicacion {
   * id_aplicacion : serial <<PK>>
   --
-  codigo : varchar <<FK control_catalogo>>
-  id_direccion : varchar <<FK, null>>
-  id_unidad : int <<FK, null>>
+  codigo : varchar(12) <<FK control_catalogo>>
+  id_direccion : varchar(16) <<FK, null>>
+  id_unidad : varchar(80) <<FK, null>>
+}
+entity area_tecnica {
+  * id_area : varchar(16) <<PK>>
+  --
+  nombre : varchar(80)
+  descripcion : text
 }
 entity area_par {
   * id_area_par : serial <<PK>>
   --
-  id_area : varchar <<FK>>
-  id_direccion : varchar <<FK>>
-  id_unidad : int <<FK>>
+  id_area : varchar(16) <<FK>>
+  id_direccion : varchar(16) <<FK>>
+  id_unidad : varchar(80) <<FK>>
 }
+
+' ============================================================ Controles del período
 entity control_mes {
-  * id_control : varchar <<PK>>
+  * id_control : varchar(24) <<PK>>
   --
-  codigo : varchar <<FK>>
+  codigo : varchar(12) <<FK control_catalogo>>
   anio : int
   mes : int
-  semana : int <<null>>
-  id_direccion : varchar <<FK>>
-  usuario_responsable : varchar <<FK>>
-  estado : varchar
+  id_direccion : varchar(16) <<FK>>
+  id_unidad : varchar(80) <<FK>>
+  usuario_responsable : varchar(40) <<FK usuario_sistema>>
+  estado : varchar(24)
   fecha_limite : date
   fecha_entrega : date <<null>>
   hora_entrega : time <<null>>
-  avance : int
-  respuestas : jsonb
+  avance : smallint
   observaciones : text
-  id_justificacion : varchar <<FK, null>>
-  id_documento : varchar <<FK, null>>
+  id_justificacion : varchar(24) <<FK, null>>
+  id_documento : varchar(24) <<FK, null>>
+  ..
+  UNIQUE (codigo, anio, mes, id_unidad)
+}
+entity control_respuesta_seccion {
+  * id_respuesta : serial <<PK>>
+  --
+  id_control : varchar(24) <<FK>>
+  id_seccion : int <<FK control_plantilla_seccion>>
+  completa : boolean
+  respuestas : jsonb
+}
+entity control_semana {
+  * id_semana : serial <<PK>>
+  --
+  id_control : varchar(24) <<FK>>
+  semana : smallint  — 1..5
+  estado : varchar(16)  — pendiente | completada | observada | no aplica
+  fecha_registro : date <<null>>
+  observacion : text
+  ..
+  F0387 y F0389: **una fila por semana**,
+  un solo documento mensual consolidado.
 }
 entity control_equipo {
   * id_control_equipo : serial <<PK>>
   --
-  id_control : varchar <<FK>>
-  inventario : varchar <<FK>>
-  seccion : varchar
-  estado : varchar
-  verificaciones : jsonb
+  id_control : varchar(24) <<FK>>
+  id_ciclo : varchar(24) <<FK equipo_operativo>>
+  seccion : varchar(48)
+  estado : varchar(24)
   observacion : text
+  ..
+  F0422 · F0174 · F0288 · VULN · F0382 (5 equipos)
+}
+entity control_equipo_item {
+  * id_item : serial <<PK>>
+  --
+  id_control_equipo : int <<FK>>
+  codigo_item : varchar(16)
+  resultado : varchar(16)  — cumple | no cumple | no aplica
+  descripcion : text <<null>>
+  accion_correctiva : text <<null>>
+  estado_final : varchar(16) <<null>>
+  fecha : date <<null>>
+  justificacion : text <<null>>
+  ..
+  Los 9 ítems de seguridad del F0382.
+}
+entity control_verificacion_ip {
+  * id_verificacion : serial <<PK>>
+  --
+  id_semana : int <<FK control_semana>>
+  id_ciclo : varchar(24) <<FK equipo_operativo, null>>
+  ip : inet
+  hora_verificacion : time
+  resultado : varchar(24)
+  ..
+  F0387: 3 equipos por IP + 3 extensiones por semana.
+  CHECK: la IP pertenece a un equipo **activo**
+  de la misma Dirección/Unidad del control.
+}
+entity control_ingreso_csod {
+  * id_ingreso : serial <<PK>>
+  --
+  id_control : varchar(24) <<FK>>
+  tipo_ingreso : varchar(16)  — individual | con acompañante
+  fecha : date
+  hora_entrada : time
+  hora_salida : time
+  carne_tecnico : varchar(20)
+  nombre_tecnico : varchar(120)
+  nombre_acompanante : varchar(120) <<null>>
+  tipo_personal_acompanante : varchar(24) <<null>>
+  cargo_institucion_acompanante : varchar(120) <<null>>
+  motivo : varchar(160)
+  observacion : text
+  anexa_respaldo : boolean
+  archivo_respaldo : varchar(200) <<null>>
+  ..
+  F0234. CHECK (hora_salida >= hora_entrada)
+  CHECK: si tipo_ingreso = 'con acompañante',
+  los tres campos del acompañante son obligatorios.
 }
 entity evidencia_control {
   * id_evidencia : serial <<PK>>
   --
-  id_control : varchar <<FK>>
-  nombre_archivo : varchar
-  descripcion : varchar
+  id_control : varchar(24) <<FK>>
+  nombre_archivo : varchar(200)
+  descripcion : varchar(200)
   fecha : date
 }
+
+' ============================================================ Bitácora y justificaciones
 entity bitacora_diaria {
-  * id_bitacora : varchar <<PK>>
+  * id_bitacora : varchar(24) <<PK>>
   --
   fecha : date
-  id_direccion : varchar <<FK>>
-  usuario_responsable : varchar <<FK>>
-  estado : varchar
+  id_direccion : varchar(16) <<FK>>
+  id_unidad : varchar(80) <<FK>>
+  usuario_responsable : varchar(40) <<FK>>
+  estado : varchar(16)
   hora_envio : time <<null>>
   observaciones : text
-  id_documento : varchar <<FK, null>>
+  id_documento : varchar(24) <<FK, null>>
+  ..
+  UNIQUE (fecha, id_unidad) · límite 17:00
 }
 entity bitacora_revision {
   * id_revision : serial <<PK>>
   --
-  id_bitacora : varchar <<FK>>
-  elemento : varchar
-  estado : varchar
+  id_bitacora : varchar(24) <<FK>>
+  elemento : varchar(80)
+  estado : varchar(28)
   descripcion_falla : text <<null>>
   accion_realizada : text <<null>>
-  estado_final : varchar <<null>>
-  evidencia : varchar <<null>>
+  estado_final : varchar(16) <<null>>
+  evidencia : varchar(200) <<null>>
 }
 entity bitacora_actividad {
   * id_actividad : serial <<PK>>
   --
-  id_bitacora : varchar <<FK>>
+  id_bitacora : varchar(24) <<FK>>
   hora : time
-  actividad : varchar
-  area : varchar
-  resultado : varchar
+  actividad : varchar(200)
+  area : varchar(80)
+  resultado : varchar(80)
   observaciones : text
 }
 entity justificacion {
-  * id_justificacion : varchar <<PK>>
+  * id_justificacion : varchar(24) <<PK>>
   --
-  codigo : varchar <<FK>>
+  codigo : varchar(12) <<FK control_catalogo>>
   anio : int
   mes : int
-  id_direccion : varchar <<FK>>
-  usuario_responsable : varchar <<FK>>
-  motivo : varchar
+  id_direccion : varchar(16) <<FK>>
+  id_unidad : varchar(80) <<FK>>
+  usuario_responsable : varchar(40) <<FK>>
+  motivo : varchar(160)
   texto : text
   fecha : date
-  estado : varchar
-  id_documento : varchar <<FK, null>>
+  estado : varchar(16)
+  id_documento : varchar(24) <<FK, null>>
 }
 entity firma_justificacion {
   * id_firma : serial <<PK>>
   --
-  id_justificacion : varchar <<FK>>
-  nombre : varchar
-  cargo : varchar
-  estado : varchar
-}
-entity equipo_operativo {
-  * id_ciclo : varchar <<PK>>
-  --
-  inventario : varchar
-  estado_ciclo : varchar
-  tipo, marca, modelo, serie : varchar
-  nombre_equipo : varchar
-  usuario_final : varchar
-  id_direccion : varchar <<FK>>
-  id_unidad : int <<FK>>
-  tecnico_configuracion : varchar
-  soporte_responsable : varchar
-  fecha_aceptacion : date
-  expediente : varchar
-  expediente_unico : varchar
-  estado : varchar
-  garantia : varchar
-  origen : varchar
-  fecha_descargo : date <<null>>
-}
-entity evento_integracion {
-  * id_evento : varchar <<PK>>
-  --
-  tipo : varchar
-  fecha : date
-  modulo_origen : varchar
-  modulo_destino : varchar
-  expediente : varchar
-  expediente_unico : varchar
-  detalle : text
-  inventario : varchar <<FK>>
-  aplicado : boolean
-}
-entity documento_generado {
-  * id_documento : varchar <<PK>>
-  --
-  tipo : varchar
-  nombre : varchar
-  codigo : varchar
-  fecha : date
-  hora : time
-  generado_por : varchar
-  id_direccion : varchar <<FK, null>>
-  id_unidad : int <<FK, null>>
-  mes : int
-  anio : int
-  hash : varchar
-  estado : varchar
-  referencia : varchar
-}
-entity evento_trazabilidad {
-  * id_evento : varchar <<PK>>
-  --
-  fecha : date
-  hora : time
-  usuario : varchar
-  rol : varchar
-  id_direccion : varchar <<FK, null>>
-  codigo_control : varchar <<null>>
-  mes, anio : int <<null>>
-  accion : varchar
-  estado_anterior : varchar <<null>>
-  estado_nuevo : varchar <<null>>
-  modulo_origen : varchar <<null>>
-  modulo_destino : varchar <<null>>
-  inventario : varchar <<FK, null>>
-  observacion : text
-  id_documento : varchar <<FK, null>>
+  id_justificacion : varchar(24) <<FK>>
+  nombre : varchar(120)
+  cargo : varchar(120)
+  estado : varchar(16)
 }
 
-direccion ||--o{ unidad
+' ============================================================ Inventario operativo (integración)
+entity equipo_operativo {
+  * id_ciclo : varchar(24) <<PK>>
+  --
+  inventario : varchar(24)
+  id_direccion : varchar(16) <<FK>>
+  id_unidad : varchar(80) <<FK>>
+  tipo, marca, modelo, serie : varchar(60)
+  nombre_equipo : varchar(60)
+  ip : inet <<null>>
+  mac : macaddr <<null>>
+  usuario_final : varchar(120)
+  carne : varchar(20)
+  correo_institucional : varchar(120)
+  tecnico_configuracion : varchar(120)
+  soporte_responsable : varchar(120)
+  fecha_aceptacion : date
+  expediente : varchar(24)
+  expediente_unico : varchar(24)
+  estado : varchar(32)
+  garantia : varchar(40)
+  origen : varchar(60)
+  ultimo_control : varchar(24) <<null>>
+  fecha_descargo : date <<null>>
+  motivo_descargo : text <<null>>
+  accion_posterior : varchar(80) <<null>>
+  ..
+  Un mismo `inventario` puede tener varios ciclos;
+  el anterior queda en estado 'Histórico'.
+  UNIQUE (inventario) WHERE estado <> 'Histórico'
+}
+entity evento_integracion {
+  * id_evento : varchar(24) <<PK>>
+  --
+  tipo : varchar(24)  — entrega aceptada | descargo
+  fecha : timestamp
+  modulo_origen : varchar(40)
+  modulo_destino : varchar(40)
+  expediente : varchar(24)
+  expediente_unico : varchar(24)
+  id_ciclo : varchar(24) <<FK equipo_operativo>>
+  detalle : text
+  aplicado : boolean
+  ..
+  `aplicado` garantiza la **idempotencia**:
+  un evento ya procesado no se repite.
+}
+
+' ============================================================ Salidas
+entity documento_generado {
+  * id_documento : varchar(24) <<PK>>
+  --
+  tipo : varchar(60)
+  nombre : varchar(200)
+  codigo : varchar(24)
+  fecha : date
+  hora : time
+  generado_por : varchar(40) <<FK usuario_sistema>>
+  id_direccion : varchar(16) <<FK, null>>
+  id_unidad : varchar(80) <<FK, null>>
+  mes : int
+  anio : int
+  hash : varchar(64)
+  estado : varchar(16)
+  referencia : varchar(24)
+}
+entity evento_trazabilidad {
+  * id_evento : varchar(24) <<PK>>
+  --
+  fecha : date
+  hora : time
+  usuario : varchar(40) <<FK usuario_sistema>>
+  rol : varchar(60)
+  id_direccion : varchar(16) <<FK, null>>
+  id_unidad : varchar(80) <<FK, null>>
+  codigo_control : varchar(12) <<null>>
+  mes : int <<null>>
+  anio : int <<null>>
+  accion : varchar(160)
+  estado_anterior : varchar(32) <<null>>
+  estado_nuevo : varchar(32) <<null>>
+  modulo_origen : varchar(40) <<null>>
+  modulo_destino : varchar(40) <<null>>
+  tecnico_afectado : varchar(120) <<null>>
+  motivo : text <<null>>
+  tipo_ingreso : varchar(20) <<null>>
+  inventario : varchar(24) <<null>>
+  id_documento : varchar(24) <<FK, null>>
+  observacion : text
+}
+
+' ============================================================ Relaciones
 rol ||--o{ usuario_sistema
+direccion ||--o{ unidad
 direccion ||--o{ distribucion_soporte
+unidad ||--o{ distribucion_soporte
 usuario_sistema ||--o{ distribucion_soporte
-control_catalogo ||--o{ control_mes
+control_catalogo ||--o{ control_plantilla_seccion
 control_catalogo ||--o{ control_aplicacion
+control_catalogo ||--o{ control_mes
+control_catalogo ||--o{ justificacion
 area_tecnica ||--o{ area_par
 area_tecnica |o--o{ control_catalogo
+direccion ||--o{ control_aplicacion
+unidad ||--o{ control_aplicacion
 direccion ||--o{ control_mes
+unidad ||--o{ control_mes
 usuario_sistema ||--o{ control_mes
-control_mes ||--o{ evidencia_control
+control_mes ||--o{ control_respuesta_seccion
+control_plantilla_seccion ||--o{ control_respuesta_seccion
+control_mes ||--o{ control_semana
+control_semana ||--o{ control_verificacion_ip
 control_mes ||--o{ control_equipo
+control_equipo ||--o{ control_equipo_item
+control_mes ||--o{ control_ingreso_csod
+control_mes ||--o{ evidencia_control
 equipo_operativo ||--o{ control_equipo
-direccion ||--o{ bitacora_diaria
+equipo_operativo ||--o{ control_verificacion_ip
+unidad ||--o{ bitacora_diaria
 bitacora_diaria ||--o{ bitacora_revision
 bitacora_diaria ||--o{ bitacora_actividad
-control_catalogo ||--o{ justificacion
 justificacion ||--o{ firma_justificacion
 control_mes |o--o| justificacion
-direccion ||--o{ equipo_operativo
+unidad ||--o{ equipo_operativo
 equipo_operativo ||--o{ evento_integracion
+documento_generado |o--o{ control_mes
+documento_generado |o--o{ bitacora_diaria
+documento_generado |o--o{ justificacion
 documento_generado |o--o{ evento_trazabilidad
+usuario_sistema ||--o{ evento_trazabilidad
+
+note as N_JSONB
+  **Criterio de normalización**
+  · Se normaliza todo lo que se **consulta, filtra o cuenta**:
+    unidades, semanas, equipos revisados, ítems, ingresos y firmas.
+  · Solo queda en `jsonb` la **definición de la plantilla** y las
+    respuestas de campo libre, que varían por formato.
+  · **Nada se borra**: la distribución se desactiva con motivo y los
+    ciclos de equipo anteriores quedan como 'Histórico'.
+end note
+
 @enduml

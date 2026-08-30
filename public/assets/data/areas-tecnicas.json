@@ -4,8 +4,14 @@
   "nombre": "CSOD / Cuarto de servidores",
   "descripcion": "Centro de servicios y operación de datos: cuartos de servidores, climatización, UPS y control de acceso físico. No todas las Direcciones tienen cuarto de servidores.",
   "pares": [
-   { "direccion": "DIR-GTEC", "unidad": "Gerencia de Tecnología" },
-   { "direccion": "DIR-RPRH", "unidad": "RPRH" }
+   {
+    "direccion": "SS",
+    "unidad": "Registro de Garantías Mobiliarias"
+   },
+   {
+    "direccion": "SON",
+    "unidad": "Todo el departamento"
+   }
   ]
  },
  {
@@ -13,8 +19,14 @@
   "nombre": "Área responsable de respaldos",
   "descripcion": "Gestión de cintas de respaldo: inventario, etiquetado, resguardo y traslado hacia el Departamento de Operaciones Informáticas.",
   "pares": [
-   { "direccion": "DIR-GTEC", "unidad": "Gerencia de Tecnología" },
-   { "direccion": "DIR-RPRH", "unidad": "RPRH" }
+   {
+    "direccion": "SS",
+    "unidad": "Registro de Garantías Mobiliarias"
+   },
+   {
+    "direccion": "SON",
+    "unidad": "Todo el departamento"
+   }
   ]
  },
  {
@@ -22,7 +34,10 @@
   "nombre": "Infraestructura y TELCO",
   "descripcion": "Servidores y equipo de telecomunicaciones cuyo mantenimiento ejecuta la Gerencia de Infraestructura y recibe el técnico de la oficina.",
   "pares": [
-   { "direccion": "DIR-GTEC", "unidad": "Gerencia de Tecnología" }
+   {
+    "direccion": "SS",
+    "unidad": "Registro de Garantías Mobiliarias"
+   }
   ]
  },
  {
@@ -30,7 +45,10 @@
   "nombre": "Seguridad informática",
   "descripcion": "Verificación del cumplimiento de los controles de seguridad informática documentados (ISO/IEC 27001).",
   "pares": [
-   { "direccion": "DIR-GTEC", "unidad": "Gerencia de Tecnología" }
+   {
+    "direccion": "SS",
+    "unidad": "Registro de Garantías Mobiliarias"
+   }
   ]
  }
 ]

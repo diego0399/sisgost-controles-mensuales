@@ -8,7 +8,7 @@
   "expediente": "SOL-2026-0141",
   "expedienteUnico": "EXP-2026-0002",
   "aplicado": false,
-  "detalle": "El Usuario Final aceptó la conformidad del equipo; queda activo en la Dirección/Unidad solicitante.",
+  "detalle": "El Usuario Final aceptó la conformidad del equipo; queda activo en la Dirección/Registro solicitante.",
   "equipo": {
    "ciclo": "CIC-2201-0954-2023-SOL-2026-0141",
    "inventario": "2201-0954-2023",
@@ -16,22 +16,25 @@
    "marca": "Dell",
    "modelo": "OptiPlex 7020",
    "serie": "SER-CPU-7020-029",
-   "nombreEquipo": "CNR-IGN-D0954",
+   "nombreEquipo": "CNR-Instituto Geográfico y del Catastro Nacional (IGCN)-D0954",
    "usuarioFinal": "J. Portillo",
    "carne": "04655",
    "correoInstitucional": "jportillo@cnr.gob.sv",
-   "direccion": "DIR-IGN",
-   "unidad": "IGN",
+   "direccion": "SS",
+   "unidad": "Instituto Geográfico y del Catastro Nacional (IGCN)",
    "tecnicoConfiguracion": "Wendy Carranza — Técnico de Soporte",
    "soporteResponsable": "Mateo Martínez — Técnico de Soporte",
    "fechaAceptacion": "2026-08-12",
    "expediente": "SOL-2026-0141",
    "expedienteUnico": "EXP-2026-0002",
-   "estado": "Activo en Dirección/Unidad",
+   "estado": "Activo en Dirección/Registro",
    "garantia": "Habilitada",
    "origen": "Gestión de Equipos",
    "ip": "192.168.40.23",
-   "mac": "00:1B:B8:6A:D6:D1"
+   "mac": "00:1B:B8:6A:D6:D1",
+   "zonaId": "ZCEN",
+   "departamentoId": "SS",
+   "direccionRegistroId": "SS-IGCN"
   }
  },
  {
@@ -43,7 +46,7 @@
   "expediente": "SOL-2026-0155",
   "expedienteUnico": "EXP-2026-0004",
   "aplicado": false,
-  "detalle": "Equipo nuevo aceptado por la Gerencia de Tecnología.",
+  "detalle": "Equipo nuevo aceptado por la San Salvador.",
   "equipo": {
    "ciclo": "CIC-2201-1201-2026-SOL-2026-0155",
    "inventario": "2201-1201-2026",
@@ -55,18 +58,21 @@
    "usuarioFinal": "K. Rivas",
    "carne": "05301",
    "correoInstitucional": "krivas@cnr.gob.sv",
-   "direccion": "DIR-GTEC",
-   "unidad": "Gerencia de Tecnología",
+   "direccion": "SS",
+   "unidad": "Registro de Garantías Mobiliarias",
    "tecnicoConfiguracion": "Wendy Carranza — Técnico de Soporte",
    "soporteResponsable": "Wendy Carranza — Técnico de Soporte",
    "fechaAceptacion": "2026-08-14",
    "expediente": "SOL-2026-0155",
    "expedienteUnico": "EXP-2026-0004",
-   "estado": "Activo en Dirección/Unidad",
+   "estado": "Activo en Dirección/Registro",
    "garantia": "Habilitada",
    "origen": "Gestión de Equipos",
    "ip": "192.168.10.25",
-   "mac": "00:1B:81:ED:54:81"
+   "mac": "00:1B:81:ED:54:81",
+   "zonaId": "ZCEN",
+   "departamentoId": "SS",
+   "direccionRegistroId": "SS-RGM"
   }
  },
  {
@@ -90,8 +96,8 @@
    "usuarioFinal": "Equipo de consulta — Archivo",
    "carne": "—",
    "correoInstitucional": "",
-   "direccion": "DIR-REGS",
-   "unidad": "Archivo Registral",
+   "direccion": "CAB",
+   "unidad": "Instituto Geográfico y del Catastro Nacional (IGCN)",
    "tecnicoConfiguracion": "Wendy Carranza — Técnico de Soporte",
    "soporteResponsable": "",
    "fechaAceptacion": "2023-07-18",
@@ -101,7 +107,10 @@
    "garantia": "Vencida",
    "origen": "Gestión de Equipos",
    "ip": "192.168.22.22",
-   "mac": "00:1B:49:9E:69:2D"
+   "mac": "00:1B:49:9E:69:2D",
+   "zonaId": "ZCEN",
+   "departamentoId": "CAB",
+   "direccionRegistroId": "CAB-IGCN"
   }
  },
  {
@@ -125,18 +134,21 @@
    "usuarioFinal": "L. Vaquerano",
    "carne": "05288",
    "correoInstitucional": "lvaquerano@cnr.gob.sv",
-   "direccion": "DIR-REGS",
-   "unidad": "Registro de la Propiedad",
+   "direccion": "SS",
+   "unidad": "Registro de la Propiedad Raíz e Hipotecas",
    "tecnicoConfiguracion": "Diana Portillo — Técnico de Soporte",
    "soporteResponsable": "Diana Portillo — Técnico de Soporte",
    "fechaAceptacion": "2026-08-15",
    "expediente": "SOL-2026-0163",
    "expedienteUnico": "EXP-2026-0023",
-   "estado": "Activo en Dirección/Unidad",
+   "estado": "Activo en Dirección/Registro",
    "garantia": "Habilitada",
    "origen": "Gestión de Equipos",
    "ip": "192.168.20.26",
-   "mac": "00:1B:C1:41:81:E7"
+   "mac": "00:1B:C1:41:81:E7",
+   "zonaId": "ZCEN",
+   "departamentoId": "SS",
+   "direccionRegistroId": "SS-RPRH"
   }
  },
  {
@@ -160,8 +172,8 @@
    "usuarioFinal": "J. Ramírez",
    "carne": "05155",
    "correoInstitucional": "jramírez@cnr.gob.sv",
-   "direccion": "DIR-REG",
-   "unidad": "Dirección de Registro",
+   "direccion": "STA",
+   "unidad": "Registro de la Propiedad Raíz e Hipotecas",
    "tecnicoConfiguracion": "Wendy Carranza — Técnico de Soporte",
    "soporteResponsable": "Mateo Martínez — Técnico de Soporte",
    "fechaAceptacion": "2026-06-25",
@@ -171,7 +183,10 @@
    "garantia": "Habilitada",
    "origen": "Gestión de Equipos",
    "ip": "192.168.30.24",
-   "mac": "00:1B:C1:41:81:E7"
+   "mac": "00:1B:C1:41:81:E7",
+   "zonaId": "ZOC",
+   "departamentoId": "STA",
+   "direccionRegistroId": "STA-RPRH"
   }
  },
  {
@@ -195,18 +210,21 @@
    "usuarioFinal": "C. Escobar",
    "carne": "02901",
    "correoInstitucional": "cescobar@cnr.gob.sv",
-   "direccion": "DIR-REGS",
+   "direccion": "SS",
    "unidad": "Registro de Comercio",
    "tecnicoConfiguracion": "Wendy Carranza — Técnico de Soporte",
    "soporteResponsable": "Wendy Carranza — Técnico de Soporte",
    "fechaAceptacion": "2026-06-30",
    "expediente": "SOL-2026-0139",
    "expedienteUnico": "EXP-2026-0001",
-   "estado": "Activo en Dirección/Unidad",
+   "estado": "Activo en Dirección/Registro",
    "garantia": "Habilitada · caso de garantía abierto",
    "origen": "Gestión de Equipos",
    "ip": "192.168.21.23",
-   "mac": "00:1B:7F:2A:A3:CE"
+   "mac": "00:1B:7F:2A:A3:CE",
+   "zonaId": "ZCEN",
+   "departamentoId": "SS",
+   "direccionRegistroId": "SS-RC"
   }
  },
  {
@@ -230,18 +248,21 @@
    "usuarioFinal": "L. Chacón",
    "carne": "04773",
    "correoInstitucional": "lchacon@cnr.gob.sv",
-   "direccion": "DIR-ISPI",
-   "unidad": "ISPI",
+   "direccion": "SS",
+   "unidad": "Instituto Salvadoreño de la Propiedad Intelectual (ISPI)",
    "tecnicoConfiguracion": "Mateo Martínez — Técnico de Soporte",
    "soporteResponsable": "Mateo Martínez — Técnico de Soporte",
    "fechaAceptacion": "2026-05-21",
    "expediente": "SOL-2026-0132",
    "expedienteUnico": "",
-   "estado": "Activo en Dirección/Unidad",
+   "estado": "Activo en Dirección/Registro",
    "garantia": "Habilitada",
    "origen": "Gestión de Equipos",
    "ip": "192.168.50.22",
-   "mac": "00:1B:C7:80:2B:85"
+   "mac": "00:1B:C7:80:2B:85",
+   "zonaId": "ZCEN",
+   "departamentoId": "SS",
+   "direccionRegistroId": "SS-ISPI"
   }
  }
 ]

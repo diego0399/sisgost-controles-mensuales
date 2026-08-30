@@ -1,6 +1,6 @@
 /**
  * Módulos del ecosistema SISGOST. Los dos prototipos son sistemas Angular independientes que
- * comparten datos base (usuarios, Direcciones/Unidades, distribución de soportes y equipos),
+ * comparten datos base (usuarios, Direcciones/Registros, distribución de soportes y equipos),
  * así que la navegación entre ellos es un enlace: si Gestión de Equipos está levantado en su
  * puerto, el enlace abre ese módulo; si no, el enlace queda como muestra de la integración.
  *

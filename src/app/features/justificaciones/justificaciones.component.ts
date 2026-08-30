@@ -24,7 +24,7 @@ import { formateaFecha, nombreMes } from '../../core/models/models';
             Justificaciones
             <ui-help texto="Si un control mensual no tuvo actividad, no debe quedar simplemente vacío: se cierra con una carta de justificación basada en el formato institucional (Formatos_nuevos_2025_.docx), firmada por el técnico, el Coordinador de Soporte Técnico y el Encargado de Soporte." />
           </h1>
-          <p class="page-sub">Cartas de justificación emitidas por período y Dirección/Unidad.</p>
+          <p class="page-sub">Cartas de justificación emitidas por período y Dirección/Registro.</p>
         </div>
         <a class="btn btn-outline" routerLink="/controles">Justificar desde un control</a>
       </div>
@@ -55,7 +55,7 @@ import { formateaFecha, nombreMes } from '../../core/models/models';
         <div class="card-body">
           <div class="table-wrap">
             <table class="tbl">
-              <thead><tr><th>Control</th><th>Período</th><th>Dirección/Unidad</th><th>Responsable</th><th>Motivo</th><th>Fecha</th><th>Firmas</th><th>Estado</th><th></th></tr></thead>
+              <thead><tr><th>Control</th><th>Período</th><th>Dirección/Registro</th><th>Responsable</th><th>Motivo</th><th>Fecha</th><th>Firmas</th><th>Estado</th><th></th></tr></thead>
               <tbody>
                 @for (j of filtradas(); track j.id) {
                   <tr>

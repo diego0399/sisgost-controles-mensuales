@@ -1,0 +1,60 @@
+@startuml pandora
+title Pandora como apoyo al inventario técnico de SISGOST
+skinparam shadowing false
+skinparam backgroundColor #FFFFFF
+skinparam componentStyle rectangle
+skinparam nodesep 24
+skinparam ranksep 42
+skinparam component {
+  BackgroundColor #F4F7FB
+  BorderColor #2F5597
+  ArrowColor #2F5597
+  FontSize 13
+}
+skinparam packageFontSize 15
+skinparam noteFontSize 12
+
+package "Red del CNR" #FFFDF5 {
+  [Equipos de las\nDirecciones/Unidades] as EQ
+}
+
+package "Pandora — apoyo técnico" #FFF7F2 {
+  [Descubrimiento o registro\nde equipos en la red] as DESC
+  [Datos técnicos del equipo\nnombre · IP · MAC · sistema operativo\nprocesador · RAM · disco · software] as DATOS
+  [Estado de conectividad\ny alertas de monitoreo] as MON
+  [Exportación\narchivo, API o servicio intermedio] as EXP
+}
+
+package "SISGOST — Gestión de Equipos" #FBFCFE {
+  [Preparación F0288 y\nConfiguración F0302] as CFG
+  [Entrega y **conformidad**\ndel Usuario Final] as ACE
+}
+
+package "SISGOST — Controles Mensuales" #FBFCFE {
+  [Inventario operativo\npor Dirección/Unidad] as INV
+  [Controles del período\nF0422 · F0382 · F0387 · F0174] as CTL
+  [Reportes, KPIs\ny trazabilidad] as REP
+}
+
+EQ --> DESC
+DESC --> DATOS
+DESC --> MON
+DATOS --> EXP
+MON --> EXP
+EXP --> CFG : **alimenta** los datos técnicos\ny reduce la captura manual
+CFG --> ACE
+ACE --> INV : el equipo entra al inventario\ncuando el usuario acepta
+INV --> CTL
+CTL --> REP
+MON ..> REP : estado de conectividad\ncomo dato de apoyo
+
+note bottom of EXP
+  **Pandora no reemplaza a SISGOST.**
+  Pandora aporta el **dato técnico** del equipo y su monitoreo.
+  SISGOST gestiona el **proceso**: responsables, controles,
+  documentos, firmas y trazabilidad. El equipo entra al inventario
+  operativo por la **conformidad del Usuario Final**, no por
+  haber sido detectado en la red.
+end note
+
+@enduml

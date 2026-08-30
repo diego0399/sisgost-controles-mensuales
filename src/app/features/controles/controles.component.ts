@@ -13,14 +13,14 @@ import { KpiDireccionesComponent } from '../../shared/kpi-direcciones';
 import { MESES, formateaFecha, isoLocal, nombreMes } from '../../core/models/models';
 
 /**
- * Controles del período organizados **por Dirección/Unidad**, que es como se atienden: cada
- * Dirección/Unidad tiene su Técnico de Soporte responsable según la distribución.
+ * Controles del período organizados **por Dirección/Registro**, que es como se atienden: cada
+ * Dirección/Registro tiene su Técnico de Soporte responsable según la distribución.
  *
  * - **Vista por Dirección** (predeterminada): tarjetas de operatividad y tabla comparativa; desde
- *   ahí se entra al detalle de cada Dirección/Unidad.
+ *   ahí se entra al detalle de cada Dirección/Registro.
  * - **Vista general**: la tabla plana de todos los controles, que se conserva para búsquedas.
  *
- * El Técnico de Soporte solo ve las Direcciones/Unidades que tiene asignadas.
+ * El Técnico de Soporte solo ve las Direcciones/Registros que tiene asignadas.
  */
 @Component({
   selector: 'app-controles',
@@ -44,17 +44,17 @@ import { MESES, formateaFecha, isoLocal, nombreMes } from '../../core/models/mod
           <div class="page-kicker">Operación</div>
           <h1>
             Controles mensuales
-            <ui-help texto="Los controles se organizan por Dirección/Unidad, que es como se atienden: cada Dirección/Unidad tiene su Técnico de Soporte responsable. Se entregan dentro de los primeros 3 días hábiles del mes siguiente al período que cubren; sábados, domingos y feriados del catálogo no cuentan." />
+            <ui-help texto="Los controles se organizan por ámbito territorial: en San Salvador, por Dirección/Registro; en los demás departamentos, por Departamento completo. Cada ámbito tiene su Técnico de Soporte responsable según la distribución. Se entregan dentro de los primeros 3 días hábiles del mes siguiente al período que cubren." />
           </h1>
           <p class="page-sub">
-            @if (auth.esTecnico()) { Mis Direcciones/Unidades asignadas y los controles que me corresponden. }
-            @else { Operatividad por Dirección/Unidad según la distribución de soportes y la aplicación de cada control. }
+            @if (auth.esTecnico()) { Mis Direcciones/Registros asignadas y los controles que me corresponden. }
+            @else { Operatividad por ámbito territorial según la distribución de soportes y la aplicación de cada control. }
           </p>
           @if (auth.esTecnico()) {
             <div class="mis-dir">
               @for (p of misPares(); track p.direccion + p.unidad) {
                 <span class="badge">{{ data.cortaDireccion(p.direccion) }} · {{ p.unidad }}</span>
-              } @empty { <span class="badge danger">Sin Direcciones/Unidades asignadas</span> }
+              } @empty { <span class="badge danger">Sin Direcciones/Registros asignadas</span> }
             </div>
           }
         </div>
@@ -73,12 +73,16 @@ import { MESES, formateaFecha, isoLocal, nombreMes } from '../../core/models/mod
           <select class="control" [(ngModel)]="mes">
             @for (m of MESES; track m; let i = $index) { <option [ngValue]="i + 1">{{ m }}</option> }
           </select>
+          <select class="control" [(ngModel)]="fZona" (ngModelChange)="fDireccion.set(''); fUnidad.set('')">
+            <option value="">Todas las zonas</option>
+            @for (z of data.territorio.zonasOrdenadas(); track z.id) { <option [value]="z.id">{{ z.nombre }}</option> }
+          </select>
           <select class="control" [(ngModel)]="fDireccion" (ngModelChange)="fUnidad.set('')">
-            <option value="">Todas las direcciones</option>
-            @for (d of direccionesVisibles(); track d.id) { <option [value]="d.id">{{ d.corta }} — {{ d.nombre }}</option> }
+            <option value="">Todos los departamentos</option>
+            @for (d of direccionesVisibles(); track d.id) { <option [value]="d.id">{{ d.nombre }}</option> }
           </select>
           <select class="control" [(ngModel)]="fUnidad">
-            <option value="">Todas las unidades</option>
+            <option value="">Todas las Direcciones/Registros</option>
             @for (u of unidadesVisibles(); track u) { <option [value]="u">{{ u }}</option> }
           </select>
           <select class="control" [(ngModel)]="fTecnico">
@@ -109,14 +113,14 @@ import { MESES, formateaFecha, isoLocal, nombreMes } from '../../core/models/mod
       @if (vista() === 'direccion') {
         <!-- KPIs globales del período -->
         <div class="grid grid-5" style="margin-bottom: 18px;">
-          <div class="kpi"><div class="kpi-label">Direcciones/Unidades</div><div class="kpi-value">{{ resumen().total }}</div><div class="kpi-hint">{{ resumen().promedio }} % de operatividad promedio</div></div>
+          <div class="kpi"><div class="kpi-label">Direcciones/Registros</div><div class="kpi-value">{{ resumen().total }}</div><div class="kpi-hint">{{ resumen().promedio }} % de operatividad promedio</div></div>
           <div class="kpi"><div class="kpi-label">Operativas</div><div class="kpi-value">{{ resumen().operativas }}</div><div class="kpi-hint">90 % o más</div></div>
           <div class="kpi"><div class="kpi-label">En observación</div><div class="kpi-value">{{ resumen().observacion }}</div><div class="kpi-hint">entre 75 % y 89 %</div></div>
           <div class="kpi"><div class="kpi-label">Críticas</div><div class="kpi-value">{{ resumen().criticas }}</div><div class="kpi-hint">menos de 75 %</div></div>
           <div class="kpi"><div class="kpi-label">Sin soporte asignado</div><div class="kpi-value">{{ resumen().sinSoporte }}</div><div class="kpi-hint">nadie puede entregar</div></div>
         </div>
 
-        <div class="sec-title">Operatividad por Dirección/Unidad · {{ nombreMes(mes()) }} {{ anio() }}</div>
+        <div class="sec-title">Operatividad por Departamento y Dirección/Registro · {{ nombreMes(mes()) }} {{ anio() }}</div>
         <ui-kpi-direcciones [kpis]="kpis()" modo="tarjetas" />
 
         <div class="card" style="margin-top: 20px;">
@@ -152,7 +156,7 @@ import { MESES, formateaFecha, isoLocal, nombreMes } from '../../core/models/mod
             <div class="table-wrap">
               <table class="tbl">
                 <thead>
-                  <tr><th>Control</th><th>Período</th><th>Dirección/Unidad</th><th>Responsable</th><th>Fecha límite</th><th>Días restantes</th><th>Avance</th><th>Estado</th><th>Acciones</th></tr>
+                  <tr><th>Control</th><th>Período</th><th>Departamento / Dirección·Registro</th><th>Responsable</th><th>Fecha límite</th><th>Días restantes</th><th>Avance</th><th>Estado</th><th>Acciones</th></tr>
                 </thead>
                 <tbody>
                   @for (c of filtrados(); track c.id) {
@@ -220,6 +224,8 @@ export class ControlesComponent {
   protected readonly anios = [2026];
   protected readonly anio = signal(this.periodo.anio);
   protected readonly mes = signal(this.periodo.mes);
+  /** Zona del catálogo territorial: acota los departamentos que ofrecen los demás filtros. */
+  protected readonly fZona = signal('');
   protected readonly fDireccion = signal('');
   protected readonly fUnidad = signal('');
   protected readonly fTecnico = signal('');
@@ -241,7 +247,7 @@ export class ControlesComponent {
   protected readonly niveles: EstadoOperatividad[] = ['Operativa', 'En observación', 'Crítica',
     'En curso', 'Sin soporte asignado', 'Sin controles aplicables'];
 
-  /** Direcciones/Unidades del técnico conectado (cabecera «Mis Direcciones asignadas»). */
+  /** Direcciones/Registros del técnico conectado (cabecera «Mis Direcciones asignadas»). */
   protected readonly misPares = computed(() => {
     const u = this.auth.usuario();
     return u ? this.data.paresDe(u.usuario) : [];
@@ -249,11 +255,17 @@ export class ControlesComponent {
 
   protected readonly direccionesVisibles = computed(() => {
     const u = this.auth.usuario();
+    const zona = this.fZona();
+    const base = zona
+      ? this.data.direcciones().filter((d) => this.data.territorio.zonaDe(d.id) === zona)
+      : this.data.direcciones();
+    // El Técnico de Soporte solo ve los departamentos que atiende, según el rol ACTIVO: quien es
+    // Encargado y Técnico a la vez ve todo mientras opera como Encargado.
     if (u?.clave === 'tec-soporte') {
       const propias = this.data.direccionesDe(u.usuario);
-      return this.data.direcciones().filter((d) => propias.includes(d.id));
+      return base.filter((d) => propias.includes(d.id));
     }
-    return this.data.direcciones();
+    return base;
   });
 
   protected readonly unidadesVisibles = computed(() => {
@@ -263,7 +275,8 @@ export class ControlesComponent {
   });
 
   private readonly filtro = computed(() => ({
-    anio: this.anio(), mes: this.mes(), direccion: this.fDireccion(), unidad: this.fUnidad(),
+    anio: this.anio(), mes: this.mes(), zona: this.fZona(),
+    direccion: this.fDireccion(), unidad: this.fUnidad(),
     tecnico: this.fTecnico(), nivel: this.fNivel()
   }));
 
@@ -273,12 +286,13 @@ export class ControlesComponent {
 
   /**
    * Vista general: controles del período, del alcance del usuario, activos en el catálogo y
-   * aplicables a su Dirección/Unidad. Un control que no aplica no se lista ni cuenta.
+   * aplicables a su Dirección/Registro. Un control que no aplica no se lista ni cuenta.
    */
   protected readonly filtrados = computed(() => this.data.controlesVisibles(this.auth.usuario())
     .filter((c) => c.anio === this.anio() && c.mes === this.mes())
     .filter((c) => this.data.catalogoDe(c.codigo)?.activo !== false)
     .filter((c) => this.data.aplicaEn(c.codigo, c.direccion, c.unidad))
+    .filter((c) => !this.fZona() || this.data.territorio.zonaDe(c.direccion) === this.fZona())
     .filter((c) => !this.fDireccion() || c.direccion === this.fDireccion())
     .filter((c) => !this.fUnidad() || c.unidad === this.fUnidad())
     .filter((c) => !this.fTecnico() || c.responsable === this.fTecnico())
@@ -295,7 +309,7 @@ export class ControlesComponent {
     return ['Programado', 'Pendiente', 'En proceso', 'Listo para entregar'].includes(estado);
   }
 
-  /** El técnico opera solo sus Direcciones/Unidades; el Coordinador nunca opera. */
+  /** El técnico opera solo sus Direcciones/Registros; el Coordinador nunca opera. */
   protected puedeOperar(c: { direccion: string; unidad: string }): boolean {
     const u = this.auth.usuario();
     if (!u || u.clave === 'coordinador') return false;

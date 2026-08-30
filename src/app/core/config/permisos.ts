@@ -17,10 +17,10 @@ export interface NavGrupo {
  * Menú y permisos por rol, compartidos entre el shell y el guard de rutas.
  *
  * · **Administrador**: todo, incluida la configuración (usuarios, catálogo, feriados, demo).
- * · **Encargado de Soporte** (jefe del área): ve todas las Direcciones/Unidades, la operatividad,
+ * · **Encargado de Soporte** (jefe del área): ve todas las Direcciones/Registros, la operatividad,
  *   los pendientes y vencidos, el historial, los reportes y la distribución de soportes.
  * · **Técnico de Soporte**: opera lo suyo (controles, bitácora, justificaciones e inventario de
- *   sus Direcciones/Unidades) y consulta —sin editar— la distribución de las que atiende.
+ *   sus Direcciones/Registros) y consulta —sin editar— la distribución de las que atiende.
  * · **Coordinador**: consulta y seguimiento — panel, operatividad por Dirección, historial,
  *   documentos, trazabilidad y distribución de soportes. No completa controles ni administra.
  */
@@ -57,12 +57,16 @@ export const NAVEGACION: NavGrupo[] = [
   {
     titulo: 'Administración',
     items: [
-      { ruta: '/administracion', titulo: 'Usuarios y direcciones', icono: 'users', roles: ['admin'] },
+      { ruta: '/administracion', titulo: 'Usuarios y roles', icono: 'users', roles: ['admin'] },
       { ruta: '/catalogo', titulo: 'Catálogo de controles', icono: 'layers', roles: ['admin', 'enc-soporte'] },
       // La distribución la CONSULTAN los cuatro roles —el técnico, limitado a lo suyo; el
       // Coordinador, sin editar—; modificarla sigue siendo del Encargado de Soporte y el
       // Administrador, y eso lo decide la pantalla, no el menú.
       { ruta: '/distribucion', titulo: 'Distribución de soportes', icono: 'assign', roles: TODOS },
+      // Mapa de responsables: la vista territorial de quién responde por cada Departamento y por
+      // cada Dirección/Registro de San Salvador. La consultan los cuatro roles; editar sigue
+      // siendo del Encargado de Soporte y el Administrador, y eso lo decide la pantalla.
+      { ruta: '/responsables', titulo: 'Mapa de responsables', icono: 'map', roles: TODOS },
       { ruta: '/feriados', titulo: 'Feriados', icono: 'flag', roles: ['admin'] }
     ]
   }

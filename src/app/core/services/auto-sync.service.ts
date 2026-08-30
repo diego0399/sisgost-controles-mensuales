@@ -7,7 +7,7 @@ import { DataService } from './data.service';
  *
  * Regla del módulo: **no hay botones de sincronizar, regenerar ni recalcular**. Cada pantalla que
  * trabaja sobre un período pide una pasada silenciosa al abrirse y cuando cambia lo que mira —mes,
- * año, Dirección/Unidad, técnico o el usuario de «Ver como»—, y la pasada se encarga de que los
+ * año, Dirección/Registro, técnico o el usuario de «Ver como»—, y la pasada se encarga de que los
  * controles del período, sus responsables y el inventario operativo estén al día.
  *
  * La pasada es idempotente y además se recuerda la última combinación sincronizada, de modo que

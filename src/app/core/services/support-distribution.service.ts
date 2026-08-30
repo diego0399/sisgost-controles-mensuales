@@ -1,39 +1,57 @@
 import { Injectable, computed, inject, signal } from '@angular/core';
 import { DistribucionSoporte } from '../models/models';
+import {
+  ALCANCE_DEPARTAMENTO, AmbitoTerritorial, ETIQUETA_TODO_EL_DEPARTAMENTO, TipoAsignacion
+} from '../models/territorio';
 import { AsignacionSoporteCompartida, SharedDistributionService } from './shared-distribution.service';
+import { TerritorioService } from './territorio.service';
 
 /**
- * Dirección del catálogo organizacional, tal como la publica `assets/data/direcciones.json`.
- * El mismo archivo se sirve en los dos módulos: es el que da los **IDs estables** con los que
- * trabaja la distribución, en lugar de comparar los nombres visibles.
+ * Departamento del catálogo organizacional, tal como lo publica `assets/data/direcciones.json`.
+ * El mismo archivo se sirve en los dos módulos y es la vista plana del catálogo territorial: cada
+ * entrada es un DEPARTAMENTO y sus `unidades` son sus Direcciones/Registros.
  */
 export interface DireccionOrganizacion {
   id: string;
   nombre: string;
   corta: string;
+  zonaId?: string;
+  porDireccion?: boolean;
   unidades: string[];
   activa?: boolean;
 }
 
 /**
- * SERVICIO COMPARTIDO DEL ECOSISTEMA SISGOST — distribución de soportes por Dirección/Unidad.
+ * SERVICIO COMPARTIDO DEL ECOSISTEMA SISGOST — distribución de soportes por territorio.
  *
- * El mismo archivo existe en los dos módulos y trabaja sobre el mismo registro
- * (`assets/data/distribucion-soportes.json`), porque la distribución es una sola verdad:
+ * El mismo archivo existe en los dos módulos y trabaja sobre el mismo registro, porque la
+ * distribución es una sola verdad:
  *
- *   · **Controles Mensuales** la ADMINISTRA (Administración → Distribución de soportes) y la usa
- *     para asignar controles y bitácoras, filtrar el inventario operativo y decidir qué ve cada
- *     Técnico de Soporte.
+ *   · **Controles Mensuales** la ADMINISTRA (Administración → Distribución de soportes y el Mapa
+ *     de responsables) y la usa para asignar controles y bitácoras, filtrar el inventario
+ *     operativo y decidir qué ve cada Técnico de Soporte.
  *   · **Gestión de Equipos** la CONSUME: al crear el expediente único solo ofrece como Técnico de
- *     Configuración a los técnicos responsables de la Dirección/Unidad del requerimiento, y al
- *     aceptarse la entrega determina con ella el soporte responsable posterior.
+ *     Configuración a los responsables del requerimiento, y al aceptarse la entrega determina con
+ *     ella el soporte responsable posterior.
+ *
+ * ## La regla territorial
+ *
+ * La organización es `Zona → Departamento → Dirección/Registro`, y la distribución **no se lleva
+ * igual en todas partes**:
+ *
+ * · En los departamentos marcados `porDireccion` en el catálogo (hoy, **San Salvador**) cada
+ *   asignación es de una **Dirección/Registro** concreta: quien responde por el Registro de
+ *   Comercio no responde por el IGCN.
+ * · En **los demás departamentos** la asignación es del **departamento completo**: quien responde
+ *   por Santa Ana atiende sus cuatro Direcciones/Registros, y no se le asigna ninguna una por una.
+ *
+ * De ahí que `deDireccionUnidad('Santa Ana', 'ISPI')` devuelva al responsable departamental
+ * aunque nadie lo haya asignado nunca al ISPI: es exactamente lo que el negocio pide, y es lo que
+ * hace que Gestión de Equipos ofrezca el Técnico de Configuración correcto sin lógica propia.
  *
  * **Todo se compara por ID, nunca por el texto visible.** Cada asignación guarda `tecnicoId`,
- * `direccionId` y `unidadId`; los nombres se conservan solo para mostrarlos y para poder migrar
- * los registros anteriores. Comparar textos era el origen real de las desincronizaciones
- * («Dirección de Registro» contra «Dirección de Registros», «Registro Propiedad» contra
- * «Registro de la Propiedad»), y una asignación mal comparada deja a un técnico sin ver sus
- * controles o le abre los de otra Dirección.
+ * `departamentoId`, `direccionRegistroId` y el `unidadId` del ámbito (`SS::SS-RC`, `STA::*`); los
+ * nombres se conservan solo para mostrarlos y para poder migrar los registros anteriores.
  *
  * Aquí viven únicamente las consultas y las escrituras planas; las reglas de negocio de cada
  * módulo (quién puede modificar, qué pasa con los equipos activos) quedan en su propio servicio.
@@ -43,10 +61,13 @@ export class SupportDistributionService {
   /** Transporte entre módulos: `localStorage` bajo la clave del ecosistema. */
   readonly compartida = inject(SharedDistributionService);
 
+  /** Catálogo territorial: es quien resuelve todo texto a su ID estable. */
+  readonly territorio = inject(TerritorioService);
+
   /** Registro compartido completo, incluidas las asignaciones desactivadas (historial). */
   readonly registros = signal<DistribucionSoporte[]>([]);
 
-  /** Catálogo organizacional que resuelve nombre → ID. Lo carga cada módulo al arrancar. */
+  /** Vista plana del catálogo, conservada para las pantallas que aún la usan. */
   readonly organizacion = signal<DireccionOrganizacion[]>([]);
 
   readonly activas = computed(() => this.registros().filter((d) => d.activo));
@@ -58,10 +79,7 @@ export class SupportDistributionService {
   // ------------------------------------------------------------------ IDs estables
 
   /** Minúsculas, sin tildes y con guiones: la base de todo ID derivado de un nombre. */
-  slug(texto: string): string {
-    return (texto ?? '').normalize('NFD').replace(/[\u0300-\u036f]/g, '')
-      .toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-  }
+  slug(texto: string): string { return this.territorio.slug(texto); }
 
   /** Solo el nombre del técnico, sin el « — Rol» con el que se guarda. */
   soloNombre(tecnico: string): string { return (tecnico ?? '').split('—')[0].trim(); }
@@ -73,90 +91,127 @@ export class SupportDistributionService {
   idTecnico(tecnico: string): string { return this.slug(this.soloNombre(tecnico)); }
 
   /**
-   * ID estable de la Dirección. Acepta el ID del catálogo (`DIR-REGS`), su forma corta (`REGS`)
-   * o el nombre institucional; si no está en el catálogo, deriva `DIR-<slug>` para no perder el
-   * registro.
+   * ID estable del **departamento**. Acepta el ID del catálogo (`SS`), su sigla o el nombre
+   * institucional. Se llama `idDireccion` porque es lo que el resto del sistema llama «Dirección».
    */
-  idDireccion(direccion: string): string {
-    const texto = (direccion ?? '').trim();
-    if (!texto) return '';
-    const cat = this.organizacion();
-    const s = this.slug(texto);
-    const hallada = cat.find((d) => d.id === texto)
-      ?? cat.find((d) => this.slug(d.id) === s)
-      ?? cat.find((d) => this.slug(d.nombre) === s)
-      ?? cat.find((d) => this.slug(d.corta) === s);
-    return hallada ? hallada.id : `DIR-${s.toUpperCase()}`;
+  idDireccion(departamento: string): string { return this.territorio.idDepartamento(departamento); }
+
+  /** ID estable de la Dirección/Registro dentro de su departamento (`SS-RC`); '' si no aplica. */
+  idRegistro(departamento: string, registro: string): string {
+    return this.territorio.idRegistro(departamento, registro);
   }
 
   /**
-   * ID estable de la Unidad, siempre dentro de su Dirección: dos Direcciones pueden tener una
-   * unidad con el mismo nombre y no son la misma.
+   * ID del **ámbito**: `SS::SS-RC` cuando es una Dirección/Registro y `STA::*` cuando es el
+   * departamento completo. Es la clave con la que se comparan controles, bitácoras e inventario.
    */
-  idUnidad(direccion: string, unidad: string): string {
-    const dir = this.idDireccion(direccion);
-    const texto = (unidad ?? '').trim();
-    if (!dir) return '';
-    return `${dir}::${this.slug(texto) || this.slug(this.nombreDireccion(dir))}`;
+  idUnidad(departamento: string, registro: string): string {
+    return this.territorio.idAmbito(departamento, registro);
   }
 
-  /** Nombre institucional de una Dirección a partir de su ID (o el texto recibido). */
-  nombreDireccion(direccion: string): string {
-    const id = this.idDireccion(direccion);
-    return this.organizacion().find((d) => d.id === id)?.nombre ?? direccion;
+  /** Nombre institucional del departamento a partir de su ID (o el texto recibido). */
+  nombreDireccion(departamento: string): string {
+    return this.territorio.nombreDepartamento(this.idDireccion(departamento));
   }
 
-  /** Forma corta de la Dirección, para etiquetas y chips. */
-  cortaDireccion(direccion: string): string {
-    const id = this.idDireccion(direccion);
-    return this.organizacion().find((d) => d.id === id)?.corta ?? this.nombreDireccion(direccion);
+  /** Sigla del departamento, para etiquetas y chips. */
+  cortaDireccion(departamento: string): string {
+    return this.territorio.departamento(departamento)?.corta ?? this.nombreDireccion(departamento);
   }
 
-  /** «Dirección / Unidad» legible; cuando la unidad se llama igual, se escribe una sola vez. */
-  etiqueta(direccion: string, unidad: string): string {
-    const nombre = this.nombreDireccion(direccion);
-    return !unidad || unidad === nombre ? nombre : `${nombre} / ${unidad}`;
+  /** «San Salvador / Registro de Comercio» o «Santa Ana / Todo el departamento». */
+  etiqueta(departamento: string, registro: string): string {
+    return this.territorio.etiqueta(departamento, registro);
+  }
+
+  /** «Zona Central · San Salvador · Registro de Comercio». */
+  ruta(departamento: string, registro: string): string {
+    return this.territorio.ruta(departamento, registro);
+  }
+
+  /** Alcance que la regla territorial impone a un departamento. */
+  tipoAsignacionDe(departamento: string): TipoAsignacion {
+    return this.territorio.tipoAsignacionDe(departamento);
+  }
+
+  /** ¿Este departamento exige elegir una Dirección/Registro al asignar? */
+  exigeRegistro(departamento: string): boolean {
+    return this.territorio.distribuyePorDireccion(departamento);
+  }
+
+  /** Ámbito territorial completo de un par departamento/registro. */
+  ambito(departamento: string, registro = ''): AmbitoTerritorial {
+    return this.territorio.ambito(departamento, registro);
   }
 
   /**
-   * Completa los IDs de un registro guardado antes de que existieran. La migración es por texto
-   * una sola vez, al cargar: a partir de ahí todo se compara por ID.
+   * Completa y corrige los IDs de un registro. La resolución por texto ocurre una sola vez, al
+   * cargar; a partir de ahí todo se compara por ID. La regla territorial manda sobre lo guardado:
+   * una asignación de un departamento que no se lleva por Dirección/Registro queda siempre como
+   * departamental, aunque venga con un registro escrito.
    */
   normalizar(d: DistribucionSoporte): DistribucionSoporte {
+    const dep = this.idDireccion(d.departamentoId || d.direccionId || d.direccion);
+    const porDireccion = this.territorio.distribuyePorDireccion(dep);
+    const reg = porDireccion
+      ? (this.territorio.registro(d.direccionRegistroId ?? '')?.id ?? this.idRegistro(dep, d.unidad))
+      : '';
     return {
       ...d,
       tecnicoId: d.tecnicoId || this.idTecnico(d.tecnico),
-      direccionId: d.direccionId || this.idDireccion(d.direccion),
-      unidadId: d.unidadId || this.idUnidad(d.direccion, d.unidad)
+      tipoAsignacion: porDireccion ? 'DIRECCION_REGISTRO' : 'DEPARTAMENTO',
+      zonaId: this.territorio.zonaDe(dep),
+      departamentoId: dep,
+      direccionRegistroId: reg || null,
+      direccionId: dep,
+      unidadId: `${dep}::${reg || ALCANCE_DEPARTAMENTO}`,
+      direccion: this.territorio.nombreDepartamento(dep),
+      unidad: reg ? this.territorio.nombreRegistro(reg) : ETIQUETA_TODO_EL_DEPARTAMENTO
     };
   }
 
   // ------------------------------------------------------------------ consultas
 
-  /** Asignaciones vigentes de una Dirección/Unidad. */
-  deDireccionUnidad(direccion: string, unidad: string): DistribucionSoporte[] {
-    const id = this.idUnidad(direccion, unidad);
-    return this.activas().filter((d) => d.unidadId === id);
+  /**
+   * Asignaciones vigentes que **cubren** una Dirección/Registro. Aquí vive la regla territorial:
+   * cuenta la asignación exacta de ese Registro y también la del departamento completo, porque
+   * fuera de San Salvador el responsable del departamento responde por todos sus Registros.
+   */
+  deDireccionUnidad(departamento: string, registro: string): DistribucionSoporte[] {
+    const dep = this.idDireccion(departamento);
+    if (!dep) return [];
+    const ambito = this.idUnidad(dep, registro);
+    const departamental = `${dep}::${ALCANCE_DEPARTAMENTO}`;
+    return this.activas().filter((d) => d.unidadId === ambito || d.unidadId === departamental);
   }
 
-  /** Asignaciones —vigentes e históricas— de una Dirección/Unidad. */
-  historialDe(direccion: string, unidad: string): DistribucionSoporte[] {
-    const id = this.idUnidad(direccion, unidad);
-    return this.registros().filter((d) => d.unidadId === id);
+  /** Asignaciones —vigentes e históricas— que cubren esa Dirección/Registro. */
+  historialDe(departamento: string, registro: string): DistribucionSoporte[] {
+    const dep = this.idDireccion(departamento);
+    if (!dep) return [];
+    const ambito = this.idUnidad(dep, registro);
+    const departamental = `${dep}::${ALCANCE_DEPARTAMENTO}`;
+    return this.registros().filter((d) => d.unidadId === ambito || d.unidadId === departamental);
   }
 
-  /** Asignaciones vigentes de toda una Dirección (cualquiera de sus unidades). */
-  deDireccion(direccion: string): DistribucionSoporte[] {
-    const id = this.idDireccion(direccion);
-    return this.activas().filter((d) => d.direccionId === id);
+  /** Asignaciones vigentes registradas **exactamente** sobre ese ámbito, sin heredar del departamento. */
+  exactasDe(departamento: string, registro: string): DistribucionSoporte[] {
+    const ambito = this.idUnidad(departamento, registro);
+    return this.activas().filter((d) => d.unidadId === ambito);
   }
 
-  /** Técnicos responsables de una Dirección/Unidad, en formato «Nombre — Rol». */
-  tecnicosDe(direccion: string, unidad: string): string[] {
-    return this.deDireccionUnidad(direccion, unidad).map((d) => d.tecnico);
+  /** Asignaciones vigentes de todo un departamento (departamentales y por Dirección/Registro). */
+  deDireccion(departamento: string): DistribucionSoporte[] {
+    const dep = this.idDireccion(departamento);
+    return this.activas().filter((d) => d.departamentoId === dep);
   }
 
-  /** Direcciones/Unidades que atiende un técnico (por ID, por nombre o por «Nombre — Rol»). */
+  /** Técnicos responsables de una Dirección/Registro, en formato «Nombre — Rol». */
+  tecnicosDe(departamento: string, registro: string): string[] {
+    return this.deDireccionUnidad(departamento, registro).map((d) => d.tecnico);
+  }
+
+  /** Ámbitos que atiende un técnico (por ID, por nombre o por «Nombre — Rol»). */
   deTecnico(tecnico: string): DistribucionSoporte[] {
     const id = this.idTecnico(tecnico);
     if (!id) return [];
@@ -170,45 +225,67 @@ export class SupportDistributionService {
     return this.registros().filter((d) => d.tecnicoId === id);
   }
 
-  /** ¿Este técnico está en la distribución vigente de esa Dirección/Unidad? */
-  atiende(tecnico: string, direccion: string, unidad: string): boolean {
-    const id = this.idTecnico(tecnico);
-    if (!id) return false;
-    return this.deDireccionUnidad(direccion, unidad).some((d) => d.tecnicoId === id);
+  /**
+   * Direcciones/Registros que un técnico cubre **en la práctica**: las suyas por asignación
+   * directa más todas las del departamento cuando su asignación es departamental. Es lo que la
+   * pantalla del técnico debe mostrarle, no la lista cruda de sus asignaciones.
+   */
+  cobertura(tecnico: string): { departamentoId: string; direccionRegistroId: string }[] {
+    const salida: { departamentoId: string; direccionRegistroId: string }[] = [];
+    for (const d of this.deTecnico(tecnico)) {
+      if (d.direccionRegistroId) {
+        salida.push({ departamentoId: d.departamentoId, direccionRegistroId: d.direccionRegistroId });
+        continue;
+      }
+      for (const r of this.territorio.registrosDe(d.departamentoId)) {
+        salida.push({ departamentoId: d.departamentoId, direccionRegistroId: r.id });
+      }
+    }
+    return salida;
   }
 
-  /** ¿Atiende alguna unidad de esa Dirección? */
-  atiendeDireccion(tecnico: string, direccion: string): boolean {
+  /** ¿Este técnico cubre esa Dirección/Registro, sea por asignación directa o departamental? */
+  atiende(tecnico: string, departamento: string, registro: string): boolean {
     const id = this.idTecnico(tecnico);
     if (!id) return false;
-    return this.deDireccion(direccion).some((d) => d.tecnicoId === id);
+    return this.deDireccionUnidad(departamento, registro).some((d) => d.tecnicoId === id);
+  }
+
+  /** ¿Atiende alguna Dirección/Registro de ese departamento? */
+  atiendeDireccion(tecnico: string, departamento: string): boolean {
+    const id = this.idTecnico(tecnico);
+    if (!id) return false;
+    return this.deDireccion(departamento).some((d) => d.tecnicoId === id);
   }
 
   /**
-   * ¿Existe ya esta responsabilidad vigente? La comprobación del duplicado es por IDs: el mismo
-   * técnico no puede quedar dos veces activo en la misma Dirección/Unidad aunque el texto con el
-   * que se escribió difiera.
+   * ¿Existe ya esta responsabilidad vigente? Se comprueba sobre el ámbito **exacto**: dos
+   * asignaciones al mismo ámbito son el duplicado que hay que impedir, mientras que asignar a un
+   * técnico un Registro de San Salvador y además otro departamento completo es lo normal.
    */
-  duplicada(tecnico: string, direccion: string, unidad: string): boolean {
-    return this.atiende(tecnico, direccion, unidad);
+  duplicada(tecnico: string, departamento: string, registro: string): boolean {
+    const id = this.idTecnico(tecnico);
+    if (!id) return false;
+    return this.exactasDe(departamento, registro).some((d) => d.tecnicoId === id);
   }
 
   /**
-   * Soporte responsable de una Dirección/Unidad. Si el técnico indicado como preferido
-   * (normalmente el que configuró el equipo) la atiende, es él; si no, el primero vigente.
+   * Soporte responsable de una Dirección/Registro. Si el técnico indicado como preferido
+   * (normalmente el que configuró el equipo) la cubre, es él; si no, el primero vigente, dando
+   * precedencia a quien la tiene asignada directamente sobre el responsable departamental.
    */
-  responsableDe(direccion: string, unidad: string, preferido = ''): string {
-    const lista = this.deDireccionUnidad(direccion, unidad);
+  responsableDe(departamento: string, registro: string, preferido = ''): string {
+    const lista = this.deDireccionUnidad(departamento, registro);
     if (!lista.length) return '';
     if (preferido) {
       const id = this.idTecnico(preferido);
       const propio = lista.find((d) => d.tecnicoId === id);
       if (propio) return propio.tecnico;
     }
-    return lista[0].tecnico;
+    return (lista.find((d) => !!d.direccionRegistroId) ?? lista[0]).tecnico;
   }
 
-  /** Pares Dirección/Unidad presentes en el registro (vigentes o históricos). */
+  /** Ámbitos presentes en el registro (vigentes o históricos). */
   pares(): { direccion: string; unidad: string }[] {
     const mapa = new Map<string, { direccion: string; unidad: string }>();
     for (const d of this.registros()) mapa.set(d.unidadId, { direccion: d.direccion, unidad: d.unidad });
@@ -253,6 +330,10 @@ export class SupportDistributionService {
       tecnicoId: normal.tecnicoId,
       tecnicoNombre: this.soloNombre(normal.tecnico),
       tecnicoRol: this.rolDe(normal.tecnico) || 'Técnico de Soporte',
+      tipoAsignacion: normal.tipoAsignacion,
+      zonaId: normal.zonaId,
+      departamentoId: normal.departamentoId,
+      direccionRegistroId: normal.direccionRegistroId,
       direccionId: normal.direccionId,
       direccionNombre: normal.direccion,
       unidadId: normal.unidadId,
@@ -273,6 +354,10 @@ export class SupportDistributionService {
     return {
       id: a.id,
       tecnicoId: a.tecnicoId,
+      tipoAsignacion: a.tipoAsignacion ?? 'DEPARTAMENTO',
+      zonaId: a.zonaId ?? '',
+      departamentoId: a.departamentoId ?? a.direccionId,
+      direccionRegistroId: a.direccionRegistroId ?? null,
       direccionId: a.direccionId,
       unidadId: a.unidadId,
       direccion: a.direccionNombre,
@@ -312,9 +397,9 @@ export class SupportDistributionService {
     return true;
   }
 
-  /** Adopta lo guardado en ESTE origen, si lo hay. */
+  /** Adopta lo guardado en ESTE origen, si lo hay y si es de esta versión del contrato. */
   adoptarDelOrigen(): boolean {
-    return this.adoptar(this.compartida.leer());
+    return this.compartida.vigente() ? this.adoptar(this.compartida.leer()) : false;
   }
 
   /** Siguiente correlativo `DIST-AAAA-NNNN`. */

@@ -114,7 +114,7 @@ import { HelpTipComponent } from '../../shared/ui';
         <div class="tagline">Controles Mensuales · Sistema de Gestión y Seguimiento de Soporte Técnico</div>
         <p class="hero-desc">
           Planificación, seguimiento y entrega de los controles mensuales y bitácoras diarias del
-          soporte técnico por Dirección/Unidad: plazos de los primeros tres días hábiles, cartas de
+          soporte técnico por Dirección/Registro: plazos de los primeros tres días hábiles, cartas de
           justificación cuando no hay actividad y documentos formales listos para presentar.
         </p>
         <div class="hero-feats">
@@ -142,7 +142,7 @@ import { HelpTipComponent } from '../../shared/ui';
             <div class="field">
               <label for="usuario">
                 Usuario del sistema
-                <ui-help texto="Inician sesión los roles del módulo: Administrador, Encargado de Soporte —jefe del área—, Técnico de Soporte y Coordinador (consulta y seguimiento). Dirección/Unidad no es un rol del sistema: es el dato organizacional al que pertenecen los controles." />
+                <ui-help texto="Inician sesión los roles del módulo: Administrador, Encargado de Soporte —jefe del área—, Técnico de Soporte y Coordinador (consulta y seguimiento). Dirección/Registro no es un rol del sistema: es el dato organizacional al que pertenecen los controles." />
               </label>
               <select id="usuario" class="control" [(ngModel)]="usuarioSel">
                 <option value="" disabled>Seleccione su usuario…</option>
@@ -167,7 +167,7 @@ import { HelpTipComponent } from '../../shared/ui';
         <div class="alert role-note">
           <span class="alert-ico">i</span>
           <span>
-            El <b>Técnico de Soporte</b> ve y completa los controles de sus Direcciones/Unidades asignadas;
+            El <b>Técnico de Soporte</b> ve y completa los controles de sus Direcciones/Registros asignadas;
             el <b>Encargado de Soporte</b> consulta todo, asigna responsables y revisa entregas.
             Los usuarios son los mismos de <b>SISGOST — Gestión de Equipos</b>; el usuario
             <span class="mono">demo.admin</span> restablece los datos de demostración desde Administración.

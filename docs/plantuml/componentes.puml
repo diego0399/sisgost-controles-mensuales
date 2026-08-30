@@ -1,78 +1,143 @@
 @startuml componentes
-title SISGOST — Controles Mensuales · Componentes
+title SISGOST — Controles Mensuales · Diagrama de componentes
+skinparam shadowing false
+skinparam backgroundColor #FFFFFF
 skinparam componentStyle rectangle
+skinparam component {
+  BackgroundColor #F4F7FB
+  BorderColor #2F5597
+  ArrowColor #2F5597
+}
+skinparam packageStyle rectangle
 
-package "features (pantallas lazy)" {
-  [Panel ejecutivo]
-  [Calendario]
-  [Historial anual]
-  [Controles / Completar control]
-  [Detalle por Dirección]
-  [Bitácora / Completar bitácora]
-  [Justificaciones]
-  [Inventario operativo]
-  [Generador de documentos]
-  [Trazabilidad]
-  [Administración\n(usuarios, catálogo,\ndistribución, feriados)]
+package "Entrada y navegación" {
+  [Login (usuarios del ecosistema)] as LOGIN
+  [Rutas lazy + authGuard + roleGuard] as ROUTER
+  [Shell · menú construido por rol\n(NAVEGACION / permiteRuta)] as SHELL
 }
 
-package "shared" {
-  [ui-documento] as DOC
-  [ui-visor-documento] as VISOR
-  [ui-kpi-direcciones] as KPIS
-  [ui-icon / ui-badge / ui-modal / ui-help] as UI
+package "features — pantallas" {
+  package "Seguimiento" {
+    [Panel ejecutivo] as F_PANEL
+    [Calendario de controles] as F_CAL
+    [Historial anual] as F_HIST
+  }
+  package "Operación" {
+    [Controles mensuales\n(vista por Dirección + vista general)] as F_CTL
+    [Detalle de Dirección/Unidad\n(meses pendientes)] as F_DIR
+    [Completar control\n(stepper por secciones)] as F_COMP
+    [Bitácora diaria / Completar bitácora] as F_BIT
+    [Justificaciones] as F_JUS
+    [Inventario operativo] as F_INV
+  }
+  package "Documentación" {
+    [Generador de documentos] as F_DOC
+    [Trazabilidad] as F_TRZ
+  }
+  package "Administración" {
+    [Usuarios y direcciones] as F_ADM
+    [Catálogo de controles\n(«Aplica a» editable)] as F_CAT
+    [Distribución de soportes\n(organizada por técnico)] as F_DIS
+    [Feriados] as F_FER
+  }
 }
 
-package "core/services" {
-  [DataService] as DATA
-  [HolidayService] as HOL
-  [BusinessDayService] as BDS
-  [ControlDeadlineService] as CDS
-  [EquipmentIntegrationService] as INT
-  [SupportDistributionService
-<<compartido con Gestión de Equipos>>] as SDS
-  [OperatividadService] as OPS
-  [AuthService] as AUTH
-  [ToastService] as TOAST
+package "shared — componentes reutilizables" {
+  [ui-documento\n(armador de la hoja formal)] as S_DOC
+  [ui-visor-documento\n(vista PDF + @media print)] as S_VIS
+  [ui-kpi-direcciones] as S_KPI
+  [ui-icon · ui-badge · ui-modal · ui-help] as S_UI
 }
 
-database "assets/data/*.json\n+ localStorage" as STORE
+package "core/services — reglas del negocio" {
+  [DataService\n(estado único de la aplicación)] as SV_DATA
+  [OperatividadService\n(KPI por Dirección/Unidad)] as SV_OPE
+  [ControlDeadlineService\n(período activo y fecha límite)] as SV_DEA
+  [BusinessDayService] as SV_BUS
+  [HolidayService\n(catálogo editable de feriados)] as SV_HOL
+  [AutoSyncService\n(pasada silenciosa del período)] as SV_SYN
+  [SupportDistributionService\n<<mismo archivo en los dos módulos>>] as SV_DIS
+  [SharedDistributionService\n<<fuente compartida del ecosistema>>] as SV_SHD
+  [EquipmentIntegrationService] as SV_INT
+  [SharedInventoryService\n<<mismo archivo en los dos módulos>>] as SV_SHI
+  [SharedInventoryBridgeService\n(iframe + postMessage)] as SV_BRI
+  [AuthService] as SV_AUT
+  [ToastService] as SV_TOA
+}
 
-[Controles / Completar control] --> DATA
-[Bitácora / Completar bitácora] --> DATA
-[Panel ejecutivo] --> DATA
-[Panel ejecutivo] --> OPS
-[Panel ejecutivo] --> KPIS
-[Controles / Completar control] --> OPS
-[Controles / Completar control] --> KPIS
-[Detalle por Dirección] --> OPS
-[Detalle por Dirección] --> DOC
-[Historial anual] --> OPS
-[Inventario operativo] --> OPS
-OPS --> DATA
-OPS --> CDS
-DOC --> OPS
-[Panel ejecutivo] --> CDS
-[Calendario] --> HOL
-[Calendario] --> CDS
-[Inventario operativo] --> INT
-[Generador de documentos] --> DOC
-[Historial anual] --> DOC
-DOC --> VISOR
-DOC --> DATA
-INT --> DATA
-DATA --> SDS
-DATA --> CDS
-CDS --> BDS
-BDS --> HOL
-DATA --> STORE
-SDS --> STORE
-HOL --> STORE
-[Administración\n(usuarios, catálogo,\ndistribución, feriados)] --> HOL
-[Controles / Completar control] ..> UI
-[Bitácora / Completar bitácora] ..> UI
+database "Persistencia local del navegador" {
+  [localStorage · sisgost.controles.v1] as ST_LS
+  [localStorage · sisgost.controles.feriados.v1] as ST_FE
+  [localStorage · sisgost_support_distribution\n+ _updated_at + _version] as ST_DI
+  [localStorage · sisgost_operational_inventory] as ST_IN
+  [sessionStorage · sesión simulada] as ST_SS
+}
 
-cloud "SISGOST — Gestión de Equipos" as GE
-GE ..> INT : eventos de aceptación y descargo
-SDS ..> GE : filtra el Técnico de Configuración
+folder "public/assets/data/*.json (semilla)" as SEED
+folder "public/puente-distribucion.html\n(publicado por este módulo)" as PUENTE
+
+cloud "SISGOST — Gestión de Equipos\n(localhost:4200)" as GE
+
+LOGIN --> SV_AUT
+SV_AUT --> ST_SS
+ROUTER --> SHELL
+SHELL --> F_PANEL
+SHELL --> F_CTL
+SHELL --> F_BIT
+SHELL --> F_DOC
+SHELL --> F_DIS
+SHELL --> GE : enlace «Ir a Gestión de Equipos»
+
+F_PANEL --> SV_OPE
+F_PANEL --> S_KPI
+F_CAL --> SV_DEA
+F_HIST --> SV_OPE
+F_CTL --> SV_OPE
+F_CTL --> S_KPI
+F_DIR --> SV_OPE
+F_COMP --> SV_DATA
+F_COMP --> SV_INT : equipos activos del inventario
+F_BIT --> SV_DATA
+F_JUS --> SV_DATA
+F_INV --> SV_INT
+F_DOC --> S_DOC
+F_TRZ --> SV_DATA
+F_ADM --> SV_DATA
+F_CAT --> SV_DATA
+F_DIS --> SV_DIS
+F_FER --> SV_HOL
+
+S_DOC --> S_VIS
+S_DOC --> SV_OPE
+F_CTL ..> S_UI
+F_BIT ..> S_UI
+
+SV_OPE --> SV_DATA
+SV_OPE --> SV_DEA
+SV_DEA --> SV_BUS
+SV_BUS --> SV_HOL
+SV_DATA --> SV_SYN
+SV_DATA --> SV_DIS
+SV_DATA --> SV_INT
+SV_DATA --> SV_TOA
+SV_DIS --> SV_SHD
+SV_INT --> SV_SHI
+SV_SHI --> SV_BRI
+
+SV_DATA --> ST_LS
+SV_HOL --> ST_FE
+SV_SHD --> ST_DI
+SV_SHI --> ST_IN
+SV_DATA --> SEED : carga inicial
+SV_SHD --> PUENTE : lo publica para el otro origen
+PUENTE ..> GE : responde por postMessage
+SV_BRI ..> GE : pide el inventario por postMessage
+GE ..> SV_INT : conformidad aceptada / descargo
+
+note bottom of SV_SYN
+  Ninguna pantalla ofrece «sincronizar», «regenerar»
+  ni «aplicar cambios»: la pasada corre al abrir el
+  período y al guardar, y es idempotente.
+end note
+
 @enduml

@@ -1,48 +1,88 @@
 @startuml arquitectura
 title SISGOST — Controles Mensuales · Arquitectura del prototipo
+skinparam shadowing false
+skinparam backgroundColor #FFFFFF
 skinparam componentStyle rectangle
+skinparam component {
+  BackgroundColor #F4F7FB
+  BorderColor #2F5597
+  ArrowColor #2F5597
+}
+skinparam node {
+  BackgroundColor #FFFFFF
+  BorderColor #2F5597
+}
 
-node "Navegador" {
-  package "Angular 21 (standalone, zoneless)" {
-    [Rutas + guards\n(auth / rol)] as ROUTER
-    [Shell (menú por rol)] as SHELL
-    [Pantallas (features)] as FEAT
-    [Visor de documentos\n(hoja tipo PDF + @media print)] as VISOR
-    [Servicios de negocio\n(Data / Deadline / BusinessDay /\nHoliday / Integration)] as SRV
+node "Estación de trabajo del CNR" {
+
+  node "Navegador · origen http://localhost:4300" as NAV43 {
+    package "SISGOST — Controles Mensuales\nAngular 21 · standalone · zoneless · signals" {
+      [Capa de presentación\npantallas lazy por ruta] as UI
+      [Capa de reglas\nservicios de negocio] as SRV
+      [Capa de documentos\narmador + visor tipo PDF] as DOCS
+      [Guards de sesión y de rol] as GUARD
+    }
+    storage "Almacenamiento del origen 4300" as ST43 {
+      [sisgost.controles.v1\n(estado completo del módulo)] as K1
+      [sisgost.controles.feriados.v1] as K2
+      [sisgost_support_distribution\n+ _updated_at + _version] as K3
+      [sisgost_operational_inventory\n(copia leída)] as K4
+      [sessionStorage — sesión simulada] as K5
+    }
+    [puente-distribucion.html\n(página del propio origen)] as PD
   }
-  folder "Persistencia local" {
-    [localStorage\nsisgost.controles.v1] as LS
-    [sessionStorage\n(sesión simulada)] as SS
+
+  node "Navegador · origen http://localhost:4200" as NAV42 {
+    [SISGOST — Gestión de Equipos] as GE
+    storage "Almacenamiento del origen 4200" as ST42 {
+      [sisgost.datos.v1] as G1
+      [sisgost_operational_inventory\n(escrito al aceptar / descargar)] as G2
+      [sisgost_support_distribution\n(copia leída)] as G3
+    }
+    [puente-inventario.html\n(página del origen 4200)] as PI
   }
 }
 
-cloud "Simulado (sin backend)" {
-  [assets/data/*.json\n(semilla)] as JSON
-  [SISGOST — Gestión de Equipos\n(cola de eventos simulada)] as GE
-}
+folder "public/assets/data/*.json\nsemilla de demostración" as SEED
 
-ROUTER --> SHELL
-SHELL --> FEAT
-FEAT --> SRV
-FEAT --> VISOR
-SRV --> LS
-SRV --> JSON : fetch inicial
-SRV --> SS
-SRV --> SDS
-SDS --> JSON : distribucion-soportes.json
-SDS ..> GE : filtra el Técnico de Configuración
-SHELL --> GE : enlace «Ir a Gestión de Equipos»
-GE ..> SRV : eventos-integracion.json\n(entrega aceptada / descargo)
+UI --> SRV
+UI --> DOCS
+GUARD --> UI
+SRV --> K1
+SRV --> K2
+SRV --> K3
+SRV --> K4
+GUARD --> K5
+SRV --> SEED : carga inicial (fetch)
 
-note bottom of GE
-  Un solo ecosistema, dos despliegues:
-  · datos base compartidos (usuarios, Direcciones/Unidades,
-    distribución de soportes y equipos);
-  · entrega aceptada por el Usuario Final
-    → equipo activo en la Dirección/Unidad
-    → crece el inventario operativo;
-  · descargo → el equipo sale del inventario activo;
-  · la distribución que se administra aquí decide allá
-    quién puede ser Técnico de Configuración.
+K3 --> PD : la página lee la clave del origen 4300
+PD <..> GE : postMessage\n(origen autorizado; la página nunca escribe)
+G2 --> PI
+PI <..> SRV : postMessage\n(inventario operativo)
+GE --> G1
+GE --> G2
+GE --> G3
+
+note right of PD
+  **Por qué existen los puentes**
+  `localStorage` está aislado **por origen** y el
+  puerto forma parte del origen. Con los módulos
+  en 4200 y 4300 la clave compartida no cruza sola:
+  cada módulo publica una página en su propio origen
+  que responde por `postMessage` a una lista blanca
+  de orígenes y **nunca escribe**.
 end note
+
+note bottom of SEED
+  **Sin backend, sin base de datos, sin Firebase y sin API real.**
+  Todo el comportamiento se simula en el navegador; la semilla
+  se puede restablecer desde Administración (solo Administrador).
+end note
+
+note bottom of NAV42
+  Sentido de cada puente:
+  · Distribución de soportes: **Controles Mensuales → Gestión de Equipos**
+  · Inventario operativo: **Gestión de Equipos → Controles Mensuales**
+end note
+
 @enduml

@@ -74,7 +74,7 @@ export class DocumentoComponent {
     const d = this.doc();
     if (!d) return '';
     const dir = d.direccion === 'Todas'
-      ? 'Todas las Direcciones/Unidades'
+      ? 'Todas las Direcciones/Registros'
       : this.data.dirUnidad(d.direccion, d.unidad ?? '');
     return `${dir} · ${nombreMes(d.mes)} ${d.anio}`;
   });
@@ -110,7 +110,7 @@ export class DocumentoComponent {
     return {
       titulo: 'Datos generales',
       campos: [
-        { etiqueta: 'Dirección/Unidad', valor: this.data.dirUnidad(direccion, unidad) },
+        { etiqueta: 'Dirección/Registro', valor: this.data.dirUnidad(direccion, unidad) },
         { etiqueta: 'Responsable', valor: responsable },
         ...extra
       ]
@@ -237,7 +237,7 @@ export class DocumentoComponent {
               this.data.estadoFinalEquipo(p, e)
             ];
           });
-          s.nota = 'Muestra de equipos activos de la Dirección/Unidad tomada del inventario operativo, proveniente de las entregas aceptadas en SISGOST — Gestión de Equipos.';
+          s.nota = 'Muestra de equipos activos de la Dirección/Registro tomada del inventario operativo, proveniente de las entregas aceptadas en SISGOST — Gestión de Equipos.';
           for (const e of muestra) {
             const eq = this.data.equipoDe(e.inventario);
             anexos.push({
@@ -276,7 +276,7 @@ export class DocumentoComponent {
                 e.usuarioFinal || '—', e.estadoEquipo || '—', e.hora || '—'
               ];
             }),
-            nota: 'Cada IP corresponde a un equipo activo de esta Dirección/Unidad en el inventario operativo, proveniente de las entregas aceptadas en SISGOST — Gestión de Equipos.'
+            nota: 'Cada IP corresponde a un equipo activo de esta Dirección/Registro en el inventario operativo, proveniente de las entregas aceptadas en SISGOST — Gestión de Equipos.'
           });
         }
       }
@@ -306,7 +306,7 @@ export class DocumentoComponent {
               e.estado
             ];
           });
-          s.nota = 'Equipos activos de la Dirección/Unidad según el inventario operativo, proveniente de las entregas aceptadas en SISGOST — Gestión de Equipos.';
+          s.nota = 'Equipos activos de la Dirección/Registro según el inventario operativo, proveniente de las entregas aceptadas en SISGOST — Gestión de Equipos.';
         } else {
           s.texto = 'No se registraron equipos revisados en el período.';
         }
@@ -371,7 +371,7 @@ export class DocumentoComponent {
     const justs = this.data.justificaciones().filter((j) =>
       j.anio === d.anio && j.mes === d.mes && (d.direccion === 'Todas' || j.direccion === d.direccion));
     const equipos = this.data.inventario().filter((e) =>
-      (d.direccion === 'Todas' || e.direccion === d.direccion) && e.estado === 'Activo en Dirección/Unidad');
+      (d.direccion === 'Todas' || e.direccion === d.direccion) && e.estado === 'Activo en Dirección/Registro');
     return [
       {
         titulo: 'Resumen del período',
@@ -388,7 +388,7 @@ export class DocumentoComponent {
       },
       {
         titulo: 'Detalle de controles del período',
-        columnas: ['Control', 'Dirección/Unidad', 'Responsable', 'Período', 'Fecha límite', 'Entrega', 'Estado'],
+        columnas: ['Control', 'Dirección/Registro', 'Responsable', 'Período', 'Fecha límite', 'Entrega', 'Estado'],
         filas: delPeriodo.map((c) => [
           c.codigo, `${this.data.cortaDireccion(c.direccion)} · ${c.unidad}`, c.responsable,
           c.semana ? `Semana ${c.semana}` : nombreMes(c.mes),
@@ -399,7 +399,7 @@ export class DocumentoComponent {
         titulo: 'Inventario operativo relacionado',
         ...(equipos.length
           ? {
-              columnas: ['N° de inventario', 'Equipo', 'Dirección/Unidad', 'Usuario final', 'Soporte responsable', 'Estado'],
+              columnas: ['N° de inventario', 'Equipo', 'Dirección/Registro', 'Usuario final', 'Soporte responsable', 'Estado'],
               filas: equipos.map((e) => [
                 e.inventario, `${e.nombreEquipo || e.tipo} · ${e.marca} ${e.modelo}`,
                 `${this.data.cortaDireccion(e.direccion)} · ${e.unidad}`, e.usuarioFinal,
@@ -428,7 +428,7 @@ export class DocumentoComponent {
   }
 
   /**
-   * Reportes por Dirección/Unidad (§17-18 del requerimiento). Todos comparten el encabezado de
+   * Reportes por Dirección/Registro (§17-18 del requerimiento). Todos comparten el encabezado de
    * datos generales y el resumen de indicadores; luego cada tipo aporta su detalle y todos
    * cierran con el estado operativo.
    */
@@ -442,7 +442,7 @@ export class DocumentoComponent {
         titulo: 'Datos generales del reporte',
         campos: [
           { etiqueta: 'Reporte', valor: d.tipo },
-          { etiqueta: 'Dirección/Unidad', valor: this.data.dirUnidad(d.direccion, unidad) },
+          { etiqueta: 'Dirección/Registro', valor: this.data.dirUnidad(d.direccion, unidad) },
           { etiqueta: 'Período', valor: anual ? `Año ${d.anio}` : `${nombreMes(d.mes)} ${d.anio}` },
           { etiqueta: 'Responsable(s)', valor: k.responsables.join(', ') || 'Sin Técnico de Soporte asignado' },
           { etiqueta: 'Fecha límite del período', valor: formateaFecha(k.fechaLimite), mono: true },
@@ -480,7 +480,7 @@ export class DocumentoComponent {
           String(m.pendientes), String(m.vencidos), String(m.justificados),
           m.aplicables ? `${m.operatividad} %` : '—', m.estado
         ]),
-        nota: 'Los meses sin controles aplicables no se puntúan: el catálogo no programa controles en esa Dirección/Unidad.'
+        nota: 'Los meses sin controles aplicables no se puntúan: el catálogo no programa controles en esa Dirección/Registro.'
       });
     } else if (d.tipo.includes('controles pendientes')) {
       const abiertos = controles.filter((c) => ['Programado', 'Pendiente', 'En proceso', 'Listo para entregar', 'Vencido', 'Observado'].includes(c.estado));
@@ -500,7 +500,7 @@ export class DocumentoComponent {
       const equipos = this.data.equiposActivosDe(d.direccion, unidad);
       const conIncidencia = new Set(this.oper.equiposConIncidencia(d.direccion, unidad, d.anio, d.mes).map((e) => e.inventario));
       salida.push({
-        titulo: 'Inventario operativo de la Dirección/Unidad',
+        titulo: 'Inventario operativo de la Dirección/Registro',
         ...(equipos.length
           ? {
               columnas: ['N° de inventario', 'Tipo', 'Marca y modelo', 'Usuario final', 'Último control', 'Incidencia', 'Garantía', 'Estado'],
@@ -514,7 +514,7 @@ export class DocumentoComponent {
               }),
               nota: 'Equipos provenientes de las entregas aceptadas en SISGOST — Gestión de Equipos.'
             }
-          : { texto: 'La Dirección/Unidad no tiene equipos activos en el inventario operativo.' })
+          : { texto: 'La Dirección/Registro no tiene equipos activos en el inventario operativo.' })
       });
     } else if (d.tipo.includes('bitácoras')) {
       const prefijo = `${d.anio}-${String(d.mes).padStart(2, '0')}`;
@@ -533,7 +533,7 @@ export class DocumentoComponent {
               ]),
               nota: 'Límite institucional de envío: 5:00 p. m. de cada día hábil.'
             }
-          : { texto: 'La Dirección/Unidad no lleva bitácora diaria de atención al público.' })
+          : { texto: 'La Dirección/Registro no lleva bitácora diaria de atención al público.' })
       });
     } else if (d.tipo.includes('F0387') || d.tipo.includes('F0389')) {
       salida.push(...this.seccionesConsolidado(d.tipo.includes('F0387') ? 'F0387' : 'F0389', controles));
@@ -565,7 +565,7 @@ export class DocumentoComponent {
                 formateaFecha(c.fechaLimite), c.fechaEntrega ? formateaFecha(c.fechaEntrega) : '—', c.estado
               ])
             }
-          : { texto: 'Ningún control del catálogo aplica a esta Dirección/Unidad en el período.' })
+          : { texto: 'Ningún control del catálogo aplica a esta Dirección/Registro en el período.' })
       });
     }
 
@@ -589,7 +589,7 @@ export class DocumentoComponent {
     if (!control) {
       return [{
         titulo: `${codigo} · ${cat?.nombre ?? ''}`,
-        texto: `El control ${codigo} no aplica a esta Dirección/Unidad en el período, o todavía no fue programado.`
+        texto: `El control ${codigo} no aplica a esta Dirección/Registro en el período, o todavía no fue programado.`
       }];
     }
     const semanas = this.data.estadoSemanas(control);
@@ -624,7 +624,7 @@ export class DocumentoComponent {
           ? {
               columnas: ['Semana', 'IP', 'N° de inventario', 'Equipo', 'Usuario final', 'Hora de verificación'],
               filas: filasIp,
-              nota: 'Las IP corresponden a equipos activos de esta Dirección/Unidad en el inventario operativo.'
+              nota: 'Las IP corresponden a equipos activos de esta Dirección/Registro en el inventario operativo.'
             }
           : { texto: 'Todavía no se registraron equipos por IP en el período.' })
       });
@@ -680,12 +680,12 @@ export class DocumentoComponent {
     }
     const base = `${dir} presenta una operatividad de ${k.operatividad} % en el período, con ${k.entregados + k.entregadosTarde} control(es) entregados y ${k.justificados} justificado(s) de ${k.aplicables} aplicables`;
     if (k.estado === 'Operativa') {
-      return `${base}. La Dirección/Unidad se encuentra OPERATIVA: cumple el estándar institucional del 90 %.`;
+      return `${base}. La Dirección/Registro se encuentra OPERATIVA: cumple el estándar institucional del 90 %.`;
     }
     if (k.estado === 'En observación') {
-      return `${base}. La Dirección/Unidad queda EN OBSERVACIÓN: ${k.pendientes} control(es) pendientes y ${k.vencidos} vencido(s) deben regularizarse antes del cierre del siguiente período.`;
+      return `${base}. La Dirección/Registro queda EN OBSERVACIÓN: ${k.pendientes} control(es) pendientes y ${k.vencidos} vencido(s) deben regularizarse antes del cierre del siguiente período.`;
     }
-    return `${base}. La Dirección/Unidad se encuentra en estado CRÍTICO: se requiere plan de regularización inmediato sobre los ${k.pendientes + k.vencidos} control(es) sin entregar.`;
+    return `${base}. La Dirección/Registro se encuentra en estado CRÍTICO: se requiere plan de regularización inmediato sobre los ${k.pendientes + k.vencidos} control(es) sin entregar.`;
   }
 
   // ------------------------------------------------------------------ evidencias y firmas

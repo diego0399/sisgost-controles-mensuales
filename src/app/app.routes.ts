@@ -26,6 +26,7 @@ export const routes: Routes = [
       { path: 'administracion', canActivate: [roleGuard], loadComponent: () => import('./features/administracion/admin.component').then((m) => m.AdminComponent) },
       { path: 'catalogo', canActivate: [roleGuard], loadComponent: () => import('./features/administracion/catalogo.component').then((m) => m.CatalogoComponent) },
       { path: 'distribucion', canActivate: [roleGuard], loadComponent: () => import('./features/administracion/distribucion.component').then((m) => m.DistribucionComponent) },
+      { path: 'responsables', canActivate: [roleGuard], loadComponent: () => import('./features/administracion/responsables.component').then((m) => m.ResponsablesComponent) },
       { path: 'feriados', canActivate: [roleGuard], loadComponent: () => import('./features/administracion/feriados.component').then((m) => m.FeriadosComponent) },
       { path: 'acceso-restringido', loadComponent: () => import('./features/acceso-restringido/acceso-restringido.component').then((m) => m.AccesoRestringidoComponent) }
     ]

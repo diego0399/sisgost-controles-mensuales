@@ -1,39 +1,46 @@
 @startuml operatividad
-title SISGOST — Controles Mensuales · Operatividad por Dirección/Unidad
+title SISGOST — Controles Mensuales · Operatividad y KPIs por Dirección/Unidad
+skinparam shadowing false
+skinparam backgroundColor #FFFFFF
 skinparam componentStyle rectangle
-
-package "Fuentes del cálculo" {
-  [CONTROL_MES del período\n(solo los que APLICAN)] as CTL
-  [BITACORA_DIARIA del período] as BIT
-  [EQUIPO_OPERATIVO\n(activos, incidencias, descargos)] as INV
-  [DISTRIBUCION_SOPORTE\n(responsables)] as DIS
-  [DOCUMENTO_GENERADO] as DOC
+skinparam component {
+  BackgroundColor #F4F7FB
+  BorderColor #2F5597
+  ArrowColor #2F5597
 }
 
-[OperatividadService\nkpi(dirección, unidad, año, mes)] as OPER
+package "Lo que entra al cálculo" #FFFDF5 {
+  [Controles del período\n**solo los que APLICAN**] as CTL
+  [Bitácoras diarias del período] as BIT
+  [Inventario operativo\n(activos, incidencias, descargos)] as INV
+  [Distribución de soportes\n(responsables vigentes)] as DIS
+  [Fecha límite del período\n(3.er día hábil + feriados)] as DEA
+}
+
+[**OperatividadService**\nkpi(dirección, unidad, año, mes)] as OPER
 
 CTL --> OPER
 BIT --> OPER
 INV --> OPER
 DIS --> OPER
-DOC --> OPER
+DEA --> OPER
 
 note right of OPER
   controles    = (entregados + entregados tarde
-                  + justificados) / aplicables
+                  + justificados) / **aplicables**
   bitácoras    = (enviadas + enviadas tarde) / bitácoras
-  operatividad = controles                        (sin bitácora)
-               = controles·0.7 + bitácoras·0.3    (con bitácora)
+  operatividad = controles                       … sin bitácora
+               = controles·0.7 + bitácoras·0.3   … con bitácora
   cumplimiento = (entregados a tiempo + justificados) / aplicables
 end note
 
-package "Semáforo institucional" {
-  [Operativa\n90–100 %] as S1
-  [En observación\n75–89 %] as S2
-  [Crítica\n< 75 %] as S3
-  [En curso\n(plazo abierto, nada vencido)] as S4
-  [Sin soporte asignado] as S5
-  [Sin controles aplicables] as S6
+package "Semáforo institucional" #F7FBF7 {
+  [**Operativa**\n90 – 100 %] as S1
+  [**En observación**\n75 – 89 %] as S2
+  [**Crítica**\nmenos de 75 %] as S3
+  [**En curso**\nel plazo sigue abierto y nada venció] as S4
+  [**Sin soporte asignado**\nhay controles aplicables y nadie responsable] as S5
+  [**Sin controles aplicables**] as S6
 }
 
 OPER --> S1
@@ -43,13 +50,13 @@ OPER --> S4
 OPER --> S5
 OPER --> S6
 
-package "Pantallas que lo consumen" {
-  [Controles mensuales\nvista por Dirección + comparativo] as P1
-  [Detalle de Dirección/Unidad] as P2
-  [Panel ejecutivo\n(KPIs globales y alertas por Dirección)] as P3
-  [Historial anual\n(operatividad mes a mes)] as P4
-  [Inventario operativo\n(resumen por Dirección)] as P5
-  [Reportes formales por Dirección] as P6
+package "Dónde se ve" {
+  [Panel ejecutivo\nKPIs globales, carga por técnico\ny alertas **por Dirección**] as P1
+  [Controles mensuales\nvista por Dirección + comparativo] as P2
+  [Detalle de Dirección/Unidad\nmeses pendientes + 15 indicadores] as P3
+  [Historial anual\noperatividad mes a mes] as P4
+  [Inventario operativo\nresumen por Dirección/Unidad] as P5
+  [Seis reportes formales\npor Dirección] as P6
 }
 
 OPER --> P1
@@ -59,9 +66,17 @@ OPER --> P4
 OPER --> P5
 OPER --> P6
 
-note bottom of P1
-  La vista por Dirección es la predeterminada del Encargado de Soporte
-  y abre en el ÚLTIMO PERÍODO CERRADO (ControlDeadlineService).
-  El Técnico de Soporte solo ve sus Direcciones/Unidades asignadas.
+note bottom of P2
+  La **vista por Dirección** es la predeterminada y abre en el
+  **mes actual**. El Encargado de Soporte y el Coordinador ven
+  todas las Direcciones/Unidades; el Técnico de Soporte, solo
+  las que la distribución le asigna.
 end note
+
+note bottom of S4
+  «En curso» evita castigar a quien todavía está
+  dentro de su plazo: sin ese estado, abrir en el
+  mes actual pintaría de rojo a todo el mundo.
+end note
+
 @enduml

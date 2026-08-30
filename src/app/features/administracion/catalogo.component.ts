@@ -11,7 +11,7 @@ import { AplicacionControl, ControlCatalogo, Frecuencia, ModoAplicacion } from '
  * Catálogo de controles: los formatos institucionales modelados desde la carpeta real de
  * controles, con su frecuencia, sus reglas (evidencia, firma, justificación) y —sobre todo— su
  * **aplicación**: en qué Direcciones, Unidades o área técnica se trabaja cada control. No todos
- * los controles se llevan en todas las Direcciones/Unidades, y el calendario solo programa un
+ * los controles se llevan en todas las Direcciones/Registros, y el calendario solo programa un
  * control donde su configuración dice que aplica.
  *
  * El Administrador edita; el Encargado consulta.
@@ -49,7 +49,7 @@ import { AplicacionControl, ControlCatalogo, Frecuencia, ModoAplicacion } from '
           <div class="page-kicker">Administración</div>
           <h1>
             Catálogo de controles
-            <ui-help texto="La frecuencia, las reglas y la aplicación de cada control no van quemadas en el código: se configuran aquí. Un control semanal genera una instancia por semana; uno eventual solo cuando hay actividad. La aplicación decide en qué Direcciones/Unidades se programa: no todos los controles se trabajan en todas." />
+            <ui-help texto="La frecuencia, las reglas y la aplicación de cada control no van quemadas en el código: se configuran aquí. Un control semanal genera una instancia por semana; uno eventual solo cuando hay actividad. La aplicación decide en qué Direcciones/Registros se programa: no todos los controles se trabajan en todas." />
           </h1>
           <p class="page-sub">{{ data.catalogo().length }} controles modelados desde los formatos físicos de la carpeta de controles.</p>
         </div>
@@ -59,7 +59,7 @@ import { AplicacionControl, ControlCatalogo, Frecuencia, ModoAplicacion } from '
         <span class="alert-ico">i</span>
         <span>
           <b>«Aplica a» es configurable.</b> El calendario mensual solo programa cada control en las
-          Direcciones/Unidades donde aplica; donde no aplica, el control no aparece como pendiente
+          Direcciones/Registros donde aplica; donde no aplica, el control no aparece como pendiente
           ni cuenta como vencido: queda simplemente como <b>No aplica</b>.
         </span>
       </div>
@@ -70,7 +70,7 @@ import { AplicacionControl, ControlCatalogo, Frecuencia, ModoAplicacion } from '
             <table class="tbl">
               <thead><tr>
                 <th>Código</th><th>Nombre del control</th><th>Frecuencia</th><th>Aplica a</th>
-                <th>Direcciones/Unidades configuradas</th>
+                <th>Direcciones/Registros configuradas</th>
                 <th class="col-si">Evid.</th><th class="col-si">Firma</th><th class="col-si">Just.</th>
                 <th class="col-si">Form.</th><th>Estado</th>@if (auth.esAdmin()) { <th>Acciones</th> }
               </tr></thead>
@@ -87,7 +87,7 @@ import { AplicacionControl, ControlCatalogo, Frecuencia, ModoAplicacion } from '
                       {{ data.resumenAplicacion(c) }}
                       <div class="aplica-motivo">
                         Se programa en {{ data.paresAplicables(c.codigo).length }}
-                        {{ data.paresAplicables(c.codigo).length === 1 ? 'Dirección/Unidad' : 'Direcciones/Unidades' }}
+                        {{ data.paresAplicables(c.codigo).length === 1 ? 'Dirección/Registro' : 'Direcciones/Registros' }}
                       </div>
                     </td>
                     <td class="col-si">{{ c.requiereEvidencia ? 'Sí' : 'No' }}</td>
@@ -119,7 +119,7 @@ import { AplicacionControl, ControlCatalogo, Frecuencia, ModoAplicacion } from '
           <p class="muted">{{ c.descripcion }}</p>
           <dl class="dl">
             <div><dt>Aplica a</dt><dd>{{ c.aplicacion.modo }}</dd></div>
-            <div><dt>Direcciones/Unidades</dt><dd>{{ data.resumenAplicacion(c) }}</dd></div>
+            <div><dt>Direcciones/Registros</dt><dd>{{ data.resumenAplicacion(c) }}</dd></div>
             <div><dt>Motivo de la aplicación</dt><dd>{{ c.aplicacion.observaciones || '—' }}</dd></div>
             <div><dt>Requiere evidencia</dt><dd>{{ c.requiereEvidencia ? 'Sí' : 'No' }}</dd></div>
             <div><dt>Requiere firma</dt><dd>{{ c.requiereFirma ? 'Sí' : 'No' }}</dd></div>
@@ -130,7 +130,7 @@ import { AplicacionControl, ControlCatalogo, Frecuencia, ModoAplicacion } from '
           <div class="row" style="gap: 6px;">
             @for (p of data.paresAplicables(c.codigo); track p.direccion + p.unidad) {
               <span class="badge">{{ data.cortaDireccion(p.direccion) }} · {{ p.unidad }}</span>
-            } @empty { <span class="badge danger">Ninguna Dirección/Unidad</span> }
+            } @empty { <span class="badge danger">Ninguna Dirección/Registro</span> }
           </div>
           <div class="sec-title">Secciones del formulario</div>
           <ol style="margin-left: 18px; font-size: 13px;">
@@ -193,7 +193,7 @@ import { AplicacionControl, ControlCatalogo, Frecuencia, ModoAplicacion } from '
           [sub]="a.codigo + ' — ' + a.nombre" [ancho]="true" (cerrar)="aplicacion.set(null)">
           <p class="muted" style="margin-bottom: 12px;">
             Indique dónde se trabaja este control. El calendario mensual solo lo programará en las
-            Direcciones/Unidades resultantes.
+            Direcciones/Registros resultantes.
           </p>
 
           @for (m of modos; track m.valor) {
@@ -250,7 +250,7 @@ import { AplicacionControl, ControlCatalogo, Frecuencia, ModoAplicacion } from '
             <span class="resultado">
               Con esta configuración el control se programará en
               <b>{{ paresPrevistos().length }}</b>
-              {{ paresPrevistos().length === 1 ? 'Dirección/Unidad' : 'Direcciones/Unidades' }}:
+              {{ paresPrevistos().length === 1 ? 'Dirección/Registro' : 'Direcciones/Registros' }}:
               {{ resumenPrevisto() }}.
               @if (data.requiereEquipos(a)) {
                 Este control trabaja con equipos, así que solo se programa donde hay inventario operativo activo.
@@ -276,9 +276,9 @@ export class CatalogoComponent {
   protected readonly frecuencias: Frecuencia[] = ['Mensual', 'Semanal',
     'Semanal con entrega mensual consolidada', 'Diaria', 'Eventual', 'Programado'];
   protected readonly modos: { valor: ModoAplicacion; detalle: string }[] = [
-    { valor: 'Todas las direcciones', detalle: 'El control se lleva en todas las Direcciones/Unidades atendidas por Soporte Técnico.' },
+    { valor: 'Todas las direcciones', detalle: 'El control se lleva en todas las Direcciones/Registros atendidas por Soporte Técnico.' },
     { valor: 'Direcciones específicas', detalle: 'Solo en las Direcciones seleccionadas, con todas sus unidades.' },
-    { valor: 'Unidades específicas', detalle: 'Solo en los pares Dirección/Unidad seleccionados.' },
+    { valor: 'Unidades específicas', detalle: 'Solo en los pares Dirección/Registro seleccionados.' },
     { valor: 'Área técnica específica', detalle: 'No aplica por Dirección: aplica al área técnica responsable (cuarto de servidores, respaldos, infraestructura…).' }
   ];
 
@@ -332,7 +332,7 @@ export class CatalogoComponent {
       : [...a.unidades, { ...p }];
   }
 
-  /** Vista previa: en qué Direcciones/Unidades quedaría el control con lo seleccionado. */
+  /** Vista previa: en qué Direcciones/Registros quedaría el control con lo seleccionado. */
   protected readonly paresPrevistos = computed(() => {
     const c = this.aplicacion();
     if (!c) return [];

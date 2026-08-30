@@ -465,7 +465,7 @@ interface PasoForm {
                 <dl class="dl">
                   <div><dt>Control</dt><dd>{{ c.codigo }} — {{ catalogo()?.nombre }}</dd></div>
                   <div><dt>Período</dt><dd>{{ c.semana ? 'Semana ' + c.semana + ' de ' : '' }}{{ nombreMes(c.mes) }} {{ c.anio }}</dd></div>
-                  <div><dt>Dirección/Unidad</dt><dd>{{ data.dirUnidad(c.direccion, c.unidad) }}</dd></div>
+                  <div><dt>Dirección/Registro</dt><dd>{{ data.dirUnidad(c.direccion, c.unidad) }}</dd></div>
                   <div><dt>Código del formato</dt><dd class="mono">{{ c.codigo }} · {{ catalogo()?.version }}</dd></div>
                   <div><dt>Responsable</dt><dd>{{ auth.usuario()?.nombre }}</dd></div>
                   <div><dt>Fecha límite</dt><dd class="mono">{{ formatea(c.fechaLimite) }}</dd></div>
@@ -541,7 +541,7 @@ interface PasoForm {
                     <div><dt>Técnico responsable</dt><dd>{{ c.responsable }}</dd></div>
                     <div><dt>Fecha límite</dt><dd class="mono">{{ formatea(c.fechaLimite) }}</dd></div>
                     <div><dt>Estado del control</dt><dd><ui-badge [estado]="c.estado" /></dd></div>
-                    <div><dt>Equipos activos en la Dirección/Unidad</dt><dd>{{ equiposActivos().length }}</dd></div>
+                    <div><dt>Equipos activos en la Dirección/Registro</dt><dd>{{ equiposActivos().length }}</dd></div>
                   </dl>
                   <p class="muted" style="margin-top: 12px;">
                     Estos datos vienen del control programado: no se digitan aquí. Si algo no
@@ -798,7 +798,7 @@ interface PasoForm {
                     <span>
                       Estos son los <b>{{ equiposActivos().length }} equipo(s) activo(s)</b> de
                       {{ data.dirUnidad(c.direccion, c.unidad) }} según el inventario operativo.
-                      No aparecen equipos de otras Direcciones/Unidades: el inventario proviene de las entregas
+                      No aparecen equipos de otras Direcciones/Registros: el inventario proviene de las entregas
                       aceptadas en Gestión de Equipos.
                       @if (pe.minimo === 0) { Deben revisarse todos. }
                       @else { Debe revisarse al menos {{ pe.minimo }}. }
@@ -845,7 +845,7 @@ interface PasoForm {
                     </div>
                   } @empty {
                     <p class="muted">
-                      Esta Dirección/Unidad no tiene equipos activos en el inventario operativo. Los equipos entran
+                      Esta Dirección/Registro no tiene equipos activos en el inventario operativo. Los equipos entran
                       cuando el Usuario Final acepta la entrega en Gestión de Equipos.
                     </p>
                   }
@@ -858,12 +858,12 @@ interface PasoForm {
                     <span>
                       Digite la IP de <b>{{ pip.cantidad }} equipos distintos</b>. La IP se busca en el
                       <b>inventario operativo</b> de {{ data.dirUnidad(c.direccion, c.unidad) }}, que proviene de las
-                      entregas aceptadas en Gestión de Equipos: no se admite una IP de otra Dirección/Unidad.
+                      entregas aceptadas en Gestión de Equipos: no se admite una IP de otra Dirección/Registro.
                       @if (pip.ayuda) { {{ pip.ayuda }} }
                       @if (ipsDisponibles().length) {
                         Hay {{ ipsDisponibles().length }} equipo(s) activo(s) con IP registrada.
                       } @else {
-                        <b>Esta Dirección/Unidad no tiene equipos con IP registrada en el inventario operativo.</b>
+                        <b>Esta Dirección/Registro no tiene equipos con IP registrada en el inventario operativo.</b>
                       }
                     </span>
                   </div>
@@ -894,7 +894,7 @@ interface PasoForm {
                           <div><dt>Equipo</dt><dd>{{ eq.nombreEquipo || eq.tipo }}</dd></div>
                           <div><dt>Tipo, marca y modelo</dt><dd>{{ eq.tipo }} {{ eq.marca }} {{ eq.modelo }}</dd></div>
                           <div><dt>Usuario final</dt><dd>{{ eq.usuarioFinal }}</dd></div>
-                          <div><dt>Dirección/Unidad</dt><dd>{{ data.dirUnidad(eq.direccion, eq.unidad) }}</dd></div>
+                          <div><dt>Dirección/Registro</dt><dd>{{ data.dirUnidad(eq.direccion, eq.unidad) }}</dd></div>
                           <div><dt>Estado operativo</dt><dd>{{ eq.estado }}</dd></div>
                         </dl>
                       }
@@ -1205,7 +1205,7 @@ interface PasoForm {
               <input id="busca-eq" class="control" [ngModel]="busqueda()" (ngModelChange)="busqueda.set($event)"
                 placeholder="Número de inventario, nombre del equipo, usuario final, IP, tipo, marca, modelo o unidad…" />
               <span class="hint">
-                Solo se listan equipos activos de esta Dirección/Unidad: el inventario operativo proviene
+                Solo se listan equipos activos de esta Dirección/Registro: el inventario operativo proviene
                 de las entregas aceptadas en Gestión de Equipos.
               </span>
             </div>
@@ -1231,7 +1231,7 @@ interface PasoForm {
                 </div>
               } @empty {
                 <p class="muted">
-                  Ningún equipo activo de esta Dirección/Unidad coincide con la búsqueda.
+                  Ningún equipo activo de esta Dirección/Registro coincide con la búsqueda.
                 </p>
               }
             </div>
@@ -1257,7 +1257,7 @@ interface PasoForm {
                   <div><dt>Usuario</dt><dd>{{ equipoDe(eq.inventario)?.usuarioFinal || sinDato }}</dd></div>
                   <div><dt>Nombre del equipo</dt><dd>{{ equipoDe(eq.inventario)?.nombreEquipo || sinDato }}</dd></div>
                   <div><dt>IP</dt><dd class="mono">{{ equipoDe(eq.inventario)?.ip || sinDato }}</dd></div>
-                  <div><dt>Dirección/Unidad</dt><dd>{{ data.dirUnidad(c.direccion, c.unidad) }}</dd></div>
+                  <div><dt>Dirección/Registro</dt><dd>{{ data.dirUnidad(c.direccion, c.unidad) }}</dd></div>
                   <div><dt>Clasificación</dt><dd>{{ eq.clasificacion }}</dd></div>
                 </dl>
                 @for (item of itemsDelEquipo(sm, slotVerificar()); track item.id) {
@@ -1477,7 +1477,7 @@ export class CompletarControlComponent {
           const ri = r?.items?.find((x) => x.id === item.id);
           items[item.id] = { estado: ri?.estado ?? '', medicion: ri?.medicion ?? '', nota: ri?.nota ?? '' };
         }
-        // La lista de equipos NO se teclea: son los activos de la Dirección/Unidad del control.
+        // La lista de equipos NO se teclea: son los activos de la Dirección/Registro del control.
         const equipos: Record<string, RespuestaEquipo> = {};
         if (p.equipos) {
           for (const eq of activos) {
@@ -1547,7 +1547,7 @@ export class CompletarControlComponent {
     const u = this.auth.usuario();
     if (!c || !u || u.clave === 'coordinador') return false;
     if (!['Programado', 'Pendiente', 'En proceso', 'Listo para entregar'].includes(c.estado)) return false;
-    // Un técnico no completa controles de una Dirección/Unidad que no tiene asignada.
+    // Un técnico no completa controles de una Dirección/Registro que no tiene asignada.
     return this.data.atiende(u, c.direccion, c.unidad);
   });
 
@@ -1870,7 +1870,7 @@ export class CompletarControlComponent {
     return inventario ? this.data.equipoDe(inventario) : undefined;
   }
 
-  /** Equipos activos de la Dirección/Unidad que coinciden con la búsqueda del modal. */
+  /** Equipos activos de la Dirección/Registro que coinciden con la búsqueda del modal. */
   protected readonly equiposBuscados = computed(() => {
     const c = this.control();
     return c ? this.data.equiposParaMuestra(c, this.busqueda()) : [];
@@ -1999,7 +1999,7 @@ export class CompletarControlComponent {
 
   // ------------------------------------------------------------------ equipos verificados por IP
 
-  /** Equipo activo de la Dirección/Unidad del control que tiene esa IP, si lo hay. */
+  /** Equipo activo de la Dirección/Registro del control que tiene esa IP, si lo hay. */
   protected equipoDeIp(ip: string) {
     const c = this.control();
     return c ? this.data.buscarEquipoIp(ip, c.direccion, c.unidad).equipo : undefined;
@@ -2015,7 +2015,7 @@ export class CompletarControlComponent {
     return this.data.buscarEquipoIp(ip, c.direccion, c.unidad).error ?? '';
   }
 
-  /** IPs que el técnico puede usar: las de los equipos activos de la Dirección/Unidad del control. */
+  /** IPs que el técnico puede usar: las de los equipos activos de la Dirección/Registro del control. */
   protected readonly ipsDisponibles = computed(() => {
     const c = this.control();
     return c ? this.data.ipsDeControl(c) : [];
@@ -2023,7 +2023,7 @@ export class CompletarControlComponent {
 
   // ------------------------------------------------------------------ equipos del inventario operativo
 
-  /** Equipos activos de la Dirección/Unidad del control: la única lista admitida. */
+  /** Equipos activos de la Dirección/Registro del control: la única lista admitida. */
   protected readonly equiposActivos = computed(() => {
     const c = this.control();
     return c ? this.data.equiposDeControl(c) : [];

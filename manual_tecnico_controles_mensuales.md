@@ -32,7 +32,7 @@ src/app/
 │       ├── control-deadline.service.ts # 3.er día hábil del mes siguiente; límites semanales
 │       ├── equipment-integration.service.ts # eventos simulados de Gestión de Equipos
 │       ├── support-distribution.service.ts   # COMPARTIDO: distribución de soportes (existe igual en el otro módulo)
-│       ├── operatividad.service.ts     # KPIs y semáforo por Dirección/Unidad
+│       ├── operatividad.service.ts     # KPIs y semáforo por Dirección/Registro
 │       ├── data.service.ts           # almacén único + todas las reglas de negocio
 │       ├── auth.service.ts           # sesión simulada (sessionStorage)
 │       └── toast.service.ts
@@ -81,12 +81,12 @@ Validaciones (regla 30 del requerimiento):
 | No cerrar bitácora sin revisar atención al público | `validarBitacora`: 9 elementos marcados; fallas con descripción, acción y estado final |
 | Bitácora después de las 17:00 | `enviarBitacora` marca `Enviada tarde` |
 | Control vencido sin estado claro | reconciliación a `Vencido` + alerta del panel |
-| Dirección/Unidad sin soporte responsable | `paresSinSoporte` (computed) + alerta |
-| Equipo activo sin Dirección/Unidad | la semilla lo garantiza; la batería de casos lo verifica |
+| Dirección/Registro sin soporte responsable | `paresSinSoporte` (computed) + alerta |
+| Equipo activo sin Dirección/Registro | la semilla lo garantiza; la batería de casos lo verifica |
 | No programar un control donde no aplica | `paresAplicables(codigo)` desde la configuración del catálogo |
 | No guardar una aplicación vacía | `validarAplicacion`; y `actualizarCatalogo` no activa un control sin ella |
-| No registrar en un control un equipo de otra Dirección/Unidad | `validarEntrega` compara contra `equiposDeControl(c)` |
-| El técnico no completa controles de una Dirección/Unidad ajena | `atiende(u, dir, unidad)` bloquea `entregarControl`, `justificarControl` y `enviarBitacora` |
+| No registrar en un control un equipo de otra Dirección/Registro | `validarEntrega` compara contra `equiposDeControl(c)` |
+| El técnico no completa controles de una Dirección/Registro ajena | `atiende(u, dir, unidad)` bloquea `entregarControl`, `justificarControl` y `enviarBitacora` |
 
 Todo cambio de estado pasa por `registrarEvento` (trazabilidad) y `persistir()`.
 
@@ -95,7 +95,7 @@ Todo cambio de estado pasa por `registrarEvento` (trazabilidad) y `persistir()`.
 `ControlCatalogo.aplicacion` (`AplicacionControl`) decide **dónde se trabaja cada control**, con
 cuatro modos: `Todas las direcciones`, `Direcciones específicas`, `Unidades específicas` y
 `Área técnica específica` (las áreas viven en `areas-tecnicas.json` y resuelven a pares
-Dirección/Unidad reales: CSOD, respaldos, infraestructura, seguridad informática).
+Dirección/Registro reales: CSOD, respaldos, infraestructura, seguridad informática).
 
 `DataService.paresAplicables(codigo)` traduce esa configuración a los pares donde el control se
 programa; si el control trabaja con equipos (`requiereEquipos`), además exige inventario operativo
@@ -107,15 +107,15 @@ activo en el par. De ahí salen:
 - el **historial anual**: los controles que no aplican se muestran como **No aplica**, informativo,
   nunca como pendientes ni vencidos (`controlesNoAplicablesDe`);
 - el **panel ejecutivo**: cuenta «controles aplicables del mes» y los «no aplicables», y alerta
-  cuando una Dirección/Unidad tiene controles aplicables pero no tiene soporte responsable
+  cuando una Dirección/Registro tiene controles aplicables pero no tiene soporte responsable
   (`paresAplicablesSinSoporte`).
 
 La edición vive en Administración → Catálogo de controles → **Editar aplicación**
-(`actualizarAplicacion`), con vista previa de en qué Direcciones/Unidades quedaría, validación de
+(`actualizarAplicacion`), con vista previa de en qué Direcciones/Registros quedaría, validación de
 aplicación vacía y traza del cambio. El catálogo se persiste en el *snapshot* porque su
 configuración es editable.
 
-## 4.2 Operatividad por Dirección/Unidad
+## 4.2 Operatividad por Dirección/Registro
 
 `OperatividadService` calcula los indicadores que alimentan la vista ejecutiva de Controles
 mensuales, el detalle de cada Dirección, el panel, el historial anual y los reportes. `kpi(dir,
@@ -136,7 +136,7 @@ Semáforo: 90–100 % Operativa · 75–89 % En observación · < 75 % Crítica,
 un período cuyo plazo aún corre: `ControlDeadlineService.periodoCerrado()` decide, y
 `ultimoPeriodoCerrado()` es el período con el que abren las vistas ejecutivas.
 
-Otros métodos: `kpis(filtro)` (todas las Direcciones/Unidades visibles, con filtros de Dirección,
+Otros métodos: `kpis(filtro)` (todas las Direcciones/Registros visibles, con filtros de Dirección,
 Unidad, técnico y nivel), `anual(dir, unidad, año)` para el historial, `resumen(filtro)` para el
 panel, `cargaSoportes(filtro)` y `equiposConIncidencia(...)`. El componente presentacional
 `ui-kpi-direcciones` (shared) dibuja los mismos KPIs en tarjetas o en tabla comparativa.
@@ -187,8 +187,8 @@ imprimen las cinco semanas en una sola hoja.
 | Método (`DataService`) | Qué hace |
 |---|---|
 | `equipoPorIp(ip)` | Equipo **activo** del inventario operativo con esa IP |
-| `buscarEquipoIp(ip, dir, unidad)` | Devuelve el equipo o el motivo del rechazo (no existe / es de otra Dirección/Unidad) |
-| `ipsDeControl(control)` | IP admitidas: las de los equipos activos de la Dirección/Unidad del control |
+| `buscarEquipoIp(ip, dir, unidad)` | Devuelve el equipo o el motivo del rechazo (no existe / es de otra Dirección/Registro) |
+| `ipsDeControl(control)` | IP admitidas: las de los equipos activos de la Dirección/Registro del control |
 | `faltasEquiposIp` / `faltasTelefonos` | Reglas de entrega: cantidad, IP repetida, pertenencia y hora obligatoria |
 
 La IP llega del ecosistema: `EquipoOperativo` guarda `ip` y `mac`, y Gestión de Equipos las
@@ -207,8 +207,8 @@ al dibujar y al imprimir, de modo que nunca quedan copias desactualizadas.
 | Método (`DataService`) | Qué hace |
 |---|---|
 | `checklistDe(codigo)` | Sección de muestra del control, si la tiene |
-| `equiposParaMuestra(control, texto)` | Equipos activos de la Dirección/Unidad filtrados por el buscador |
-| `bloqueoEquipoMuestra(...)` | Motivo por el que un equipo no puede entrar: repetido o de otra Dirección/Unidad |
+| `equiposParaMuestra(control, texto)` | Equipos activos de la Dirección/Registro filtrados por el buscador |
+| `bloqueoEquipoMuestra(...)` | Motivo por el que un equipo no puede entrar: repetido o de otra Dirección/Registro |
 | `itemsDeClasificacion(seccion, clasificacion)` | Ítems que aplican a ese equipo según el grupo del formato |
 | `itemsVerificados` / `itemsIncumplidos` | Avance y hallazgos del equipo |
 | `estadoFinalEquipo(...)` | Completado / Pendiente derivado de los ítems, no tecleado |
@@ -224,7 +224,7 @@ desde inventario», «Equipo removido del control», «Ítems de seguridad verif
 el equipo y su usuario final.
 
 Nota de datos: el formato exige cinco equipos, así que el inventario operativo mantiene al menos
-esa cantidad activa en cada Dirección/Unidad donde el control aplica.
+esa cantidad activa en cada Dirección/Registro donde el control aplica.
 
 ## 4.4.1 Bitácora de ingresos (F0234)
 
@@ -360,7 +360,7 @@ de acciones se excluye con `display: none`.
 
 Los dos módulos son proyectos Angular distintos que trabajan sobre los **mismos datos base**:
 `usuarios-sistema.json` (misma identidad, mismo `usuario`, mismo rol), el catálogo de
-Direcciones/Unidades, los equipos y `distribucion-soportes.json`. `UsuarioSistema.moduloControles`
+Direcciones/Registros, los equipos y `distribucion-soportes.json`. `UsuarioSistema.moduloControles`
 distingue quién opera aquí (Soporte, Jefatura, Administración) de quién opera solo allá (Hardware).
 
 ### 7.2 `SupportDistributionService` — servicio compartido
@@ -380,8 +380,8 @@ Gestión de Equipos):
 | ID | Forma | Ejemplo |
 |---|---|---|
 | `tecnicoId` | slug del nombre | `wendy-carranza` |
-| `direccionId` | id del catálogo | `DIR-REGS` |
-| `unidadId` | `<direccionId>::<slug(unidad)>` | `DIR-REGS::registro-de-la-propiedad` |
+| `direccionId` | id del catálogo | `SS` |
+| `unidadId` | `<direccionId>::<slug(unidad)>` | `SS::SS-RC` |
 
 `idDireccion()` acepta el id, la forma corta o el nombre institucional, de modo que quien consulta
 puede seguir pasando lo que tenga a mano; lo que se **guarda y se compara** es siempre el id.
@@ -391,7 +391,7 @@ ocurre una sola vez.
 | Módulo | Uso |
 |---|---|
 | Controles Mensuales | **Administra** la distribución; asigna controles y bitácoras, filtra el inventario operativo y decide qué ve cada técnico |
-| Gestión de Equipos | **Consume**: `atiendeDireccionUnidad` y `soporteResponsableDe` delegan aquí, y `bloqueoExpedienteUnico` impide elegir un Técnico de Configuración que no atienda la Dirección/Unidad del requerimiento |
+| Gestión de Equipos | **Consume**: `atiendeDireccionUnidad` y `soporteResponsableDe` delegan aquí, y `bloqueoExpedienteUnico` impide elegir un Técnico de Configuración que no atienda la Dirección/Registro del requerimiento |
 
 Guardar un cambio en la distribución dispara `sincronizarTrasDistribucion(u, cambio)`, que llama a
 `autoSyncControls` del período activo y deja la traza «Controles recalculados automáticamente por
@@ -441,7 +441,7 @@ contadores) y `syncOperationalInventory()` para forzar una pasada:
 
 | Evento | Efecto |
 |---|---|
-| `onEquipmentAccepted` | El equipo entra al inventario operativo de su Dirección/Unidad, con el soporte responsable resuelto por la distribución (no a mano). |
+| `onEquipmentAccepted` | El equipo entra al inventario operativo de su Dirección/Registro, con el soporte responsable resuelto por la distribución (no a mano). |
 | `onEquipmentDischarged` | El equipo pasa a `Descargado` y sale del inventario activo. |
 
 Garantías de la sincronización:
@@ -452,7 +452,7 @@ Garantías de la sincronización:
   `Histórico` y se crea un registro operativo nuevo: `EquipoOperativo.ciclo` es la clave, no el
   número de inventario.
 - **Trazabilidad completa.** Cada movimiento deja un evento con fecha, hora, módulo origen y
-  destino, equipo, número de inventario, Dirección/Unidad, usuario final, expediente único,
+  destino, equipo, número de inventario, Dirección/Registro, usuario final, expediente único,
   estado anterior, estado nuevo y observación.
 
 No se duplica lógica de Gestión de Equipos: solo se consumen sus efectos.
@@ -461,7 +461,7 @@ No se duplica lógica de Gestión de Equipos: solo se consumen sus efectos.
 
 `SeccionPlantilla.equipos` (`EquiposPlantilla`) declara que una sección trabaja sobre el
 inventario operativo. `CompletarControlComponent` la dibuja con la lista de
-`data.equiposDeControl(c)` —los equipos **activos de la Dirección/Unidad del control**— y guarda
+`data.equiposDeControl(c)` —los equipos **activos de la Dirección/Registro del control**— y guarda
 `RespuestaEquipo[]`. `validarEntrega` rechaza cualquier inventario que no esté en esa lista.
 Lo usan F0422 (todos los equipos), F0174, F0288 y VULN (al menos uno).
 
@@ -494,12 +494,12 @@ texto real de `Formatos_nuevos_2025_.docx`, ~339 documentos y ~455 eventos de tr
 
 El **inventario operativo (40 equipos)** se deriva de Gestión de Equipos: los equipos que aquel
 módulo ya tiene aceptados se copian con su mismo número de inventario, expediente y técnico de
-configuración; el resto es la flota histórica de las mismas Direcciones/Unidades, con el soporte
+configuración; el resto es la flota histórica de las mismas Direcciones/Registros, con el soporte
 responsable resuelto por la distribución compartida. Cada equipo activo lleva su **IP** y su
-**MAC**, con un segmento de red por Dirección/Unidad: es lo que el F0387 verifica cada semana.
+**MAC**, con un segmento de red por Dirección/Registro: es lo que el F0387 verifica cada semana.
 
 La unidad **Dirección de Registros / Archivo Registral** queda sin soporte asignado a propósito
-(su asignación se desactivó el 31/07/2026): así el panel muestra la alerta de Dirección/Unidad sin
+(su asignación se desactivó el 31/07/2026): así el panel muestra la alerta de Dirección/Registro sin
 responsable y de equipos activos sin soporte.
 
 ## 10. Restablecimiento de la demostración

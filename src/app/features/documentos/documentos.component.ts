@@ -34,7 +34,7 @@ import { MESES, formateaFecha, nombreMes } from '../../core/models/models';
           <div class="card-head">
             <div>
               <h3>Generar reporte</h3>
-              <p class="sub">Consolidado del mes o reportes formales por Dirección/Unidad</p>
+              <p class="sub">Consolidado del mes o reportes formales por Dirección/Registro</p>
             </div>
           </div>
           <div class="card-body">
@@ -58,7 +58,7 @@ import { MESES, formateaFecha, nombreMes } from '../../core/models/models';
               </button>
             </div>
             <p class="muted" style="font-size: 12.5px; margin-top: 10px;">
-              Los reportes por Dirección/Unidad incluyen los KPIs del período, los controles aplicables,
+              Los reportes por Dirección/Registro incluyen los KPIs del período, los controles aplicables,
               las bitácoras, el inventario operativo y la conclusión del estado operativo. Se abren en la
               vista formal, lista para imprimir o descargar.
             </p>
@@ -154,7 +154,7 @@ export class DocumentosComponent {
     'Reporte de controles pendientes por Dirección', 'Reporte de inventario operativo por Dirección',
     'Reporte de bitácoras diarias por Dirección'];
 
-  /** Los seis reportes formales por Dirección/Unidad. */
+  /** Los seis reportes formales por Dirección/Registro. */
   protected readonly tiposReporte = ['Reporte mensual por Dirección', 'Reporte anual por Dirección',
     'Reporte de operatividad por Dirección', 'Reporte de controles pendientes por Dirección',
     'Reporte de inventario operativo por Dirección', 'Reporte de bitácoras diarias por Dirección',
@@ -183,7 +183,7 @@ export class DocumentosComponent {
   protected cuentaTipo(tipo: string): number { return this.visibles().filter((d) => d.tipo === tipo).length; }
 
   protected generarReporte(): void {
-    // Sin Dirección elegida se genera el consolidado; con Dirección/Unidad, el reporte formal por Dirección.
+    // Sin Dirección elegida se genera el consolidado; con Dirección/Registro, el reporte formal por Dirección.
     if (!this.repDireccion()) {
       const doc = this.data.generarReporteMensual(2026, this.repMes(), '', this.auth.usuario()!);
       this.verDoc.set(doc);

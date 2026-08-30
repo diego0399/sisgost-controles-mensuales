@@ -7,7 +7,7 @@ durante una demostración.
 
 Los usuarios son los mismos de **SISGOST — Gestión de Equipos**. El botón **Ir a Gestión de
 Equipos** (barra lateral, barra superior y panel ejecutivo) abre el módulo hermano: los dos
-forman un solo sistema y comparten usuarios, Direcciones/Unidades, equipos y la distribución de
+forman un solo sistema y comparten usuarios, Direcciones/Registros, equipos y la distribución de
 soportes.
 
 ---
@@ -19,13 +19,13 @@ La fotografía del mes en curso:
 - **Indicadores**: controles del mes, entregados (y cuántos fuera de plazo), pendientes,
   vencidos del año, cartas de justificación emitidas, bitácoras de hoy (enviadas y
   pendientes) y controles próximos a vencer.
-- **Alertas accionables**: Dirección/Unidad sin soporte asignado, movimientos de Gestión de
+- **Alertas accionables**: Dirección/Registro sin soporte asignado, movimientos de Gestión de
   Equipos por aplicar, controles vencidos sin justificación, bitácoras del día sin enviar,
   controles que vencen dentro de 3 días hábiles y equipos activos sin control asociado. Cada
   alerta lleva a la pantalla donde se resuelve.
 - **Tarjeta de SISGOST — Gestión de Equipos**: cuántos equipos activos alimentan hoy el
   inventario operativo, cuántos movimientos esperan aplicarse y el acceso al otro módulo.
-- **Avance por Dirección/Unidad**: soporte responsable, equipos activos, entregados/pendientes
+- **Avance por Dirección/Registro**: soporte responsable, equipos activos, entregados/pendientes
   y barra de avance del período.
 
 ## 2. Calendario de controles
@@ -42,7 +42,7 @@ hábil del mes siguiente**. En agosto de 2026, por ejemplo, los controles de jul
 ## 3. Historial anual
 
 Al elegir una **Dirección** (y su Unidad) aparece además el resumen **mes a mes de operatividad**
-de esa Dirección/Unidad: controles aplicables, entregados, pendientes, vencidos, justificados,
+de esa Dirección/Registro: controles aplicables, entregados, pendientes, vencidos, justificados,
 bitácoras, porcentaje y estado. Desde ahí se abre el mes en el detalle o se genera el
 **Reporte anual por Dirección**.
 
@@ -61,16 +61,16 @@ partir de lo que se acepta o se descarga en Gestión de Equipos.
 
 ## 4. Controles mensuales
 
-La pantalla se organiza **por Dirección/Unidad**, que es como se atienden los controles, y abre
+La pantalla se organiza **por Dirección/Registro**, que es como se atienden los controles, y abre
 en el **mes actual** del sistema. Con la fecha de demostración (16/08/2026) carga **Agosto 2026**;
 la fecha límite de ese período sigue siendo el tercer día hábil del mes siguiente (03/09/2026). Si
 elige otro mes en el selector, su elección se mantiene mientras siga en la pantalla.
 
 ### Vista por Dirección (predeterminada)
 
-- **Indicadores del período**: Direcciones/Unidades atendidas y su operatividad promedio,
+- **Indicadores del período**: Direcciones/Registros atendidas y su operatividad promedio,
   cuántas están operativas, en observación, críticas y sin soporte asignado.
-- **Una tarjeta por Dirección/Unidad** con sus responsables, el porcentaje de operatividad, el
+- **Una tarjeta por Dirección/Registro** con sus responsables, el porcentaje de operatividad, el
   semáforo institucional y las cifras del período (aplicables, entregados, pendientes, vencidos,
   justificados, equipos activos y con incidencia). El botón **Ver detalle** abre la Dirección.
 - **Comparativo por Dirección**: la misma información en tabla, para comparar de un vistazo.
@@ -80,7 +80,7 @@ El semáforo es **Operativa** (90 % o más), **En observación** (75–89 %), **
 75 %), **En curso** (el plazo del período todavía corre), **Sin soporte asignado** y
 **Sin controles aplicables**.
 
-### Detalle de una Dirección/Unidad
+### Detalle de una Dirección/Registro
 
 Abre con **Meses pendientes por completar**: los meses del año con controles pendientes o
 vencidos, con su resumen y su estado general (Pendiente, En proceso, Entregado, Entregado tarde,
@@ -89,7 +89,7 @@ cerrados, y con **Ver controles del mes** se entra a los controles aplicables de
 faltan muestran **Completar** (o **Continuar** si ya se empezó) y los entregados, **Ver documento**.
 Los que no aplican aparecen al pie como **No aplica** y no cuentan como pendientes.
 
-Reúne además todo lo de esa Dirección/Unidad en el período: responsables, fecha límite, operatividad y
+Reúne además todo lo de esa Dirección/Registro en el período: responsables, fecha límite, operatividad y
 estado, los quince indicadores, sus alertas, los controles que le aplican —y, al pie, los que
 **no aplican**—, sus bitácoras diarias, su inventario operativo y los documentos generados.
 Desde ahí se generan los **reportes formales por Dirección** (mensual, anual, de operatividad,
@@ -98,17 +98,17 @@ vista tipo PDF con **Imprimir**, **Descargar** y **Cerrar**.
 
 ### Vista general
 
-La tabla plana de todos los controles del período —código, período, Dirección/Unidad,
+La tabla plana de todos los controles del período —código, período, Dirección/Registro,
 responsable, fecha límite, días hábiles restantes, avance y estado— con sus filtros de control y
 estado. Sigue disponible en la pestaña **Vista general**.
 
 ### Si usted es Técnico de Soporte
 
-La pantalla muestra primero **Mis Direcciones asignadas** y solo las Direcciones/Unidades que la
+La pantalla muestra primero **Mis Direcciones asignadas** y solo las Direcciones/Registros que la
 distribución le asigna, con los controles que le corresponden.
 
 Lista de controles del período con fecha límite, **días hábiles restantes**, avance y estado.
-El Técnico de Soporte solo ve —y solo puede completar— las Direcciones/Unidades que la
+El Técnico de Soporte solo ve —y solo puede completar— las Direcciones/Registros que la
 distribución de soportes le asigna; si abre un control ajeno, el sistema lo advierte y no deja
 editarlo.
 
@@ -119,9 +119,9 @@ editarlo.
    **Agregar registro**, campos de fecha/hora/observación).
    Los controles que trabajan con equipos —**F0422**, mantenimiento **F0174**, correctivo
    **F0288** y **vulnerabilidades**— abren con la lista de **equipos activos de la
-   Dirección/Unidad** tomada del inventario operativo: se marcan los revisados, sus
+   Dirección/Registro** tomada del inventario operativo: se marcan los revisados, sus
    verificaciones (existe físicamente, usuario asignado correcto, estado operativo…), el estado
-   y una observación. No aparecen equipos de otras Direcciones/Unidades ni se teclean a mano.
+   y una observación. No aparecen equipos de otras Direcciones/Registros ni se teclean a mano.
 2. **Guardar avance** conserva el borrador; el avance se refleja en la lista.
 3. Si el control exige **evidencia**, adjúntela en el paso «Evidencias».
 4. En **Resumen y entrega** el sistema valida obligatorios, checklist completo, mínimos de
@@ -142,8 +142,8 @@ responsable, las observaciones y, sobre todo:
 
 - **3 equipos identificados por su IP**, cada uno con su **hora de verificación**. Al escribir una
   IP el sistema la busca en el inventario operativo y muestra el número de inventario, el equipo,
-  el usuario final, la Dirección/Unidad y el estado operativo. Si la IP no existe entre los equipos
-  activos, o si pertenece a otra Dirección/Unidad, el formulario lo advierte y no deja entregar.
+  el usuario final, la Dirección/Registro y el estado operativo. Si la IP no existe entre los equipos
+  activos, o si pertenece a otra Dirección/Registro, el formulario lo advierte y no deja entregar.
   Tampoco admite la misma IP dos veces en la misma semana.
 - **3 teléfonos o extensiones**, con su ubicación, el resultado de la verificación, su **hora** y
   observaciones.
@@ -193,13 +193,13 @@ el **resumen** antes de entregar.
 ### F0382: cinco equipos tomados del inventario
 
 El **F0382** se llena en cinco pasos. El primero solo muestra los datos del control programado
-—código, período, Dirección/Unidad, técnico responsable y fecha límite—, que no se digitan.
+—código, período, Dirección/Registro, técnico responsable y fecha límite—, que no se digitan.
 
 En el segundo paso aparecen los **cinco huecos** que el formato exige. Cada uno tiene el botón
 **Seleccionar desde inventario**, que abre el buscador con los equipos **activos de esa
-Dirección/Unidad**; puede buscar por número de inventario, nombre del equipo, usuario final, IP,
+Dirección/Registro**; puede buscar por número de inventario, nombre del equipo, usuario final, IP,
 tipo, marca, modelo o unidad. Un equipo ya elegido aparece marcado como «Ya seleccionado» y no
-puede repetirse, y no se ofrecen equipos de otras Direcciones/Unidades ni descargados. Al elegir
+puede repetirse, y no se ofrecen equipos de otras Direcciones/Registros ni descargados. Al elegir
 uno se muestran sus datos tomados del inventario; solo debe indicar si es un equipo de **usuario
 interno** o de **consulta al público**, porque de eso dependen los ítems que se le piden.
 
@@ -256,11 +256,11 @@ Todas las cartas emitidas, con su motivo, período, responsable, avance de firma
 
 ## 7. Inventario operativo
 
-Antes de la tabla de equipos hay un resumen **por Dirección/Unidad**: equipos activos, equipos con
+Antes de la tabla de equipos hay un resumen **por Dirección/Registro**: equipos activos, equipos con
 incidencias, descargados del mes, estado del último F0422 y de la última bitácora, con acceso a
-los equipos de esa Dirección/Unidad.
+los equipos de esa Dirección/Registro.
 
-Los equipos activos por Dirección/Unidad que alimentan F0422, el mantenimiento preventivo y
+Los equipos activos por Dirección/Registro que alimentan F0422, el mantenimiento preventivo y
 el análisis de vulnerabilidades. El inventario se mantiene **solo**: cuando el Usuario Final
 acepta la conformidad en Gestión de Equipos el equipo entra automáticamente, y cuando Soporte
 registra el descargo sale automáticamente del inventario activo. **No hay nada que confirmar**:
@@ -269,7 +269,7 @@ aplicó, y todo queda en trazabilidad.
 
 La tabla lista por defecto **solo los equipos activos**; la casilla «Ver descargados e históricos»
 muestra también los que salieron y los ciclos anteriores de un equipo que volvió a entregarse en
-otra Dirección/Unidad.
+otra Dirección/Registro.
 
 **Detalle** de un equipo muestra sus datos (inventario, serie, usuario final, técnico de
 configuración, soporte responsable, expediente único, garantía) y su **historial de controles**:
@@ -302,35 +302,35 @@ destino y el número de inventario afectado.
   firma, justificación, estado y —sobre todo— **Aplica a**: en qué Direcciones, Unidades o área
   técnica se trabaja cada control. Con **Editar aplicación** se elige el modo (todas, Direcciones
   específicas, Unidades específicas o área técnica), se marcan las que corresponden y se escribe el
-  motivo; el sistema muestra en qué Direcciones/Unidades quedaría antes de guardar y no permite
+  motivo; el sistema muestra en qué Direcciones/Registros quedaría antes de guardar y no permite
   guardar una aplicación vacía. Lo que se configure aquí decide qué controles aparecen en el
-  calendario de cada Dirección/Unidad: donde el control no aplica, queda como **No aplica** y no
+  calendario de cada Dirección/Registro: donde el control no aplica, queda como **No aplica** y no
   cuenta como pendiente ni vence.
-- **Distribución de soportes**: qué técnico responde por cada Dirección/Unidad, **vista desde la
+- **Distribución de soportes**: qué técnico responde por cada Dirección/Registro, **vista desde la
   persona**. Cada Técnico de Soporte tiene una tarjeta con su rol, su estado, todas las
-  Direcciones/Unidades que atiende y su carga del período; desde ella se abre **Ver detalle** o
+  Direcciones/Registros que atiende y su carga del período; desde ella se abre **Ver detalle** o
   **Editar responsabilidades**.
 
   En la ficha de edición se ve cada responsabilidad con su fecha de inicio, su estado y sus
   observaciones, cuántos controles del período y cuántos equipos le corresponden, y el historial de
-  las que se desactivaron. Con **Agregar Dirección/Unidad** se suma otra —Dirección, Unidad, fecha
+  las que se desactivaron. Con **Agregar Dirección/Registro** se suma otra —Dirección, Unidad, fecha
   de inicio, estado y observaciones—; con **Desactivar** se retira, y el sistema **exige el
   motivo**: «Debe ingresar el motivo por el cual se desactiva esta responsabilidad.» Nada se borra,
   para que los controles y equipos registrados mientras estuvo vigente sigan teniendo a quién
   apuntar.
 
-  El mismo registro puede consultarse **por Dirección/Unidad** —con **Agregar soporte** y
-  **Desactivar** en cada una— o en la tabla completa. Una Dirección/Unidad sin soporte activo genera
-  la alerta del panel. No se permite asignar dos veces la misma Dirección/Unidad activa a la misma
-  persona: «Esta Dirección/Unidad ya se encuentra asignada a este Técnico de Soporte.»
+  El mismo registro puede consultarse **por Dirección/Registro** —con **Agregar soporte** y
+  **Desactivar** en cada una— o en la tabla completa. Una Dirección/Registro sin soporte activo genera
+  la alerta del panel. No se permite asignar dos veces la misma Dirección/Registro activa a la misma
+  persona: «Esta Dirección/Registro ya se encuentra asignada a este Técnico de Soporte.»
 
   **Esta pantalla gobierna también a Gestión de Equipos**: allí solo pueden recibir equipos para
-  configurar los técnicos responsables de la Dirección/Unidad del requerimiento. Al guardar no hay
+  configurar los técnicos responsables de la Dirección/Registro del requerimiento. Al guardar no hay
   que sincronizar nada: «La distribución de soportes fue actualizada y los controles se recalcularon
   automáticamente.»
 
   El **Coordinador** la consulta sin editarla y el **Técnico de Soporte** solo ve las
-  Direcciones/Unidades de las que es responsable: quien decide qué le toca revisar no puede ser él
+  Direcciones/Registros de las que es responsable: quien decide qué le toca revisar no puede ser él
   mismo.
 - **Feriados** (Administrador): catálogo editable nacional y de San Salvador, con la tabla de
   **fechas límite resultantes** del año para ver el efecto de cada cambio.
@@ -343,15 +343,15 @@ destino y el número de inventario afectado.
 - «Este control venció el plazo de entrega establecido.»
 - «La bitácora diaria fue enviada fuera del horario establecido.»
 - «No se registró actividad mensual asociada a este control; se generó carta de justificación.»
-- «El equipo fue incorporado al inventario operativo de la Dirección/Unidad posterior a la
+- «El equipo fue incorporado al inventario operativo de la Dirección/Registro posterior a la
   aceptación del Usuario Final.»
-- «Este control pertenece a una Dirección/Unidad que no está asignada al técnico en la
+- «Este control pertenece a una Dirección/Registro que no está asignada al técnico en la
   distribución de soportes.»
 - «Los datos de demostración fueron restablecidos correctamente.»
 - «Debe seleccionar al menos una Dirección, Unidad o área donde aplica este control.»
 - «La aplicación del control fue actualizada correctamente.»
-- «La Dirección/Unidad tiene controles aplicables, pero no posee Técnico de Soporte asignado.»
-- «Esta Dirección/Unidad ya se encuentra asignada a este Técnico de Soporte.»
+- «La Dirección/Registro tiene controles aplicables, pero no posee Técnico de Soporte asignado.»
+- «Esta Dirección/Registro ya se encuentra asignada a este Técnico de Soporte.»
 - «Debe ingresar el motivo por el cual se desactiva esta responsabilidad.»
 - «Solo se pueden asignar usuarios con rol Técnico de Soporte.»
 - «La distribución de soportes fue actualizada y los controles se recalcularon automáticamente.»

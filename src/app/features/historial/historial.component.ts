@@ -81,7 +81,7 @@ import { MESES, formateaFecha, nombreMes } from '../../core/models/models';
         }
       </div>
 
-      <!-- Historial por Dirección/Unidad: operatividad mes a mes -->
+      <!-- Historial por Dirección/Registro: operatividad mes a mes -->
       @if (fDireccion() && parSeleccionado()) {
         <div class="card" style="margin-top: 20px;">
           <div class="card-head">
@@ -133,7 +133,7 @@ import { MESES, formateaFecha, nombreMes } from '../../core/models/models';
             </div>
             <div class="row" style="margin-top: 12px;">
               <a class="btn btn-outline btn-sm" [routerLink]="['/controles/direccion', fDireccion(), unidadSel()]">
-                Ver detalle de operatividad de la Dirección/Unidad
+                Ver detalle de operatividad de la Dirección/Registro
               </a>
             </div>
           </div>
@@ -172,7 +172,7 @@ import { MESES, formateaFecha, nombreMes } from '../../core/models/models';
         <div class="card-body">
           <div class="table-wrap">
             <table class="tbl">
-              <thead><tr><th>Control</th><th>Período</th><th>Dirección/Unidad</th><th>Responsable</th><th>Fecha límite</th><th>Entrega</th><th>Estado</th><th>Documento</th></tr></thead>
+              <thead><tr><th>Control</th><th>Período</th><th>Dirección/Registro</th><th>Responsable</th><th>Fecha límite</th><th>Entrega</th><th>Estado</th><th>Documento</th></tr></thead>
               <tbody>
                 @for (c of filtrados(); track c.id) {
                   <tr>
@@ -277,7 +277,7 @@ export class HistorialComponent {
 
   protected readonly delMes = computed(() => this.visibles().filter((c) => c.mes === this.mesSel()));
 
-  // ------------------------------------------------------------------ historial por Dirección/Unidad
+  // ------------------------------------------------------------------ historial por Dirección/Registro
 
   /** Unidad del historial por Dirección: la elegida o la primera de la Dirección. */
   protected readonly unidadSel = computed(() => {
@@ -287,7 +287,7 @@ export class HistorialComponent {
 
   protected readonly parSeleccionado = computed(() => !!this.fDireccion() && !!this.unidadSel());
 
-  /** Operatividad de los doce meses del año para la Dirección/Unidad seleccionada. */
+  /** Operatividad de los doce meses del año para la Dirección/Registro seleccionada. */
   protected readonly anual = computed(() =>
     this.parSeleccionado() ? this.oper.anual(this.fDireccion(), this.unidadSel(), this.anio()) : []);
 
@@ -315,7 +315,7 @@ export class HistorialComponent {
       for (const c of this.data.controlesNoAplicablesDe(dir, u)) {
         salida.push({
           codigo: c.codigo, unidad: u,
-          motivo: `${c.nombre} — ${c.aplicacion.observaciones || 'No configurado para esta Dirección/Unidad.'}`
+          motivo: `${c.nombre} — ${c.aplicacion.observaciones || 'No configurado para esta Dirección/Registro.'}`
         });
       }
     }

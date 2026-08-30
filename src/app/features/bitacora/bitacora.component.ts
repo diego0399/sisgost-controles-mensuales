@@ -9,7 +9,7 @@ import { DocumentoComponent } from '../../shared/documento';
 import { formateaFecha, isoLocal } from '../../core/models/models';
 
 /**
- * Bitácora diaria del Técnico de Soporte: una por Dirección/Unidad y día hábil, con envío
+ * Bitácora diaria del Técnico de Soporte: una por Dirección/Registro y día hábil, con envío
  * obligatorio antes de las 5:00 p. m. La prioridad de la bitácora es que el equipo de
  * atención al público esté funcionando.
  */
@@ -75,7 +75,7 @@ import { formateaFecha, isoLocal } from '../../core/models/models';
         <div class="card-body">
           <div class="table-wrap">
             <table class="tbl">
-              <thead><tr><th>Fecha</th><th>Dirección/Unidad</th><th>Responsable</th><th>Hora de envío</th><th>Fallas del día</th><th>Actividades</th><th>Estado</th><th>Acciones</th></tr></thead>
+              <thead><tr><th>Fecha</th><th>Dirección/Registro</th><th>Responsable</th><th>Hora de envío</th><th>Fallas del día</th><th>Actividades</th><th>Estado</th><th>Acciones</th></tr></thead>
               <tbody>
                 @for (b of filtradas(); track b.id) {
                   <tr>

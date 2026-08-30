@@ -716,28 +716,28 @@
    "direcciones": [],
    "unidades": [
     {
-     "direccion": "DIR-REGS",
-     "unidad": "Registro de la Propiedad"
+     "direccion": "SS",
+     "unidad": "Registro de la Propiedad Raíz e Hipotecas"
     },
     {
-     "direccion": "DIR-REGS",
+     "direccion": "SS",
      "unidad": "Registro de Comercio"
     },
     {
-     "direccion": "DIR-REG",
-     "unidad": "Dirección de Registro"
+     "direccion": "STA",
+     "unidad": "Todo el departamento"
     },
     {
-     "direccion": "DIR-RPRH",
-     "unidad": "RPRH"
+     "direccion": "SON",
+     "unidad": "Todo el departamento"
     },
     {
-     "direccion": "DIR-IGN",
-     "unidad": "IGN"
+     "direccion": "SS",
+     "unidad": "Instituto Geográfico y del Catastro Nacional (IGCN)"
     },
     {
-     "direccion": "DIR-GTEC",
-     "unidad": "Gerencia de Tecnología"
+     "direccion": "SS",
+     "unidad": "Registro de Garantías Mobiliarias"
     }
    ],
    "area": "",
@@ -747,7 +747,7 @@
   "requiereFirma": true,
   "permiteJustificacion": false,
   "activo": true,
-  "descripcion": "Verificación mensual de las políticas y controles de seguridad de TIC sobre una muestra de CINCO equipos activos de la Dirección/Unidad. Cada equipo se elige del inventario operativo y se revisa con los nueve ítems del formato; los incumplimientos exigen observación, acción correctiva y estado final.",
+  "descripcion": "Verificación mensual de las políticas y controles de seguridad de TIC sobre una muestra de CINCO equipos activos de la Dirección/Registro. Cada equipo se elige del inventario operativo y se revisa con los nueve ítems del formato; los incumplimientos exigen observación, acción correctiva y estado final.",
   "plantilla": [
    {
     "titulo": "Datos generales del control",
@@ -756,7 +756,7 @@
    },
    {
     "titulo": "Equipos verificados",
-    "descripcion": "Muestra de cinco equipos activos de la Dirección/Unidad, elegidos del inventario operativo.",
+    "descripcion": "Muestra de cinco equipos activos de la Dirección/Registro, elegidos del inventario operativo.",
     "checklistEquipos": {
      "cantidad": 5,
      "items": [
@@ -822,7 +822,7 @@
       "Usuarios externos (PC de consulta al público)",
       "Ambos equipos"
      ],
-     "ayuda": "El formato pide cinco equipos. El Técnico de Soporte decide cuáles, pero solo puede elegir equipos activos de la Dirección/Unidad del control."
+     "ayuda": "El formato pide cinco equipos. El Técnico de Soporte decide cuáles, pero solo puede elegir equipos activos de la Dirección/Registro del control."
     }
    },
    {
@@ -1034,12 +1034,12 @@
    "direcciones": [],
    "unidades": [
     {
-     "direccion": "DIR-GTEC",
-     "unidad": "Gerencia de Tecnología"
+     "direccion": "SS",
+     "unidad": "Registro de Garantías Mobiliarias"
     },
     {
-     "direccion": "DIR-REGS",
-     "unidad": "Registro de la Propiedad"
+     "direccion": "SS",
+     "unidad": "Registro de la Propiedad Raíz e Hipotecas"
     }
    ],
    "area": "",
@@ -1099,7 +1099,7 @@
     ],
     "equiposIp": {
      "cantidad": 3,
-     "ayuda": "La IP debe existir en el inventario operativo, pertenecer a un equipo activo de esta misma Dirección/Unidad y no repetirse dentro de la semana."
+     "ayuda": "La IP debe existir en el inventario operativo, pertenecer a un equipo activo de esta misma Dirección/Registro y no repetirse dentro de la semana."
     },
     "telefonos": {
      "cantidad": 3,
@@ -1160,7 +1160,7 @@
     ],
     "equiposIp": {
      "cantidad": 3,
-     "ayuda": "La IP debe existir en el inventario operativo, pertenecer a un equipo activo de esta misma Dirección/Unidad y no repetirse dentro de la semana."
+     "ayuda": "La IP debe existir en el inventario operativo, pertenecer a un equipo activo de esta misma Dirección/Registro y no repetirse dentro de la semana."
     },
     "telefonos": {
      "cantidad": 3,
@@ -1221,7 +1221,7 @@
     ],
     "equiposIp": {
      "cantidad": 3,
-     "ayuda": "La IP debe existir en el inventario operativo, pertenecer a un equipo activo de esta misma Dirección/Unidad y no repetirse dentro de la semana."
+     "ayuda": "La IP debe existir en el inventario operativo, pertenecer a un equipo activo de esta misma Dirección/Registro y no repetirse dentro de la semana."
     },
     "telefonos": {
      "cantidad": 3,
@@ -1282,7 +1282,7 @@
     ],
     "equiposIp": {
      "cantidad": 3,
-     "ayuda": "La IP debe existir en el inventario operativo, pertenecer a un equipo activo de esta misma Dirección/Unidad y no repetirse dentro de la semana."
+     "ayuda": "La IP debe existir en el inventario operativo, pertenecer a un equipo activo de esta misma Dirección/Registro y no repetirse dentro de la semana."
     },
     "telefonos": {
      "cantidad": 3,
@@ -1343,7 +1343,7 @@
     ],
     "equiposIp": {
      "cantidad": 3,
-     "ayuda": "La IP debe existir en el inventario operativo, pertenecer a un equipo activo de esta misma Dirección/Unidad y no repetirse dentro de la semana."
+     "ayuda": "La IP debe existir en el inventario operativo, pertenecer a un equipo activo de esta misma Dirección/Registro y no repetirse dentro de la semana."
     },
     "telefonos": {
      "cantidad": 3,
@@ -1385,17 +1385,17 @@
    "direcciones": [],
    "unidades": [],
    "area": "",
-   "observaciones": "Cada Dirección/Unidad puede tener equipos activos asignados en el inventario operativo."
+   "observaciones": "Cada Dirección/Registro puede tener equipos activos asignados en el inventario operativo."
   },
   "requiereEvidencia": false,
   "requiereFirma": true,
   "permiteJustificacion": false,
   "activo": true,
-  "descripcion": "Actualización mensual del inventario de equipo informático de la Dirección/Unidad: PC, impresores, escáneres y equipo de telecomunicaciones. Se alimenta del inventario operativo conectado con Gestión de Equipos.",
+  "descripcion": "Actualización mensual del inventario de equipo informático de la Dirección/Registro: PC, impresores, escáneres y equipo de telecomunicaciones. Se alimenta del inventario operativo conectado con Gestión de Equipos.",
   "plantilla": [
    {
-    "titulo": "Equipos activos de la Dirección/Unidad",
-    "descripcion": "Lista tomada del inventario operativo: son los equipos que Gestión de Equipos dejó activos en esta Dirección/Unidad tras la aceptación del Usuario Final. No se teclean a mano.",
+    "titulo": "Equipos activos de la Dirección/Registro",
+    "descripcion": "Lista tomada del inventario operativo: son los equipos que Gestión de Equipos dejó activos en esta Dirección/Registro tras la aceptación del Usuario Final. No se teclean a mano.",
     "equipos": {
      "verificaciones": [
       "Existe físicamente",
@@ -1409,7 +1409,7 @@
       "No ubicado"
      ],
      "minimo": 0,
-     "ayuda": "Deben revisarse todos los equipos activos de la Dirección/Unidad."
+     "ayuda": "Deben revisarse todos los equipos activos de la Dirección/Registro."
     }
    },
    {
@@ -1479,28 +1479,28 @@
    "direcciones": [],
    "unidades": [
     {
-     "direccion": "DIR-REGS",
-     "unidad": "Registro de la Propiedad"
+     "direccion": "SS",
+     "unidad": "Registro de la Propiedad Raíz e Hipotecas"
     },
     {
-     "direccion": "DIR-REGS",
+     "direccion": "SS",
      "unidad": "Registro de Comercio"
     },
     {
-     "direccion": "DIR-REG",
-     "unidad": "Dirección de Registro"
+     "direccion": "STA",
+     "unidad": "Todo el departamento"
     },
     {
-     "direccion": "DIR-RPRH",
-     "unidad": "RPRH"
+     "direccion": "SON",
+     "unidad": "Todo el departamento"
     },
     {
-     "direccion": "DIR-IGN",
-     "unidad": "IGN"
+     "direccion": "SS",
+     "unidad": "Instituto Geográfico y del Catastro Nacional (IGCN)"
     },
     {
-     "direccion": "DIR-ISPI",
-     "unidad": "ISPI"
+     "direccion": "SS",
+     "unidad": "Instituto Salvadoreño de la Propiedad Intelectual (ISPI)"
     }
    ],
    "area": "",
@@ -1609,7 +1609,7 @@
    "direcciones": [],
    "unidades": [],
    "area": "",
-   "observaciones": "El mantenimiento correctivo puede ocurrir en cualquier Dirección/Unidad atendida; sin atenciones, se justifica."
+   "observaciones": "El mantenimiento correctivo puede ocurrir en cualquier Dirección/Registro atendida; sin atenciones, se justifica."
   },
   "requiereEvidencia": true,
   "requiereFirma": true,
@@ -1619,7 +1619,7 @@
   "plantilla": [
    {
     "titulo": "Equipos atendidos",
-    "descripcion": "Equipos activos de la Dirección/Unidad que recibieron atención correctiva en el período.",
+    "descripcion": "Equipos activos de la Dirección/Registro que recibieron atención correctiva en el período.",
     "equipos": {
      "verificaciones": [
       "Falla verificada",
@@ -1671,7 +1671,7 @@
    "direcciones": [],
    "unidades": [],
    "area": "",
-   "observaciones": "Direcciones/Unidades atendidas por Soporte Técnico: se revisan los tiquetes del mes o se justifica si no hubo actividad."
+   "observaciones": "Direcciones/Registros atendidas por Soporte Técnico: se revisan los tiquetes del mes o se justifica si no hubo actividad."
   },
   "requiereEvidencia": false,
   "requiereFirma": true,
@@ -1743,9 +1743,8 @@
   "aplicacion": {
    "modo": "Direcciones específicas",
    "direcciones": [
-    "DIR-REGS",
-    "DIR-REG",
-    "DIR-GTEC"
+    "SS",
+    "STA"
    ],
    "unidades": [],
    "area": "",
@@ -1759,7 +1758,7 @@
   "plantilla": [
    {
     "titulo": "Equipos analizados",
-    "descripcion": "Equipos activos de la Dirección/Unidad incluidos en el análisis de vulnerabilidades del mes.",
+    "descripcion": "Equipos activos de la Dirección/Registro incluidos en el análisis de vulnerabilidades del mes.",
     "equipos": {
      "verificaciones": [
       "Análisis ejecutado",

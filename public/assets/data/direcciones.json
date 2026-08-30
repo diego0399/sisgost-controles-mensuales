@@ -1,44 +1,182 @@
 [
  {
-  "id": "DIR-REGS",
-  "nombre": "Dirección de Registros",
-  "corta": "REGS",
-  "unidades": ["Registro de la Propiedad", "Registro de Comercio", "Archivo Registral"],
+  "id": "AHU",
+  "nombre": "Ahuachapán",
+  "corta": "AHU",
+  "zonaId": "ZOC",
+  "porDireccion": false,
+  "unidades": [
+   "Instituto Geográfico y del Catastro Nacional (IGCN)",
+   "Registro de la Propiedad Raíz e Hipotecas"
+  ],
   "activa": true
  },
  {
-  "id": "DIR-REG",
-  "nombre": "Dirección de Registro",
-  "corta": "REG",
-  "unidades": ["Dirección de Registro"],
+  "id": "STA",
+  "nombre": "Santa Ana",
+  "corta": "STA",
+  "zonaId": "ZOC",
+  "porDireccion": false,
+  "unidades": [
+   "Instituto Geográfico y del Catastro Nacional (IGCN)",
+   "Registro de la Propiedad Raíz e Hipotecas",
+   "Registro de Comercio",
+   "Instituto Salvadoreño de la Propiedad Intelectual (ISPI)"
+  ],
   "activa": true
  },
  {
-  "id": "DIR-RPRH",
-  "nombre": "Dirección del RPRH",
-  "corta": "RPRH",
-  "unidades": ["RPRH"],
+  "id": "SON",
+  "nombre": "Sonsonate",
+  "corta": "SON",
+  "zonaId": "ZOC",
+  "porDireccion": false,
+  "unidades": [
+   "Instituto Geográfico y del Catastro Nacional (IGCN)",
+   "Registro de la Propiedad Raíz e Hipotecas",
+   "Registro de Comercio",
+   "Instituto Salvadoreño de la Propiedad Intelectual (ISPI)"
+  ],
   "activa": true
  },
  {
-  "id": "DIR-IGN",
-  "nombre": "Dirección del IGN",
-  "corta": "IGN",
-  "unidades": ["IGN"],
+  "id": "CAB",
+  "nombre": "Cabañas",
+  "corta": "CAB",
+  "zonaId": "ZCEN",
+  "porDireccion": false,
+  "unidades": [
+   "Instituto Geográfico y del Catastro Nacional (IGCN)",
+   "Registro de la Propiedad Raíz e Hipotecas"
+  ],
   "activa": true
  },
  {
-  "id": "DIR-ISPI",
-  "nombre": "Dirección del ISPI",
-  "corta": "ISPI",
-  "unidades": ["ISPI"],
+  "id": "CHA",
+  "nombre": "Chalatenango",
+  "corta": "CHA",
+  "zonaId": "ZCEN",
+  "porDireccion": false,
+  "unidades": [
+   "Instituto Geográfico y del Catastro Nacional (IGCN)",
+   "Registro de Comercio",
+   "Registro de la Propiedad Raíz e Hipotecas"
+  ],
   "activa": true
  },
  {
-  "id": "DIR-GTEC",
-  "nombre": "Gerencia de Tecnología",
-  "corta": "GTEC",
-  "unidades": ["Gerencia de Tecnología"],
+  "id": "CUS",
+  "nombre": "Cuscatlán",
+  "corta": "CUS",
+  "zonaId": "ZCEN",
+  "porDireccion": false,
+  "unidades": [
+   "Instituto Geográfico y del Catastro Nacional (IGCN)",
+   "Registro de la Propiedad Raíz e Hipotecas"
+  ],
+  "activa": true
+ },
+ {
+  "id": "LIB",
+  "nombre": "La Libertad",
+  "corta": "LIB",
+  "zonaId": "ZCEN",
+  "porDireccion": false,
+  "unidades": [
+   "Instituto Geográfico y del Catastro Nacional (IGCN)",
+   "Registro de la Propiedad Raíz e Hipotecas"
+  ],
+  "activa": true
+ },
+ {
+  "id": "PAZ",
+  "nombre": "La Paz",
+  "corta": "PAZ",
+  "zonaId": "ZCEN",
+  "porDireccion": false,
+  "unidades": [
+   "Instituto Geográfico y del Catastro Nacional (IGCN)",
+   "Registro de la Propiedad Raíz e Hipotecas",
+   "Registro de Comercio",
+   "Instituto Salvadoreño de la Propiedad Intelectual (ISPI)"
+  ],
+  "activa": true
+ },
+ {
+  "id": "SS",
+  "nombre": "San Salvador",
+  "corta": "SS",
+  "zonaId": "ZCEN",
+  "porDireccion": true,
+  "unidades": [
+   "Registro de la Propiedad Raíz e Hipotecas",
+   "Instituto Geográfico y del Catastro Nacional (IGCN)",
+   "Registro de Garantías Mobiliarias",
+   "Registro de Comercio",
+   "Instituto Salvadoreño de la Propiedad Intelectual (ISPI)"
+  ],
+  "activa": true
+ },
+ {
+  "id": "SV",
+  "nombre": "San Vicente",
+  "corta": "SV",
+  "zonaId": "ZCEN",
+  "porDireccion": false,
+  "unidades": [
+   "Instituto Geográfico y del Catastro Nacional (IGCN)",
+   "Registro de la Propiedad Raíz e Hipotecas"
+  ],
+  "activa": true
+ },
+ {
+  "id": "UNI",
+  "nombre": "La Unión",
+  "corta": "UNI",
+  "zonaId": "ZOR",
+  "porDireccion": false,
+  "unidades": [
+   "Instituto Geográfico y del Catastro Nacional (IGCN)",
+   "Registro de la Propiedad Raíz e Hipotecas"
+  ],
+  "activa": true
+ },
+ {
+  "id": "MOR",
+  "nombre": "Morazán",
+  "corta": "MOR",
+  "zonaId": "ZOR",
+  "porDireccion": false,
+  "unidades": [
+   "Instituto Geográfico y del Catastro Nacional (IGCN)",
+   "Registro de la Propiedad Raíz e Hipotecas"
+  ],
+  "activa": true
+ },
+ {
+  "id": "SM",
+  "nombre": "San Miguel",
+  "corta": "SM",
+  "zonaId": "ZOR",
+  "porDireccion": false,
+  "unidades": [
+   "Instituto Geográfico y del Catastro Nacional (IGCN)",
+   "Registro de la Propiedad Raíz e Hipotecas",
+   "Registro de Comercio",
+   "Instituto Salvadoreño de la Propiedad Intelectual (ISPI)"
+  ],
+  "activa": true
+ },
+ {
+  "id": "USU",
+  "nombre": "Usulután",
+  "corta": "USU",
+  "zonaId": "ZOR",
+  "porDireccion": false,
+  "unidades": [
+   "Instituto Geográfico y del Catastro Nacional (IGCN)",
+   "Registro de la Propiedad Raíz e Hipotecas"
+  ],
   "activa": true
  }
 ]

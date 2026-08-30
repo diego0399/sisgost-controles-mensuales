@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { TipoAsignacion } from '../models/territorio';
 
 /**
  * DISTRIBUCIÓN DE SOPORTES COMPARTIDA del ecosistema SISGOST.
@@ -32,7 +33,7 @@ export const CLAVE_DISTRIBUCION_ACTUALIZADA = 'sisgost_support_distribution_upda
 
 /** Versión del contrato guardado; una versión distinta se migra, nunca se borra en silencio. */
 export const CLAVE_DISTRIBUCION_VERSION = 'sisgost_support_distribution_version';
-export const VERSION_DISTRIBUCION_COMPARTIDA = '2026-08-19-shared-distribution-fix';
+export const VERSION_DISTRIBUCION_COMPARTIDA = '2026-08-30-territorio-zona-departamento-registro';
 
 /** Aviso dentro del mismo origen; entre orígenes distintos avisa el evento `storage`. */
 export const EVENTO_DISTRIBUCION_ACTUALIZADA = 'sisgost-support-distribution-updated';
@@ -47,12 +48,26 @@ export interface AsignacionSoporteCompartida {
   tecnicoId: string;
   tecnicoNombre: string;
   tecnicoRol: string;
+  /**
+   * Alcance territorial: `DIRECCION_REGISTRO` en los departamentos que se llevan Registro por
+   * Registro (hoy, San Salvador) y `DEPARTAMENTO` en los demás, donde el responsable cubre todas
+   * las Direcciones/Registros del departamento. Es el dato del que depende que Gestión de Equipos
+   * ofrezca el Técnico de Configuración correcto sin lógica propia.
+   */
+  tipoAsignacion: TipoAsignacion;
+  zonaId: string;
+  departamentoId: string;
+  /** `null` cuando la asignación cubre el departamento completo. */
+  direccionRegistroId: string | null;
+  /** Departamento; se conserva el nombre heredado del campo para no romper a quien ya lo leía. */
   direccionId: string;
   direccionNombre: string;
+  /** Ámbito completo: `SS::SS-RC` o `STA::*`. */
   unidadId: string;
+  /** Nombre de la Dirección/Registro, o «Todo el departamento». */
   unidadNombre: string;
   activo: boolean;
-  /** Desde cuándo atiende esa Dirección/Unidad (ISO `AAAA-MM-DD`). */
+  /** Desde cuándo atiende ese ámbito (ISO `AAAA-MM-DD`). */
   fechaInicio: string;
   horaInicio: string;
   observaciones: string;
@@ -73,6 +88,16 @@ export class SharedDistributionService {
   /** ¿Hay ya una distribución compartida en este origen? Decide si se siembra la demostración. */
   existe(): boolean {
     return this.crudo() !== null;
+  }
+
+  /**
+   * ¿Lo guardado corresponde a **esta** versión del contrato? El cambio a la estructura
+   * territorial `Zona → Departamento → Dirección/Registro` reescribió el ámbito de cada
+   * asignación, así que una copia anterior ya no describe la misma organización. No se borra en
+   * silencio: se ignora, y la semilla territorial vuelve a publicarse encima.
+   */
+  vigente(): boolean {
+    return this.existe() && this.versionGuardada() === VERSION_DISTRIBUCION_COMPARTIDA;
   }
 
   private crudo(): string | null {

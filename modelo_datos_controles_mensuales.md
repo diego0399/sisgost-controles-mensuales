@@ -13,7 +13,7 @@ relacional están en `docs/plantuml/` (ver `diagramas_controles_mensuales.md`).
 ### DIRECCION
 | Campo | Tipo | Nota |
 |---|---|---|
-| id | PK | `DIR-REGS`, `DIR-RPRH`… |
+| id | PK | `SS`, `DIR-RPRH`… |
 | nombre, corta | texto | Dirección de Registros / `REGS` — el mismo texto que usa Gestión de Equipos |
 | unidades | lista | Registro de la Propiedad, Registro de Comercio, IGN, RPRH… |
 | activa | bool | inactivas no generan controles |
@@ -34,9 +34,9 @@ bitácoras, inventario y distribución.
 |---|---|---|
 | id | PK | `DIST-2026-0001` |
 | **tecnicoId** | FK estable | `wendy-carranza` — slug del nombre; con él se compara, no con el texto |
-| **direccionId** | FK estable | `DIR-REGS` — id del catálogo organizacional |
-| **unidadId** | FK estable | `DIR-REGS::registro-de-la-propiedad` — la unidad cuelga de su Dirección |
-| direccion, unidad | texto | Dirección/Unidad atendida, para mostrar |
+| **direccionId** | FK estable | `SS` — id del catálogo organizacional |
+| **unidadId** | FK estable | `SS::SS-RC` — la unidad cuelga de su Dirección |
+| direccion, unidad | texto | Dirección/Registro atendida, para mostrar |
 | tecnico | texto | «Nombre — Rol», resuelve a USUARIO_SISTEMA |
 | asignadoPor, fecha, hora | | quién la registró · `fecha` es la **fecha de inicio**, que decide quien asigna |
 | activo | bool | nunca se borra: se desactiva |
@@ -96,7 +96,7 @@ observación.
 | area | FK → AREA_TECNICA | modo «Área técnica específica» |
 | observaciones | texto | motivo institucional que se muestra en el catálogo |
 
-No todos los controles se trabajan en todas las Direcciones/Unidades: el calendario solo programa
+No todos los controles se trabajan en todas las Direcciones/Registros: el calendario solo programa
 un control en los pares que resultan de esta configuración, y los controles que revisan equipos
 exigen además inventario operativo activo.
 
@@ -105,7 +105,7 @@ exigen además inventario operativo activo.
 |---|---|---|
 | id | PK | `AREA-CSOD`, `AREA-RESP`, `AREA-INFRA`, `AREA-SEG` |
 | nombre, descripcion | texto | |
-| pares | lista Dirección/Unidad | dónde tiene presencia física el área |
+| pares | lista Dirección/Registro | dónde tiene presencia física el área |
 
 ### CONTROL_MES (instancia por período)
 | Campo | Tipo | Nota |
@@ -165,7 +165,7 @@ En observación`) y evidencia opcional.
 | fechaAceptacion, expediente, expedienteUnico | | vínculo con Gestión de Equipos |
 | origen | texto | módulo del que proviene el registro |
 | fechaDescargo?, motivoDescargo?, accionPosterior? | | solo tras el descargo |
-| estado | catálogo | `Activo en Dirección/Unidad, Descargado, En garantía, Pendiente de revisión, Reingresado a Hardware, No disponible, Histórico` |
+| estado | catálogo | `Activo en Dirección/Registro, Descargado, En garantía, Pendiente de revisión, Reingresado a Hardware, No disponible, Histórico` |
 | garantia, ultimoControl? | texto | |
 
 ### EVENTO_INTEGRACION
@@ -212,7 +212,7 @@ un cálculo en consulta; guardarlo duplicaría un dato que cambia con cada entre
 
 | Campo | Origen |
 |---|---|
-| aplicables, entregados, pendientes, vencidos, justificados | CONTROL_MES del período que aplican a la Dirección/Unidad |
+| aplicables, entregados, pendientes, vencidos, justificados | CONTROL_MES del período que aplican a la Dirección/Registro |
 | bitácoras enviadas / tarde / pendientes / vencidas | BITACORA_DIARIA del período |
 | equipos activos / con incidencia / descargados | EQUIPO_OPERATIVO y las respuestas de equipos de los controles |
 | responsables | DISTRIBUCION_SOPORTE vigente |
@@ -246,4 +246,4 @@ CONTROL_MES.secciones[] : RespuestaSeccion
 ```
 
 La lista de equipos que un control puede responder **no se teclea**: es la de equipos activos de
-su Dirección/Unidad. `validarEntrega` rechaza cualquier inventario ajeno.
+su Dirección/Registro. `validarEntrega` rechaza cualquier inventario ajeno.

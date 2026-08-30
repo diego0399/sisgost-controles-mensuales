@@ -1,0 +1,119 @@
+@startuml actividades
+title SISGOST — Controles Mensuales · Diagrama de actividades (ciclo completo del período)
+skinparam shadowing false
+skinparam backgroundColor #FFFFFF
+skinparam activity {
+  BackgroundColor #F4F7FB
+  BorderColor #2F5597
+  ArrowColor #2F5597
+  DiamondBackgroundColor #FFF4E5
+  DiamondBorderColor #B26B00
+}
+
+|#F2F6FC|SISGOST (automático)|
+start
+:Lee el **catálogo de controles** y el
+«Aplica a» de cada formato;
+:Lee la **distribución de soportes**
+vigente por Dirección/Unidad;
+:Calcula la **fecha límite** del período:
+3.er día hábil del mes siguiente,
+descontando sábados, domingos y feriados;
+:Programa los controles que **aplican**
+en cada Dirección/Unidad y les asigna
+el Técnico de Soporte responsable;
+note right
+  autoSyncControls(anio, mes) es **idempotente**:
+  si nada cambió no escribe ni deja traza.
+  No hay botón que la dispare.
+end note
+:Crea la **bitácora diaria** de cada
+Dirección/Unidad con soporte asignado;
+
+|#FFFFFF|Técnico de Soporte|
+:Entra al sistema y ve **solo** las
+Direcciones/Unidades que atiende;
+:Abre **Controles mensuales → meses pendientes**;
+
+if (¿Hubo actividad en el período?) then (sí)
+  :Completa el formulario digital del control;
+  note right
+    **Lo que pide cada formato**
+    · **F0422 · F0174 · F0288 · VULN**: toma los equipos
+      **activos** de su Dirección/Unidad, del inventario operativo.
+    · **F0382**: elige 5 equipos del inventario y responde
+      los 9 ítems de seguridad de cada uno.
+    · **F0387 · F0389**: registra semana a semana
+      (3 IP y 3 extensiones / condiciones del CSOD)
+      y entrega **un solo documento mensual consolidado**.
+    · **F0234**: registra cada ingreso al cuarto de servidores,
+      individual o con acompañante.
+  end note
+  :Adjunta evidencias cuando el formato las pide;
+
+  |SISGOST (automático)|
+  :Valida obligatorios, checklist completo,
+  mínimos de tabla, muestra y evidencias;
+
+  |Técnico de Soporte|
+  while (¿La validación señala faltantes?) is (sí)
+    :Corrige lo que el resumen de validación enumera;
+  endwhile (no)
+  :Entrega el control;
+
+  |SISGOST (automático)|
+  if (¿Entrega dentro del plazo?) then (sí)
+    :Estado **Entregado**;
+  else (no)
+    :Estado **Entregado tarde**;
+  endif
+  :Genera el **documento formal** (vista PDF)
+  y el evento de trazabilidad;
+
+else (no)
+  |Técnico de Soporte|
+  :Emite la **carta de justificación**
+  (motivo + texto institucional);
+  |SISGOST (automático)|
+  :Estado **Justificado** + carta con
+  las tres firmas del formato;
+endif
+
+|#FFFFFF|Técnico de Soporte|
+:Completa la **bitácora diaria**: revisión del
+equipo de atención al público y actividades;
+|SISGOST (automático)|
+if (¿Enviada antes de las 5:00 p. m.?) then (sí)
+  :Estado **Enviada**;
+else (no)
+  :Estado **Enviada tarde**
+  (o **Vencida** si el día terminó sin envío);
+endif
+
+|#F7F4FC|Encargado de Soporte|
+:Revisa la entrega en la **vista por Dirección**;
+if (¿Conforme?) then (sí)
+  :Estado **Cerrado**;
+else (no)
+  :Estado **Observado** — vuelve al técnico
+  con la observación registrada;
+endif
+
+|SISGOST (automático)|
+if (¿Venció el plazo sin entrega ni carta?) then (sí)
+  :Estado **Vencido** + alerta en el panel;
+else (no)
+endif
+:Recalcula la **operatividad** de la Dirección/Unidad
+y su semáforo institucional;
+
+|#FCF7F2|Coordinador (Carlos Durán)|
+:Consulta panel, operatividad, historial anual,
+reportes y trazabilidad. **No edita.**
+
+|SISGOST (automático)|
+:Deja en **trazabilidad** fecha, hora, usuario, rol,
+Dirección/Unidad, estado anterior y estado nuevo;
+stop
+
+@enduml

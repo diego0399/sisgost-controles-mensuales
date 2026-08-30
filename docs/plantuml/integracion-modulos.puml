@@ -1,68 +1,82 @@
 @startuml integracion-modulos
-title SISGOST · Integración entre módulos (datos compartidos y flujo del equipo)
+title SISGOST · Integración entre Gestión de Equipos y Controles Mensuales
+skinparam shadowing false
+skinparam backgroundColor #FFFFFF
 skinparam componentStyle rectangle
-skinparam linetype ortho
+skinparam nodesep 22
+skinparam ranksep 45
+skinparam component {
+  BackgroundColor #F4F7FB
+  BorderColor #2F5597
+  ArrowColor #2F5597
+  FontSize 13
+}
+skinparam packageFontSize 15
+skinparam noteFontSize 12
 
-package "Datos base compartidos" as BASE {
-  [usuarios-sistema.json\n(mismos usuarios y roles)] as USR
-  [direcciones / unidades] as DIR
-  [distribucion-soportes.json] as DIS
-  [SupportDistributionService\n(mismo servicio en los dos proyectos)] as SRV
+package "SISGOST — Gestión de Equipos · localhost:4200" as GE #FBFCFE {
+  [Requerimiento\nDirección/Unidad destino] as REQ
+  [Inventario de Hardware\n+ Expediente técnico F0288] as HW
+  [**Expediente único**\nselección del Técnico de Configuración] as EXP
+  [Configuración F0302\nnombre de equipo, IP y MAC] as CFG
+  [Entrega y **conformidad**\ndel Usuario Final] as ACE
+  [**Descargo** del equipo] as DES
+
+  REQ -down-> EXP
+  HW -down-> EXP
+  EXP -down-> CFG
+  CFG -down-> ACE
+  ACE -down-> DES
 }
 
-package "SISGOST — Gestión de Equipos\n(localhost:4200)" as GE {
-  [Requerimiento\nDirección/Unidad] as REQ
-  [Expediente único\nTécnico de Configuración] as EXP
-  [Preparación F0288 /\nConfiguración F0302] as CFG
-  [Entrega y aceptación\ndel Usuario Final] as ACE
-  [Descargo] as DES
-  [Distribución de soportes\n(solo consulta)] as DGE
+package "Fuente compartida del ecosistema" as SHARE #FFF7F2 {
+  [**sisgost_support_distribution**\n_updated_at · _version] as KDIS
+  [**sisgost_operational_inventory**] as KINV
+  [puente-distribucion.html\npublicada por el origen 4300] as PD
+  [puente-inventario.html\npublicada por el origen 4200] as PI
+
+  KDIS -down-> PD
+  KINV -down-> PI
 }
 
-package "SISGOST — Controles Mensuales\n(localhost:4300)" as CM {
-  [Distribución de soportes\n(administración)] as DCM
-  [Inventario operativo] as INV
-  [Controles con equipos\nF0422 · F0174 · F0288 · VULN] as CTL
-  [F0387 · verificación por IP\n3 equipos y 3 extensiones por semana] as F87
-  [F0387 · verificación por IP\n3 equipos y 3 extensiones por semana] as F87
+package "SISGOST — Controles Mensuales · localhost:4300" as CM #FBFCFE {
+  [**Distribución de soportes**\nadministración por técnico] as DCM
+  [**Inventario operativo**\npor Dirección/Unidad] as INV
+  [Controles del período\nF0234 · F0382 · F0387 · F0389\nF0422 · F0174 · F0288 · VULN] as CTL
   [Bitácora diaria] as BIT
+  [Operatividad y KPIs\npor Dirección/Unidad] as KPI
   [Trazabilidad] as TRZ
+
+  INV -down-> CTL : equipos **activos**\nde la Dirección/Unidad
+  CTL -down-> KPI
+  BIT -down-> KPI
+  CTL -down-> TRZ
+  INV -down-> TRZ
 }
 
-DCM --> DIS : administra
-DIS --> SRV
-SRV --> DGE : consulta
-SRV --> EXP : **filtra** los técnicos elegibles\ncomo Técnico de Configuración
-SRV --> CTL : responsable del control
-SRV --> BIT : responsable de la bitácora
-SRV --> INV : soporte responsable del equipo
-USR --> GE
-USR --> CM
-DIR --> GE
-DIR --> CM
+DCM -up-> KDIS : **publica** al guardar\n(alta y baja con motivo)
+PD ..> EXP : el selector de **Técnico de Configuración**\nse relee al abrirlo, al cambiar de requerimiento,\nal cambiar de usuario y al recuperar el foco
+KDIS -> CTL : responsable del control
+KDIS -> BIT : responsable de la bitácora
+ACE -> KINV : el equipo se publica\ncon sus datos técnicos
+DES -> KINV : el equipo sale\ndel inventario activo
+PI ..> INV : se lee al cargar y al recibir el aviso `storage`
 
-REQ --> EXP
-EXP --> CFG
-CFG --> ACE
-ACE --> INV : **entrega aceptada**\nse incorpora AUTOMÁTICAMENTE con sus\ndatos técnicos (nombre, IP y MAC del F0302)
-ACE ..> DES
-DES --> INV : **descargo**\nsale AUTOMÁTICAMENTE del\ninventario activo
-INV --> CTL : equipos activos de la\nDirección/Unidad
-INV --> F87 : **IP** de los equipos activos\nde esa Dirección/Unidad
-INV --> F87 : **IP** de los equipos activos\nde esa Dirección/Unidad
-CTL --> TRZ
-INV --> TRZ : módulo origen → módulo destino,\nequipo, estado anterior y nuevo
-
-note right of INV
-  syncOperationalInventory() corre al cargar:
-  idempotente (no duplica equipos ni repite
-  movimientos) y conserva los ciclos anteriores
-  como «Histórico».
+note bottom of SHARE
+  **Ningún módulo tiene botón de sincronizar.**
+  `localStorage` está aislado por origen y el puerto forma parte del
+  origen: cada módulo publica una página puente en el suyo, que
+  responde por `postMessage` a orígenes autorizados y **nunca escribe**.
+  Los datos base —usuarios, roles y Direcciones/Unidades— son los
+  mismos en los dos módulos: no se duplican.
 end note
 
-note bottom of SRV
-  Regla: un Técnico de Soporte solo puede recibir
-  equipos para configurar en las Direcciones/Unidades
-  donde la distribución lo declara responsable.
+note bottom of CM
+  **Regla del ecosistema**: solo puede ser Técnico de Configuración quien
+  la distribución declara **responsable activo** de la Dirección/Unidad del
+  requerimiento. Si no hay ninguno, el expediente único se **bloquea** y el
+  mensaje indica configurar la Distribución de Soportes en Controles
+  Mensuales. **No hay lista de reserva con todos los técnicos.**
 end note
+
 @enduml

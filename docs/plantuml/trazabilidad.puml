@@ -1,0 +1,89 @@
+@startuml trazabilidad
+title SISGOST · Trazabilidad y flujo integral (Gestión de Equipos → Controles Mensuales)
+skinparam shadowing false
+skinparam backgroundColor #FFFFFF
+skinparam sequence {
+  ArrowColor #2F5597
+  LifeLineBorderColor #2F5597
+  ParticipantBorderColor #2F5597
+  ParticipantBackgroundColor #F4F7FB
+  BoxBorderColor #B7C7E0
+  ActorBorderColor #2F5597
+  ActorBackgroundColor #F4F7FB
+}
+
+actor "Usuario Final\n(no entra al sistema)" as UF
+box "SISGOST — Gestión de Equipos" #FBFCFE
+  participant "Expediente único\ny entrega" as GE
+end box
+box "Fuente compartida del ecosistema" #FFFDF5
+  participant "sisgost_operational_inventory" as KINV
+  participant "sisgost_support_distribution" as KDIS
+end box
+box "SISGOST — Controles Mensuales" #FBFCFE
+  participant "Inventario\noperativo" as INV
+  participant "Controles\ndel período" as CTL
+  participant "Documentos" as DOC
+  database "Trazabilidad" as TRZ
+end box
+actor "Técnico\nde Soporte" as TEC
+actor "Encargado\nde Soporte" as ENC
+actor "Coordinador\n(Carlos Durán)" as COO
+
+== Quién atiende cada Dirección/Unidad ==
+ENC -> KDIS : guarda la distribución de soportes\n(alta / baja con motivo obligatorio)
+activate KDIS
+KDIS -> TRZ : **Distribución guardada en fuente compartida**\nusuario · rol · técnico afectado · Dirección/Unidad · motivo
+KDIS --> GE : el expediente único solo ofrece como\n**Técnico de Configuración** a los responsables
+deactivate KDIS
+note over KDIS
+  Se compara por **IDs estables**
+  (tecnicoId · direccionId · unidadId),
+  nunca por el nombre visible.
+end note
+
+== El equipo llega al inventario operativo ==
+UF -> GE : acepta la conformidad de la entrega
+GE -> KINV : publica el equipo con sus datos técnicos\n(inventario, nombre, IP y MAC del F0302)
+KINV -> INV : el módulo lo lee **al cargar y al recibir el aviso**
+INV -> TRZ : **Equipo incorporado al inventario operativo**\nmódulo origen → destino · equipo · estado anterior / nuevo
+note right of INV
+  Sin botón «incorporar»: la pasada es
+  idempotente y no duplica el equipo.
+end note
+
+== El control se trabaja y se entrega ==
+INV -> CTL : equipos **activos** de la Dirección/Unidad\n(F0422 · F0174 · F0288 · VULN · F0382 · F0387)
+TEC -> CTL : completa el formulario del período
+CTL -> TRZ : **Control en proceso** · avance y sección
+TEC -> CTL : entrega dentro de los 3 primeros días hábiles
+CTL -> DOC : genera el documento formal (vista PDF)
+DOC -> TRZ : **Control entregado** · documento · hash · fecha y hora
+alt Sin actividad en el mes
+  TEC -> DOC : carta de justificación con las tres firmas
+  DOC -> TRZ : **Control justificado** · motivo declarado
+else Venció el plazo
+  CTL -> TRZ : **Control vencido** · alerta en el panel
+end
+
+== Revisión y seguimiento ==
+ENC -> CTL : revisa la entrega
+alt Conforme
+  CTL -> TRZ : **Control cerrado**
+else Con observación
+  CTL -> TRZ : **Control observado** · vuelve al técnico
+end
+COO -> TRZ : consulta el histórico y los reportes\n(**solo lectura**)
+
+== El equipo sale ==
+GE -> KINV : registra el **descargo** del equipo
+KINV -> INV : el equipo sale del inventario **activo**
+INV -> TRZ : **Equipo descargado** · motivo · acción posterior
+note over TRZ
+  **Cada evento guarda**: fecha, hora, usuario, rol,
+  Dirección, Unidad, control o equipo afectado,
+  estado anterior, estado nuevo, motivo y observación;
+  los de integración añaden módulo origen y destino.
+end note
+
+@enduml

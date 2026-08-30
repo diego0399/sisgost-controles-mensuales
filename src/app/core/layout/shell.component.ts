@@ -8,6 +8,7 @@ import { ToastService } from '../services/toast.service';
 import { IconComponent } from '../../shared/icon';
 import { NAVEGACION, NavGrupo } from '../config/permisos';
 import { MODULOS, URL_GESTION_EQUIPOS } from '../config/modulos';
+import { RolSistema, nombreRol } from '../models/roles';
 
 /**
  * Layout principal: barra lateral con el menú por rol y barra superior con el usuario
@@ -80,15 +81,33 @@ import { MODULOS, URL_GESTION_EQUIPOS } from '../config/modulos';
             <label for="vercomo">Ver como</label>
             <select id="vercomo" (change)="cambiarUsuario($event)">
               @for (u of data.usuariosDelModulo(); track u.usuario) {
-                <option [value]="u.usuario" [selected]="u.usuario === auth.usuario()?.usuario">{{ u.rol }} · {{ u.nombre }}</option>
+                <option [value]="u.usuario" [selected]="u.usuario === auth.usuario()?.usuario">{{ etiqueta(u.roles) }} · {{ u.nombre }}</option>
               }
             </select>
           </div>
+
+          <!-- Selector de rol activo: aparece SOLO si el usuario tiene más de un rol. Cambiar de
+               rol no cierra la sesión ni pierde los demás roles: reordena el menú, los permisos
+               visibles y los filtros para que la interfaz no mezcle dos formas de trabajar. -->
+          @if (auth.multirol()) {
+            <div class="ver-como rol-activo">
+              <label for="rolactivo">Rol activo</label>
+              <select id="rolactivo" (change)="cambiarRol($event)" title="Cambiar el rol con el que opera, sin cerrar sesión">
+                @for (r of auth.roles(); track r) {
+                  <option [value]="r" [selected]="r === auth.rolActivo()">{{ nombreDe(r) }}</option>
+                }
+              </select>
+            </div>
+          }
+
           <div class="user-chip">
             <div class="avatar">{{ auth.usuario()?.iniciales }}</div>
             <div>
               <div class="u-name">{{ auth.usuario()?.nombre }}</div>
-              <div class="u-role">{{ auth.usuario()?.rol }}</div>
+              <div class="u-role">
+                {{ auth.usuario()?.rol }}
+                @if (auth.multirol()) { <span class="u-otros" [title]="'Roles del usuario: ' + auth.etiquetaRoles()">+{{ auth.roles().length - 1 }}</span> }
+              </div>
             </div>
           </div>
           <button class="btn-out" type="button" (click)="salir()" title="Cerrar sesión">
@@ -145,6 +164,29 @@ export class ShellComponent {
     }
     return 'SISGOST';
   });
+
+  /** Nombre institucional de un rol, para el selector y la ficha del usuario. */
+  protected nombreDe(rol: RolSistema): string { return nombreRol(rol); }
+
+  /** «Encargado de Soporte · Técnico de Soporte» del listado «Ver como». */
+  protected etiqueta(roles: RolSistema[] | undefined): string {
+    return (roles ?? []).map(nombreRol).join(' · ');
+  }
+
+  /**
+   * Cambia el rol activo **sin cerrar sesión** (§5). Solo reordena lo que se ve: los demás roles
+   * del usuario siguen ahí y sus permisos combinados se conservan.
+   */
+  protected cambiarRol(ev: Event): void {
+    const rol = (ev.target as HTMLSelectElement).value as RolSistema;
+    const anterior = this.auth.cambiarRolActivo(rol);
+    const u = this.auth.usuario();
+    if (!u) return;
+    this.data.registrarCambioRolActivo(u, anterior);
+    this.toast.info('Rol activo cambiado', `Ahora opera como ${u.rol}. Conserva sus demás roles: ${this.auth.etiquetaRoles()}.`);
+    // El menú del rol nuevo puede no incluir la pantalla actual: se vuelve al panel, que ven todos.
+    this.router.navigateByUrl('/panel');
+  }
 
   protected cambiarUsuario(ev: Event): void {
     const usuario = (ev.target as HTMLSelectElement).value;

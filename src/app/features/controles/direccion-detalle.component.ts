@@ -14,7 +14,7 @@ import { IconComponent } from '../../shared/icon';
 import { MESES, formateaFecha, isoLocal, nombreMes } from '../../core/models/models';
 
 /**
- * Detalle de operatividad de una Dirección/Unidad en un período: sus responsables, sus KPIs,
+ * Detalle de operatividad de un ámbito territorial en un período: sus responsables, sus KPIs,
  * los controles que le aplican, su bitácora diaria, su inventario operativo y los documentos
  * generados. Es la pantalla a la que llega el Encargado de Soporte desde la vista por Dirección.
  */
@@ -43,7 +43,7 @@ import { MESES, formateaFecha, isoLocal, nombreMes } from '../../core/models/mod
             <div class="page-kicker">Operación · {{ kpi().corta }}</div>
             <h1>
               {{ kpi().nombre }}@if (kpi().unidad !== kpi().nombre) { <span class="muted"> / {{ kpi().unidad }}</span> }
-              <ui-help texto="Operatividad de la Dirección/Unidad en el período: controles que le aplican según el catálogo, bitácoras diarias, inventario operativo y documentos generados." />
+              <ui-help texto="Operatividad del ámbito territorial en el período: controles que le aplican según el catálogo, bitácoras diarias, inventario operativo y documentos generados." />
             </h1>
             <p class="page-sub">
               {{ nombreMes(mes()) }} {{ anio() }} · fecha límite <b>{{ formatea(kpi().fechaLimite) }}</b> ·
@@ -121,7 +121,7 @@ import { MESES, formateaFecha, isoLocal, nombreMes } from '../../core/models/mod
             <div>
               <h3>Meses pendientes por completar</h3>
               <p class="sub">
-                Meses del año {{ anio() }} con controles pendientes o vencidos en esta Dirección/Unidad
+                Meses del año {{ anio() }} con controles pendientes o vencidos en este ámbito territorial
               </p>
             </div>
             <button class="btn btn-ghost btn-sm" type="button" (click)="verHistorial.set(!verHistorial())">
@@ -159,7 +159,7 @@ import { MESES, formateaFecha, isoLocal, nombreMes } from '../../core/models/mod
               </div>
             } @else {
               <p class="muted">
-                Esta Dirección/Unidad no tiene meses pendientes en {{ anio() }}: todos sus controles
+                Este ámbito territorial no tiene meses pendientes en {{ anio() }}: todos sus controles
                 aplicables quedaron entregados, justificados o cerrados.
               </p>
             }
@@ -171,7 +171,7 @@ import { MESES, formateaFecha, isoLocal, nombreMes } from '../../core/models/mod
           <div class="card-head">
             <div>
               <h3>Controles aplicables de {{ nombreMes(mes()) }} {{ anio() }}</h3>
-              <p class="sub">Solo los controles que el catálogo programa en esta Dirección/Unidad</p>
+              <p class="sub">Solo los controles que el catálogo programa en este ámbito territorial</p>
             </div>
           </div>
           <div class="card-body">
@@ -209,14 +209,14 @@ import { MESES, formateaFecha, isoLocal, nombreMes } from '../../core/models/mod
                       </td>
                     </tr>
                   } @empty {
-                    <tr><td colspan="8" class="muted">Ningún control del catálogo aplica a esta Dirección/Unidad en el período.</td></tr>
+                    <tr><td colspan="8" class="muted">Ningún control del catálogo aplica a este ámbito territorial en el período.</td></tr>
                   }
                 </tbody>
               </table>
             </div>
             @if (noAplican().length) {
               <div class="divider"></div>
-              <div class="sec-title">No aplican a esta Dirección/Unidad</div>
+              <div class="sec-title">No aplican a este ámbito territorial</div>
               <div class="row" style="gap: 6px;">
                 @for (n of noAplican(); track n.codigo) {
                   <span class="badge" [title]="n.motivo">{{ n.codigo }} — No aplica</span>
@@ -252,7 +252,7 @@ import { MESES, formateaFecha, isoLocal, nombreMes } from '../../core/models/mod
                   </table>
                 </div>
               } @else {
-                <p class="muted">Esta Dirección/Unidad no lleva bitácora diaria de atención al público.</p>
+                <p class="muted">Este ámbito territorial no lleva bitácora diaria de atención al público.</p>
               }
             </div>
           </div>
@@ -279,7 +279,7 @@ import { MESES, formateaFecha, isoLocal, nombreMes } from '../../core/models/mod
                         <td><ui-badge [estado]="e.estado" /></td>
                       </tr>
                     } @empty {
-                      <tr><td colspan="4" class="muted">Sin equipos activos en esta Dirección/Unidad.</td></tr>
+                      <tr><td colspan="4" class="muted">Sin equipos activos en este ámbito territorial.</td></tr>
                     }
                   </tbody>
                 </table>
@@ -291,7 +291,7 @@ import { MESES, formateaFecha, isoLocal, nombreMes } from '../../core/models/mod
         <!-- Documentos del período -->
         <div class="card" style="margin-top: 18px;">
           <div class="card-head">
-            <div><h3>Documentos generados en el período</h3><p class="sub">Controles entregados, bitácoras, cartas y reportes de esta Dirección/Unidad</p></div>
+            <div><h3>Documentos generados en el período</h3><p class="sub">Controles entregados, bitácoras, cartas y reportes de este ámbito territorial</p></div>
             <a class="btn btn-ghost btn-sm" routerLink="/documentos">Ver generador</a>
           </div>
           <div class="card-body">
@@ -321,7 +321,7 @@ import { MESES, formateaFecha, isoLocal, nombreMes } from '../../core/models/mod
       </div>
     } @else {
       <div class="page">
-        <p class="muted">La Dirección/Unidad indicada no existe o no está asignada a su usuario.</p>
+        <p class="muted">El ámbito territorial indicado no existe o no está asignada a su usuario.</p>
         <a class="btn btn-outline" routerLink="/controles">Volver a Controles mensuales</a>
       </div>
     }
@@ -351,7 +351,7 @@ export class DireccionDetalleComponent {
   private readonly sincroniza = effect(() => this.autoSync.periodo(this.anio(), this.mes()));
 
 
-  /** Deja constancia de la consulta de operatividad, una vez por Dirección/Unidad y período. */
+  /** Deja constancia de la consulta de operatividad, una vez por ámbito territorial y período. */
   private consultado = '';
 
   constructor() {
@@ -454,12 +454,12 @@ export class DireccionDetalleComponent {
     .filter((d) => d.anio === this.anio() && d.mes === this.mes() && d.direccion === this.direccion())
     .sort((a, b) => b.fecha.localeCompare(a.fecha)));
 
-  /** Alertas de la Dirección/Unidad (las mismas que ve el Encargado en el panel). */
+  /** Alertas de el ámbito territorial (las mismas que ve el Encargado en el panel). */
   protected readonly alertas = computed(() => {
     const k = this.kpi();
     const lista: string[] = [];
     if (!k.responsables.length && k.aplicables) {
-      lista.push('Esta Dirección/Unidad tiene controles aplicables, pero no posee Técnico de Soporte asignado.');
+      lista.push('Este ámbito territorial tiene controles aplicables, pero no posee Técnico de Soporte asignado.');
     }
     if (k.vencidos) lista.push(`${k.vencidos} control(es) vencieron el plazo de entrega sin carta de justificación.`);
     if (k.bitacorasPendientes || k.bitacorasVencidas) {

@@ -24,7 +24,7 @@ export const CLAVE_INVENTARIO_COMPARTIDO = 'sisgost_operational_inventory';
 
 /** Estados del equipo dentro del inventario operativo compartido. */
 export type EstadoOperativoCompartido =
-  | 'Activo en Dirección/Unidad'
+  | 'Activo en Dirección/Registro'
   | 'Descargado'
   /** Ciclo cerrado porque el equipo volvió a entregarse; se conserva como historia. */
   | 'Histórico';
@@ -110,7 +110,7 @@ export class SharedInventoryService {
   /** Ficha ACTIVA de un número de inventario, si la hay. */
   activoDe(numeroInventario: string): EquipoOperativoCompartido | undefined {
     return this.leer().find((e) => e.numeroInventario === numeroInventario
-      && e.estadoOperativo === 'Activo en Dirección/Unidad');
+      && e.estadoOperativo === 'Activo en Dirección/Registro');
   }
 
   /**
@@ -118,7 +118,7 @@ export class SharedInventoryService {
    *
    * · Si ya existe activo con el mismo n.º de inventario y el mismo expediente único, se
    *   **actualiza** (y si nada cambió, se informa `sin-cambios` sin reescribir la fecha).
-   * · Si existe activo pero de otro expediente único o de otra Dirección/Unidad, el registro
+   * · Si existe activo pero de otro expediente único o de otra Dirección/Registro, el registro
    *   anterior pasa a **Histórico** y se crea el nuevo ciclo.
    * · Si existe descargado o histórico, se crea el nuevo ciclo conservando el anterior.
    */
@@ -130,14 +130,14 @@ export class SharedInventoryService {
     const lista = this.leer();
     const id = this.idDe(datos.numeroInventario, datos.expedienteUnico);
     const activo = lista.find((e) => e.numeroInventario === datos.numeroInventario
-      && e.estadoOperativo === 'Activo en Dirección/Unidad');
+      && e.estadoOperativo === 'Activo en Dirección/Registro');
 
-    // Mismo equipo, mismo expediente y misma Dirección/Unidad: es la MISMA pertenencia.
+    // Mismo equipo, mismo expediente y misma Dirección/Registro: es la MISMA pertenencia.
     if (activo && activo.expedienteUnico === datos.expedienteUnico
       && activo.direccion === datos.direccion && activo.unidad === datos.unidad) {
       const actualizado: EquipoOperativoCompartido = {
         ...activo, ...datos, id: activo.id,
-        estadoOperativo: 'Activo en Dirección/Unidad',
+        estadoOperativo: 'Activo en Dirección/Registro',
         origen: activo.origen || 'Gestión de Equipos',
         fechaSincronizacion: this.ahora()
       };
@@ -150,7 +150,7 @@ export class SharedInventoryService {
     // Ciclo nuevo: el registro anterior se conserva como historia, nunca se borra.
     const registro: EquipoOperativoCompartido = {
       ...datos, id,
-      estadoOperativo: 'Activo en Dirección/Unidad',
+      estadoOperativo: 'Activo en Dirección/Registro',
       origen: 'Gestión de Equipos',
       fechaSincronizacion: this.ahora()
     };
@@ -167,7 +167,7 @@ export class SharedInventoryService {
   }): EquipoOperativoCompartido | undefined {
     const lista = this.leer();
     const activo = lista.find((e) => e.numeroInventario === numeroInventario
-      && e.estadoOperativo === 'Activo en Dirección/Unidad');
+      && e.estadoOperativo === 'Activo en Dirección/Registro');
     if (!activo) return undefined;
     const cerrado: EquipoOperativoCompartido = {
       ...activo, ...datos, estadoOperativo: 'Descargado', fechaSincronizacion: this.ahora()

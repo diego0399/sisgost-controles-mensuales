@@ -8,42 +8,61 @@
  * eventual cuando dependen de actividad) y la carta de justificación de `Formatos_nuevos_2025_.docx`
  * con sus tres firmas.
  *
- * Los datos base —usuarios, roles, Direcciones/Unidades, distribución de soportes y equipos—
+ * Los datos base —usuarios, roles, Direcciones/Registros, distribución de soportes y equipos—
  * son los MISMOS de SISGOST — Gestión de Equipos: ambos módulos son un solo ecosistema y este
  * módulo no inventa identidades ni organización propia.
  */
 
+import { ClaveRolSistema, RolSistema } from './roles';
+import { TipoAsignacion } from './territorio';
+
+export * from './roles';
+export * from './territorio';
+
 // ---------------------------------------------------------------------------- Organización
 
-/** Dirección u oficina atendida. NO es un rol del sistema: es dato organizacional. */
+/**
+ * **Departamento** del catálogo territorial, en la forma plana con la que el módulo lo venía
+ * llamando «Dirección». La estructura real es `Zona → Departamento → Dirección/Registro`
+ * (ver `territorio.ts`): aquí un `Direccion` es un DEPARTAMENTO y cada `unidades[]` es una
+ * **Dirección/Registro** suya. NO es un rol del sistema: es dato organizacional.
+ */
 export interface Direccion {
   id: string;
-  /** Nombre institucional; es el mismo texto que usa Gestión de Equipos en sus requerimientos. */
+  /** Nombre del departamento («San Salvador», «Santa Ana»). */
   nombre: string;
-  /** Abreviatura para tablas y chips («REGS», «RPRH»). */
+  /** Abreviatura para tablas y chips («SS», «STA»). */
   corta: string;
-  /** Unidades o áreas internas atendidas (Registro de la Propiedad, IGN, RPRH…). */
+  /** Zona a la que pertenece el departamento. */
+  zonaId?: string;
+  /** `true` = la distribución de este departamento se lleva por Dirección/Registro. */
+  porDireccion?: boolean;
+  /** Direcciones/Registros del departamento (IGCN, RPRH, Registro de Comercio, ISPI, RGM). */
   unidades: string[];
-  /** Direcciones sin soporte asignado generan alerta en el panel ejecutivo. */
+  /** Departamentos sin soporte asignado generan alerta en el panel ejecutivo. */
   activa: boolean;
 }
 
 /**
- * Roles de SISGOST — Controles Mensuales. **Hardware no participa en este módulo**: sus usuarios
- * operan solo en Gestión de Equipos y no figuran en este directorio.
- *
- * · `enc-soporte` — Encargado de Soporte: es el **jefe** del área; ve todo y da seguimiento.
- * · `coordinador` — Coordinador: consulta y seguimiento (panel, operatividad, reportes, historial,
- *   documentos y trazabilidad); no completa controles ni administra.
+ * Forma corta del **rol activo** de la sesión. El catálogo completo de roles —incluidos los de
+ * Hardware, que el sistema reconoce aunque no operen en este módulo— vive en `roles.ts`.
  */
-export type ClaveRol = 'admin' | 'enc-soporte' | 'tec-soporte' | 'coordinador';
+export type ClaveRol = ClaveRolSistema;
 
 export interface UsuarioSistema {
   usuario: string;
   nombre: string;
   iniciales: string;
+  /** Nombre visible del **rol activo** («Encargado de Soporte»). */
   rol: string;
+  /** Forma corta del **rol activo**; es la que leen el menú, los guards y las pantallas. */
   clave: ClaveRol;
+  /**
+   * **Todos los roles del usuario.** Un usuario puede tener más de uno —Encargado de Soporte y
+   * Técnico de Soporte, o Administrador y Encargado— y sigue siendo un solo usuario: no se
+   * duplica la cuenta ni se crea una por rol. `rol` y `clave` reflejan cuál está activo.
+   */
+  roles: RolSistema[];
   /** Unidad organizativa a la que pertenece (Soporte, Hardware, DTI…). */
   unidad: string;
   cargo: string;
@@ -53,9 +72,9 @@ export interface UsuarioSistema {
 }
 
 /**
- * Asignación de un Técnico de Soporte a una Dirección/Unidad. **Registro compartido**: se
+ * Asignación de un Técnico de Soporte a una Dirección/Registro. **Registro compartido**: se
  * administra desde este módulo (Administración → Distribución de soportes) y Gestión de Equipos
- * lo consume para ofrecer únicamente los técnicos responsables de la Dirección/Unidad del
+ * lo consume para ofrecer únicamente los técnicos responsables de la Dirección/Registro del
  * requerimiento como Técnico de Configuración.
  *
  * Nunca se borra una asignación: se desactiva, porque los equipos aceptados mientras estuvo
@@ -66,11 +85,27 @@ export interface DistribucionSoporte {
   /**
    * IDs estables de la responsabilidad. Todo se compara por ellos: los nombres visibles se
    * escriben de más de una forma y compararlos era el origen de las desincronizaciones.
+   *
+   * `direccionId` es el **departamento** (`SS`, `STA`) y `unidadId`, el **ámbito** completo
+   * (`SS::SS-RC` para una Dirección/Registro; `STA::*` para el departamento entero).
    */
   tecnicoId: string;
   direccionId: string;
   unidadId: string;
+  /**
+   * Alcance territorial de la asignación:
+   * · `DIRECCION_REGISTRO` — solo en los departamentos que se llevan por Dirección/Registro
+   *   (hoy, San Salvador): el técnico responde por ese Registro y por ningún otro.
+   * · `DEPARTAMENTO` — el técnico atiende **todas** las Direcciones/Registros del departamento.
+   */
+  tipoAsignacion: TipoAsignacion;
+  zonaId: string;
+  departamentoId: string;
+  /** `null` cuando la asignación cubre el departamento completo. */
+  direccionRegistroId: string | null;
+  /** Nombre del departamento, para mostrar. */
   direccion: string;
+  /** Nombre de la Dirección/Registro, o «Todo el departamento». */
   unidad: string;
   /** Técnico de Soporte responsable, en formato «Nombre — Rol». */
   tecnico: string;
@@ -82,7 +117,7 @@ export interface DistribucionSoporte {
   observacion: string;
   desactivadaPor?: string;
   fechaDesactivacion?: string;
-  /** Por qué se dejó de atender esa Dirección/Unidad; obligatorio al desactivar. */
+  /** Por qué se dejó de atender esa Dirección/Registro; obligatorio al desactivar. */
   motivoDesactivacion?: string;
 }
 
@@ -130,9 +165,9 @@ export interface TablaPlantilla {
 }
 
 /**
- * Sección que trabaja sobre los equipos ACTIVOS de la Dirección/Unidad atendida. La lista no se
+ * Sección que trabaja sobre los equipos ACTIVOS de la Dirección/Registro atendida. La lista no se
  * teclea: sale del inventario operativo, que a su vez proviene de las entregas aceptadas en
- * Gestión de Equipos. Así ningún control puede registrar un equipo de otra Dirección/Unidad.
+ * Gestión de Equipos. Así ningún control puede registrar un equipo de otra Dirección/Registro.
  */
 export interface EquiposPlantilla {
   /** Casillas de verificación aplicables a cada equipo. */
@@ -147,7 +182,7 @@ export interface EquiposPlantilla {
 /**
  * Verificación de equipos identificados por su **IP**. La IP no se acepta a ciegas: se busca en el
  * inventario operativo —que proviene de las entregas aceptadas en Gestión de Equipos— y solo vale
- * si corresponde a un equipo ACTIVO de la misma Dirección/Unidad del control. Es la sección de
+ * si corresponde a un equipo ACTIVO de la misma Dirección/Registro del control. Es la sección de
  * verificación semanal del F0387.
  */
 export interface EquiposIpPlantilla {
@@ -182,7 +217,7 @@ export interface ItemSeguridad {
  * traducción digital del cuadro del F0382: cinco filas de equipo, nueve columnas de ítem y, por
  * cada incumplimiento, su observación (Obs), su acción correctiva (AC) y su estado final.
  *
- * Los equipos no se teclean: se eligen del inventario operativo de la Dirección/Unidad del
+ * Los equipos no se teclean: se eligen del inventario operativo de la Dirección/Registro del
  * control, que a su vez proviene de las entregas aceptadas en Gestión de Equipos.
  */
 export interface ChecklistEquiposPlantilla {
@@ -238,13 +273,13 @@ export interface SeccionPlantilla {
 /**
  * Área técnica responsable de un control. No todos los controles se trabajan por Dirección:
  * el cuarto de servidores, los respaldos o la infraestructura de red pertenecen a un área, y el
- * área resuelve a las Direcciones/Unidades concretas donde el control se ejecuta.
+ * área resuelve a las Direcciones/Registros concretas donde el control se ejecuta.
  */
 export interface AreaTecnica {
   id: string;
   nombre: string;
   descripcion: string;
-  /** Direcciones/Unidades donde el área tiene presencia física. */
+  /** Direcciones/Registros donde el área tiene presencia física. */
   pares: { direccion: string; unidad: string }[];
 }
 
@@ -256,14 +291,14 @@ export type ModoAplicacion =
 
 /**
  * Dónde aplica un control. Es configurable desde el catálogo porque **no todos los controles se
- * trabajan en todas las Direcciones/Unidades**: el calendario solo programa un control en las
- * Direcciones/Unidades que resultan de esta configuración.
+ * trabajan en todas las Direcciones/Registros**: el calendario solo programa un control en las
+ * Direcciones/Registros que resultan de esta configuración.
  */
 export interface AplicacionControl {
   modo: ModoAplicacion;
   /** Ids de Dirección (modo «Direcciones específicas»). */
   direcciones: string[];
-  /** Pares Dirección/Unidad (modo «Unidades específicas»). */
+  /** Pares Dirección/Registro (modo «Unidades específicas»). */
   unidades: { direccion: string; unidad: string }[];
   /** Id del área técnica (modo «Área técnica específica»). */
   area: string;
@@ -429,7 +464,7 @@ export interface ResumenMuestra {
 
 export interface EvidenciaControl { nombre: string; descripcion: string; fecha: string; }
 
-/** Instancia de un control programado para un mes (o semana) y una Dirección/Unidad. */
+/** Instancia de un control programado para un mes (o semana) y una Dirección/Registro. */
 export interface ControlMes {
   id: string;
   codigo: string;
@@ -520,25 +555,25 @@ export interface Justificacion {
 // ---------------------------------------------------------------------------- Inventario operativo
 
 export type EstadoEquipoOperativo =
-  | 'Activo en Dirección/Unidad' | 'Descargado' | 'En garantía'
+  | 'Activo en Dirección/Registro' | 'Descargado' | 'En garantía'
   | 'Pendiente de revisión' | 'Reingresado a Hardware' | 'No disponible'
   /** Ciclo cerrado: el equipo volvió a entregarse y su registro anterior queda de historia. */
   | 'Histórico';
 
-/** Estados que siguen contando como inventario activo de la Dirección/Unidad. */
+/** Estados que siguen contando como inventario activo de la Dirección/Registro. */
 export const ESTADOS_ACTIVOS: EstadoEquipoOperativo[] = [
-  'Activo en Dirección/Unidad', 'En garantía', 'Pendiente de revisión'
+  'Activo en Dirección/Registro', 'En garantía', 'Pendiente de revisión'
 ];
 
 /**
- * Equipo activo en una Dirección/Unidad. Entra desde Gestión de Equipos cuando el Usuario Final
+ * Equipo activo en una Dirección/Registro. Entra desde Gestión de Equipos cuando el Usuario Final
  * acepta la entrega y sale cuando allí se registra su descargo; los datos son los mismos que
  * maneja ese módulo (número de inventario, expediente único, técnico de configuración).
  */
 export interface EquipoOperativo {
   /**
    * Identificador del **ciclo operativo**: un mismo número de inventario puede tener varios
-   * registros a lo largo del tiempo (se descarga y vuelve a entregarse en otra Dirección/Unidad).
+   * registros a lo largo del tiempo (se descarga y vuelve a entregarse en otra Dirección/Registro).
    * El ciclo anterior queda como «Histórico» y nunca se sobrescribe.
    */
   ciclo: string;
@@ -559,9 +594,16 @@ export interface EquipoOperativo {
   usuarioFinal: string;
   carne: string;
   correoInstitucional: string;
+  /** Departamento donde el equipo está en operación. */
   direccion: string;
+  /** Dirección/Registro concreta dentro del departamento. */
   unidad: string;
+  /** Ámbito territorial resuelto, con los IDs estables del catálogo. */
+  zonaId?: string;
+  departamentoId?: string;
+  direccionRegistroId?: string;
   tecnicoConfiguracion: string;
+  /** Técnico de Soporte que responde por el equipo, según la distribución territorial vigente. */
   soporteResponsable: string;
   fechaAceptacion: string;
   /** Solicitud/requerimiento que originó el proceso en Gestión de Equipos. */
@@ -625,8 +667,23 @@ export interface EventoTrazabilidad {
   fecha: string;
   hora: string;
   usuario: string;
+  /** Rol con el que actuaba el usuario: el **rol activo** de su sesión. */
   rol: string;
+  /** Todos los roles que el usuario tenía en ese momento, separados por « · ». */
+  rolesUsuario?: string;
+  /** Usuario sobre el que recae el cambio, en los eventos de administración de roles. */
+  usuarioAfectado?: string;
+  rolesAnteriores?: string;
+  rolesNuevos?: string;
+  /** Ámbito territorial del evento: zona, departamento y Dirección/Registro. */
+  zona?: string;
+  departamento?: string;
+  direccionRegistro?: string;
+  /** `DEPARTAMENTO` o `DIRECCION_REGISTRO`, en los eventos de distribución territorial. */
+  tipoAsignacion?: string;
+  /** Departamento afectado, en la nomenclatura heredada de las pantallas. */
   direccion?: string;
+  /** Dirección/Registro afectada, o «Todo el departamento». */
   unidad?: string;
   tipoControl?: string;
   mes?: number;

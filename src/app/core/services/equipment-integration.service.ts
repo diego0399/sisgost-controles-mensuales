@@ -6,7 +6,7 @@ import { EventoIntegracion } from '../models/models';
  * Integración **automática** con SISGOST — Gestión de Equipos.
  *
  * Regla de conexión entre módulos: cuando el flujo de Gestión de Equipos finaliza con la
- * aceptación del Usuario Final, el equipo entra al inventario operativo de la Dirección/Unidad
+ * aceptación del Usuario Final, el equipo entra al inventario operativo de la Dirección/Registro
  * solicitante; cuando Soporte registra el descargo, sale del inventario activo. **Ninguna de las
  * dos cosas se confirma a mano**: no hay botones de «incorporar» ni de «aplicar descargo». El
  * módulo se sincroniza al cargar y lo que se muestra son los movimientos ya sincronizados.

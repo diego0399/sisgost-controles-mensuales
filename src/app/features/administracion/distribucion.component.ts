@@ -6,6 +6,7 @@ import { ToastService } from '../../core/services/toast.service';
 import { BadgeComponent, HelpTipComponent, ModalComponent } from '../../shared/ui';
 import { IconComponent } from '../../shared/icon';
 import { DistribucionSoporte, UsuarioSistema, formateaFecha, isoLocal } from '../../core/models/models';
+import { etiquetaRoles } from '../../core/models/roles';
 
 /** Una persona con todo lo que hoy responde: es la unidad de trabajo de esta pantalla. */
 interface FichaSoporte {
@@ -19,15 +20,15 @@ interface FichaSoporte {
 }
 
 /**
- * Distribución de soportes por Dirección/Unidad. Se administra AQUÍ, en Controles Mensuales,
+ * Distribución de soportes por Dirección/Registro. Se administra AQUÍ, en Controles Mensuales,
  * y gobierna los dos módulos del ecosistema:
  *
  *  · en este módulo decide quién ve y completa cada control, bitácora e inventario operativo;
  *  · en Gestión de Equipos decide qué técnicos pueden recibir equipos para configurar en cada
- *    Dirección/Unidad (Técnico de Configuración del expediente único).
+ *    Dirección/Registro (Técnico de Configuración del expediente único).
  *
  * La pantalla se organiza **por persona**: se edita a quien responde, no la casilla. Un Técnico
- * de Soporte atiende varias Direcciones/Unidades y es su lista completa la que hay que ver junta
+ * de Soporte atiende varias Direcciones/Registros y es su lista completa la que hay que ver junta
  * para decidir si se le carga una más.
  */
 @Component({
@@ -54,9 +55,9 @@ interface FichaSoporte {
           <div class="page-kicker">Administración</div>
           <h1>
             Distribución de soportes
-            <ui-help texto="Cada Técnico de Soporte responde por una o varias Direcciones/Unidades. Se edita desde la persona: sus responsabilidades se ven y se cambian juntas. Esta tabla se administra desde Controles Mensuales y la consume también Gestión de Equipos." />
+            <ui-help texto="Cada Técnico de Soporte responde por uno o varios ámbitos territoriales. En San Salvador se asigna Dirección/Registro por Dirección/Registro; en los demás departamentos, el departamento completo. Se edita desde la persona: sus responsabilidades se ven y se cambian juntas." />
           </h1>
-          <p class="page-sub">Responsabilidades de los Técnicos de Soporte por Dirección/Unidad · registro compartido del ecosistema SISGOST.</p>
+          <p class="page-sub">Responsabilidades por Zona, Departamento y Dirección/Registro · registro compartido del ecosistema SISGOST.</p>
         </div>
         @if (puedeGestionar()) {
           <button class="btn btn-primary" type="button" (click)="nueva('', '', '')">Nueva asignación</button>
@@ -66,11 +67,15 @@ interface FichaSoporte {
       <div class="alert" style="margin-bottom: 16px;">
         <span class="alert-ico">i</span>
         <span>
-          <b>Esta distribución afecta también a Gestión de Equipos.</b>
-          Un Técnico de Soporte solo puede recibir equipos para configurar en las Direcciones/Unidades
-          donde es responsable: al crear el expediente único, aquel módulo ofrece únicamente los técnicos
-          que aparecen aquí para la Dirección/Unidad del requerimiento. Al guardar un cambio, los
-          controles del período se recalculan solos: no hay ningún botón que lo dispare.
+          <b>La regla territorial.</b> En <b>San Salvador</b> la distribución es por Dirección/Registro:
+          un soporte responde por el Registro de Comercio, o por el IGCN, y por ninguno más. En
+          <b>los demás departamentos</b> es por Departamento: quien responde por Santa Ana atiende
+          todas sus Direcciones/Registros sin asignarse una por una.
+          <br />
+          <b>Esto afecta también a Gestión de Equipos.</b> Al crear el expediente único, aquel módulo
+          ofrece como Técnico de Configuración únicamente a quien responde por el requerimiento según
+          esta regla. Al guardar un cambio, los controles del período se recalculan solos: no hay
+          ningún botón que lo dispare.
         </span>
       </div>
 
@@ -80,7 +85,7 @@ interface FichaSoporte {
           <span>
             <b>Consulta.</b>
             {{ soloSuyo()
-              ? 'Aquí ve las Direcciones/Unidades de las que es responsable. La distribución la modifica el Encargado de Soporte o el Administrador.'
+              ? 'Aquí ve los Departamentos y Direcciones/Registros de los que es responsable. La distribución la modifica el Encargado de Soporte o el Administrador.'
               : 'Su rol consulta la distribución; modificarla corresponde al Encargado de Soporte o al Administrador.' }}
           </span>
         </div>
@@ -90,7 +95,7 @@ interface FichaSoporte {
         <div class="alert danger" style="margin-bottom: 16px;">
           <span class="alert-ico">!</span>
           <span>
-            <b>Direcciones/Unidades sin soporte responsable:</b>
+            <b>Ámbitos sin soporte responsable:</b>
             {{ sinSoporte() }}. Sus controles del período no tienen quién los entregue y sus equipos
             activos quedan sin Técnico de Soporte responsable.
           </span>
@@ -101,11 +106,11 @@ interface FichaSoporte {
         <div class="card-head">
           <div>
             <h3>Consulta</h3>
-            <p class="sub">Las mismas responsabilidades, vistas por Técnico de Soporte, por Dirección/Unidad o una por una.</p>
+            <p class="sub">Las mismas responsabilidades, vistas por Técnico de Soporte, por ámbito territorial o una por una.</p>
           </div>
           <div class="vista-tabs">
             <button type="button" [class.on]="vista() === 'tecnico'" (click)="vista.set('tecnico')">Por soporte</button>
-            <button type="button" [class.on]="vista() === 'direccion'" (click)="vista.set('direccion')">Por Dirección/Unidad</button>
+            <button type="button" [class.on]="vista() === 'direccion'" (click)="vista.set('direccion')">Por Departamento</button>
             <button type="button" [class.on]="vista() === 'tabla'" (click)="vista.set('tabla')">Todas</button>
           </div>
         </div>
@@ -113,7 +118,7 @@ interface FichaSoporte {
 
           <div class="row" style="margin-bottom: 12px;">
             <input id="dist-buscar" class="control" style="max-width: 320px;" [(ngModel)]="busqueda"
-              placeholder="Buscar Técnico de Soporte, Dirección o Unidad…" />
+              placeholder="Buscar Técnico de Soporte, Zona, Departamento o Dirección/Registro…" />
             @if (vista() === 'tabla') {
               <select class="control" style="width: 220px;" [(ngModel)]="fEstado">
                 <option value="">Vigentes e históricas</option>
@@ -123,7 +128,7 @@ interface FichaSoporte {
             }
             <span class="muted" style="align-self: center;">
               {{ vista() === 'tecnico' ? fichas().length + ' Técnico(s) de Soporte' : '' }}
-              {{ vista() === 'direccion' ? porDireccion().length + ' Dirección/Unidad' : '' }}
+              {{ vista() === 'direccion' ? porDireccion().length + ' ámbito(s) territorial(es)' : '' }}
               {{ vista() === 'tabla' ? filtradas().length + ' asignación(es)' : '' }}
             </span>
           </div>
@@ -135,7 +140,7 @@ interface FichaSoporte {
                   <div>
                     <h4>{{ f.usuario.nombre }} <ui-badge [estado]="f.usuario.estado" /></h4>
                     <p class="sub">
-                      Rol: {{ f.usuario.rol }} · {{ f.asignaciones.length }} Dirección/Unidad asignada(s)
+                      Roles: {{ rolesDe(f.usuario) }} · {{ f.asignaciones.length }} ámbito(s) asignado(s)
                       · {{ f.pendientes }} control(es) pendiente(s) de {{ f.controles }} del período
                       · {{ f.equipos }} equipo(s) en inventario operativo
                     </p>
@@ -151,7 +156,7 @@ interface FichaSoporte {
                   @for (d of f.asignaciones; track d.id) {
                     <span class="badge">{{ data.soportes.etiqueta(d.direccion, d.unidad) }}</span>
                   }
-                  @if (!f.asignaciones.length) { <span class="badge warn">Sin Direcciones/Unidades asignadas</span> }
+                  @if (!f.asignaciones.length) { <span class="badge warn">Sin ámbitos asignados</span> }
                 </div>
               </div>
             } @empty {
@@ -165,7 +170,10 @@ interface FichaSoporte {
                 <div class="grupo-head">
                   <div>
                     <h4>{{ g.etiqueta }}</h4>
-                    <p class="sub">{{ g.equipos }} equipo(s) activo(s) en el inventario operativo · {{ g.controles }} control(es) del año</p>
+                    <p class="sub">
+                      {{ g.zona }} · asignación por <b>{{ g.tipo }}</b>
+                      · {{ g.equipos }} equipo(s) activo(s) · {{ g.controles }} control(es) del año
+                    </p>
                   </div>
                   @if (puedeGestionar()) {
                     <button class="btn btn-outline btn-sm" type="button" (click)="nueva(g.direccion, g.unidad, '')">Agregar soporte</button>
@@ -173,6 +181,16 @@ interface FichaSoporte {
                 </div>
                 @if (!g.asignaciones.length) {
                   <div class="chip-list"><span class="badge danger">Sin soporte responsable</span></div>
+                }
+                @if (!g.porDireccion) {
+                  <!-- §21: al expandir un departamento se ven sus Direcciones/Registros, dejando
+                       claro que TODAS quedan cubiertas por el responsable del departamento. -->
+                  <p class="sub" style="margin: 6px 0 0;">
+                    Alcance cubierto por el responsable del Departamento:
+                  </p>
+                  <div class="chip-list" style="margin-top: 4px;">
+                    @for (r of g.registros; track r) { <span class="badge">{{ r }}</span> }
+                  </div>
                 }
                 @for (d of g.asignaciones; track d.id) {
                   <div class="row" style="margin-top: 6px;">
@@ -185,7 +203,7 @@ interface FichaSoporte {
                 }
               </div>
             } @empty {
-              <p class="muted">Ninguna Dirección/Unidad coincide con la búsqueda.</p>
+              <p class="muted">Ninguna Dirección/Registro coincide con la búsqueda.</p>
             }
           }
 
@@ -193,7 +211,8 @@ interface FichaSoporte {
             <div class="table-wrap">
               <table class="tbl">
                 <thead><tr>
-                  <th>Código</th><th>Técnico de Soporte</th><th>Dirección</th><th>Unidad</th>
+                  <th>Código</th><th>Técnico de Soporte</th><th>Zona</th><th>Departamento</th>
+                  <th>Dirección/Registro</th><th>Tipo</th>
                   <th>Fecha de inicio</th><th>Estado</th><th>Observaciones</th>
                   @if (puedeGestionar()) { <th></th> }
                 </tr></thead>
@@ -202,8 +221,10 @@ interface FichaSoporte {
                     <tr [style.opacity]="d.activo ? 1 : .6">
                       <td class="mono">{{ d.id }}</td>
                       <td><b>{{ soloNombre(d.tecnico) }}</b></td>
+                      <td>{{ zonaDe(d) }}</td>
                       <td>{{ d.direccion }}</td>
                       <td>{{ d.unidad }}</td>
+                      <td>{{ tipoDe(d) }}</td>
                       <td class="mono">{{ formatea(d.fecha) }}</td>
                       <td><ui-badge [estado]="d.activo ? 'Activa' : 'Desactivada'" /></td>
                       <td style="max-width: 300px;">{{ d.observacion || '—' }}</td>
@@ -216,7 +237,7 @@ interface FichaSoporte {
                       }
                     </tr>
                   } @empty {
-                    <tr><td colspan="8" class="muted" style="text-align: center; padding: 24px;">Ninguna asignación coincide con la búsqueda.</td></tr>
+                    <tr><td colspan="10" class="muted" style="text-align: center; padding: 24px;">Ninguna asignación coincide con la búsqueda.</td></tr>
                   }
                 </tbody>
               </table>
@@ -228,32 +249,34 @@ interface FichaSoporte {
 
       @if (ficha(); as f) {
         <ui-modal [titulo]="(modo() === 'editar' ? 'Editar responsabilidades — ' : 'Detalle del soporte — ') + f.usuario.nombre"
-          [sub]="f.usuario.rol + ' · ' + f.usuario.estado + ' · ' + f.asignaciones.length + ' Dirección/Unidad vigente(s)'"
+          [sub]="rolesDe(f.usuario) + ' · ' + f.usuario.estado + ' · ' + f.asignaciones.length + ' ámbito(s) vigente(s)'"
           (cerrar)="cerrarFicha()">
 
           <dl class="dl">
             <dt>Técnico de Soporte</dt><dd>{{ f.usuario.nombre }}</dd>
-            <dt>Rol</dt><dd>{{ f.usuario.rol }}</dd>
+            <dt>Roles</dt><dd>{{ rolesDe(f.usuario) }}</dd>
             <dt>Estado</dt><dd><ui-badge [estado]="f.usuario.estado" /></dd>
             <dt>Carga actual del período</dt>
             <dd>{{ f.controles }} control(es) del período · {{ f.pendientes }} sin entregar</dd>
-            <dt>Bitácoras asociadas</dt><dd>{{ f.bitacoras }} bitácora(s) diaria(s) de sus Direcciones/Unidades</dd>
+            <dt>Bitácoras asociadas</dt><dd>{{ f.bitacoras }} bitácora(s) diaria(s) de sus ámbitos</dd>
             <dt>Inventario operativo visible</dt><dd>{{ f.equipos }} equipo(s) activo(s)</dd>
           </dl>
 
           <hr class="divider" />
-          <div class="sec-title">Direcciones/Unidades asignadas</div>
+          <div class="sec-title">Ámbitos territoriales asignados</div>
           <div class="table-wrap">
             <table class="tbl">
               <thead><tr>
-                <th>Dirección / Unidad</th><th>Fecha de inicio</th><th>Estado</th>
+                <th>Zona</th><th>Departamento / Dirección·Registro</th><th>Tipo</th><th>Fecha de inicio</th><th>Estado</th>
                 <th>Controles del período</th><th>Equipos</th><th>Observaciones</th>
                 @if (modo() === 'editar') { <th></th> }
               </tr></thead>
               <tbody>
                 @for (d of f.historicas; track d.id) {
                   <tr [style.opacity]="d.activo ? 1 : .6">
+                    <td>{{ zonaDe(d) }}</td>
                     <td><b>{{ data.soportes.etiqueta(d.direccion, d.unidad) }}</b></td>
+                    <td>{{ tipoDe(d) }}</td>
                     <td class="mono">{{ formatea(d.fecha) }}</td>
                     <td><ui-badge [estado]="d.activo ? 'Activa' : 'Desactivada'" /></td>
                     <td>{{ controlesDe(d) }}</td>
@@ -273,7 +296,7 @@ interface FichaSoporte {
                     }
                   </tr>
                 } @empty {
-                  <tr><td colspan="7" class="muted" style="text-align: center; padding: 20px;">Todavía no atiende ninguna Dirección/Unidad.</td></tr>
+                  <tr><td colspan="9" class="muted" style="text-align: center; padding: 20px;">Todavía no atiende ningún ámbito territorial.</td></tr>
                 }
               </tbody>
             </table>
@@ -281,22 +304,39 @@ interface FichaSoporte {
 
           @if (modo() === 'editar') {
             <hr class="divider" />
-            <div class="sec-title">Agregar Dirección/Unidad</div>
+            <div class="sec-title">Agregar ámbito territorial</div>
             <div class="form-grid">
               <div class="field">
-                <label for="ag-dir">Dirección <span style="color: var(--danger)">*</span></label>
-                <select id="ag-dir" class="control" [(ngModel)]="nuevaDireccion" (ngModelChange)="nuevaUnidad = ''">
-                  <option value="">Seleccione…</option>
-                  @for (d of data.direcciones(); track d.id) { <option [value]="d.id">{{ d.nombre }}</option> }
+                <label for="ag-zona">Zona</label>
+                <select id="ag-zona" class="control" [(ngModel)]="nuevaZona" (ngModelChange)="alCambiarZona()">
+                  <option value="">Todas las zonas</option>
+                  @for (z of data.territorio.zonasOrdenadas(); track z.id) { <option [value]="z.id">{{ z.nombre }}</option> }
                 </select>
               </div>
               <div class="field">
-                <label for="ag-uni">Unidad <span style="color: var(--danger)">*</span></label>
-                <select id="ag-uni" class="control" [(ngModel)]="nuevaUnidad">
+                <label for="ag-dir">Departamento <span style="color: var(--danger)">*</span></label>
+                <select id="ag-dir" class="control" [(ngModel)]="nuevaDireccion" (ngModelChange)="nuevaUnidad = ''">
                   <option value="">Seleccione…</option>
-                  @for (u of unidadesDe(); track u) { <option [value]="u">{{ u }}</option> }
+                  @for (d of departamentos(); track d.id) { <option [value]="d.id">{{ d.nombre }}</option> }
                 </select>
               </div>
+              <!-- §23: la Dirección/Registro solo se pide donde la regla territorial lo exige; en
+                   los demás departamentos se explica por qué no aparece, en vez de dejar el campo
+                   mudo o, peor, guardar una asignación que la regla no admite. -->
+              @if (exigeRegistro()) {
+                <div class="field">
+                  <label for="ag-uni">Dirección/Registro <span style="color: var(--danger)">*</span></label>
+                  <select id="ag-uni" class="control" [(ngModel)]="nuevaUnidad">
+                    <option value="">Seleccione…</option>
+                    @for (u of unidadesDe(); track u) { <option [value]="u">{{ u }}</option> }
+                  </select>
+                </div>
+              } @else if (nuevaDireccion) {
+                <div class="field" style="grid-column: 1 / -1;">
+                  <div class="alert"><span class="alert-ico">i</span><span>{{ data.MSG_DIST_POR_DEPARTAMENTO }}
+                    El responsable cubrirá las {{ unidadesDe().length }} Direcciones/Registros de {{ nombreDepartamento() }}.</span></div>
+                </div>
+              }
               <div class="field">
                 <label for="ag-fecha">Fecha de inicio</label>
                 <input id="ag-fecha" class="control" type="date" [(ngModel)]="nuevaFecha" />
@@ -315,7 +355,7 @@ interface FichaSoporte {
             </div>
             <div class="row" style="justify-content: flex-end; margin-top: 12px;">
               <button id="ag-guardar" class="btn btn-primary" type="button" (click)="agregar(f)">
-                <ui-icon name="assign" [size]="13" /> Agregar Dirección/Unidad
+                <ui-icon name="assign" [size]="13" /> Agregar ámbito
               </button>
             </div>
           }
@@ -324,7 +364,7 @@ interface FichaSoporte {
 
       @if (modal()) {
         <ui-modal titulo="Nueva asignación de soporte"
-          sub="El técnico asignado responde por los controles y la bitácora de la Dirección/Unidad, y queda disponible como Técnico de Configuración en Gestión de Equipos"
+          sub="El técnico asignado responde por los controles y la bitácora del ámbito, y queda disponible como Técnico de Configuración en Gestión de Equipos"
           (cerrar)="modal.set(false)">
           <div class="form-grid">
             <div class="field">
@@ -335,19 +375,33 @@ interface FichaSoporte {
               </select>
             </div>
             <div class="field">
-              <label for="na-dir">Dirección <span style="color: var(--danger)">*</span></label>
-              <select id="na-dir" class="control" [(ngModel)]="nuevaDireccion" (ngModelChange)="nuevaUnidad = ''">
-                <option value="">Seleccione…</option>
-                @for (d of data.direcciones(); track d.id) { <option [value]="d.id">{{ d.nombre }}</option> }
+              <label for="na-zona">Zona</label>
+              <select id="na-zona" class="control" [(ngModel)]="nuevaZona" (ngModelChange)="alCambiarZona()">
+                <option value="">Todas las zonas</option>
+                @for (z of data.territorio.zonasOrdenadas(); track z.id) { <option [value]="z.id">{{ z.nombre }}</option> }
               </select>
             </div>
             <div class="field">
-              <label for="na-uni">Unidad <span style="color: var(--danger)">*</span></label>
-              <select id="na-uni" class="control" [(ngModel)]="nuevaUnidad">
+              <label for="na-dir">Departamento <span style="color: var(--danger)">*</span></label>
+              <select id="na-dir" class="control" [(ngModel)]="nuevaDireccion" (ngModelChange)="nuevaUnidad = ''">
                 <option value="">Seleccione…</option>
-                @for (u of unidadesDe(); track u) { <option [value]="u">{{ u }}</option> }
+                @for (d of departamentos(); track d.id) { <option [value]="d.id">{{ d.nombre }}</option> }
               </select>
             </div>
+            @if (exigeRegistro()) {
+              <div class="field">
+                <label for="na-uni">Dirección/Registro <span style="color: var(--danger)">*</span></label>
+                <select id="na-uni" class="control" [(ngModel)]="nuevaUnidad">
+                  <option value="">Seleccione…</option>
+                  @for (u of unidadesDe(); track u) { <option [value]="u">{{ u }}</option> }
+                </select>
+              </div>
+            } @else if (nuevaDireccion) {
+              <div class="field" style="grid-column: 1 / -1;">
+                <div class="alert"><span class="alert-ico">i</span><span>{{ data.MSG_DIST_POR_DEPARTAMENTO }}
+                  El responsable cubrirá las {{ unidadesDe().length }} Direcciones/Registros de {{ nombreDepartamento() }}.</span></div>
+              </div>
+            }
             <div class="field">
               <label for="na-fecha">Fecha de inicio</label>
               <input id="na-fecha" class="control" type="date" [(ngModel)]="nuevaFecha" />
@@ -372,7 +426,7 @@ interface FichaSoporte {
       }
 
       @if (aDesactivar(); as d) {
-        <ui-modal titulo="Desactivar responsabilidad" [sub]="soloNombre(d.tecnico) + ' · ' + d.direccion + ' / ' + d.unidad" (cerrar)="aDesactivar.set(null)">
+        <ui-modal titulo="Desactivar responsabilidad" [sub]="soloNombre(d.tecnico) + ' · ' + data.soportes.etiqueta(d.direccion, d.unidad)" (cerrar)="aDesactivar.set(null)">
           <div class="alert warn" style="margin-bottom: 14px;">
             <span class="alert-ico">!</span>
             <span>La responsabilidad no se borra: queda en el historial porque los controles y equipos
@@ -409,6 +463,8 @@ export class DistribucionComponent {
   protected readonly modo = signal<'detalle' | 'editar'>('detalle');
 
   protected nuevoUsuario = '';
+  /** Filtro de zona del formulario: acota la lista de departamentos, no forma parte del dato. */
+  protected nuevaZona = '';
   protected nuevaDireccion = '';
   protected nuevaUnidad = '';
   protected nuevaFecha = isoLocal(new Date());
@@ -430,7 +486,7 @@ export class DistribucionComponent {
     return this.data.tecnicosSoporte()
       .filter((u) => !this.soloSuyo() || u.usuario === yo?.usuario)
       .map((u) => this.fichaDe(u))
-      .filter((f) => this.coincide(f.usuario.nombre, ...f.asignaciones.map((d) => `${d.direccion} ${d.unidad}`)));
+      .filter((f) => this.coincide(f.usuario.nombre, ...f.asignaciones.map((d) => `${this.zonaDe(d)} ${d.direccion} ${d.unidad}`)));
   });
 
   private fichaDe(u: UsuarioSistema): FichaSoporte {
@@ -452,14 +508,20 @@ export class DistribucionComponent {
     return u ? this.fichaDe(u) : null;
   });
 
-  /** Una tarjeta por Dirección/Unidad del catálogo organizacional, con o sin soporte. */
+  /** Una tarjeta por Dirección/Registro del catálogo organizacional, con o sin soporte. */
   protected readonly porDireccion = computed(() => this.data.pares()
     .map((p) => ({
       clave: `${p.direccion}|${p.unidad}`,
       direccion: p.direccion,
       unidad: p.unidad,
+      zona: this.data.zonaDe(p.direccion),
+      porDireccion: this.data.exigeRegistro(p.direccion),
+      tipo: this.data.exigeRegistro(p.direccion) ? 'Dirección/Registro' : 'Departamento',
+      // El alcance completo del ámbito: en un departamento distribuido entero son todas sus
+      // Direcciones/Registros, y es lo que hay que poder ver al expandirlo (§21).
+      registros: this.data.registrosDelAmbito(p.direccion, p.unidad).map((r) => r.unidad),
       etiqueta: this.data.dirUnidad(p.direccion, p.unidad),
-      asignaciones: this.data.soportes.deDireccionUnidad(this.data.nombreDireccion(p.direccion), p.unidad),
+      asignaciones: this.data.soportes.deDireccionUnidad(p.direccion, p.unidad),
       equipos: this.data.equiposActivosDe(p.direccion, p.unidad).length,
       controles: this.data.controles().filter((c) => c.direccion === p.direccion && c.unidad === p.unidad).length
     }))
@@ -469,28 +531,62 @@ export class DistribucionComponent {
   protected readonly filtradas = computed(() => this.data.distribucion()
     .filter((d) => !this.soloSuyo() || d.tecnicoId === this.data.soportes.idTecnico(this.auth.usuario()?.nombre ?? ''))
     .filter((d) => !this.fEstado() || (this.fEstado() === 'activa' ? d.activo : !d.activo))
-    .filter((d) => this.coincide(d.tecnico, d.direccion, d.unidad, d.id))
+    .filter((d) => this.coincide(d.tecnico, d.direccion, d.unidad, d.id, this.zonaDe(d)))
     .sort((a, b) => Number(b.activo) - Number(a.activo) || a.direccion.localeCompare(b.direccion) || a.unidad.localeCompare(b.unidad)));
 
-  protected unidadesDe(): string[] { return this.data.direccionDe(this.nuevaDireccion)?.unidades ?? []; }
+  /** Departamentos que ofrece el formulario, acotados por la zona elegida. */
+  protected departamentos() {
+    const zona = this.nuevaZona;
+    const lista = this.data.territorio.departamentosActivos();
+    return zona ? lista.filter((d) => d.zonaId === zona) : lista;
+  }
+
+  /** Al cambiar de zona se limpia lo elegido debajo: un departamento de otra zona no aplica. */
+  protected alCambiarZona(): void { this.nuevaDireccion = ''; this.nuevaUnidad = ''; }
+
+  /**
+   * ¿El departamento elegido exige Dirección/Registro? Lo dice el catálogo territorial, no una
+   * comparación contra el texto «San Salvador».
+   */
+  protected exigeRegistro(): boolean {
+    return !!this.nuevaDireccion && this.data.exigeRegistro(this.nuevaDireccion);
+  }
+
+  protected nombreDepartamento(): string { return this.data.nombreDireccion(this.nuevaDireccion); }
+
+  protected unidadesDe(): string[] {
+    return this.data.territorio.registrosDe(this.nuevaDireccion).map((r) => r.nombre);
+  }
+
+  /** Zona de una asignación, para las tablas. */
+  protected zonaDe(d: DistribucionSoporte): string {
+    return this.data.territorio.nombreZona(d.zonaId || this.data.territorio.zonaDe(d.departamentoId || d.direccion));
+  }
+
+  protected tipoDe(d: DistribucionSoporte): string {
+    return d.tipoAsignacion === 'DIRECCION_REGISTRO' ? 'Dirección/Registro' : 'Departamento';
+  }
+
+  /** «Encargado de Soporte · Técnico de Soporte»: todos los roles, no solo el activo. */
+  protected rolesDe(u: UsuarioSistema): string { return etiquetaRoles(u.roles ?? []); }
 
   protected sinSoporte(): string {
-    return this.data.paresSinSoporte().map((p) => `${this.data.cortaDireccion(p.direccion)} / ${p.unidad}`).join('; ');
+    return this.data.paresSinSoporte().map((p) => this.data.territorio.etiqueta(p.direccion, p.unidad)).join('; ');
   }
 
   protected soloNombre(tecnico: string): string { return this.data.soportes.soloNombre(tecnico); }
   protected formatea(iso: string): string { return iso ? formateaFecha(iso) : '—'; }
 
   protected controlesDe(d: DistribucionSoporte): number {
-    return this.data.controlesDeResponsabilidad(this.data.idDireccion(d.direccion), d.unidad).length;
+    return this.data.controlesDeResponsabilidad(d.departamentoId || d.direccion, d.unidad).length;
   }
   protected equiposDe(d: DistribucionSoporte): number {
-    return this.data.equiposActivosDe(this.data.idDireccion(d.direccion), d.unidad).length;
+    return this.data.equiposActivosDe(d.departamentoId || d.direccion, d.unidad).length;
   }
 
   // ------------------------------------------------------------------ acciones
 
-  /** Detalle de un responsable desde la vista por Dirección/Unidad: es la misma ficha. */
+  /** Detalle de un responsable desde la vista por Dirección/Registro: es la misma ficha. */
   protected verDetalleDe(tecnico: string): void {
     const id = this.data.soportes.idTecnico(tecnico);
     const u = this.data.tecnicosSoporte().find((x) => this.data.soportes.idTecnico(x.nombre) === id);
@@ -512,6 +608,7 @@ export class DistribucionComponent {
   protected cerrarFicha(): void { this.enPantalla.set(''); }
 
   private limpiarFormulario(): void {
+    this.nuevaZona = '';
     this.nuevaDireccion = '';
     this.nuevaUnidad = '';
     this.nuevaFecha = isoLocal(new Date());
@@ -522,8 +619,11 @@ export class DistribucionComponent {
   protected nueva(direccion: string, unidad: string, usuario: string): void {
     this.limpiarFormulario();
     this.nuevoUsuario = usuario;
+    this.nuevaZona = direccion ? this.data.territorio.zonaDe(direccion) : '';
     this.nuevaDireccion = direccion;
-    this.nuevaUnidad = unidad;
+    // Un ámbito departamental llega con «Todo el departamento» como unidad: eso no es una
+    // Dirección/Registro elegible, así que el formulario arranca sin nada seleccionado.
+    this.nuevaUnidad = direccion && this.data.exigeRegistro(direccion) ? unidad : '';
     this.modal.set(true);
   }
 

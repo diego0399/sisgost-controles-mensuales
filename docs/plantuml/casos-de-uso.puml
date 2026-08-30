@@ -1,79 +1,134 @@
 @startuml casos-de-uso
-title SISGOST — Controles Mensuales · Casos de uso
+title SISGOST — Controles Mensuales · Diagrama de casos de uso
 left to right direction
 skinparam actorStyle awesome
+skinparam shadowing false
+skinparam backgroundColor #FFFFFF
+skinparam usecase {
+  BackgroundColor #F4F7FB
+  BorderColor #2F5597
+  ArrowColor #2F5597
+}
+skinparam packageStyle rectangle
 
-actor "Técnico de Soporte" as TEC
-actor "Encargado de Soporte" as ENC
 actor "Administrador" as ADM
-actor "Jefatura (consulta)" as JEF
+actor "Encargado de Soporte\n(Carlos González — jefe del área)" as ENC
+actor "Técnico de Soporte\n(Wendy Carranza · Mateo Martínez · Diana Portillo)" as TEC
+actor "Coordinador\n(Carlos Durán — consulta y seguimiento)" as COO
 actor "SISGOST — Gestión de Equipos" as GE <<sistema>>
 
 rectangle "SISGOST — Controles Mensuales" {
-  usecase "Consultar panel ejecutivo" as UC1
-  usecase "Consultar calendario de controles\n(3 días hábiles y feriados)" as UC2
-  usecase "Completar control mensual\n(formulario por secciones)" as UC3
-  usecase "Entregar control\n(genera documento formal)" as UC4
-  usecase "Justificar control sin actividad\n(carta institucional)" as UC5
-  usecase "Completar y enviar bitácora diaria\n(antes de las 5:00 p. m.)" as UC6
-  usecase "Consultar historial anual" as UC7
-  usecase "Generar reporte mensual consolidado" as UC8
-  usecase "Revisar entrega\n(cerrar u observar)" as UC9
-  usecase "Administrar distribución de soportes" as UC10
-  usecase "Administrar catálogo de controles" as UC11
-  usecase "Administrar feriados" as UC12
-  usecase "Consultar inventario operativo" as UC13
-  usecase "Sincronización automática del\ninventario operativo" as UC14
-  usecase "Consultar trazabilidad" as UC15
-  usecase "Ver / imprimir / descargar documento" as UC16
-  usecase "Revisar equipos del inventario\nen un control (F0422, F0174, VULN)" as UC17
-  usecase "Restablecer datos de demostración" as UC18
-  usecase "Configurar aplicación del control\n(dónde aplica)" as UC20
-  usecase "Ir a SISGOST — Gestión de Equipos" as UC19
+
+  package "Seguimiento" {
+    usecase "UC01 · Consultar panel ejecutivo\n(KPIs, semáforo y alertas por Dirección)" as UC01
+    usecase "UC02 · Consultar calendario de controles\n(3 días hábiles y feriados)" as UC02
+    usecase "UC03 · Consultar historial anual\n(operatividad mes a mes)" as UC03
+    usecase "UC04 · Consultar operatividad\npor Dirección/Unidad" as UC04
+    usecase "UC05 · Consultar meses pendientes\npor completar" as UC05
+  }
+
+  package "Operación" {
+    usecase "UC06 · Completar control mensual\n(formulario por secciones)" as UC06
+    usecase "UC07 · Entregar control\n(genera documento formal)" as UC07
+    usecase "UC08 · Registrar F0387 semanal\n(3 IP y 3 extensiones por semana)" as UC08
+    usecase "UC09 · Registrar F0389 semanal\n(condiciones del CSOD)" as UC09
+    usecase "UC10 · Entregar consolidado mensual\nF0387 / F0389" as UC10
+    usecase "UC11 · Verificar F0382 sobre\n5 equipos del inventario operativo" as UC11
+    usecase "UC12 · Registrar ingresos F0234\n(individual o con acompañante)" as UC12
+    usecase "UC13 · Completar y enviar\nbitácora diaria (antes de 5:00 p. m.)" as UC13
+    usecase "UC14 · Justificar control sin actividad\n(carta institucional con 3 firmas)" as UC14
+    usecase "UC15 · Consultar inventario operativo\nde sus Direcciones/Unidades" as UC15
+  }
+
+  package "Documentación" {
+    usecase "UC16 · Ver / imprimir / descargar\ndocumento (vista PDF formal)" as UC16
+    usecase "UC17 · Generar reportes por Dirección\n(mensual, anual, operatividad,\npendientes, inventario, bitácoras)" as UC17
+    usecase "UC18 · Consultar trazabilidad\n(filtro de integración entre módulos)" as UC18
+  }
+
+  package "Administración" {
+    usecase "UC19 · Revisar entrega\n(cerrar u observar)" as UC19
+    usecase "UC20 · Administrar distribución\nde soportes por Dirección/Unidad" as UC20
+    usecase "UC21 · Administrar catálogo de controles\ny su «Aplica a»" as UC21
+    usecase "UC22 · Administrar usuarios\ny Direcciones/Unidades" as UC22
+    usecase "UC23 · Administrar feriados" as UC23
+    usecase "UC24 · Restablecer datos\nde demostración" as UC24
+  }
+
+  package "Automático (sin acción del usuario)" {
+    usecase "UC25 · Programar los controles del período\n(autoSyncControls)" as UC25
+    usecase "UC26 · Sincronizar el inventario operativo\ndesde Gestión de Equipos" as UC26
+    usecase "UC27 · Publicar la distribución en la\nfuente compartida del ecosistema" as UC27
+  }
 }
 
-TEC --> UC1
-TEC --> UC2
-TEC --> UC3
-TEC --> UC4
-TEC --> UC5
-TEC --> UC6
-TEC --> UC21
+TEC --> UC01
+TEC --> UC02
+TEC --> UC05
+TEC --> UC06
+TEC --> UC07
+TEC --> UC08
+TEC --> UC09
+TEC --> UC10
+TEC --> UC11
+TEC --> UC12
 TEC --> UC13
-TEC --> UC17
-TEC --> UC19
+TEC --> UC14
+TEC --> UC15
 TEC --> UC16
+TEC --> UC20
 
-ENC --> UC1
-ENC --> UC7
-ENC --> UC8
-ENC --> UC9
-ENC --> UC10
+ENC --> UC01
+ENC --> UC03
+ENC --> UC04
+ENC --> UC05
+ENC --> UC17
+ENC --> UC18
+ENC --> UC19
+ENC --> UC20
 ENC --> UC21
-ENC --> UC22
-ENC --> UC23
-ENC --> UC15
 ENC --> UC16
 
-ADM --> UC10
-ADM --> UC11
-ADM --> UC12
-ADM --> UC18
+COO --> UC01
+COO --> UC03
+COO --> UC04
+COO --> UC17
+COO --> UC18
+COO --> UC16
+COO --> UC20
+
 ADM --> UC20
-ADM --> UC19
+ADM --> UC21
+ADM --> UC22
+ADM --> UC23
+ADM --> UC24
 
-JEF --> UC1
-JEF --> UC7
-JEF --> UC21
-JEF --> UC22
-JEF --> UC15
-JEF --> UC16
+UC07 ..> UC16 : <<include>>
+UC10 ..> UC16 : <<include>>
+UC13 ..> UC16 : <<include>>
+UC14 ..> UC16 : <<include>>
+UC17 ..> UC16 : <<include>>
+UC08 ..> UC10 : <<extend>>
+UC09 ..> UC10 : <<extend>>
+UC11 ..> UC15 : <<include>>
+UC21 ..> UC25 : <<include>>
+UC20 ..> UC25 : <<include>>
+UC20 ..> UC27 : <<include>>
+UC26 ..> UC15 : <<include>>
 
-GE ..> UC14 : "entrega aceptada / descargo\n(se aplica sin acción del usuario)"
-UC14 ..> UC13 : <<include>>
-UC21 ..> UC23 : <<extend>>
-UC20 ..> UC3 : "decide en qué Direcciones/Unidades\nse programa el control"
-UC4 ..> UC16 : <<include>>
-UC5 ..> UC16 : <<include>>
-UC6 ..> UC16 : <<include>>
+GE ..> UC26 : conformidad aceptada / descargo
+UC27 ..> GE : filtra al Técnico de Configuración\ndel expediente único
+
+note as N1
+  **Reglas que el diagrama respeta**
+  · Dirección/Unidad **no es un rol**: es dato organizacional.
+  · El **Usuario Final no entra** a Controles Mensuales.
+  · El **Técnico de Soporte** solo ve las Direcciones/Unidades
+    que la distribución le asigna; en UC20 solo consulta.
+  · El **Encargado de Soporte** ve toda la operatividad.
+  · El **Coordinador (Carlos Durán)** solo consulta y da seguimiento.
+  · **No hay usuarios de Hardware** en este módulo.
+  · UC25, UC26 y UC27 **no tienen botón**: ocurren solas.
+end note
+
 @enduml

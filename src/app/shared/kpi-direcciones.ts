@@ -6,7 +6,7 @@ import { KpiDireccion } from '../core/services/operatividad.service';
 import { formateaFecha } from '../core/models/models';
 
 /**
- * Operatividad por Dirección/Unidad. Un solo componente presentacional con dos presentaciones
+ * Operatividad por Dirección/Registro. Un solo componente presentacional con dos presentaciones
  * —tarjetas ejecutivas y tabla comparativa— que comparten la vista de Controles mensuales, el
  * panel ejecutivo y el historial anual: así los mismos indicadores se leen igual en todas partes.
  *
@@ -52,8 +52,8 @@ import { formateaFecha } from '../core/models/models';
         @for (k of kpis(); track k.direccion + k.unidad) {
           <div class="dir-card" [class]="'dir-card ' + clase(k)">
             <div>
-              <div class="d-uni">{{ k.corta }}</div>
-              <div class="d-tit">{{ k.unidad === k.nombre ? k.nombre : k.nombre + ' / ' + k.unidad }}</div>
+              <div class="d-uni">{{ k.zona }} · {{ k.porDireccion ? 'Dirección/Registro' : 'Departamento' }}</div>
+              <div class="d-tit">{{ k.nombre }} / {{ k.unidad }}</div>
               <div class="d-resp">
                 @if (k.responsables.length) {
                   {{ k.responsables.length === 1 ? 'Responsable: ' : 'Responsables: ' }}{{ k.responsables.join(', ') }}
@@ -88,14 +88,14 @@ import { formateaFecha } from '../core/models/models';
             </div>
           </div>
         } @empty {
-          <p class="muted">Sin Direcciones/Unidades para los filtros seleccionados.</p>
+          <p class="muted">Sin Direcciones/Registros para los filtros seleccionados.</p>
         }
       </div>
     } @else {
       <div class="table-wrap">
         <table class="tbl comparativo">
           <thead><tr>
-            <th>Dirección/Unidad</th><th>Responsable(s)</th>
+            <th>Dirección/Registro</th><th>Responsable(s)</th>
             <th class="col-num">Aplic.</th><th class="col-num">Entreg.</th><th class="col-num">Pend.</th>
             <th class="col-num">Venc.</th><th class="col-num">Justif.</th>
             <th class="col-num">Bitác.</th><th class="col-num">Equipos</th>
@@ -124,7 +124,7 @@ import { formateaFecha } from '../core/models/models';
                 <td class="c-estado"><ui-badge [estado]="k.estado" /></td>
               </tr>
             } @empty {
-              <tr><td colspan="11" class="muted">Sin Direcciones/Unidades para los filtros seleccionados.</td></tr>
+              <tr><td colspan="11" class="muted">Sin Direcciones/Registros para los filtros seleccionados.</td></tr>
             }
           </tbody>
         </table>

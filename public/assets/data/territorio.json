@@ -1,0 +1,473 @@
+{
+ "version": "2026-08-30-territorio-zona-departamento-registro",
+ "zonas": [
+  {
+   "id": "ZOC",
+   "nombre": "Zona Occidental",
+   "corta": "Occidental",
+   "orden": 1
+  },
+  {
+   "id": "ZCEN",
+   "nombre": "Zona Central",
+   "corta": "Central",
+   "orden": 2
+  },
+  {
+   "id": "ZOR",
+   "nombre": "Zona Oriental",
+   "corta": "Oriental",
+   "orden": 3
+  }
+ ],
+ "departamentos": [
+  {
+   "id": "AHU",
+   "nombre": "Ahuachapán",
+   "zonaId": "ZOC",
+   "corta": "AHU",
+   "porDireccion": false,
+   "orden": 1,
+   "activo": true
+  },
+  {
+   "id": "STA",
+   "nombre": "Santa Ana",
+   "zonaId": "ZOC",
+   "corta": "STA",
+   "porDireccion": false,
+   "orden": 2,
+   "activo": true
+  },
+  {
+   "id": "SON",
+   "nombre": "Sonsonate",
+   "zonaId": "ZOC",
+   "corta": "SON",
+   "porDireccion": false,
+   "orden": 3,
+   "activo": true
+  },
+  {
+   "id": "CAB",
+   "nombre": "Cabañas",
+   "zonaId": "ZCEN",
+   "corta": "CAB",
+   "porDireccion": false,
+   "orden": 4,
+   "activo": true
+  },
+  {
+   "id": "CHA",
+   "nombre": "Chalatenango",
+   "zonaId": "ZCEN",
+   "corta": "CHA",
+   "porDireccion": false,
+   "orden": 5,
+   "activo": true
+  },
+  {
+   "id": "CUS",
+   "nombre": "Cuscatlán",
+   "zonaId": "ZCEN",
+   "corta": "CUS",
+   "porDireccion": false,
+   "orden": 6,
+   "activo": true
+  },
+  {
+   "id": "LIB",
+   "nombre": "La Libertad",
+   "zonaId": "ZCEN",
+   "corta": "LIB",
+   "porDireccion": false,
+   "orden": 7,
+   "activo": true
+  },
+  {
+   "id": "PAZ",
+   "nombre": "La Paz",
+   "zonaId": "ZCEN",
+   "corta": "PAZ",
+   "porDireccion": false,
+   "orden": 8,
+   "activo": true
+  },
+  {
+   "id": "SS",
+   "nombre": "San Salvador",
+   "zonaId": "ZCEN",
+   "corta": "SS",
+   "porDireccion": true,
+   "orden": 9,
+   "activo": true
+  },
+  {
+   "id": "SV",
+   "nombre": "San Vicente",
+   "zonaId": "ZCEN",
+   "corta": "SV",
+   "porDireccion": false,
+   "orden": 10,
+   "activo": true
+  },
+  {
+   "id": "UNI",
+   "nombre": "La Unión",
+   "zonaId": "ZOR",
+   "corta": "UNI",
+   "porDireccion": false,
+   "orden": 11,
+   "activo": true
+  },
+  {
+   "id": "MOR",
+   "nombre": "Morazán",
+   "zonaId": "ZOR",
+   "corta": "MOR",
+   "porDireccion": false,
+   "orden": 12,
+   "activo": true
+  },
+  {
+   "id": "SM",
+   "nombre": "San Miguel",
+   "zonaId": "ZOR",
+   "corta": "SM",
+   "porDireccion": false,
+   "orden": 13,
+   "activo": true
+  },
+  {
+   "id": "USU",
+   "nombre": "Usulután",
+   "zonaId": "ZOR",
+   "corta": "USU",
+   "porDireccion": false,
+   "orden": 14,
+   "activo": true
+  }
+ ],
+ "direccionesRegistro": [
+  {
+   "id": "AHU-IGCN",
+   "departamentoId": "AHU",
+   "corta": "IGCN",
+   "nombre": "Instituto Geográfico y del Catastro Nacional (IGCN)",
+   "orden": 1,
+   "activa": true
+  },
+  {
+   "id": "AHU-RPRH",
+   "departamentoId": "AHU",
+   "corta": "RPRH",
+   "nombre": "Registro de la Propiedad Raíz e Hipotecas",
+   "orden": 2,
+   "activa": true
+  },
+  {
+   "id": "STA-IGCN",
+   "departamentoId": "STA",
+   "corta": "IGCN",
+   "nombre": "Instituto Geográfico y del Catastro Nacional (IGCN)",
+   "orden": 1,
+   "activa": true
+  },
+  {
+   "id": "STA-RPRH",
+   "departamentoId": "STA",
+   "corta": "RPRH",
+   "nombre": "Registro de la Propiedad Raíz e Hipotecas",
+   "orden": 2,
+   "activa": true
+  },
+  {
+   "id": "STA-RC",
+   "departamentoId": "STA",
+   "corta": "RC",
+   "nombre": "Registro de Comercio",
+   "orden": 3,
+   "activa": true
+  },
+  {
+   "id": "STA-ISPI",
+   "departamentoId": "STA",
+   "corta": "ISPI",
+   "nombre": "Instituto Salvadoreño de la Propiedad Intelectual (ISPI)",
+   "orden": 4,
+   "activa": true
+  },
+  {
+   "id": "SON-IGCN",
+   "departamentoId": "SON",
+   "corta": "IGCN",
+   "nombre": "Instituto Geográfico y del Catastro Nacional (IGCN)",
+   "orden": 1,
+   "activa": true
+  },
+  {
+   "id": "SON-RPRH",
+   "departamentoId": "SON",
+   "corta": "RPRH",
+   "nombre": "Registro de la Propiedad Raíz e Hipotecas",
+   "orden": 2,
+   "activa": true
+  },
+  {
+   "id": "SON-RC",
+   "departamentoId": "SON",
+   "corta": "RC",
+   "nombre": "Registro de Comercio",
+   "orden": 3,
+   "activa": true
+  },
+  {
+   "id": "SON-ISPI",
+   "departamentoId": "SON",
+   "corta": "ISPI",
+   "nombre": "Instituto Salvadoreño de la Propiedad Intelectual (ISPI)",
+   "orden": 4,
+   "activa": true
+  },
+  {
+   "id": "CAB-IGCN",
+   "departamentoId": "CAB",
+   "corta": "IGCN",
+   "nombre": "Instituto Geográfico y del Catastro Nacional (IGCN)",
+   "orden": 1,
+   "activa": true
+  },
+  {
+   "id": "CAB-RPRH",
+   "departamentoId": "CAB",
+   "corta": "RPRH",
+   "nombre": "Registro de la Propiedad Raíz e Hipotecas",
+   "orden": 2,
+   "activa": true
+  },
+  {
+   "id": "CHA-IGCN",
+   "departamentoId": "CHA",
+   "corta": "IGCN",
+   "nombre": "Instituto Geográfico y del Catastro Nacional (IGCN)",
+   "orden": 1,
+   "activa": true
+  },
+  {
+   "id": "CHA-RC",
+   "departamentoId": "CHA",
+   "corta": "RC",
+   "nombre": "Registro de Comercio",
+   "orden": 2,
+   "activa": true
+  },
+  {
+   "id": "CHA-RPRH",
+   "departamentoId": "CHA",
+   "corta": "RPRH",
+   "nombre": "Registro de la Propiedad Raíz e Hipotecas",
+   "orden": 3,
+   "activa": true
+  },
+  {
+   "id": "CUS-IGCN",
+   "departamentoId": "CUS",
+   "corta": "IGCN",
+   "nombre": "Instituto Geográfico y del Catastro Nacional (IGCN)",
+   "orden": 1,
+   "activa": true
+  },
+  {
+   "id": "CUS-RPRH",
+   "departamentoId": "CUS",
+   "corta": "RPRH",
+   "nombre": "Registro de la Propiedad Raíz e Hipotecas",
+   "orden": 2,
+   "activa": true
+  },
+  {
+   "id": "LIB-IGCN",
+   "departamentoId": "LIB",
+   "corta": "IGCN",
+   "nombre": "Instituto Geográfico y del Catastro Nacional (IGCN)",
+   "orden": 1,
+   "activa": true
+  },
+  {
+   "id": "LIB-RPRH",
+   "departamentoId": "LIB",
+   "corta": "RPRH",
+   "nombre": "Registro de la Propiedad Raíz e Hipotecas",
+   "orden": 2,
+   "activa": true
+  },
+  {
+   "id": "PAZ-IGCN",
+   "departamentoId": "PAZ",
+   "corta": "IGCN",
+   "nombre": "Instituto Geográfico y del Catastro Nacional (IGCN)",
+   "orden": 1,
+   "activa": true
+  },
+  {
+   "id": "PAZ-RPRH",
+   "departamentoId": "PAZ",
+   "corta": "RPRH",
+   "nombre": "Registro de la Propiedad Raíz e Hipotecas",
+   "orden": 2,
+   "activa": true
+  },
+  {
+   "id": "PAZ-RC",
+   "departamentoId": "PAZ",
+   "corta": "RC",
+   "nombre": "Registro de Comercio",
+   "orden": 3,
+   "activa": true
+  },
+  {
+   "id": "PAZ-ISPI",
+   "departamentoId": "PAZ",
+   "corta": "ISPI",
+   "nombre": "Instituto Salvadoreño de la Propiedad Intelectual (ISPI)",
+   "orden": 4,
+   "activa": true
+  },
+  {
+   "id": "SS-RPRH",
+   "departamentoId": "SS",
+   "corta": "RPRH",
+   "nombre": "Registro de la Propiedad Raíz e Hipotecas",
+   "orden": 1,
+   "activa": true
+  },
+  {
+   "id": "SS-IGCN",
+   "departamentoId": "SS",
+   "corta": "IGCN",
+   "nombre": "Instituto Geográfico y del Catastro Nacional (IGCN)",
+   "orden": 2,
+   "activa": true
+  },
+  {
+   "id": "SS-RGM",
+   "departamentoId": "SS",
+   "corta": "RGM",
+   "nombre": "Registro de Garantías Mobiliarias",
+   "orden": 3,
+   "activa": true
+  },
+  {
+   "id": "SS-RC",
+   "departamentoId": "SS",
+   "corta": "RC",
+   "nombre": "Registro de Comercio",
+   "orden": 4,
+   "activa": true
+  },
+  {
+   "id": "SS-ISPI",
+   "departamentoId": "SS",
+   "corta": "ISPI",
+   "nombre": "Instituto Salvadoreño de la Propiedad Intelectual (ISPI)",
+   "orden": 5,
+   "activa": true
+  },
+  {
+   "id": "SV-IGCN",
+   "departamentoId": "SV",
+   "corta": "IGCN",
+   "nombre": "Instituto Geográfico y del Catastro Nacional (IGCN)",
+   "orden": 1,
+   "activa": true
+  },
+  {
+   "id": "SV-RPRH",
+   "departamentoId": "SV",
+   "corta": "RPRH",
+   "nombre": "Registro de la Propiedad Raíz e Hipotecas",
+   "orden": 2,
+   "activa": true
+  },
+  {
+   "id": "UNI-IGCN",
+   "departamentoId": "UNI",
+   "corta": "IGCN",
+   "nombre": "Instituto Geográfico y del Catastro Nacional (IGCN)",
+   "orden": 1,
+   "activa": true
+  },
+  {
+   "id": "UNI-RPRH",
+   "departamentoId": "UNI",
+   "corta": "RPRH",
+   "nombre": "Registro de la Propiedad Raíz e Hipotecas",
+   "orden": 2,
+   "activa": true
+  },
+  {
+   "id": "MOR-IGCN",
+   "departamentoId": "MOR",
+   "corta": "IGCN",
+   "nombre": "Instituto Geográfico y del Catastro Nacional (IGCN)",
+   "orden": 1,
+   "activa": true
+  },
+  {
+   "id": "MOR-RPRH",
+   "departamentoId": "MOR",
+   "corta": "RPRH",
+   "nombre": "Registro de la Propiedad Raíz e Hipotecas",
+   "orden": 2,
+   "activa": true
+  },
+  {
+   "id": "SM-IGCN",
+   "departamentoId": "SM",
+   "corta": "IGCN",
+   "nombre": "Instituto Geográfico y del Catastro Nacional (IGCN)",
+   "orden": 1,
+   "activa": true
+  },
+  {
+   "id": "SM-RPRH",
+   "departamentoId": "SM",
+   "corta": "RPRH",
+   "nombre": "Registro de la Propiedad Raíz e Hipotecas",
+   "orden": 2,
+   "activa": true
+  },
+  {
+   "id": "SM-RC",
+   "departamentoId": "SM",
+   "corta": "RC",
+   "nombre": "Registro de Comercio",
+   "orden": 3,
+   "activa": true
+  },
+  {
+   "id": "SM-ISPI",
+   "departamentoId": "SM",
+   "corta": "ISPI",
+   "nombre": "Instituto Salvadoreño de la Propiedad Intelectual (ISPI)",
+   "orden": 4,
+   "activa": true
+  },
+  {
+   "id": "USU-IGCN",
+   "departamentoId": "USU",
+   "corta": "IGCN",
+   "nombre": "Instituto Geográfico y del Catastro Nacional (IGCN)",
+   "orden": 1,
+   "activa": true
+  },
+  {
+   "id": "USU-RPRH",
+   "departamentoId": "USU",
+   "corta": "RPRH",
+   "nombre": "Registro de la Propiedad Raíz e Hipotecas",
+   "orden": 2,
+   "activa": true
+  }
+ ]
+}

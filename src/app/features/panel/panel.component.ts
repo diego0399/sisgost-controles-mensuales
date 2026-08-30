@@ -16,7 +16,7 @@ interface Alerta { tipo: 'danger' | 'warn' | 'ok'; titulo: string; texto: string
 
 /**
  * Panel ejecutivo: la fotografía del mes en curso para el rol conectado. Indicadores de
- * controles y bitácoras, alertas accionables y el avance por Dirección/Unidad.
+ * controles y bitácoras, alertas accionables y el avance por Dirección/Registro.
  */
 @Component({
   selector: 'app-panel',
@@ -66,9 +66,9 @@ interface Alerta { tipo: 'danger' | 'warn' | 'ok'; titulo: string; texto: string
         <div class="kpi"><div class="kpi-label">Equipos con incidencias</div><div class="kpi-value">{{ equiposIncidencia() }}</div><div class="kpi-hint">en garantía, revisión o con hallazgo</div></div>
       </div>
 
-      <!-- Operatividad por Dirección/Unidad -->
+      <!-- Operatividad por Dirección/Registro -->
       <div class="grid grid-5" style="margin-top: 14px;">
-        <div class="kpi"><div class="kpi-label">Direcciones atendidas</div><div class="kpi-value">{{ resumenOper().total }}</div><div class="kpi-hint">{{ resumenOper().promedio }} % de operatividad promedio</div></div>
+        <div class="kpi"><div class="kpi-label">Ámbitos atendidos</div><div class="kpi-value">{{ resumenOper().total }}</div><div class="kpi-hint">{{ resumenOper().promedio }} % de operatividad promedio</div></div>
         <div class="kpi"><div class="kpi-label">Operativas</div><div class="kpi-value">{{ resumenOper().operativas }}</div><div class="kpi-hint">90 % o más</div></div>
         <div class="kpi"><div class="kpi-label">En observación</div><div class="kpi-value">{{ resumenOper().observacion }}</div><div class="kpi-hint">entre 75 % y 89 %</div></div>
         <div class="kpi"><div class="kpi-label">Críticas</div><div class="kpi-value">{{ resumenOper().criticas }}</div><div class="kpi-hint">menos de 75 %</div></div>
@@ -87,7 +87,7 @@ interface Alerta { tipo: 'danger' | 'warn' | 'ok'; titulo: string; texto: string
           @if (alertas().length > alertasVisibles().length) {
             <p class="muted" style="font-size: 12.5px;">
               y {{ alertas().length - alertasVisibles().length }} alerta(s) más; el detalle de cada
-              Dirección/Unidad las muestra completas.
+              ámbito territorial las muestra completas.
             </p>
           }
         </div>
@@ -103,7 +103,7 @@ interface Alerta { tipo: 'danger' | 'warn' | 'ok'; titulo: string; texto: string
               <p class="muted" style="margin: 0; max-width: 620px;">
                 Consulta preparación, asignación, configuración, aceptación, garantía y descargo de equipos.
                 Los equipos que aquel módulo deja aceptados alimentan el inventario operativo de este:
-                <b>{{ equiposActivos() }}</b> equipo(s) activo(s) en {{ data.pares().length }} Direcciones/Unidades,
+                <b>{{ equiposActivos() }}</b> equipo(s) activo(s) en {{ data.pares().length }} ámbito(s) territorial(es),
                 <b>{{ integracionPendiente().length }}</b> movimiento(s) por aplicar.
               </p>
             </div>
@@ -121,7 +121,7 @@ interface Alerta { tipo: 'danger' | 'warn' | 'ok'; titulo: string; texto: string
       <div class="card" style="margin-top: 18px;">
         <div class="card-head">
           <div>
-            <h3>Operatividad por Dirección</h3>
+            <h3>Operatividad por Departamento y Dirección/Registro</h3>
             <p class="sub">
               Controles aplicables, bitácoras, inventario y semáforo institucional del período {{ mesActual }}
             </p>
@@ -138,7 +138,7 @@ interface Alerta { tipo: 'danger' | 'warn' | 'ok'; titulo: string; texto: string
           <div class="card-head">
             <div>
               <h3>Carga por Técnico de Soporte</h3>
-              <p class="sub">Direcciones/Unidades atendidas y controles abiertos del período</p>
+              <p class="sub">Ámbitos territoriales atendidos y controles abiertos del período</p>
             </div>
             <a class="btn btn-ghost btn-sm" routerLink="/distribucion">Ver distribución</a>
           </div>
@@ -251,7 +251,7 @@ export class PanelComponent {
   protected restan(limite: string): number { return Math.max(this.habiles.habilesHasta(limite), 0); }
   protected formatea(iso: string): string { return formateaFecha(iso); }
 
-  /** Operatividad por Dirección/Unidad del período en curso. */
+  /** Operatividad por Dirección/Registro del período en curso. */
   private readonly filtroOper = computed(() => ({ anio: this.periodo.anio, mes: this.periodo.mes }));
   protected readonly kpis = computed(() => this.oper.kpis(this.filtroOper()));
   protected readonly resumenOper = computed(() => this.oper.resumen(this.filtroOper()));
@@ -270,10 +270,10 @@ export class PanelComponent {
   protected readonly integracionPendiente = computed(() => this.data.eventosIntegracion().filter((e) => !e.aplicado));
 
   protected readonly equiposActivos = computed(() => this.data.inventarioVisible(this.auth.usuario())
-    .filter((e) => e.estado === 'Activo en Dirección/Unidad').length);
+    .filter((e) => e.estado === 'Activo en Dirección/Registro').length);
 
   /**
-   * Combinaciones control × Dirección/Unidad que **no aplican** este mes. Es informativo: no
+   * Combinaciones control × Dirección/Registro que **no aplican** este mes. Es informativo: no
    * cuentan como pendientes ni como vencidos, porque ese control no se trabaja ahí.
    */
   protected readonly noAplicables = computed(() => {
@@ -290,12 +290,12 @@ export class PanelComponent {
 
   protected readonly alertas = computed<Alerta[]>(() => {
     const lista: Alerta[] = [];
-    // ---- alertas por Dirección/Unidad (§19): cada una lleva a su detalle de operatividad
+    // ---- alertas por Dirección/Registro (§19): cada una lleva a su detalle de operatividad
     for (const k of this.kpis()) {
       const ruta = `/controles/direccion/${k.direccion}/${k.unidad}`;
       if (k.estado === 'Sin soporte asignado') {
         lista.push({
-          tipo: 'danger', titulo: 'Dirección/Unidad sin soporte responsable',
+          tipo: 'danger', titulo: 'Ámbito territorial sin soporte responsable',
           texto: `${this.data.dirUnidad(k.direccion, k.unidad)} tiene ${k.aplicables} control(es) aplicables, pero no posee Técnico de Soporte asignado${k.equiposActivos ? `; además, ${k.equiposActivos} equipo(s) activo(s) quedan sin responsable` : ''}.`,
           ruta: '/distribucion'
         });
@@ -350,7 +350,7 @@ export class PanelComponent {
       lista.push({ tipo: 'warn', titulo: 'Controles por vencer', texto: `${this.proximos().length} control(es) vencen dentro de los próximos 3 días hábiles.`, ruta: '/controles' });
     }
     const sinControl = this.data.inventarioVisible(this.auth.usuario())
-      .filter((e) => e.estado === 'Activo en Dirección/Unidad' && !this.data.controlesDeEquipo(e.inventario).length);
+      .filter((e) => e.estado === 'Activo en Dirección/Registro' && !this.data.controlesDeEquipo(e.inventario).length);
     if (sinControl.length) {
       lista.push({ tipo: 'warn', titulo: 'Equipos activos sin control asociado', texto: `${sinControl.length} equipo(s) del inventario operativo no aparecen en ningún control del año.`, ruta: '/inventario' });
     }

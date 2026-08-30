@@ -1,166 +1,256 @@
 @startuml entidad-relacion
 title SISGOST — Controles Mensuales · Modelo entidad-relación
 hide circle
+skinparam shadowing false
+skinparam backgroundColor #FFFFFF
 skinparam linetype ortho
-
-entity DIRECCION {
-  * id : texto <<PK>>
-  --
-  nombre
-  corta
-  unidades[]
-  activa
+skinparam class {
+  BackgroundColor #F4F7FB
+  BorderColor #2F5597
+  ArrowColor #2F5597
 }
 
-entity USUARIO_SISTEMA <<compartida>> {
+' ------------------------------------------------------------- Organización
+entity DIRECCION <<compartida con Gestión de Equipos>> {
+  * id : texto <<PK>>   — «DIR-REGS»
+  --
+  nombre : texto
+  corta : texto
+  unidades : texto[]
+  activa : booleano
+  ..
+  **No es un rol del sistema**: es dato organizacional.
+}
+
+entity UNIDAD {
+  * unidadId : texto <<PK>>  — «DIR-REGS::registro-de-la-propiedad»
+  --
+  direccionId <<FK DIRECCION>>
+  nombre : texto
+}
+
+entity USUARIO_SISTEMA <<compartida con Gestión de Equipos>> {
   * usuario : texto <<PK>>
   --
-  nombre
-  rol / clave
-  cargo, unidad, estado
-  moduloControles
+  nombre, iniciales, cargo
+  rol : texto
+  clave : admin | enc-soporte | tec-soporte | coordinador
+  unidad organizativa : Soporte | DTI
+  estado : Activo | Inactivo
+  moduloControles : booleano
+  ..
+  **Hardware no participa** en este módulo.
 }
 
-entity DISTRIBUCION_SOPORTE <<compartida>> {
-  * id <<PK>>
+entity DISTRIBUCION_SOPORTE <<compartida — se administra aquí>> {
+  * id : texto <<PK>>
   --
-  direccion, unidad
-  tecnico  <<FK usuario>>
+  tecnicoId <<FK USUARIO_SISTEMA>>
+  direccionId <<FK DIRECCION>>
+  unidadId <<FK UNIDAD>>
+  tecnico, direccion, unidad : texto visible
   asignadoPor, fecha, hora
-  activo
-  desactivadaPor?, fechaDesactivacion?
+  activo : booleano
   observacion
+  desactivadaPor?, fechaDesactivacion?
+  motivoDesactivacion?  — obligatorio al desactivar
+  ..
+  Nunca se borra: **se desactiva**.
+  Se compara por **IDs estables**, no por texto.
 }
 
 entity FERIADO {
-  * fecha + nombre <<PK>>
+  * fecha : ISO <<PK>>
   --
-  ambito (Nacional / San Salvador)
+  nombre
+  ambito : Nacional | San Salvador
 }
 
+' ------------------------------------------------------------- Catálogo
 entity CONTROL_CATALOGO {
-  * codigo <<PK>>
+  * codigo : texto <<PK>>  — F0234, F0382, F0387…
   --
-  nombre, version
-  frecuencia
-  aplicacion (modo, direcciones,
-    unidades, area, observaciones)
-  requiereEvidencia
-  requiereFirma
-  permiteJustificacion
-  plantilla (secciones)
+  nombre, version, descripcion
+  frecuencia : Mensual | Semanal | Diaria | Eventual |
+      Programado | Semanal con entrega mensual consolidada
+  requiereEvidencia, requiereFirma, permiteJustificacion
+  activo : booleano
+  plantilla : SECCION_PLANTILLA[]
+}
+
+entity APLICACION_CONTROL {
+  * codigo <<PK, FK CONTROL_CATALOGO>>
+  --
+  modo : Todas las direcciones | Direcciones específicas |
+      Unidades específicas | Área técnica específica
+  direcciones[] , unidades[] , area <<FK AREA_TECNICA>>
+  observaciones : motivo institucional
 }
 
 entity AREA_TECNICA {
-  * id <<PK>>
+  * id : texto <<PK>>
   --
   nombre, descripcion
-  pares Dirección/Unidad
+  pares : { direccion, unidad }[]
 }
 
-entity CONTROL_MES {
+entity SECCION_PLANTILLA {
   * id <<PK>>
   --
-  codigo <<FK>>
+  codigo <<FK CONTROL_CATALOGO>>
+  titulo, orden
+  campos[], items[], tablas[]
+  equipos / equiposIp / telefonos
+  itemsSeguridad[] / checklistEquipos
+  ingresos (F0234)
+}
+
+' ------------------------------------------------------------- Período
+entity CONTROL_MES {
+  * id : texto <<PK>>
+  --
+  codigo <<FK CONTROL_CATALOGO>>
   anio, mes, semana?
-  direccion <<FK>>
-  responsable
-  estado
-  fechaLimite
-  fechaEntrega?
-  avance
-  secciones (respuestas)
-  equipos revisados[]
-  evidencias[]
+  direccionId <<FK DIRECCION>> , unidadId <<FK UNIDAD>>
+  responsable <<FK USUARIO_SISTEMA>>
+  estado : Programado | Pendiente | En proceso |
+      Listo para entregar | En revisión | Entregado |
+      Entregado tarde | Vencido | Justificado |
+      Observado | Cerrado | No aplica
+  fechaLimite : 3.er día hábil del mes siguiente
+  fechaEntrega?, horaEntrega?
+  avance : 0–100
+  observaciones
+  documento? <<FK DOCUMENTO_GENERADO>>
+  justificacion? <<FK JUSTIFICACION>>
+}
+
+entity RESPUESTA_SECCION {
+  * controlId + seccionId <<PK>>
+  --
+  campos[], items[], filas[]
+  equipos[] <<FK EQUIPO_OPERATIVO>>
+  equiposIp[] , telefonos[]
+  itemsSeguridad[] (F0382)
+  ingresos[] (F0234)
+  estadoSemana (F0387 / F0389)
+  completa : booleano
+}
+
+entity EVIDENCIA_CONTROL {
+  * controlId + nombre <<PK>>
+  --
+  descripcion, fecha
 }
 
 entity BITACORA_DIARIA {
-  * id <<PK>>
+  * id : texto <<PK>>
   --
-  fecha
-  direccion <<FK>>
-  responsable
-  estado
-  horaEnvio?
-  revision[9]
-  actividades[]
+  fecha : ISO
+  direccionId <<FK>> , unidadId <<FK>>
+  responsable <<FK USUARIO_SISTEMA>>
+  estado : Pendiente | En edición | Enviada |
+      Enviada tarde | Vencida | Observada | Cerrada
+  horaEnvio?  — límite institucional 17:00
+  revision[9] : equipo de atención al público
+  actividades[] : hora, actividad, área, resultado
+  documento? <<FK DOCUMENTO_GENERADO>>
 }
 
 entity JUSTIFICACION {
-  * id <<PK>>
+  * id : texto <<PK>>
   --
-  codigoControl <<FK>>
+  codigoControl <<FK CONTROL_CATALOGO>>
   anio, mes
-  direccion <<FK>>
-  motivo, texto
-  estado
-  firmas[3]
+  direccionId <<FK>> , unidadId <<FK>>
+  responsable, motivo, texto, fecha
+  estado : Emitida | En revisión | Aceptada
+  firmas[3] : nombre, cargo, estado
+  documento? <<FK DOCUMENTO_GENERADO>>
 }
 
-entity EQUIPO_OPERATIVO <<compartida>> {
-  * ciclo <<PK>>
+' ------------------------------------------------------------- Inventario e integración
+entity EQUIPO_OPERATIVO <<llega de Gestión de Equipos>> {
+  * ciclo : texto <<PK>>
   --
-  inventario
-  --
-  tipo, marca, modelo, serie
-  usuarioFinal
-  direccion <<FK>>, unidad
-  soporteResponsable
-  fechaAceptacion
-  expediente, expedienteUnico
-  estado
-  garantia
-  origen
+  inventario : texto  — puede repetirse en ciclos distintos
+  tipo, marca, modelo, serie, nombreEquipo
+  ip?, mac?  — reserva registrada en el F0302
+  usuarioFinal, carne, correoInstitucional
+  direccionId <<FK>> , unidadId <<FK>>
+  tecnicoConfiguracion
+  soporteResponsable <<FK DISTRIBUCION_SOPORTE>>
+  fechaAceptacion, expediente, expedienteUnico
+  estado : Activo en Dirección/Unidad | En garantía |
+      Pendiente de revisión | Descargado |
+      Reingresado a Hardware | No disponible | Histórico
+  garantia, origen, ultimoControl?
+  fechaDescargo?, motivoDescargo?, accionPosterior?
 }
 
 entity EVENTO_INTEGRACION {
-  * id <<PK>>
+  * id : texto <<PK>>
   --
-  tipo (entrega / descargo)
-  moduloOrigen, moduloDestino
-  expediente, expedienteUnico
-  detalle
-  equipo
-  aplicado
+  tipo : Entrega aceptada | Descargo de equipo
+  fecha, moduloOrigen, moduloDestino
+  expediente, expedienteUnico, detalle
+  equipo <<FK EQUIPO_OPERATIVO>>
+  aplicado : booleano  — idempotencia
 }
 
+' ------------------------------------------------------------- Salidas
 entity DOCUMENTO_GENERADO {
-  * id <<PK>>
+  * id : texto <<PK>>
   --
-  tipo
-  nombre, codigo
-  fecha, hora
-  direccion, mes, anio
-  hash
+  tipo : Control mensual | Bitácora diaria | Justificación |
+      Reporte mensual consolidado | Reportes por Dirección |
+      Consolidado mensual F0387 / F0389
+  nombre, codigo, fecha, hora, generadoPor
+  direccionId, unidadId?, mes, anio
+  hash, estado : Generado | Descargado
   referencia <<FK polimórfica>>
 }
 
 entity EVENTO_TRAZABILIDAD {
-  * id <<PK>>
+  * id : texto <<PK>>
   --
-  fecha, hora
-  usuario, rol
-  accion
-  estadoAnterior / estadoNuevo
-  moduloOrigen / moduloDestino
-  inventario?
-  documento?
+  fecha, hora, usuario, rol
+  direccion?, unidad?, tipoControl?, mes?, anio?
+  accion, estadoAnterior?, estadoNuevo?
+  observacion?, documento?
+  moduloOrigen?, moduloDestino?
+  tecnicoAfectado?, motivo?  — cambios de distribución
+  inventario?, equipo?, usuarioFinal?, expedienteUnico?
+  tipoIngreso?  — eventos del F0234
 }
 
+' ------------------------------------------------------------- Relaciones
+DIRECCION ||--o{ UNIDAD
 DIRECCION ||--o{ DISTRIBUCION_SOPORTE
-USUARIO_SISTEMA ||--o{ DISTRIBUCION_SOPORTE
+UNIDAD ||--o{ DISTRIBUCION_SOPORTE
+USUARIO_SISTEMA ||--o{ DISTRIBUCION_SOPORTE : "solo rol\nTécnico de Soporte"
+CONTROL_CATALOGO ||--|| APLICACION_CONTROL
+CONTROL_CATALOGO ||--o{ SECCION_PLANTILLA
+AREA_TECNICA |o--o{ APLICACION_CONTROL : "modo área técnica"
 DIRECCION ||--o{ CONTROL_MES
-CONTROL_CATALOGO ||--o{ CONTROL_MES
-AREA_TECNICA |o--o{ CONTROL_CATALOGO : "aplica a (modo área técnica)"
-DIRECCION ||--o{ BITACORA_DIARIA
-DIRECCION ||--o{ EQUIPO_OPERATIVO
+UNIDAD ||--o{ CONTROL_MES
+CONTROL_CATALOGO ||--o{ CONTROL_MES : "se programa donde APLICA"
+CONTROL_MES ||--o{ RESPUESTA_SECCION
+CONTROL_MES ||--o{ EVIDENCIA_CONTROL
 CONTROL_MES |o--o| JUSTIFICACION
 CONTROL_MES |o--o| DOCUMENTO_GENERADO
+UNIDAD ||--o{ BITACORA_DIARIA
 BITACORA_DIARIA |o--o| DOCUMENTO_GENERADO
 JUSTIFICACION |o--o| DOCUMENTO_GENERADO
-EVENTO_INTEGRACION }o--|| EQUIPO_OPERATIVO : actualiza
-EQUIPO_OPERATIVO }o--o{ CONTROL_MES : "revisado en\n(RespuestaEquipo)"
-DISTRIBUCION_SOPORTE .. CONTROL_MES : "define el responsable"
-FERIADO .. CONTROL_MES : "define los días hábiles\nde la fecha límite"
+UNIDAD ||--o{ EQUIPO_OPERATIVO
+EQUIPO_OPERATIVO ||--o{ RESPUESTA_SECCION : "revisado en F0422 · F0174 ·\nF0288 · VULN · F0382 · F0387"
+EVENTO_INTEGRACION }o--|| EQUIPO_OPERATIVO : "entra / sale del inventario activo"
+DISTRIBUCION_SOPORTE ..> CONTROL_MES : "decide el responsable"
+DISTRIBUCION_SOPORTE ..> BITACORA_DIARIA : "decide el responsable"
+FERIADO ..> CONTROL_MES : "define los días hábiles\nde la fecha límite"
 DOCUMENTO_GENERADO ||--o{ EVENTO_TRAZABILIDAD
+CONTROL_MES ||--o{ EVENTO_TRAZABILIDAD
+EVENTO_INTEGRACION ||--o{ EVENTO_TRAZABILIDAD
+DISTRIBUCION_SOPORTE ||--o{ EVENTO_TRAZABILIDAD
+
 @enduml

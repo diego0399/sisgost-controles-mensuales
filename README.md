@@ -5,8 +5,23 @@ Seguimiento de Soporte Técnico) del Centro Nacional de Registros, conectado con
 con el módulo **SISGOST — Gestión de Equipos**.
 
 Controla, da seguimiento, completa, justifica, genera y consulta los **controles mensuales**
-y las **bitácoras diarias** que realizan los Técnicos de Soporte según las Direcciones/Unidades
+y las **bitácoras diarias** que realizan los Técnicos de Soporte según las Direcciones/Registros
 que tienen asignadas.
+
+## Organización territorial y roles
+
+La estructura organizacional es **Zona → Departamento → Dirección/Registro**
+(`public/assets/data/territorio.json`, compartido con Gestión de Equipos), y de ella depende la
+regla que gobierna los dos módulos:
+
+- En **San Salvador** la distribución de soportes es por **Dirección/Registro**.
+- En **los demás departamentos** es por **Departamento completo**: quien responde por Santa Ana
+  atiende sus cuatro Direcciones/Registros sin que se le asigne ninguna una por una.
+
+Un **usuario puede tener varios roles** (`roles: RolSistema[]`) y elige cuál usar en la sesión;
+el rol activo ordena el menú y los permisos visibles, y se cambia sin cerrar sesión.
+
+El detalle completo está en `ajuste-prototipo-2026-08-30.md`.
 
 ## Ejecución
 
@@ -35,7 +50,7 @@ rol: no existe un directorio paralelo.
 |---|---|---|
 | `sadmin` | Administrador | Usuarios, catálogo, aplicación de controles, feriados y datos de demostración |
 | `demo.admin` | Administrador | Usuario de demostración: restablece los datos |
-| `cgonzalez` | Encargado de Soporte (**jefe del área**) | Ve todas las Direcciones/Unidades, la operatividad, pendientes, vencidos, historial y reportes |
+| `cgonzalez` | Encargado de Soporte (**jefe del área**) | Ve todas las Direcciones/Registros, la operatividad, pendientes, vencidos, historial y reportes |
 | `cduran` | **Coordinador** | Consulta y seguimiento: panel, operatividad, historial, reportes, documentos y trazabilidad |
 | `wcarranza` | Técnico de Soporte | Registro de la Propiedad, Registro de Comercio, RPRH y Gerencia de Tecnología |
 | `mmartinez` | Técnico de Soporte | Registro de la Propiedad, Dirección de Registro, IGN e ISPI |
@@ -43,32 +58,32 @@ rol: no existe un directorio paralelo.
 
 El personal de **Hardware no participa en este módulo**: opera solo en Gestión de Equipos y no
 figura en este directorio. Diana Portillo sí aparece porque la distribución compartida le asigna
-Direcciones/Unidades en ambos módulos.
+Direcciones/Registros en ambos módulos.
 
-La contraseña es libre (prototipo). **Dirección/Unidad no es un rol del sistema**: es el dato
+La contraseña es libre (prototipo). **Dirección/Registro no es un rol del sistema**: es el dato
 organizacional al que pertenecen los controles, y quién atiende cada una lo decide la
 distribución de soportes.
 
 ### La distribución se edita desde la persona
 
 La pantalla **Administración → Distribución de soportes** se organiza por Técnico de Soporte: cada
-tarjeta muestra su rol, su estado, todas las Direcciones/Unidades que atiende y su carga del
+tarjeta muestra su rol, su estado, todas las Direcciones/Registros que atiende y su carga del
 período, con **Ver detalle** y **Editar responsabilidades**. Dentro de la ficha se agregan
-Direcciones/Unidades —Dirección, Unidad, fecha de inicio, estado y observaciones— y se desactivan
-una a una con motivo obligatorio. Las mismas responsabilidades pueden verse por Dirección/Unidad o
+Direcciones/Registros —Dirección, Unidad, fecha de inicio, estado y observaciones— y se desactivan
+una a una con motivo obligatorio. Las mismas responsabilidades pueden verse por Dirección/Registro o
 en la tabla completa.
 
 **Todo se compara por IDs estables**, no por el texto visible: cada asignación guarda
-`tecnicoId` (`wendy-carranza`), `direccionId` (`DIR-REGS`) y `unidadId`
-(`DIR-REGS::registro-de-la-propiedad`). Comparar nombres era el origen real de las
-desincronizaciones —«Dirección de Registro» contra «Dirección de Registros»— y una asignación mal
+`tecnicoId` (`wendy-carranza`), `direccionId` (`SS`) y `unidadId`
+(`SS::SS-RC`). Comparar nombres era el origen real de las
+desincronizaciones —«Santa Ana» contra «SANTA ANA»— y una asignación mal
 comparada deja a un técnico sin ver sus controles o le abre los de otra Dirección.
 
 | Rol | Qué puede hacer aquí |
 |---|---|
 | Administrador · Encargado de Soporte | Editar: agregar, desactivar y consultar |
 | Coordinador | Consultar toda la distribución |
-| Técnico de Soporte | Consultar **solo** las Direcciones/Unidades que atiende |
+| Técnico de Soporte | Consultar **solo** las Direcciones/Registros que atiende |
 
 No hay ningún botón de sincronizar: al guardar, el sistema recalcula los controles del período,
 el perfil del técnico, la vista por Dirección, el inventario visible y lo que Gestión de Equipos
@@ -99,13 +114,13 @@ que Gestión de Equipos ya publicaba para el inventario operativo, que viaja en 
   tiquetes, F0386 sin traslado de cintas…) no queda vacío: se cierra con carta de justificación
   basada en `Formatos_nuevos_2025_.docx`, con las tres firmas del formato.
 - **Integración automática con Gestión de Equipos.** Una entrega aceptada por el Usuario Final
-  incorpora el equipo al inventario operativo de su Dirección/Unidad y un descargo lo retira,
+  incorpora el equipo al inventario operativo de su Dirección/Registro y un descargo lo retira,
   **sin confirmación manual**: el módulo se sincroniza al cargar (`EquipmentIntegrationService`,
   `syncOperationalInventory()`) y la pantalla solo muestra los movimientos ya sincronizados.
   Ver «Un solo ecosistema» abajo.
 - **Un control no registra equipos ajenos.** Los controles que trabajan con equipos (F0422,
-  F0174, F0288, VULN) solo ofrecen los equipos **activos de su Dirección/Unidad**, tomados del
-  inventario operativo; y un Técnico de Soporte solo completa controles de las Direcciones/Unidades
+  F0174, F0288, VULN) solo ofrecen los equipos **activos de su Dirección/Registro**, tomados del
+  inventario operativo; y un Técnico de Soporte solo completa controles de las Direcciones/Registros
   que la distribución le asigna.
 - **Documentos formales.** Todo control entregado, bitácora enviada, carta y reporte
   consolidado se abre en un visor tipo PDF con encabezado institucional, secciones numeradas,
@@ -113,20 +128,20 @@ que Gestión de Equipos ya publicaba para el inventario operativo, que viaja en 
 
 ## Aplicación configurable de los controles («Aplica a»)
 
-No todos los controles se trabajan en todas las Direcciones/Unidades, así que **dónde aplica cada
+No todos los controles se trabajan en todas las Direcciones/Registros, así que **dónde aplica cada
 control se configura** en Administración → Catálogo de controles → **Editar aplicación**, con
 cuatro modos:
 
 | Modo | Ejemplo |
 |---|---|
-| Todas las direcciones | **F0422** — cada Dirección/Unidad puede tener equipos activos |
+| Todas las direcciones | **F0422** — cada Dirección/Registro puede tener equipos activos |
 | Direcciones específicas | **VULN** — solo las Direcciones incluidas en el ciclo de escaneo |
 | Unidades específicas | **F0174** — solo las unidades con equipos de usuario |
 | Área técnica específica | **F0234** → CSOD/Cuarto de servidores; **F0386** → área responsable de respaldos |
 
 Consecuencias en todo el sistema: el calendario **solo programa** cada control donde aplica; un
 control que no aplica no figura como pendiente ni vence —queda como **No aplica**, informativo—;
-el panel ejecutivo cuenta «controles aplicables del mes» y avisa cuando una Dirección/Unidad
+el panel ejecutivo cuenta «controles aplicables del mes» y avisa cuando una Dirección/Registro
 **tiene controles aplicables pero no tiene Técnico de Soporte asignado**; y los controles que
 trabajan con equipos solo se programan donde hay inventario operativo activo.
 
@@ -140,7 +155,7 @@ hace el usuario es guardar su cambio; el resto ocurre en el mismo acto.
 | Se guarda «Aplica a» en el catálogo | Se recalcula el período: se crean los controles que pasaron a aplicar, se marcan «No aplica» los que dejaron de corresponder y se conservan los históricos |
 | Se guarda o desactiva una asignación de la distribución | Los controles **abiertos** pasan al nuevo responsable; los entregados conservan a quien los entregó |
 | Se abre una pantalla de período | Pasada silenciosa del período visible (controles + inventario operativo) |
-| Se cambia mes, año, Dirección/Unidad, técnico o el usuario de «Ver como» | La pasada se repite para lo que ahora se mira |
+| Se cambia mes, año, Dirección/Registro, técnico o el usuario de «Ver como» | La pasada se repite para lo que ahora se mira |
 | Gestión de Equipos acepta una conformidad o registra un descargo | El equipo entra o sale del inventario operativo por sí solo |
 
 La función central es `autoSyncControls(anio, mes)`, y la del inventario,
@@ -148,7 +163,7 @@ La función central es `autoSyncControls(anio, mes)`, y la del inventario,
 no dejan traza, así que navegar entre pantallas no duplica controles ni ensucia la trazabilidad.
 
 Las comparaciones se hacen con **claves estables** —código del formato, período y par
-Dirección/Unidad— y nunca con textos visibles.
+Dirección/Registro— y nunca con textos visibles.
 
 Una decisión que conviene conocer: en un período **cuyo plazo ya venció** la sincronización no
 crea controles nuevos (no se inventan obligaciones retroactivas); ahí solo marca «No aplica» lo
@@ -178,10 +193,10 @@ propio origen y Controles Mensuales lo carga en un iframe oculto para pedirle el
 | Puertos distintos y Gestión de Equipos levantado | El puente los conecta y el equipo aparece |
 | Gestión de Equipos apagado | Controles Mensuales sigue con lo que ya había sincronizado |
 
-Reglas antiduplicado: mismo número de inventario, mismo expediente único y misma Dirección/Unidad
+Reglas antiduplicado: mismo número de inventario, mismo expediente único y misma Dirección/Registro
 **actualizan** el registro; si nada cambió no se reescribe nada y queda constancia del intento
 evitado; un ciclo nuevo del mismo equipo deja el anterior como **Histórico** sin borrarlo. El
-equipo aparece **únicamente** en la Dirección/Unidad del requerimiento aceptado, y su soporte
+equipo aparece **únicamente** en la Dirección/Registro del requerimiento aceptado, y su soporte
 responsable lo decide la distribución de soportes vigente.
 
 ## Período activo: el mes actual
@@ -198,7 +213,7 @@ mientras permanezca en la pantalla.
 
 El **F0387 — Verificación de sincronización de hora de equipos con IP** y el **F0389 — Control de
 condiciones de infraestructura del CSOD** se trabajan semana a semana pero se entregan en **un solo
-documento mensual**: son un único control por Dirección/Unidad y mes —no cuatro— cuyo formulario
+documento mensual**: son un único control por Dirección/Registro y mes —no cuatro— cuyo formulario
 tiene una sección por semana (1 a 5) más el cierre del mes.
 
 | Estado interno de la semana | Efecto |
@@ -218,12 +233,12 @@ Cada semana del F0387 verifica **3 equipos identificados por su IP** y **3 telé
 extensiones**, cada uno con su **hora de verificación**. La IP no se teclea a ciegas: se busca en
 el **inventario operativo**, que proviene de las entregas aceptadas en Gestión de Equipos junto con
 los datos técnicos del equipo (nombre, IP y MAC del F0302). Al digitar una IP válida el formulario
-autocompleta número de inventario, equipo, tipo/marca/modelo, usuario final, Dirección/Unidad y
+autocompleta número de inventario, equipo, tipo/marca/modelo, usuario final, Dirección/Registro y
 estado operativo.
 
 Reglas: la IP debe existir en el inventario operativo, pertenecer a un equipo **activo**, ser de la
-**misma Dirección/Unidad** del control, no repetirse dentro de la semana, y los 3 equipos y los
-3 teléfonos deben llevar hora. Cada Dirección/Unidad usa su propio segmento de red, así que una IP
+**misma Dirección/Registro** del control, no repetirse dentro de la semana, y los 3 equipos y los
+3 teléfonos deben llevar hora. Cada Dirección/Registro usa su propio segmento de red, así que una IP
 ajena se rechaza con el mensaje correspondiente.
 
 El F0389, en cambio, registra por semana las **condiciones del cuarto de servidores** (gabinetes,
@@ -300,7 +315,7 @@ como el formato físico: un cuadro de **cinco equipos** y, para cada uno, los **
 seguridad del documento original con su resultado, su observación, su acción correctiva y su
 estado final.
 
-Los equipos **no se escriben**: se eligen del **inventario operativo** de la Dirección/Unidad del
+Los equipos **no se escriben**: se eligen del **inventario operativo** de la Dirección/Registro del
 control con un buscador que filtra por número de inventario, nombre del equipo, usuario final, IP,
 tipo, marca, modelo o unidad. Al elegir uno, el formulario autocompleta inventario, usuario,
 nombre del equipo, tipo, marca, modelo, serie, IP, Dirección, Unidad y estado operativo; lo que el
@@ -324,7 +339,7 @@ la respuesta es «No», debajo se enumera lo que falta y la entrega devuelve «N
 control F0382 con campos pendientes.». Un control con hallazgos —incumplimientos o ítems «No
 aplica»— tampoco se entrega con las observaciones generales en blanco.
 
-Reglas de entrega: cinco equipos, sin repetir, todos activos y de la Dirección/Unidad del control,
+Reglas de entrega: cinco equipos, sin repetir, todos activos y de la Dirección/Registro del control,
 con todos sus ítems respondidos. El **estado final de cada equipo** (Completado / Pendiente) no se
 teclea: se deriva de sus ítems. Los nueve ítems conservan la agrupación del formato —cinco para
 equipos de usuario interno, tres para los de consulta al público y uno para ambos—, así que a cada
@@ -344,7 +359,7 @@ justificable), VULN (vulnerabilidades), F0206 (servidores), F0204 (TELCO) y SEGT
 ## Un solo ecosistema: integración con Gestión de Equipos
 
 Los dos prototipos son aplicaciones Angular independientes que **comparten los datos base**. No
-hay usuarios, Direcciones/Unidades ni equipos duplicados con otro nombre.
+hay usuarios, Direcciones/Registros ni equipos duplicados con otro nombre.
 
 | Dato | Dónde se administra | Quién lo consume |
 |---|---|---|
@@ -358,7 +373,7 @@ Flujo del equipo:
 
 ```text
 Gestión de Equipos → aceptación del Usuario Final
-   → equipo activo en la Dirección/Unidad solicitante
+   → equipo activo en la Dirección/Registro solicitante
    → se incorpora AUTOMÁTICAMENTE al inventario operativo de Controles Mensuales
    → controles asociados (F0422, F0174, F0288, VULN) y bitácora diaria
 
@@ -370,28 +385,28 @@ Gestión de Equipos → descargo
 Nada de esto se confirma a mano: no hay botones de «incorporar al inventario» ni de «aplicar
 descargo». `EquipmentIntegrationService` sincroniza al cargar (`syncOperationalInventory()`), es
 idempotente —un evento ya procesado no duplica el equipo ni repite el movimiento— y si un equipo
-vuelve a entregarse en otra Dirección/Unidad, el registro anterior se conserva como **Histórico**
+vuelve a entregarse en otra Dirección/Registro, el registro anterior se conserva como **Histórico**
 y se abre un ciclo operativo nuevo. La pantalla muestra **Últimos movimientos sincronizados desde
 Gestión de Equipos**, y la tabla lista por defecto solo los equipos activos, con opción de ver
 descargados e históricos.
 
 Efecto de la distribución en el otro módulo: en **Gestión de Equipos**, al crear el expediente
 único solo se ofrecen como **Técnico de Configuración** los técnicos responsables de la
-Dirección/Unidad del requerimiento —los que están aquí—. El registro es único
+Dirección/Registro del requerimiento —los que están aquí—. El registro es único
 (`SupportDistributionService`, el mismo servicio en los dos proyectos) y la pantalla de
 distribución de Gestión de Equipos quedó en modo consulta, con enlace a esta.
 
 Cada movimiento entre módulos queda en **Trazabilidad** con módulo origen, módulo destino,
-Dirección/Unidad, equipo, estado anterior y estado nuevo (filtro «Solo integración entre módulos»).
+Dirección/Registro, equipo, estado anterior y estado nuevo (filtro «Solo integración entre módulos»).
 
-## Operatividad por Dirección/Unidad
+## Operatividad por Dirección/Registro
 
-Los controles se atienden **por Dirección/Unidad** —cada una tiene su Técnico de Soporte
+Los controles se atienden **por Dirección/Registro** —cada una tiene su Técnico de Soporte
 responsable—, así que esa es la organización principal de la pantalla **Controles mensuales**:
 
-- **Vista por Dirección** (predeterminada): una tarjeta por Dirección/Unidad con sus responsables,
+- **Vista por Dirección** (predeterminada): una tarjeta por Dirección/Registro con sus responsables,
   su operatividad, el semáforo institucional y las cifras del período, más una **tabla comparativa**
-  entre Direcciones. Desde cada tarjeta se entra al **detalle de la Dirección/Unidad**.
+  entre Direcciones. Desde cada tarjeta se entra al **detalle de la Dirección/Registro**.
 - **Vista general**: la tabla plana de todos los controles del período, que se conserva para buscar.
 
 Filtros globales: año, mes, Dirección, Unidad, Técnico de Soporte, tipo de control, estado y
@@ -402,7 +417,7 @@ Filtros globales: año, mes, Dirección, Unidad, Técnico de Soporte, tipo de co
 ```text
 controles     = (entregados —incluidas las entregas tardías— + justificados) / controles aplicables
 bitácoras     = (enviadas + enviadas tarde) / bitácoras del período
-operatividad  = controles                         … si la Dirección/Unidad no lleva bitácora
+operatividad  = controles                         … si la Dirección/Registro no lleva bitácora
               = controles · 0.7 + bitácoras · 0.3  … si la lleva
 cumplimiento  = (entregados a tiempo + justificados) / controles aplicables
 ```
@@ -415,7 +430,7 @@ Direcciones que todavía están dentro de su plazo.
 
 ### Meses pendientes por completar
 
-El detalle de una Dirección/Unidad abre con los **meses que tienen controles pendientes o
+El detalle de una Dirección/Registro abre con los **meses que tienen controles pendientes o
 vencidos**, cada uno con su resumen (aplicables, entregados, pendientes, vencidos, justificados) y
 su **estado general**: Pendiente, En proceso, Entregado, Entregado tarde, Vencido, Justificado o
 Cerrado. Un botón muestra el **historial mensual completo**, y **Ver controles del mes** lista los
@@ -423,7 +438,7 @@ controles aplicables de ese mes con su acción: **Completar** o **Continuar** si
 **Ver documento** si ya se entregó. Los controles que no aplican se muestran aparte como
 **No aplica** y no cuentan como pendientes.
 
-### Detalle de la Dirección/Unidad
+### Detalle de la Dirección/Registro
 
 `/controles/direccion/:direccion/:unidad` reúne responsables, fecha límite, los 15 indicadores del
 período, las alertas de esa Dirección, los controles que le aplican —y los que **no aplican**—, sus
@@ -433,8 +448,8 @@ inventario operativo y de bitácoras diarias.
 
 El **Panel ejecutivo** resume lo mismo a nivel global (Direcciones operativas, en observación,
 críticas y sin soporte; equipos con incidencias; carga por Técnico de Soporte) y sus **alertas son
-por Dirección**. El **Historial anual** muestra la operatividad mes a mes de la Dirección/Unidad
-elegida, y el **Inventario operativo** se resume también por Dirección/Unidad.
+por Dirección**. El **Historial anual** muestra la operatividad mes a mes de la Dirección/Registro
+elegida, y el **Inventario operativo** se resume también por Dirección/Registro.
 
 ## Documentación
 
@@ -442,3 +457,7 @@ elegida, y el **Inventario operativo** se resume también por Dirección/Unidad.
 - `manual_tecnico_controles_mensuales.md` — arquitectura, servicios y reglas.
 - `modelo_datos_controles_mensuales.md` — entidades y relaciones del modelo simulado.
 - `diagramas_controles_mensuales.md` — diagramas del sistema (fuentes PlantUML en `docs/plantuml/`).
+
+Los entregables para presentar —manual de usuario en **Word** y en **PowerPoint**, presentación
+final del ecosistema (Gestión de Equipos + Controles Mensuales + Pandora), diagramas renderizados y
+su explicación— están en `../entregables-controles-mensuales/`.

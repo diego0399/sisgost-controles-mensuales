@@ -3,77 +3,239 @@
   "usuario": "sadmin",
   "nombre": "Administrador SISGOST",
   "iniciales": "AS",
-  "rol": "Administrador",
-  "clave": "admin",
+  "roles": [
+   "ADMINISTRADOR"
+  ],
   "unidad": "DTI",
   "cargo": "Administración del sistema SISGOST",
   "estado": "Activo",
+  "rol": "Administrador",
+  "clave": "admin",
   "moduloControles": true
  },
  {
   "usuario": "demo.admin",
   "nombre": "Usuario de demostración SISGOST",
   "iniciales": "DA",
-  "rol": "Administrador",
-  "clave": "admin",
+  "roles": [
+   "ADMINISTRADOR"
+  ],
   "unidad": "DTI",
   "cargo": "Restablecimiento de datos de demostración",
   "estado": "Activo",
+  "rol": "Administrador",
+  "clave": "admin",
   "moduloControles": true
  },
  {
   "usuario": "cgonzalez",
   "nombre": "Carlos González",
   "iniciales": "CG",
-  "rol": "Encargado de Soporte",
-  "clave": "enc-soporte",
+  "roles": [
+   "ENCARGADO_SOPORTE",
+   "TECNICO_SOPORTE"
+  ],
   "unidad": "Soporte",
   "cargo": "Jefe del Departamento de Soporte Técnico",
   "estado": "Activo",
+  "rol": "Encargado de Soporte",
+  "clave": "enc-soporte",
   "moduloControles": true
  },
  {
   "usuario": "cduran",
   "nombre": "Carlos Durán",
   "iniciales": "CD",
-  "rol": "Coordinador",
-  "clave": "coordinador",
+  "roles": [
+   "COORDINADOR"
+  ],
   "unidad": "Soporte",
   "cargo": "Coordinador de Soporte Técnico",
   "estado": "Activo",
+  "rol": "Coordinador",
+  "clave": "coordinador",
   "moduloControles": true
  },
  {
   "usuario": "wcarranza",
   "nombre": "Wendy Carranza",
   "iniciales": "WC",
-  "rol": "Técnico de Soporte",
-  "clave": "tec-soporte",
+  "roles": [
+   "TECNICO_SOPORTE"
+  ],
   "unidad": "Soporte",
   "cargo": "Técnico de Soporte Técnico",
   "estado": "Activo",
+  "rol": "Técnico de Soporte",
+  "clave": "tec-soporte",
   "moduloControles": true
  },
  {
   "usuario": "mmartinez",
   "nombre": "Mateo Martínez",
   "iniciales": "MM",
-  "rol": "Técnico de Soporte",
-  "clave": "tec-soporte",
+  "roles": [
+   "TECNICO_SOPORTE"
+  ],
   "unidad": "Soporte",
   "cargo": "Técnico de Soporte Técnico",
   "estado": "Activo",
+  "rol": "Técnico de Soporte",
+  "clave": "tec-soporte",
   "moduloControles": true
  },
  {
   "usuario": "dportillo",
   "nombre": "Diana Portillo",
   "iniciales": "DP",
-  "rol": "Técnico de Soporte",
-  "clave": "tec-soporte",
+  "roles": [
+   "TECNICO_SOPORTE"
+  ],
   "unidad": "Soporte",
   "cargo": "Técnico de Soporte Técnico",
   "estado": "Activo",
+  "rol": "Técnico de Soporte",
+  "clave": "tec-soporte",
   "moduloControles": true
+ },
+ {
+  "usuario": "scruz",
+  "nombre": "Samuel Cruz",
+  "iniciales": "SC",
+  "roles": [
+   "ENCARGADO_HARDWARE"
+  ],
+  "unidad": "Hardware",
+  "cargo": "Encargado de la Unidad de Hardware",
+  "estado": "Activo",
+  "rol": "Encargado de Hardware",
+  "clave": "enc-hardware",
+  "moduloControles": false
+ },
+ {
+  "usuario": "bmejia",
+  "nombre": "Balmore Mejía",
+  "iniciales": "BM",
+  "roles": [
+   "TECNICO_HARDWARE"
+  ],
+  "unidad": "Hardware",
+  "cargo": "Técnico de Hardware",
+  "estado": "Activo",
+  "rol": "Técnico de Hardware",
+  "clave": "tec-hardware",
+  "moduloControles": false
+ },
+ {
+  "usuario": "jramirez",
+  "nombre": "José Ramírez",
+  "iniciales": "JR",
+  "roles": [
+   "TECNICO_HARDWARE"
+  ],
+  "unidad": "Hardware",
+  "cargo": "Técnico de Hardware",
+  "estado": "Activo",
+  "rol": "Técnico de Hardware",
+  "clave": "tec-hardware",
+  "moduloControles": false
+ },
+ {
+  "usuario": "lhernandez",
+  "nombre": "Luis Hernández",
+  "iniciales": "LH",
+  "roles": [
+   "TECNICO_HARDWARE"
+  ],
+  "unidad": "Hardware",
+  "cargo": "Técnico de Hardware",
+  "estado": "Activo",
+  "rol": "Técnico de Hardware",
+  "clave": "tec-hardware",
+  "moduloControles": false
+ },
+ {
+  "usuario": "mlopez",
+  "nombre": "Mario López",
+  "iniciales": "ML",
+  "roles": [
+   "TECNICO_HARDWARE"
+  ],
+  "unidad": "Hardware",
+  "cargo": "Técnico de Hardware",
+  "estado": "Activo",
+  "rol": "Técnico de Hardware",
+  "clave": "tec-hardware",
+  "moduloControles": false
+ },
+ {
+  "usuario": "evasquez",
+  "nombre": "Erick Vásquez",
+  "iniciales": "EV",
+  "roles": [
+   "TECNICO_HARDWARE"
+  ],
+  "unidad": "Hardware",
+  "cargo": "Técnico de Hardware",
+  "estado": "Activo",
+  "rol": "Técnico de Hardware",
+  "clave": "tec-hardware",
+  "moduloControles": false
+ },
+ {
+  "usuario": "rmartinez",
+  "nombre": "Rafael Martínez",
+  "iniciales": "RM",
+  "roles": [
+   "TECNICO_HARDWARE"
+  ],
+  "unidad": "Hardware",
+  "cargo": "Técnico de Hardware",
+  "estado": "Activo",
+  "rol": "Técnico de Hardware",
+  "clave": "tec-hardware",
+  "moduloControles": false
+ },
+ {
+  "usuario": "dmorales",
+  "nombre": "Daniel Morales",
+  "iniciales": "DM",
+  "roles": [
+   "TECNICO_HARDWARE"
+  ],
+  "unidad": "Hardware",
+  "cargo": "Técnico de Hardware",
+  "estado": "Activo",
+  "rol": "Técnico de Hardware",
+  "clave": "tec-hardware",
+  "moduloControles": false
+ },
+ {
+  "usuario": "oreyes",
+  "nombre": "Óscar Reyes",
+  "iniciales": "OR",
+  "roles": [
+   "TECNICO_HARDWARE"
+  ],
+  "unidad": "Hardware",
+  "cargo": "Técnico de Hardware",
+  "estado": "Activo",
+  "rol": "Técnico de Hardware",
+  "clave": "tec-hardware",
+  "moduloControles": false
+ },
+ {
+  "usuario": "fcastro",
+  "nombre": "Fernando Castro",
+  "iniciales": "FC",
+  "roles": [
+   "TECNICO_HARDWARE"
+  ],
+  "unidad": "Hardware",
+  "cargo": "Técnico de Hardware",
+  "estado": "Activo",
+  "rol": "Técnico de Hardware",
+  "clave": "tec-hardware",
+  "moduloControles": false
  }
 ]

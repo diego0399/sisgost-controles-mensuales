@@ -6,14 +6,26 @@ import {
   ItemSeguridad, RespuestaEquipoChecklist, RespuestaIngreso, RespuestaItemSeguridad, RevisionAtencion,
   ResumenMuestra, SeccionPlantilla, UsuarioSistema, isoLocal, nombreMes
 } from '../models/models';
+import {
+  RolSistema, ROLES, ROL_RESPONSABLE_SOPORTE, claveDeRol, esRolHardware, etiquetaRoles, nombreRol,
+  normalizaRoles, ordenaRoles, rolPrincipal
+} from '../models/roles';
+import { ETIQUETA_TODO_EL_DEPARTAMENTO } from '../models/territorio';
 import { HolidayService } from './holiday.service';
 import { BusinessDayService } from './business-day.service';
 import { ControlDeadlineService } from './control-deadline.service';
 import { SupportDistributionService } from './support-distribution.service';
+import { TerritorioService } from './territorio.service';
 import { EquipoOperativoCompartido, SharedInventoryService } from './shared-inventory.service';
 import { SharedInventoryBridgeService } from './shared-inventory-bridge.service';
 
-const STORAGE_KEY = 'sisgost.controles.v1';
+/**
+ * v2: la foto de estado cambió de forma con la estructura territorial
+ * `Zona → Departamento → Dirección/Registro` y con los usuarios multirrol. Una foto v1 describe
+ * una organización que ya no existe, así que se ignora y el módulo vuelve a sembrar la
+ * demostración; no se borra nada del navegador en silencio.
+ */
+const STORAGE_KEY = 'sisgost.controles.v2';
 
 /** Qué movió una pasada de sincronización automática del período. */
 export interface ResumenAutoSync {
@@ -48,6 +60,8 @@ interface Snapshot {
   distribucion: DistribucionSoporte[];
   /** El catálogo se guarda porque su configuración (frecuencia y aplicación) es editable. */
   catalogo?: ControlCatalogo[];
+  /** Los usuarios se guardan porque el Administrador edita sus roles y su estado. */
+  usuarios?: UsuarioSistema[];
 }
 
 /**
@@ -56,7 +70,7 @@ interface Snapshot {
  * entrega dentro de los primeros 3 días hábiles, bitácora antes de las 5:00 p. m.,
  * justificación obligatoria cuando no hay actividad y la integración con Gestión de Equipos.
  *
- * Los datos base (usuarios, Direcciones/Unidades, distribución de soportes y equipos) son los
+ * Los datos base (usuarios, Direcciones/Registros, distribución de soportes y equipos) son los
  * mismos del módulo Gestión de Equipos: este servicio no inventa organización propia.
  */
 @Injectable({ providedIn: 'root' })
@@ -64,6 +78,8 @@ export class DataService {
   private readonly feriadosSrv = inject(HolidayService);
   private readonly habiles = inject(BusinessDayService);
   private readonly plazos = inject(ControlDeadlineService);
+  /** Catálogo territorial `Zona → Departamento → Dirección/Registro`, compartido del ecosistema. */
+  readonly territorio = inject(TerritorioService);
   /** Inventario operativo compartido: lo escribe Gestión de Equipos al aceptar la conformidad. */
   private readonly compartido = inject(SharedInventoryService);
   /** Puente hacia el otro origen: los dos módulos corren en puertos distintos. */
@@ -91,9 +107,16 @@ export class DataService {
   /** Usuarios con acceso a este módulo (Hardware opera solo en Gestión de Equipos). */
   readonly usuariosDelModulo = computed(() => this.usuarios().filter((u) => u.moduloControles && u.estado === 'Activo'));
 
-  /** Técnicos de Soporte del ecosistema, en el formato «Nombre — Rol» de la distribución. */
+  /**
+   * Técnicos de Soporte del ecosistema. Se busca **entre todos los roles del usuario**, no en el
+   * rol activo: quien es Encargado y además Técnico de Soporte puede recibir asignaciones, y con
+   * la comparación anterior desaparecía de la lista en cuanto entraba como Encargado.
+   */
   readonly tecnicosSoporte = computed(() =>
-    this.usuarios().filter((u) => u.clave === 'tec-soporte' && u.estado === 'Activo'));
+    this.usuarios().filter((u) => u.roles?.includes(ROL_RESPONSABLE_SOPORTE) && u.estado === 'Activo'));
+
+  /** Catálogo de roles del sistema, para Administración → Usuarios. */
+  readonly rolesDisponibles = ROLES;
 
   private secuencia = 1000;
 
@@ -101,7 +124,9 @@ export class DataService {
 
   async cargar(): Promise<void> {
     if (this.listo()) return;
-    await this.feriadosSrv.cargar();
+    // El catálogo territorial entra primero: es quien resuelve zona, departamento y
+    // Dirección/Registro para todo lo demás.
+    await Promise.all([this.feriadosSrv.cargar(), this.territorio.cargar()]);
 
     const [usuarios, direcciones, areas, catalogo] = await Promise.all([
       this.json<UsuarioSistema[]>('usuarios-sistema'),
@@ -109,10 +134,10 @@ export class DataService {
       this.json<AreaTecnica[]>('areas-tecnicas'),
       this.json<ControlCatalogo[]>('catalogo-controles')
     ]);
-    this.usuarios.set(usuarios);
+    this.usuarios.set(usuarios.map((u) => this.normalizaUsuario(u)));
     this.direcciones.set(direcciones);
     // El catálogo organizacional entra al servicio compartido ANTES que la distribución: es quien
-    // resuelve el nombre de una Dirección/Unidad a su ID estable.
+    // resuelve el nombre de una Dirección/Registro a su ID estable.
     this.soportes.cargarOrganizacion(direcciones);
     this.areas.set(areas);
     this.catalogo.set(catalogo);
@@ -126,6 +151,8 @@ export class DataService {
       this.eventosIntegracion.set(guardado.eventosIntegracion);
       this.documentos.set(guardado.documentos);
       this.trazabilidad.set(guardado.trazabilidad);
+      // Los roles y el estado que el Administrador haya editado mandan sobre la semilla.
+      if (guardado.usuarios?.length) this.usuarios.set(guardado.usuarios.map((x) => this.normalizaUsuario(x)));
       this.soportes.cargar(guardado.distribucion);
       this.alinearDistribucionCompartida();
       // Una foto anterior a la aplicación configurable no trae catálogo: entonces manda el JSON.
@@ -163,8 +190,25 @@ export class DataService {
     this.compartido.escuchar(() => this.sincronizarInventario());
     this.reconciliarVencidos();
     this.asegurarBitacorasDeHoy();
+    this.trazarCatalogoTerritorial();
     this.persistir();
     this.listo.set(true);
+  }
+
+  /**
+   * Deja constancia de con qué catálogo territorial está trabajando el módulo (§32). Se registra
+   * una sola vez por versión: repetirlo en cada arranque llenaría la trazabilidad de ruido.
+   */
+  private trazarCatalogoTerritorial(): void {
+    const version = this.territorio.version();
+    if (!version) return;
+    const yaEsta = this.trazabilidad().some((e) => e.accion === 'Catálogo territorial actualizado'
+      && e.estadoNuevo === version);
+    if (yaEsta) return;
+    this.registrarEvento(null, {
+      accion: 'Catálogo territorial actualizado', estadoNuevo: version,
+      observacion: `El módulo trabaja con ${this.territorio.zonas().length} zonas, ${this.territorio.departamentos().length} departamentos y ${this.territorio.direccionesRegistro().length} Direcciones/Registros. Se distribuyen por Dirección/Registro: ${this.territorio.departamentosPorDireccion().map((d) => d.nombre).join(', ') || 'ninguno'}; el resto, por Departamento completo.`
+    });
   }
 
   private async json<T>(nombre: string): Promise<T> {
@@ -189,7 +233,10 @@ export class DataService {
    * la semilla, que es la única forma de sembrar la demostración sin pisar cambios del usuario.
    */
   private alinearDistribucionCompartida(): void {
-    if (this.soportes.compartida.existe()) {
+    // Una copia de una versión anterior del contrato describe una organización que ya no existe
+    // (Direcciones/Registros en vez de Departamentos y Direcciones/Registros): se ignora y se
+    // vuelve a publicar la semilla territorial encima.
+    if (this.soportes.compartida.vigente()) {
       this.soportes.adoptarDelOrigen();
       return;
     }
@@ -216,7 +263,7 @@ export class DataService {
       controles: this.controles(), bitacoras: this.bitacoras(), justificaciones: this.justificaciones(),
       inventario: this.inventario(), eventosIntegracion: this.eventosIntegracion(),
       documentos: this.documentos(), trazabilidad: this.trazabilidad(), distribucion: this.distribucion(),
-      catalogo: this.catalogo()
+      catalogo: this.catalogo(), usuarios: this.usuarios()
     };
     try { localStorage.setItem(STORAGE_KEY, JSON.stringify(s)); } catch { /* cuota llena: la sesión sigue en memoria */ }
   }
@@ -246,7 +293,7 @@ export class DataService {
   readonly coleccionesDemostracion = [
     'Controles mensuales', 'Bitácoras diarias', 'Justificaciones', 'Documentos generados',
     'Trazabilidad de controles', 'Inventario operativo simulado', 'Distribución de soportes inicial',
-    'Datos base (usuarios, Direcciones/Unidades y catálogo)'
+    'Datos base (usuarios, Direcciones/Registros y catálogo)'
   ];
 
   /**
@@ -261,7 +308,7 @@ export class DataService {
       (b.fecha < hoy && (b.estado === 'Pendiente' || b.estado === 'En edición')) ? { ...b, estado: 'Vencida' as const } : b));
   }
 
-  /** Crea la bitácora «Pendiente» del día para cada Dirección/Unidad con soporte activo. */
+  /** Crea la bitácora «Pendiente» del día para cada Dirección/Registro con soporte activo. */
   private asegurarBitacorasDeHoy(): void {
     const hoy = isoLocal(new Date());
     if (!this.habiles.esHabil(hoy)) return;
@@ -280,7 +327,7 @@ export class DataService {
     if (nuevas.length) this.bitacoras.update((l) => [...l, ...nuevas]);
   }
 
-  /** Pares Dirección/Unidad que llevan bitácora, tomados del histórico ya sembrado. */
+  /** Pares Dirección/Registro que llevan bitácora, tomados del histórico ya sembrado. */
   private bitacorasDelDiaAnterior(): { direccion: string; unidad: string }[] {
     const mapa = new Map<string, { direccion: string; unidad: string }>();
     for (const b of this.bitacoras()) mapa.set(`${b.direccion}|${b.unidad}`, { direccion: b.direccion, unidad: b.unidad });
@@ -297,69 +344,105 @@ export class DataService {
   nombreDireccion(id: string): string { return this.direccionDe(id)?.nombre ?? id; }
   cortaDireccion(id: string): string { return this.direccionDe(id)?.corta ?? id; }
   /** Id de la Dirección a partir del nombre institucional que usa Gestión de Equipos. */
-  idDireccion(nombre: string): string { return this.direcciones().find((d) => d.nombre === nombre)?.id ?? nombre; }
+  idDireccion(nombre: string): string { return this.territorio.idDepartamento(nombre); }
 
   /**
    * «Dirección / Unidad» para mostrar. Cuando la unidad se llama igual que la Dirección
    * (Gerencia de Tecnología, Dirección de Registro) se escribe una sola vez.
    */
   dirUnidad(direccionId: string, unidad: string): string {
-    const nombre = this.nombreDireccion(direccionId);
-    return !unidad || unidad === nombre ? nombre : `${nombre} / ${unidad}`;
+    return this.territorio.etiqueta(direccionId, unidad);
+  }
+
+  /** «Zona Central · San Salvador · Registro de Comercio», para encabezados y documentos. */
+  rutaTerritorial(direccionId: string, unidad = ''): string {
+    return this.territorio.ruta(direccionId, unidad);
+  }
+
+  /** Zona a la que pertenece un departamento. */
+  zonaDe(direccionId: string): string {
+    return this.territorio.nombreZona(this.territorio.zonaDe(direccionId));
   }
   catalogoDe(codigo: string): ControlCatalogo | undefined { return this.catalogo().find((c) => c.codigo === codigo); }
 
-  /** Todos los pares Dirección/Unidad del catálogo organizacional. */
-  readonly pares = computed(() => this.direcciones()
-    .filter((d) => d.activa)
-    .flatMap((d) => d.unidades.map((u) => ({ direccion: d.id, unidad: u }))));
+  /** Todos los pares Dirección/Registro del catálogo organizacional. */
+  readonly pares = computed(() => this.territorio.ambitosDistribuibles().map((a) => ({
+    direccion: a.departamentoId,
+    unidad: a.direccionRegistroId
+      ? this.territorio.nombreRegistro(a.direccionRegistroId)
+      : ETIQUETA_TODO_EL_DEPARTAMENTO
+  })));
 
-  /** Técnico responsable (formato «Nombre — Rol») de una Dirección/Unidad. */
+  /**
+   * Todas las Direcciones/Registros, una por una, con independencia de cómo se distribuya el
+   * departamento. Es lo que se muestra **al expandir** un departamento: su alcance completo, aun
+   * cuando el control y el responsable sean del departamento entero (§21, §30).
+   */
+  readonly registrosTodos = computed(() => this.territorio.departamentosActivos()
+    .flatMap((d) => this.territorio.registrosDe(d.id)
+      .map((r) => ({ direccion: d.id, unidad: r.nombre, registroId: r.id }))));
+
+  /** Direcciones/Registros que cubre un ámbito de control (una sola, o todas las del departamento). */
+  registrosDelAmbito(direccionId: string, unidad: string): { direccion: string; unidad: string }[] {
+    const dep = this.territorio.idDepartamento(direccionId);
+    const reg = this.territorio.idRegistro(dep, unidad);
+    if (reg) return [{ direccion: dep, unidad: this.territorio.nombreRegistro(reg) }];
+    return this.territorio.registrosDe(dep).map((r) => ({ direccion: dep, unidad: r.nombre }));
+  }
+
+  /** Técnico responsable (formato «Nombre — Rol») de un ámbito territorial. */
   responsableDe(direccionId: string, unidad: string, preferido = ''): string {
-    return this.soportes.responsableDe(this.nombreDireccion(direccionId), unidad, preferido);
+    return this.soportes.responsableDe(direccionId, unidad, preferido);
   }
 
-  /** Técnicos responsables de una Dirección/Unidad. */
+  /** Técnicos responsables de un ámbito territorial. */
   tecnicosDe(direccionId: string, unidad: string): string[] {
-    return this.soportes.tecnicosDe(this.nombreDireccion(direccionId), unidad);
+    return this.soportes.tecnicosDe(direccionId, unidad);
   }
 
-  /** Primera asignación vigente de una Dirección (cualquiera de sus unidades). */
+  /** Primera asignación vigente del departamento (departamental o de cualquiera de sus registros). */
   soporteDe(direccionId: string): DistribucionSoporte | undefined {
-    return this.soportes.deDireccion(this.nombreDireccion(direccionId))[0];
+    return this.soportes.deDireccion(direccionId)[0];
   }
 
-  /** Pares Dirección/Unidad asignados a un usuario del sistema. */
+  /** Ámbitos territoriales asignados a un usuario del sistema. */
   paresDe(usuario: string): { direccion: string; unidad: string }[] {
     const u = this.usuarios().find((x) => x.usuario === usuario);
     if (!u) return [];
-    return this.soportes.deTecnico(u.nombre).map((d) => ({ direccion: this.idDireccion(d.direccion), unidad: d.unidad }));
+    return this.soportes.deTecnico(u.nombre).map((d) => ({ direccion: d.departamentoId, unidad: d.unidad }));
   }
 
-  /** Ids de Dirección asignados a un usuario (una Dirección basta con que tenga una unidad suya). */
+  /** Ids de departamento asignados a un usuario. */
   direccionesDe(usuario: string): string[] {
     return [...new Set(this.paresDe(usuario).map((p) => p.direccion))];
   }
 
-  /** ¿El usuario atiende esa Dirección/Unidad? Los demás roles no están limitados. */
+  /**
+   * ¿El usuario atiende ese ámbito? Solo limita al Técnico de Soporte, y la comprobación es
+   * territorial: quien tiene el departamento completo atiende todas sus Direcciones/Registros.
+   *
+   * Se pregunta por el **rol activo**: quien es Encargado y Técnico a la vez ve todo mientras
+   * opera como Encargado, y se limita a lo suyo en cuanto pasa a Técnico. Esa es justamente la
+   * razón de que el rol activo exista.
+   */
   atiende(u: UsuarioSistema | null, direccionId: string, unidad: string): boolean {
     if (!u) return false;
     if (u.clave !== 'tec-soporte') return true;
-    return this.soportes.atiende(u.nombre, this.nombreDireccion(direccionId), unidad);
+    return this.soportes.atiende(u.nombre, direccionId, unidad);
   }
 
-  /** Direcciones/Unidades activas sin ningún soporte responsable: alerta del panel ejecutivo. */
+  /** Ámbitos territoriales activos sin ningún soporte responsable: alerta del panel ejecutivo. */
   readonly paresSinSoporte = computed(() => this.pares()
-    .filter((p) => !this.soportes.deDireccionUnidad(this.nombreDireccion(p.direccion), p.unidad).length));
+    .filter((p) => !this.soportes.deDireccionUnidad(p.direccion, p.unidad).length));
 
   // ------------------------------------------------------------------ aplicación de los controles
 
   areaDe(id: string): AreaTecnica | undefined { return this.areas().find((a) => a.id === id); }
 
   /**
-   * Direcciones/Unidades donde **aplica** un control, según su configuración del catálogo.
+   * Direcciones/Registros donde **aplica** un control, según su configuración del catálogo.
    * El calendario solo programa el control en estos pares: no todos los controles se trabajan en
-   * todas las Direcciones/Unidades. Los controles que revisan equipos se limitan además a los
+   * todas las Direcciones/Registros. Los controles que revisan equipos se limitan además a los
    * pares que tienen inventario operativo activo.
    */
   paresAplicables(codigo: string): { direccion: string; unidad: string }[] {
@@ -391,17 +474,17 @@ export class DataService {
     return c.plantilla.some((s) => !!s.equipos || !!s.checklistEquipos);
   }
 
-  /** ¿Aplica este control en esa Dirección/Unidad? */
+  /** ¿Aplica este control en esa Dirección/Registro? */
   aplicaEn(codigo: string, direccionId: string, unidad: string): boolean {
     return this.paresAplicables(codigo).some((p) => p.direccion === direccionId && p.unidad === unidad);
   }
 
-  /** Controles activos que aplican a una Dirección/Unidad. */
+  /** Controles activos que aplican a una Dirección/Registro. */
   controlesAplicablesDe(direccionId: string, unidad: string): ControlCatalogo[] {
     return this.catalogo().filter((c) => c.activo && this.aplicaEn(c.codigo, direccionId, unidad));
   }
 
-  /** Controles activos que NO aplican a una Dirección/Unidad (estado informativo «No aplica»). */
+  /** Controles activos que NO aplican a una Dirección/Registro (estado informativo «No aplica»). */
   controlesNoAplicablesDe(direccionId: string, unidad: string): ControlCatalogo[] {
     return this.catalogo().filter((c) => c.activo && !this.aplicaEn(c.codigo, direccionId, unidad));
   }
@@ -410,7 +493,7 @@ export class DataService {
   resumenAplicacion(c: ControlCatalogo): string {
     const a = c.aplicacion;
     switch (a.modo) {
-      case 'Todas las direcciones': return 'Todas las Direcciones/Unidades';
+      case 'Todas las direcciones': return 'Todas las Direcciones/Registros';
       case 'Direcciones específicas': return a.direcciones.map((d) => this.cortaDireccion(d)).join(' · ') || 'Sin configurar';
       case 'Unidades específicas': return a.unidades.map((u) => `${this.cortaDireccion(u.direccion)} / ${u.unidad}`).join(' · ') || 'Sin configurar';
       default: return this.areaDe(a.area)?.nombre ?? 'Sin configurar';
@@ -418,18 +501,18 @@ export class DataService {
   }
 
   /**
-   * Direcciones/Unidades que tienen controles aplicables pero ningún Técnico de Soporte
+   * Direcciones/Registros que tienen controles aplicables pero ningún Técnico de Soporte
    * responsable: nadie puede entregarlos.
    */
   readonly paresAplicablesSinSoporte = computed(() => this.paresSinSoporte()
     .map((p) => ({ ...p, controles: this.controlesAplicablesDe(p.direccion, p.unidad).length }))
     .filter((p) => p.controles > 0));
 
-  /** Direcciones sin ningún soporte en ninguna de sus unidades. */
+  /** Departamentos sin ningún soporte, ni departamental ni por Dirección/Registro. */
   readonly direccionesSinSoporte = computed(() => this.direcciones()
-    .filter((d) => d.activa && !this.soportes.deDireccion(d.nombre).length));
+    .filter((d) => d.activa && !this.soportes.deDireccion(d.id).length));
 
-  /** El Técnico de Soporte solo ve sus Direcciones/Unidades; los demás roles ven todo. */
+  /** El Técnico de Soporte solo ve sus Direcciones/Registros; los demás roles ven todo. */
   controlesVisibles(u: UsuarioSistema | null): ControlMes[] {
     if (!u) return [];
     if (u.clave !== 'tec-soporte') return this.controles();
@@ -454,12 +537,19 @@ export class DataService {
   /** Todo el inventario que sigue vigente (sin descargados ni ciclos históricos). */
   readonly inventarioActivo = computed(() => this.inventario().filter((e) => ESTADOS_ACTIVOS.includes(e.estado)));
 
-  /** Equipos ACTIVOS de una Dirección/Unidad: los que cuentan para los controles. */
+  /**
+   * Equipos ACTIVOS de un ámbito territorial: los que cuentan para los controles. Cuando el
+   * ámbito es un departamento completo —fuera de San Salvador— entran los equipos de **todas**
+   * sus Direcciones/Registros, porque el control y el responsable también lo son.
+   */
   equiposActivosDe(direccionId: string, unidad: string): EquipoOperativo[] {
-    return this.inventarioActivo().filter((e) => e.direccion === direccionId && e.unidad === unidad);
+    const dep = this.territorio.idDepartamento(direccionId);
+    const reg = this.territorio.idRegistro(dep, unidad);
+    return this.inventarioActivo().filter((e) => this.territorio.idDepartamento(e.direccion) === dep
+      && (!reg || this.territorio.idRegistro(dep, e.unidad) === reg));
   }
 
-  /** Equipos que un control puede revisar: los activos de su propia Dirección/Unidad. */
+  /** Equipos que un control puede revisar: los activos de su propia Dirección/Registro. */
   equiposDeControl(c: ControlMes): EquipoOperativo[] {
     return this.equiposActivosDe(c.direccion, c.unidad);
   }
@@ -476,7 +566,7 @@ export class DataService {
   readonly MSG_IP_NO_ENCONTRADA =
     'No se encontró un equipo activo con esta IP en el inventario operativo.';
   readonly MSG_IP_OTRA_UNIDAD =
-    'La IP ingresada pertenece a otra Dirección/Unidad y no puede usarse en este control.';
+    'La IP ingresada pertenece a otra Dirección/Registro y no puede usarse en este control.';
 
   /**
    * Equipo ACTIVO cuya IP coincide con la buscada. La IP viene del inventario operativo, es decir,
@@ -490,20 +580,22 @@ export class DataService {
   }
 
   /**
-   * Resuelve una IP dentro de una Dirección/Unidad. Devuelve el equipo o el motivo del rechazo:
-   * la IP no existe entre los equipos activos, o existe pero en otra Dirección/Unidad.
+   * Resuelve una IP dentro de una Dirección/Registro. Devuelve el equipo o el motivo del rechazo:
+   * la IP no existe entre los equipos activos, o existe pero en otra Dirección/Registro.
    */
   buscarEquipoIp(ip: string, direccionId: string, unidad: string):
     { equipo?: EquipoOperativo; error?: string } {
     const equipo = this.equipoPorIp(ip);
     if (!equipo) return { error: this.MSG_IP_NO_ENCONTRADA };
-    if (equipo.direccion !== direccionId || equipo.unidad !== unidad) {
+    // El equipo tiene que caer dentro del ámbito del control: la misma Dirección/Registro, o
+    // cualquiera del departamento cuando el control es departamental.
+    if (!this.equiposActivosDe(direccionId, unidad).some((e) => e.ciclo === equipo.ciclo)) {
       return { error: this.MSG_IP_OTRA_UNIDAD };
     }
     return { equipo };
   }
 
-  /** IPs disponibles para un control: las de los equipos activos de su Dirección/Unidad. */
+  /** IPs disponibles para un control: las de los equipos activos de su Dirección/Registro. */
   ipsDeControl(c: ControlMes): EquipoOperativo[] {
     return this.equiposDeControl(c).filter((e) => (e.ip ?? '').trim());
   }
@@ -533,7 +625,7 @@ export class DataService {
 
   /** Mensaje único de la regla de pertenencia (se repite en varias validaciones). */
   readonly MSG_FUERA_DE_DISTRIBUCION =
-    'Este control pertenece a una Dirección/Unidad que no está asignada al técnico en la distribución de soportes.';
+    'Este control pertenece a una Dirección/Registro que no está asignada al técnico en la distribución de soportes.';
 
   iniciarControl(id: string, u: UsuarioSistema): void {
     const c = this.controlPorId(id);
@@ -846,16 +938,16 @@ export class DataService {
       }
       if (p.equipos) {
         const revisados = (r?.equipos ?? []).filter((e) => e.incluido);
-        // Un equipo solo puede registrarse si pertenece a la Dirección/Unidad del control.
+        // Un equipo solo puede registrarse si pertenece a la Dirección/Registro del control.
         const ajenos = revisados.filter((e) => !activos.some((a) => a.inventario === e.inventario));
         if (ajenos.length) {
-          faltas.push(`${p.titulo}: ${ajenos.map((e) => e.inventario).join(', ')} no pertenece(n) a la Dirección/Unidad del control.`);
+          faltas.push(`${p.titulo}: ${ajenos.map((e) => e.inventario).join(', ')} no pertenece(n) a la Dirección/Registro del control.`);
         }
         const sinEstado = revisados.filter((e) => !e.estado);
         if (sinEstado.length) faltas.push(`${p.titulo}: ${sinEstado.length} equipo(s) seleccionado(s) sin estado registrado.`);
         if (p.equipos.minimo === 0) {
           const faltantes = activos.filter((a) => !revisados.some((e) => e.inventario === a.inventario));
-          if (faltantes.length) faltas.push(`${p.titulo}: faltan por revisar ${faltantes.length} equipo(s) activo(s) de la Dirección/Unidad.`);
+          if (faltantes.length) faltas.push(`${p.titulo}: faltan por revisar ${faltantes.length} equipo(s) activo(s) de la Dirección/Registro.`);
         } else if (revisados.length < p.equipos.minimo) {
           faltas.push(`${p.titulo}: se requiere revisar al menos ${p.equipos.minimo} equipo(s) del inventario operativo.`);
         }
@@ -876,7 +968,7 @@ export class DataService {
   /**
    * Reglas de los equipos verificados por IP (F0387): deben ser tantos como pida la plantilla,
    * distintos entre sí, existir como equipos ACTIVOS del inventario operativo, pertenecer a la
-   * Dirección/Unidad del control y llevar hora de verificación.
+   * Dirección/Registro del control y llevar hora de verificación.
    */
   private faltasEquiposIp(p: SeccionPlantilla, r: RespuestaSeccion | undefined, c: ControlMes): string[] {
     const faltas: string[] = [];
@@ -1079,7 +1171,7 @@ export class DataService {
 
   /** Mensajes de la verificación por muestra; se reutilizan en el formulario y en la entrega. */
   readonly MSG_EQUIPO_REPETIDO = 'Este equipo ya fue seleccionado.';
-  readonly MSG_EQUIPO_AJENO = 'Este equipo no pertenece a la Dirección/Unidad del control.';
+  readonly MSG_EQUIPO_AJENO = 'Este equipo no pertenece a la Dirección/Registro del control.';
   readonly MSG_EQUIPO_INACTIVO = 'Este equipo no se encuentra activo en el inventario operativo.';
 
   /** Sección de muestra del control, si la tiene (F0382). */
@@ -1088,9 +1180,9 @@ export class DataService {
   }
 
   /**
-   * Equipos que el técnico puede elegir para la muestra: los ACTIVOS de la Dirección/Unidad del
+   * Equipos que el técnico puede elegir para la muestra: los ACTIVOS de la Dirección/Registro del
    * control, filtrados por el texto del buscador (inventario, nombre, usuario, IP, tipo, marca,
-   * modelo o unidad). Nunca aparecen equipos de otra Dirección/Unidad ni descargados.
+   * modelo o unidad). Nunca aparecen equipos de otra Dirección/Registro ni descargados.
    */
   equiposParaMuestra(c: ControlMes, texto = ''): EquipoOperativo[] {
     const q = texto.trim().toLowerCase();
@@ -1104,7 +1196,7 @@ export class DataService {
   bloqueoEquipoMuestra(c: ControlMes, inventario: string, yaElegidos: string[]): string {
     if (yaElegidos.includes(inventario)) return this.MSG_EQUIPO_REPETIDO;
     if (this.equiposDeControl(c).some((e) => e.inventario === inventario)) return '';
-    // El equipo existe pero no está activo aquí: se distingue de «no es de esta Dirección/Unidad».
+    // El equipo existe pero no está activo aquí: se distingue de «no es de esta Dirección/Registro».
     const ficha = this.equipoDe(inventario);
     if (ficha && ficha.direccion === c.direccion && ficha.unidad === c.unidad) return this.MSG_EQUIPO_INACTIVO;
     return this.MSG_EQUIPO_AJENO;
@@ -1142,7 +1234,7 @@ export class DataService {
 
   /**
    * Reglas de la muestra del F0382: cantidad exacta de equipos, sin repetir, todos activos y de la
-   * Dirección/Unidad del control, con sus ítems respondidos; los incumplimientos exigen
+   * Dirección/Registro del control, con sus ítems respondidos; los incumplimientos exigen
    * descripción, acción correctiva y estado, y los «No aplica», justificación.
    */
   private faltasChecklistEquipos(p: SeccionPlantilla, r: RespuestaSeccion | undefined, c: ControlMes): string[] {
@@ -1374,7 +1466,7 @@ export class DataService {
     if (!this.catalogoDe(c.codigo)?.permiteJustificacion) return { ok: false, error: 'Este control no admite justificación.' };
     if (!motivo.trim() || !texto.trim()) return { ok: false, error: 'La justificación requiere motivo y texto de la carta.' };
     if (!c.direccion || !c.unidad || !u.nombre) {
-      return { ok: false, error: 'No es posible generar la carta sin mes, Dirección/Unidad y responsable.' };
+      return { ok: false, error: 'No es posible generar la carta sin mes, Dirección/Registro y responsable.' };
     }
     if (!this.atiende(u, c.direccion, c.unidad)) return { ok: false, error: this.MSG_FUERA_DE_DISTRIBUCION };
     const hoy = isoLocal(new Date());
@@ -1498,7 +1590,7 @@ export class DataService {
 
   /**
    * Clave estable de un control del período. No se compara por textos visibles: se arma con el
-   * código del formato, el período y el par Dirección/Unidad, que es el identificador que ambos
+   * código del formato, el período y el par Dirección/Registro, que es el identificador que ambos
    * módulos comparten.
    */
   claveControl(codigo: string, anio: number, mes: number, direccionId: string, unidad: string): string {
@@ -1685,7 +1777,7 @@ export class DataService {
           ...this.trazaCompartido(c),
           accion: equipo.estado === 'Descargado'
             ? 'Equipo retirado del inventario operativo por descargo'
-            : 'Equipo incorporado automáticamente al inventario operativo de Controles Mensuales',
+            : 'Inventario operativo actualizado con Zona/Departamento/Dirección',
           estadoAnterior: 'Aceptado en Gestión de Equipos', estadoNuevo: equipo.estado,
           observacion: `${this.dirUnidad(equipo.direccion, equipo.unidad)} · usuario final ${equipo.usuarioFinal}${equipo.ip ? ` · IP ${equipo.ip}` : ' · sin reserva de IP'}. Sincronizado desde el inventario operativo compartido (${c.fechaSincronizacion}).`
         });
@@ -1725,8 +1817,8 @@ export class DataService {
 
   /** Traduce la ficha compartida al modelo del módulo (la Dirección viaja por nombre, no por id). */
   private deCompartido(c: EquipoOperativoCompartido): EquipoOperativo {
-    const estado: EquipoOperativo['estado'] = c.estadoOperativo === 'Activo en Dirección/Unidad'
-      ? 'Activo en Dirección/Unidad'
+    const estado: EquipoOperativo['estado'] = c.estadoOperativo === 'Activo en Dirección/Registro'
+      ? 'Activo en Dirección/Registro'
       : c.estadoOperativo === 'Histórico' ? 'Histórico' : 'Descargado';
     const direccion = this.idDireccion(c.direccion);
     return {
@@ -1737,6 +1829,11 @@ export class DataService {
       ip: c.ip || undefined, mac: c.mac || undefined,
       usuarioFinal: c.usuarioFinal, carne: '—', correoInstitucional: c.correoUsuarioFinal,
       direccion, unidad: c.unidad,
+      // Ámbito territorial resuelto al entrar: el equipo llega con Zona, Departamento y
+      // Dirección/Registro, no solo con dos nombres (§27).
+      zonaId: this.territorio.zonaDe(direccion),
+      departamentoId: direccion,
+      direccionRegistroId: this.territorio.idRegistro(direccion, c.unidad) || undefined,
       tecnicoConfiguracion: c.tecnicoConfiguracion,
       // El responsable lo manda la distribución vigente; la copia recibida es el respaldo.
       soporteResponsable: this.responsableDe(direccion, c.unidad, c.tecnicoConfiguracion) || c.soporteResponsable,
@@ -1764,6 +1861,7 @@ export class DataService {
   /** Datos de traza de un movimiento del inventario compartido. */
   private trazaCompartido(c: EquipoOperativoCompartido): Partial<EventoTrazabilidad> {
     return {
+      ...this.trazaTerritorio(this.idDireccion(c.direccion), c.unidad),
       direccion: this.idDireccion(c.direccion), unidad: c.unidad,
       moduloOrigen: MODULO_EQUIPOS, moduloDestino: MODULO_CONTROLES,
       inventario: c.numeroInventario,
@@ -1796,7 +1894,7 @@ export class DataService {
 
   /**
    * El Usuario Final aceptó la conformidad en Gestión de Equipos: el equipo queda activo en su
-   * Dirección/Unidad y entra **automáticamente** al inventario operativo. Si el mismo número de
+   * Dirección/Registro y entra **automáticamente** al inventario operativo. Si el mismo número de
    * inventario ya tenía un ciclo abierto (nueva entrega tras un descargo), el ciclo anterior pasa
    * a «Histórico» y se crea un registro operativo nuevo: el historial no se pierde.
    */
@@ -1810,7 +1908,7 @@ export class DataService {
       ...ev.equipo,
       soporteResponsable: this.responsableDe(ev.equipo.direccion, ev.equipo.unidad, ev.equipo.tecnicoConfiguracion)
         || ev.equipo.soporteResponsable,
-      estado: 'Activo en Dirección/Unidad'
+      estado: 'Activo en Dirección/Registro'
     };
     if (abiertos.length) {
       this.inventario.update((l) => l.map((e) => (abiertos.some((a) => a.ciclo === e.ciclo)
@@ -1826,7 +1924,7 @@ export class DataService {
     this.inventario.update((l) => [equipo, ...l]);
     this.registrarEvento(null, {
       ...this.trazaEquipo(ev), accion: 'Equipo incorporado automáticamente al inventario operativo de Controles Mensuales',
-      estadoAnterior: 'Entregado', estadoNuevo: 'Activo en Dirección/Unidad',
+      estadoAnterior: 'Entregado', estadoNuevo: 'Activo en Dirección/Registro',
       observacion: `El Usuario Final aceptó la conformidad (${ev.expedienteUnico || ev.expediente}); el equipo se incorporó automáticamente al inventario operativo de ${this.dirUnidad(equipo.direccion, equipo.unidad)} con sus datos técnicos${equipo.ip ? ` (IP ${equipo.ip})` : ' (sin reserva de IP)'}. Soporte responsable: ${equipo.soporteResponsable || 'sin asignar'}.`
     });
   }
@@ -1891,7 +1989,7 @@ export class DataService {
   }
 
   /**
-   * Reportes formales por Dirección/Unidad (mensual, anual, pendientes, operatividad, inventario
+   * Reportes formales por Dirección/Registro (mensual, anual, pendientes, operatividad, inventario
    * y bitácoras). El contenido lo arma el visor con los datos vivos del período; aquí solo se
    * registra el documento y su traza.
    */
@@ -1914,13 +2012,175 @@ export class DataService {
     return doc;
   }
 
+  /**
+   * Deja constancia de lo ocurrido. Además de quién y cuándo, todo evento guarda el **rol activo**
+   * con el que se actuó y **todos los roles** que la persona tenía en ese momento: con usuarios
+   * multirrol, saber que actuó «Carlos González» ya no basta para auditar, hay que saber si lo
+   * hizo como Encargado o como Técnico.
+   */
   registrarEvento(u: UsuarioSistema | null, e: Partial<EventoTrazabilidad> & { accion: string }): void {
     const ahora = new Date();
     const evento: EventoTrazabilidad = {
       id: this.idNuevo('TRZ'), fecha: isoLocal(ahora), hora: ahora.toTimeString().slice(0, 5),
-      usuario: u?.usuario ?? 'sistema', rol: u?.rol ?? 'Sistema', moduloOrigen: MODULO_CONTROLES, ...e
+      usuario: u?.usuario ?? 'sistema', rol: u?.rol ?? 'Sistema',
+      rolesUsuario: u ? etiquetaRoles(u.roles ?? []) : 'Sistema',
+      moduloOrigen: MODULO_CONTROLES, ...e
     };
     this.trazabilidad.update((l) => [evento, ...l]);
+    this.persistir();
+  }
+
+  // ------------------------------------------------------------------ usuarios y roles
+
+  // Mensajes de la administración de usuarios, escritos una sola vez.
+  readonly MSG_ROL_PERMISO = 'Solo el Administrador puede modificar los roles de un usuario.';
+  readonly MSG_ROL_VACIO = 'El usuario debe conservar al menos un rol.';
+  readonly MSG_ROL_INVALIDO = 'El rol indicado no existe en el catálogo del sistema.';
+  readonly MSG_ROL_PROPIO_ADMIN =
+    'No puede quitarse a sí mismo el rol Administrador: quedaría sin quién administrar el sistema.';
+  readonly MSG_ROL_ULTIMO_ADMIN =
+    'Debe existir al menos un Administrador activo en el sistema.';
+  readonly MSG_ROL_CON_ASIGNACIONES =
+    'No se puede quitar el rol Técnico de Soporte: el usuario tiene responsabilidades vigentes en la distribución. Desactive primero sus asignaciones.';
+
+  /**
+   * Deja un usuario con sus roles resueltos y coherentes. Acepta el registro heredado —el que
+   * traía un solo `clave`— para que una semilla o una foto anteriores sigan abriendo.
+   */
+  normalizaUsuario(u: UsuarioSistema): UsuarioSistema {
+    const roles = ordenaRoles(normalizaRoles(u));
+    const activo = rolPrincipal(roles);
+    return {
+      ...u,
+      roles,
+      clave: activo ? claveDeRol(activo) : u.clave,
+      rol: activo ? nombreRol(activo) : u.rol,
+      // Un usuario opera en este módulo si alguno de sus roles lo hace. Hardware existe en el
+      // directorio del ecosistema, pero no entra aquí.
+      moduloControles: roles.some((r) => ROLES.find((x) => x.rol === r)?.moduloControles === true)
+    };
+  }
+
+  usuarioPorId(usuario: string): UsuarioSistema | undefined {
+    return this.usuarios().find((u) => u.usuario === usuario);
+  }
+
+  /** Solo el Administrador toca los roles de otro usuario. */
+  puedeAdministrarUsuarios(u: UsuarioSistema | null): boolean {
+    return !!u && (u.roles ?? []).includes('ADMINISTRADOR');
+  }
+
+  /** Administradores activos del sistema; nunca puede quedar ninguno. */
+  private administradoresActivos(exceptoUsuario = ''): UsuarioSistema[] {
+    return this.usuarios().filter((u) => u.usuario !== exceptoUsuario
+      && u.estado === 'Activo' && (u.roles ?? []).includes('ADMINISTRADOR'));
+  }
+
+  /**
+   * Cambia el conjunto de roles de un usuario. Es la operación central de
+   * Administración → Usuarios: **el rol es un arreglo**, así que agregar y quitar son el mismo
+   * movimiento, se aplican de una vez y quedan trazados con los roles anteriores y los nuevos.
+   */
+  actualizarRoles(usuario: string, roles: RolSistema[], u: UsuarioSistema, observacion = ''): string | null {
+    if (!this.puedeAdministrarUsuarios(u)) return this.MSG_ROL_PERMISO;
+    const objetivo = this.usuarioPorId(usuario);
+    if (!objetivo) return 'El usuario indicado no existe.';
+    const validos = new Set(ROLES.map((r) => r.rol));
+    if (roles.some((r) => !validos.has(r))) return this.MSG_ROL_INVALIDO;
+    const nuevos = ordenaRoles([...new Set(roles)]);
+    if (!nuevos.length) return this.MSG_ROL_VACIO;
+
+    const antes = ordenaRoles(objetivo.roles ?? []);
+    const quitados = antes.filter((r) => !nuevos.includes(r));
+    const agregados = nuevos.filter((r) => !antes.includes(r));
+    if (!quitados.length && !agregados.length) return null;
+
+    // Nadie se queda sin administración, ni el sistema sin Administrador.
+    if (quitados.includes('ADMINISTRADOR')) {
+      if (objetivo.usuario === u.usuario) return this.MSG_ROL_PROPIO_ADMIN;
+      if (!this.administradoresActivos(objetivo.usuario).length) return this.MSG_ROL_ULTIMO_ADMIN;
+    }
+    // Un técnico con responsabilidades vigentes no puede perder el rol que las sostiene: sus
+    // Direcciones/Registros quedarían con un responsable que el sistema ya no reconoce.
+    if (quitados.includes(ROL_RESPONSABLE_SOPORTE) && this.soportes.deTecnico(objetivo.nombre).length) {
+      return this.MSG_ROL_CON_ASIGNACIONES;
+    }
+
+    this.aplicarUsuario(usuario, { roles: nuevos });
+    const base = {
+      usuarioAfectado: objetivo.nombre,
+      rolesAnteriores: etiquetaRoles(antes),
+      rolesNuevos: etiquetaRoles(nuevos),
+      estadoAnterior: etiquetaRoles(antes),
+      estadoNuevo: etiquetaRoles(nuevos),
+      observacion: observacion.trim()
+    };
+    for (const r of agregados) {
+      this.registrarEvento(u, {
+        ...base, accion: 'Rol agregado a usuario',
+        observacion: `${objetivo.nombre} recibió el rol ${nombreRol(r)}. ${observacion}`.trim()
+      });
+    }
+    for (const r of quitados) {
+      this.registrarEvento(u, {
+        ...base, accion: 'Rol quitado a usuario',
+        observacion: `${objetivo.nombre} perdió el rol ${nombreRol(r)}. ${observacion}`.trim()
+      });
+    }
+    this.registrarEvento(u, {
+      ...base, accion: 'Permisos recalculados',
+      observacion: `Los permisos de ${objetivo.nombre} se recalcularon automáticamente: ahora puede usar las funciones de ${etiquetaRoles(nuevos)}. No hay ninguna acción manual de sincronización.`
+    });
+    return null;
+  }
+
+  /** Activa o desactiva un usuario. Un usuario inactivo no inicia sesión ni recibe asignaciones. */
+  cambiarEstadoUsuario(usuario: string, estado: 'Activo' | 'Inactivo', u: UsuarioSistema, motivo = ''): string | null {
+    if (!this.puedeAdministrarUsuarios(u)) return this.MSG_ROL_PERMISO;
+    const objetivo = this.usuarioPorId(usuario);
+    if (!objetivo) return 'El usuario indicado no existe.';
+    if (objetivo.estado === estado) return null;
+    if (estado === 'Inactivo') {
+      if (objetivo.usuario === u.usuario) return 'No puede desactivar su propio usuario.';
+      if ((objetivo.roles ?? []).includes('ADMINISTRADOR') && !this.administradoresActivos(objetivo.usuario).length) {
+        return this.MSG_ROL_ULTIMO_ADMIN;
+      }
+      if (this.soportes.deTecnico(objetivo.nombre).length) {
+        return 'No se puede desactivar: el usuario tiene responsabilidades vigentes en la distribución de soportes. Desactive primero sus asignaciones.';
+      }
+    }
+    this.aplicarUsuario(usuario, { estado });
+    this.registrarEvento(u, {
+      usuarioAfectado: objetivo.nombre, accion: estado === 'Activo' ? 'Usuario activado' : 'Usuario desactivado',
+      estadoAnterior: objetivo.estado, estadoNuevo: estado, motivo: motivo.trim(),
+      rolesUsuario: etiquetaRoles(u.roles ?? []),
+      observacion: `${objetivo.nombre} (${etiquetaRoles(objetivo.roles ?? [])}) quedó ${estado.toLowerCase()}. ${motivo}`.trim()
+    });
+    return null;
+  }
+
+  /** Deja registrado que alguien cambió de rol activo sin cerrar sesión (§7). */
+  registrarCambioRolActivo(u: UsuarioSistema, anterior: RolSistema | null): void {
+    this.registrarEvento(u, {
+      usuarioAfectado: u.nombre, accion: 'Usuario cambió rol activo',
+      estadoAnterior: anterior ? nombreRol(anterior) : 'Sin rol activo', estadoNuevo: u.rol,
+      rolesAnteriores: etiquetaRoles(u.roles ?? []), rolesNuevos: etiquetaRoles(u.roles ?? []),
+      observacion: `${u.nombre} pasó a operar como ${u.rol}. Conserva sus demás roles (${etiquetaRoles(u.roles ?? [])}); solo cambia cómo se le ordena la interfaz.`
+    });
+  }
+
+  /** Deja registrado un intento de entrar donde el rol activo no llega (§7). */
+  registrarAccesoDenegado(u: UsuarioSistema | null, ruta: string): void {
+    this.registrarEvento(u, {
+      usuarioAfectado: u?.nombre, accion: 'Intento de acceso denegado',
+      estadoNuevo: 'Acceso bloqueado',
+      observacion: `El rol activo ${u?.rol ?? 'sin sesión'} no tiene acceso a «${ruta}». Roles del usuario: ${u ? etiquetaRoles(u.roles ?? []) : 'ninguno'}.`
+    });
+  }
+
+  /** Escribe el cambio en el directorio y lo persiste. */
+  private aplicarUsuario(usuario: string, cambios: Partial<UsuarioSistema>): void {
+    this.usuarios.update((l) => l.map((x) => (x.usuario === usuario ? this.normalizaUsuario({ ...x, ...cambios }) : x)));
     this.persistir();
   }
 
@@ -1928,13 +2188,28 @@ export class DataService {
 
   // Mensajes de la distribución, escritos una sola vez y verificados por la batería.
   readonly MSG_DIST_TECNICO = 'Debe seleccionar un Técnico de Soporte.';
-  readonly MSG_DIST_DIRECCION = 'Debe seleccionar una Dirección.';
-  readonly MSG_DIST_UNIDAD = 'Debe seleccionar una Unidad.';
-  readonly MSG_DIST_DUPLICADA = 'Esta Dirección/Unidad ya se encuentra asignada a este Técnico de Soporte.';
+  readonly MSG_DIST_DIRECCION = 'Debe seleccionar un Departamento.';
+  readonly MSG_DIST_UNIDAD = 'Debe seleccionar una Dirección/Registro.';
+  readonly MSG_DIST_DUPLICADA = 'Esta asignación ya existe para este Técnico de Soporte.';
   readonly MSG_DIST_MOTIVO = 'Debe ingresar el motivo por el cual se desactiva esta responsabilidad.';
   readonly MSG_DIST_SOLO_SOPORTE = 'Solo se pueden asignar usuarios con rol Técnico de Soporte.';
   readonly MSG_DIST_PERMISO = 'Solo el Encargado de Soporte o el Administrador pueden gestionar la distribución de soportes.';
   readonly MSG_DIST_SINCRONIZADA = 'La distribución de soportes fue actualizada y los controles se recalcularon automáticamente.';
+
+  /**
+   * Aviso —no error— de los departamentos que se distribuyen completos. No se muestra como falla:
+   * el formulario simplemente deja de pedir la Dirección/Registro y explica por qué.
+   */
+  readonly MSG_DIST_POR_DEPARTAMENTO =
+    'En este Departamento la distribución se realiza por Departamento, no por Dirección/Registro.';
+
+  /** «Para San Salvador debe seleccionar una Dirección/Registro.» */
+  msgRegistroObligatorio(departamento: string): string {
+    return `Para ${this.territorio.nombreDepartamento(this.territorio.idDepartamento(departamento))} debe seleccionar una Dirección/Registro.`;
+  }
+
+  /** ¿Este departamento exige elegir Dirección/Registro? Lo decide el catálogo territorial. */
+  exigeRegistro(departamento: string): boolean { return this.soportes.exigeRegistro(departamento); }
 
   /**
    * Solo el Encargado de Soporte y el Administrador gestionan la distribución. El Coordinador y
@@ -1948,11 +2223,11 @@ export class DataService {
   /** Todos ven la pantalla; el Técnico de Soporte, limitado a lo suyo. */
   puedeConsultarDistribucion(u: UsuarioSistema | null): boolean { return !!u; }
 
-  /** El Técnico de Soporte solo consulta sus propias Direcciones/Unidades. */
+  /** El Técnico de Soporte solo consulta sus propias Direcciones/Registros. */
   soloVeLoSuyo(u: UsuarioSistema | null): boolean { return u?.clave === 'tec-soporte'; }
 
   /**
-   * Carga de un Técnico de Soporte: lo que hoy responde por sus Direcciones/Unidades vigentes.
+   * Carga de un Técnico de Soporte: lo que hoy responde por sus Direcciones/Registros vigentes.
    * Es el resumen que la pantalla de edición muestra antes de agregarle o quitarle una más.
    */
   cargaDeSoporte(usuarioOTecnico: string): {
@@ -1979,22 +2254,22 @@ export class DataService {
     };
   }
 
-  /** Controles del período de una Dirección/Unidad concreta, para el detalle de la responsabilidad. */
+  /** Controles del período de una Dirección/Registro concreta, para el detalle de la responsabilidad. */
   controlesDeResponsabilidad(direccionId: string, unidad: string): ControlMes[] {
     const p = this.plazos.periodoActivo();
     return this.controles().filter((c) => c.anio === p.anio && c.mes === p.mes
       && c.direccion === direccionId && c.unidad === unidad);
   }
 
-  /** Bitácoras abiertas de una Dirección/Unidad. */
+  /** Bitácoras abiertas de una Dirección/Registro. */
   bitacorasDeResponsabilidad(direccionId: string, unidad: string): BitacoraDiaria[] {
     return this.bitacoras().filter((b) => b.direccion === direccionId && b.unidad === unidad);
   }
 
   /**
-   * Asigna un Técnico de Soporte a una Dirección/Unidad. El efecto es doble: en este módulo pasa
+   * Asigna un Técnico de Soporte a una Dirección/Registro. El efecto es doble: en este módulo pasa
    * a ver y completar sus controles y bitácoras; en Gestión de Equipos pasa a estar disponible
-   * como Técnico de Configuración para los requerimientos de esa Dirección/Unidad.
+   * como Técnico de Configuración para los requerimientos de esa Dirección/Registro.
    */
   asignarDistribucion(datos: {
     direccion: string; unidad: string; tecnico: string; observacion: string;
@@ -2003,19 +2278,34 @@ export class DataService {
     if (!this.puedeGestionarDistribucion(u)) return this.MSG_DIST_PERMISO;
     if (!datos.tecnico) return this.MSG_DIST_TECNICO;
     if (!datos.direccion) return this.MSG_DIST_DIRECCION;
-    if (!datos.unidad) return this.MSG_DIST_UNIDAD;
+
+    // La regla territorial decide qué se exige: en los departamentos que se llevan por
+    // Dirección/Registro hay que elegir una; en los demás, la asignación es del departamento
+    // completo y un registro escrito se ignora, no se guarda a medias.
+    const dep = this.territorio.idDepartamento(datos.direccion);
+    const porDireccion = this.territorio.distribuyePorDireccion(dep);
+    const registro = porDireccion ? this.territorio.idRegistro(dep, datos.unidad) : '';
+    if (porDireccion && !registro) return this.msgRegistroObligatorio(dep);
+
     const tec = this.usuarios().find((x) => x.usuario === datos.tecnico)
       ?? this.usuarios().find((x) => this.soportes.idTecnico(datos.tecnico) === this.soportes.idTecnico(x.nombre));
-    // Hardware y el Coordinador no atienden Direcciones/Unidades: no son Técnicos de Soporte.
-    if (!tec || tec.clave !== 'tec-soporte') return this.MSG_DIST_SOLO_SOPORTE;
+    // Hardware y el Coordinador no atienden territorio: no son Técnicos de Soporte. Se comprueba
+    // sobre TODOS sus roles, no sobre el activo: quien es Encargado y Técnico sigue siendo Técnico.
+    if (!tec || !(tec.roles ?? []).includes(ROL_RESPONSABLE_SOPORTE)) return this.MSG_DIST_SOLO_SOPORTE;
+    if ((tec.roles ?? []).some(esRolHardware) && !(tec.roles ?? []).includes(ROL_RESPONSABLE_SOPORTE)) {
+      return this.MSG_DIST_SOLO_SOPORTE;
+    }
     if (tec.estado !== 'Activo') return 'No se puede asignar un Técnico de Soporte inactivo.';
-    const nombreDir = this.nombreDireccion(datos.direccion);
-    // El duplicado se comprueba por ID, no por el texto con el que esté escrita la asignación.
-    if (this.soportes.duplicada(tec.nombre, datos.direccion, datos.unidad)) {
+
+    const nombreDir = this.territorio.nombreDepartamento(dep);
+    const etiqueta = this.territorio.etiqueta(dep, registro);
+    const tipo = porDireccion ? 'DIRECCION_REGISTRO' : 'DEPARTAMENTO';
+    // El duplicado se comprueba por ID sobre el ámbito exacto, no por el texto de la asignación.
+    if (this.soportes.duplicada(tec.nombre, dep, registro)) {
       this.registrarEvento(u, {
-        direccion: this.idDireccion(datos.direccion), unidad: datos.unidad,
+        ...this.trazaTerritorio(dep, registro),
         accion: 'Intento de duplicado bloqueado', tecnicoAfectado: tec.nombre,
-        observacion: `${tec.nombre} ya atiende ${nombreDir} / ${datos.unidad}; no se registró una segunda responsabilidad vigente sobre la misma Dirección/Unidad.`
+        observacion: `${tec.nombre} ya atiende ${etiqueta}; no se registró una segunda responsabilidad vigente sobre el mismo ámbito.`
       });
       return this.MSG_DIST_DUPLICADA;
     }
@@ -2024,9 +2314,15 @@ export class DataService {
     const nuevo: DistribucionSoporte = {
       id: this.soportes.siguienteId(ahora.getFullYear()),
       tecnicoId: this.soportes.idTecnico(tec.nombre),
-      direccionId: this.soportes.idDireccion(datos.direccion),
-      unidadId: this.soportes.idUnidad(datos.direccion, datos.unidad),
-      direccion: nombreDir, unidad: datos.unidad, tecnico: `${tec.nombre} — ${tec.rol}`,
+      tipoAsignacion: tipo,
+      zonaId: this.territorio.zonaDe(dep),
+      departamentoId: dep,
+      direccionRegistroId: registro || null,
+      direccionId: dep,
+      unidadId: this.soportes.idUnidad(dep, registro),
+      direccion: nombreDir,
+      unidad: registro ? this.territorio.nombreRegistro(registro) : ETIQUETA_TODO_EL_DEPARTAMENTO,
+      tecnico: `${tec.nombre} — ${nombreRol(ROL_RESPONSABLE_SOPORTE)}`,
       asignadoPor: `${u.nombre} — ${u.rol}`,
       // La fecha de inicio la decide quien asigna: una responsabilidad puede empezar antes de
       // que alguien tenga tiempo de registrarla.
@@ -2036,33 +2332,52 @@ export class DataService {
     };
     this.soportes.agregar(nuevo);
     this.persistir();
-    this.publicarDistribucion(u, `${tec.nombre} atiende ${nombreDir} / ${datos.unidad}.`);
-    const base = { direccion: this.idDireccion(datos.direccion), unidad: datos.unidad, tecnicoAfectado: tec.nombre };
+    this.publicarDistribucion(u, `${tec.nombre} atiende ${etiqueta}.`);
+    const base = { ...this.trazaTerritorio(dep, registro), tecnicoAfectado: tec.nombre };
     this.registrarEvento(u, {
-      ...base, accion: 'Dirección/Unidad agregada a soporte',
+      ...base,
+      accion: porDireccion ? 'Responsable asignado por Dirección/Registro' : 'Responsable asignado por Departamento',
       moduloOrigen: MODULO_CONTROLES,
       estadoAnterior: 'Sin asignar', estadoNuevo: activo ? 'Activa' : 'Inactiva',
-      observacion: `${tec.nombre} atiende ${nombreDir} / ${datos.unidad} desde el ${nuevo.fecha}. ${nuevo.observacion}`.trim()
+      observacion: porDireccion
+        ? `${tec.nombre} atiende ${etiqueta} desde el ${nuevo.fecha}. ${nuevo.observacion}`.trim()
+        : `${tec.nombre} atiende TODO el departamento de ${nombreDir} (${this.territorio.registrosDe(dep).length} Direcciones/Registros) desde el ${nuevo.fecha}. ${nuevo.observacion}`.trim()
     });
     this.registrarEvento(u, {
       ...base, accion: 'Responsabilidad de soporte modificada',
-      estadoNuevo: `${this.soportes.deTecnico(tec.nombre).length} Dirección/Unidad atendida(s)`,
-      observacion: `Se agregó una Dirección/Unidad a la responsabilidad de ${tec.nombre}.`
+      estadoNuevo: `${this.soportes.deTecnico(tec.nombre).length} ámbito(s) atendido(s)`,
+      observacion: `Se agregó un ámbito territorial a la responsabilidad de ${tec.nombre}.`
     });
     this.registrarEvento(u, {
       ...base, accion: 'Perfil del soporte actualizado automáticamente',
-      observacion: `${tec.nombre} pasa a ver los controles, la bitácora y el inventario operativo de ${nombreDir} / ${datos.unidad} sin ninguna acción adicional.`
+      observacion: `${tec.nombre} pasa a ver los controles, la bitácora y el inventario operativo de ${etiqueta} sin ninguna acción adicional.`
     });
     if (activo) {
       this.registrarEvento(u, {
         ...base, accion: 'Distribución aplicada en Gestión de Equipos',
         moduloOrigen: MODULO_CONTROLES, moduloDestino: MODULO_EQUIPOS,
-        observacion: `Desde esta fecha, Gestión de Equipos ofrece a ${tec.nombre} como Técnico de Configuración para los requerimientos de esta Dirección/Unidad.`
+        observacion: porDireccion
+          ? `Desde esta fecha, Gestión de Equipos ofrece a ${tec.nombre} como Técnico de Configuración para los requerimientos de ${etiqueta}.`
+          : `Desde esta fecha, Gestión de Equipos ofrece a ${tec.nombre} como Técnico de Configuración para los requerimientos de cualquier Dirección/Registro de ${nombreDir}.`
       });
     }
     // Los controles abiertos del período pasan solos al nuevo responsable.
-    this.sincronizarTrasDistribucion(u, `${tec.nombre} atiende ${nombreDir} / ${datos.unidad}`);
+    this.sincronizarTrasDistribucion(u, `${tec.nombre} atiende ${etiqueta}`);
     return null;
+  }
+
+  /** Campos territoriales comunes de un evento de trazabilidad (§32). */
+  private trazaTerritorio(departamento: string, registro: string): Partial<EventoTrazabilidad> {
+    const dep = this.territorio.idDepartamento(departamento);
+    const reg = this.territorio.idRegistro(dep, registro);
+    return {
+      zona: this.territorio.nombreZona(this.territorio.zonaDe(dep)),
+      departamento: this.territorio.nombreDepartamento(dep),
+      direccionRegistro: reg ? this.territorio.nombreRegistro(reg) : ETIQUETA_TODO_EL_DEPARTAMENTO,
+      tipoAsignacion: this.territorio.tipoAsignacionDe(dep),
+      direccion: dep,
+      unidad: reg ? this.territorio.nombreRegistro(reg) : ETIQUETA_TODO_EL_DEPARTAMENTO
+    };
   }
 
   /** Deja constancia de que alguien consultó la distribución de un Técnico de Soporte. */
@@ -2070,7 +2385,7 @@ export class DataService {
     const pares = this.soportes.deTecnico(tecnico);
     this.registrarEvento(u, {
       accion: 'Distribución de soporte consultada', tecnicoAfectado: this.soportes.soloNombre(tecnico),
-      observacion: `${this.soportes.soloNombre(tecnico)} atiende ${pares.length} Dirección/Unidad vigente(s): ${pares.map((d) => this.soportes.etiqueta(d.direccion, d.unidad)).join('; ') || 'ninguna'}.`
+      observacion: `${this.soportes.soloNombre(tecnico)} atiende ${pares.length} Dirección/Registro vigente(s): ${pares.map((d) => this.soportes.etiqueta(d.direccion, d.unidad)).join('; ') || 'ninguna'}.`
     });
   }
 
@@ -2098,28 +2413,46 @@ export class DataService {
     if (!actual) return 'No se encontró la asignación indicada.';
     if (!actual.activo) return 'La asignación ya está desactivada.';
     if (!motivo.trim()) return this.MSG_DIST_MOTIVO;
-    const idDir = this.idDireccion(actual.direccion);
-    const equipos = this.equiposActivosDe(idDir, actual.unidad);
-    const quedan = this.soportes.deDireccionUnidad(actual.direccion, actual.unidad).filter((d) => d.id !== id);
-    if (equipos.length && !quedan.length) {
-      return `No se puede desactivar: ${actual.direccion} / ${actual.unidad} tiene ${equipos.length} equipo(s) activo(s) y quedaría sin ningún Técnico de Soporte responsable.`;
-    }
+    const dep = actual.departamentoId || this.territorio.idDepartamento(actual.direccion);
+    const reg = actual.direccionRegistroId ?? '';
+    const etiqueta = this.territorio.etiqueta(dep, reg);
+    // El alcance real de la asignación: una departamental cubre todas las Direcciones/Registros.
+    const alcance = reg
+      ? [{ departamentoId: dep, direccionRegistroId: reg }]
+      : this.territorio.registrosDe(dep).map((r) => ({ departamentoId: dep, direccionRegistroId: r.id }));
+    const equipos = alcance.flatMap((a) => this.equiposActivosDe(a.departamentoId, a.direccionRegistroId));
+    const quedan = this.soportes.deDireccionUnidad(dep, reg).filter((d) => d.id !== id);
+    const controlesAbiertos = alcance.flatMap((a) => this.controlesDeResponsabilidad(a.departamentoId, a.direccionRegistroId))
+      .filter((c) => !['Cerrado', 'No aplica', 'Entregado', 'Entregado tarde', 'Justificado'].includes(c.estado));
+    // §25: un ámbito con controles o equipos activos no puede quedarse sin responsable «porque
+    // sí», pero tampoco se bloquea de plano: se permite si queda constancia del motivo, que aquí
+    // ya es obligatorio. Lo que nunca ocurre es que el hueco pase inadvertido.
+    const quedaSinResponsable = !quedan.length && (equipos.length > 0 || controlesAbiertos.length > 0);
+
     this.soportes.desactivar(id, `${u.nombre} — ${u.rol}`, isoLocal(new Date()), motivo.trim());
     // Los equipos activos pasan al responsable que queda vigente: nunca quedan sin soporte.
     if (equipos.length && quedan.length) {
-      const nuevo = quedan[0].tecnico;
-      this.inventario.update((l) => l.map((e) => (e.direccion === idDir && e.unidad === actual.unidad
-        && e.estado !== 'Descargado' ? { ...e, soporteResponsable: nuevo } : e)));
+      const inventarios = new Set(equipos.map((e) => e.ciclo));
+      this.inventario.update((l) => l.map((e) => (inventarios.has(e.ciclo) && e.estado !== 'Descargado'
+        ? { ...e, soporteResponsable: this.soportes.responsableDe(e.direccion, e.unidad) || e.soporteResponsable }
+        : e)));
     }
     this.persistir();
     const quien = this.soportes.soloNombre(actual.tecnico);
-    this.publicarDistribucion(u, `${quien} deja de atender ${actual.direccion} / ${actual.unidad}.`);
-    const base = { direccion: idDir, unidad: actual.unidad, tecnicoAfectado: quien, motivo: motivo.trim() };
+    this.publicarDistribucion(u, `${quien} deja de atender ${etiqueta}.`);
+    const base = { ...this.trazaTerritorio(dep, reg), tecnicoAfectado: quien, motivo: motivo.trim() };
     this.registrarEvento(u, {
-      ...base, accion: 'Dirección/Unidad desactivada para soporte',
+      ...base, accion: 'Asignación territorial desactivada',
       estadoAnterior: 'Activa', estadoNuevo: 'Desactivada',
-      observacion: `${quien} deja de atender ${actual.direccion} / ${actual.unidad}. Responsable(s) que quedan: ${quedan.map((d) => this.soportes.soloNombre(d.tecnico)).join(' · ') || 'ninguno'}.`
+      observacion: `${quien} deja de atender ${etiqueta}. Responsable(s) que quedan: ${quedan.map((d) => this.soportes.soloNombre(d.tecnico)).join(' · ') || 'ninguno'}.`
     });
+    if (quedaSinResponsable) {
+      this.registrarEvento(u, {
+        ...base, accion: 'Ámbito territorial sin responsable',
+        estadoAnterior: quien, estadoNuevo: 'Sin soporte asignado',
+        observacion: `${etiqueta} queda sin Técnico de Soporte responsable con ${equipos.length} equipo(s) activo(s) y ${controlesAbiertos.length} control(es) abierto(s). Se registró el motivo: ${motivo.trim()}`
+      });
+    }
     this.registrarEvento(u, {
       ...base, accion: 'Responsabilidad de soporte modificada',
       estadoAnterior: this.soportes.soloNombre(actual.tecnico),
@@ -2128,15 +2461,15 @@ export class DataService {
     });
     this.registrarEvento(u, {
       ...base, accion: 'Perfil del soporte actualizado automáticamente',
-      observacion: `${quien} deja de ver los controles nuevos, la bitácora y el inventario operativo de esta Dirección/Unidad. Lo ya entregado se conserva como historial.`
+      observacion: `${quien} deja de ver los controles nuevos, la bitácora y el inventario operativo de ${etiqueta}. Lo ya entregado se conserva como historial.`
     });
     this.registrarEvento(u, {
       ...base, accion: 'Distribución aplicada en Gestión de Equipos',
       moduloOrigen: MODULO_CONTROLES, moduloDestino: MODULO_EQUIPOS,
-      observacion: `Gestión de Equipos deja de ofrecer a ${quien} como Técnico de Configuración de esta Dirección/Unidad.`
+      observacion: `Gestión de Equipos deja de ofrecer a ${quien} como Técnico de Configuración de ${etiqueta}.`
     });
     // Los controles abiertos quedan con el responsable que corresponda ahora.
-    this.sincronizarTrasDistribucion(u, `${quien} deja de atender ${actual.direccion} / ${actual.unidad}`);
+    this.sincronizarTrasDistribucion(u, `${quien} deja de atender ${etiqueta}`);
     return null;
   }
 
@@ -2149,7 +2482,7 @@ export class DataService {
     return null;
   }
 
-  /** Una aplicación vacía no se guarda: el control quedaría sin ninguna Dirección/Unidad donde correr. */
+  /** Una aplicación vacía no se guarda: el control quedaría sin ninguna Dirección/Registro donde correr. */
   validarAplicacion(a: AplicacionControl): string | null {
     if (a.modo === 'Todas las direcciones') return null;
     if (a.modo === 'Direcciones específicas' && !a.direcciones.length) {
@@ -2165,7 +2498,7 @@ export class DataService {
   }
 
   /**
-   * Guarda dónde aplica un control. Cambiar la aplicación cambia qué Direcciones/Unidades verán
+   * Guarda dónde aplica un control. Cambiar la aplicación cambia qué Direcciones/Registros verán
    * ese control en el calendario del próximo período; los controles ya programados no se tocan,
    * porque pertenecen a un período cerrado.
    */
