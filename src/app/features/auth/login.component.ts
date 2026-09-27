@@ -90,6 +90,21 @@ import { APP_DEMO_LABEL, APP_INSTITUTION_NAME, APP_LOGO_WHITE, APP_TECH_UNIT } f
     .login-card .lc-body { padding: 24px 24px 22px; display: grid; gap: 18px; }
 
     .role-note { margin-top: 16px; font-size: 12.5px; }
+    .module-link {
+      margin-top: 12px;
+      display: flex;
+      justify-content: center;
+    }
+    .module-link a {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--blue-700);
+      font-size: 12.5px;
+      font-weight: 700;
+      text-decoration: none;
+    }
+    .module-link a:hover { text-decoration: underline; }
     .acc-foot { font-size: 11px; color: var(--tx-3); text-align: center; padding-top: 18px; letter-spacing: .03em; }
 
     @media (max-width: 960px) {
@@ -173,6 +188,10 @@ import { APP_DEMO_LABEL, APP_INSTITUTION_NAME, APP_LOGO_WHITE, APP_TECH_UNIT } f
             Los usuarios son los mismos de <b>SISGOST — Gestión de Equipos</b>; el usuario
             <span class="mono">demo.admin</span> restablece los datos de demostración desde Administración.
           </span>
+        </div>
+
+        <div class="module-link">
+          <a href="https://prototipo-angular-three.vercel.app/login">Ir a SISGOST · Gestión de Equipos →</a>
         </div>
       </div>
 
