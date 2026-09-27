@@ -35,6 +35,10 @@ export const NAVEGACION: NavGrupo[] = [
     items: [
       { ruta: '/panel', titulo: 'Panel ejecutivo', icono: 'panel', roles: TODOS },
       { ruta: '/calendario', titulo: 'Calendario de controles', icono: 'calendar', roles: OPERAN },
+      // Mapa de bitácoras: el estado de la bitácora diaria de cada departamento sobre el mapa del
+      // país. Lo consultan los cuatro roles —el Técnico de Soporte con color solo en lo que
+      // atiende, y eso lo decide la pantalla por el rol activo, no el menú—.
+      { ruta: '/mapa-bitacoras', titulo: 'Mapa de bitácoras', icono: 'map', roles: TODOS },
       { ruta: '/historial', titulo: 'Historial anual', icono: 'archive', roles: TODOS }
     ]
   },

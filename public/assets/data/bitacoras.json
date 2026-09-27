@@ -3507,5 +3507,6397 @@
   ],
   "observaciones": "",
   "documento": "DOC-2026-0339"
+ },
+ {
+  "id": "BIT-2026-0049",
+  "fecha": "2026-09-21",
+  "direccion": "AHU",
+  "unidad": "Todo el departamento",
+  "responsable": "Wendy Carranza",
+  "estado": "Enviada",
+  "horaEnvio": "15:38",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "14:20",
+    "actividad": "Revisión de impresoras y periféricos de atención",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "16:00",
+    "actividad": "Seguimiento de tiquetes y cierre del día",
+    "area": "Soporte",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": ""
+ },
+ {
+  "id": "BIT-2026-0050",
+  "fecha": "2026-09-21",
+  "direccion": "STA",
+  "unidad": "Todo el departamento",
+  "responsable": "Wendy Carranza",
+  "estado": "Enviada",
+  "horaEnvio": "16:02",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "14:20",
+    "actividad": "Revisión de impresoras y periféricos de atención",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "16:00",
+    "actividad": "Seguimiento de tiquetes y cierre del día",
+    "area": "Soporte",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": ""
+ },
+ {
+  "id": "BIT-2026-0051",
+  "fecha": "2026-09-21",
+  "direccion": "SON",
+  "unidad": "Todo el departamento",
+  "responsable": "Mateo Martínez",
+  "estado": "Enviada",
+  "horaEnvio": "16:19",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "14:20",
+    "actividad": "Revisión de impresoras y periféricos de atención",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "16:00",
+    "actividad": "Seguimiento de tiquetes y cierre del día",
+    "area": "Soporte",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": ""
+ },
+ {
+  "id": "BIT-2026-0052",
+  "fecha": "2026-09-21",
+  "direccion": "CAB",
+  "unidad": "Todo el departamento",
+  "responsable": "Mateo Martínez",
+  "estado": "Enviada",
+  "horaEnvio": "16:27",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "14:20",
+    "actividad": "Revisión de impresoras y periféricos de atención",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "16:00",
+    "actividad": "Seguimiento de tiquetes y cierre del día",
+    "area": "Soporte",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": ""
+ },
+ {
+  "id": "BIT-2026-0053",
+  "fecha": "2026-09-21",
+  "direccion": "CHA",
+  "unidad": "Todo el departamento",
+  "responsable": "Mateo Martínez",
+  "estado": "Enviada",
+  "horaEnvio": "16:44",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "14:20",
+    "actividad": "Revisión de impresoras y periféricos de atención",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "16:00",
+    "actividad": "Seguimiento de tiquetes y cierre del día",
+    "area": "Soporte",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": ""
+ },
+ {
+  "id": "BIT-2026-0054",
+  "fecha": "2026-09-21",
+  "direccion": "CUS",
+  "unidad": "Todo el departamento",
+  "responsable": "Carlos González",
+  "estado": "Enviada",
+  "horaEnvio": "15:51",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "14:20",
+    "actividad": "Revisión de impresoras y periféricos de atención",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "16:00",
+    "actividad": "Seguimiento de tiquetes y cierre del día",
+    "area": "Soporte",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": ""
+ },
+ {
+  "id": "BIT-2026-0055",
+  "fecha": "2026-09-21",
+  "direccion": "LIB",
+  "unidad": "Todo el departamento",
+  "responsable": "Carlos González",
+  "estado": "Enviada",
+  "horaEnvio": "15:38",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "14:20",
+    "actividad": "Revisión de impresoras y periféricos de atención",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "16:00",
+    "actividad": "Seguimiento de tiquetes y cierre del día",
+    "area": "Soporte",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": ""
+ },
+ {
+  "id": "BIT-2026-0056",
+  "fecha": "2026-09-21",
+  "direccion": "PAZ",
+  "unidad": "Todo el departamento",
+  "responsable": "Carlos González",
+  "estado": "Enviada",
+  "horaEnvio": "16:02",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "14:20",
+    "actividad": "Revisión de impresoras y periféricos de atención",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "16:00",
+    "actividad": "Seguimiento de tiquetes y cierre del día",
+    "area": "Soporte",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": ""
+ },
+ {
+  "id": "BIT-2026-0057",
+  "fecha": "2026-09-21",
+  "direccion": "SS",
+  "unidad": "Registro de la Propiedad Raíz e Hipotecas",
+  "responsable": "Mateo Martínez",
+  "estado": "Enviada",
+  "horaEnvio": "16:19",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "14:20",
+    "actividad": "Revisión de impresoras y periféricos de atención",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "16:00",
+    "actividad": "Seguimiento de tiquetes y cierre del día",
+    "area": "Soporte",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": ""
+ },
+ {
+  "id": "BIT-2026-0058",
+  "fecha": "2026-09-21",
+  "direccion": "SS",
+  "unidad": "Instituto Geográfico y del Catastro Nacional (IGCN)",
+  "responsable": "Mateo Martínez",
+  "estado": "Enviada",
+  "horaEnvio": "16:27",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "14:20",
+    "actividad": "Revisión de impresoras y periféricos de atención",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "16:00",
+    "actividad": "Seguimiento de tiquetes y cierre del día",
+    "area": "Soporte",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": ""
+ },
+ {
+  "id": "BIT-2026-0059",
+  "fecha": "2026-09-21",
+  "direccion": "SS",
+  "unidad": "Registro de Garantías Mobiliarias",
+  "responsable": "Diana Portillo",
+  "estado": "Enviada",
+  "horaEnvio": "16:44",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "14:20",
+    "actividad": "Revisión de impresoras y periféricos de atención",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "16:00",
+    "actividad": "Seguimiento de tiquetes y cierre del día",
+    "area": "Soporte",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": ""
+ },
+ {
+  "id": "BIT-2026-0060",
+  "fecha": "2026-09-21",
+  "direccion": "SS",
+  "unidad": "Registro de Comercio",
+  "responsable": "Wendy Carranza",
+  "estado": "Enviada",
+  "horaEnvio": "15:51",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "14:20",
+    "actividad": "Revisión de impresoras y periféricos de atención",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "16:00",
+    "actividad": "Seguimiento de tiquetes y cierre del día",
+    "area": "Soporte",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": ""
+ },
+ {
+  "id": "BIT-2026-0061",
+  "fecha": "2026-09-21",
+  "direccion": "SS",
+  "unidad": "Instituto Salvadoreño de la Propiedad Intelectual (ISPI)",
+  "responsable": "Wendy Carranza",
+  "estado": "Enviada",
+  "horaEnvio": "15:38",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "14:20",
+    "actividad": "Revisión de impresoras y periféricos de atención",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "16:00",
+    "actividad": "Seguimiento de tiquetes y cierre del día",
+    "area": "Soporte",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": ""
+ },
+ {
+  "id": "BIT-2026-0062",
+  "fecha": "2026-09-21",
+  "direccion": "SV",
+  "unidad": "Todo el departamento",
+  "responsable": "Diana Portillo",
+  "estado": "Enviada",
+  "horaEnvio": "16:02",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "14:20",
+    "actividad": "Revisión de impresoras y periféricos de atención",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "16:00",
+    "actividad": "Seguimiento de tiquetes y cierre del día",
+    "area": "Soporte",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": ""
+ },
+ {
+  "id": "BIT-2026-0063",
+  "fecha": "2026-09-21",
+  "direccion": "MOR",
+  "unidad": "Todo el departamento",
+  "responsable": "Diana Portillo",
+  "estado": "Enviada",
+  "horaEnvio": "16:27",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "14:20",
+    "actividad": "Revisión de impresoras y periféricos de atención",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "16:00",
+    "actividad": "Seguimiento de tiquetes y cierre del día",
+    "area": "Soporte",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": ""
+ },
+ {
+  "id": "BIT-2026-0064",
+  "fecha": "2026-09-21",
+  "direccion": "SM",
+  "unidad": "Todo el departamento",
+  "responsable": "Diana Portillo",
+  "estado": "Enviada",
+  "horaEnvio": "16:44",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "14:20",
+    "actividad": "Revisión de impresoras y periféricos de atención",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "16:00",
+    "actividad": "Seguimiento de tiquetes y cierre del día",
+    "area": "Soporte",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": ""
+ },
+ {
+  "id": "BIT-2026-0065",
+  "fecha": "2026-09-21",
+  "direccion": "USU",
+  "unidad": "Todo el departamento",
+  "responsable": "Diana Portillo",
+  "estado": "Enviada",
+  "horaEnvio": "15:51",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "14:20",
+    "actividad": "Revisión de impresoras y periféricos de atención",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "16:00",
+    "actividad": "Seguimiento de tiquetes y cierre del día",
+    "area": "Soporte",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": ""
+ },
+ {
+  "id": "BIT-2026-0066",
+  "fecha": "2026-09-22",
+  "direccion": "AHU",
+  "unidad": "Todo el departamento",
+  "responsable": "Wendy Carranza",
+  "estado": "Enviada",
+  "horaEnvio": "16:02",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "14:20",
+    "actividad": "Revisión de impresoras y periféricos de atención",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "16:00",
+    "actividad": "Seguimiento de tiquetes y cierre del día",
+    "area": "Soporte",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": ""
+ },
+ {
+  "id": "BIT-2026-0067",
+  "fecha": "2026-09-22",
+  "direccion": "STA",
+  "unidad": "Todo el departamento",
+  "responsable": "Wendy Carranza",
+  "estado": "Enviada",
+  "horaEnvio": "16:19",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "14:20",
+    "actividad": "Revisión de impresoras y periféricos de atención",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "16:00",
+    "actividad": "Seguimiento de tiquetes y cierre del día",
+    "area": "Soporte",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": ""
+ },
+ {
+  "id": "BIT-2026-0068",
+  "fecha": "2026-09-22",
+  "direccion": "SON",
+  "unidad": "Todo el departamento",
+  "responsable": "Mateo Martínez",
+  "estado": "Enviada",
+  "horaEnvio": "16:27",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "14:20",
+    "actividad": "Revisión de impresoras y periféricos de atención",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "16:00",
+    "actividad": "Seguimiento de tiquetes y cierre del día",
+    "area": "Soporte",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": ""
+ },
+ {
+  "id": "BIT-2026-0069",
+  "fecha": "2026-09-22",
+  "direccion": "CAB",
+  "unidad": "Todo el departamento",
+  "responsable": "Mateo Martínez",
+  "estado": "Enviada tarde",
+  "horaEnvio": "17:21",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "14:20",
+    "actividad": "Revisión de impresoras y periféricos de atención",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "16:00",
+    "actividad": "Seguimiento de tiquetes y cierre del día",
+    "area": "Soporte",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": "Envío fuera de las 5:00 p. m."
+ },
+ {
+  "id": "BIT-2026-0070",
+  "fecha": "2026-09-22",
+  "direccion": "CHA",
+  "unidad": "Todo el departamento",
+  "responsable": "Mateo Martínez",
+  "estado": "Enviada",
+  "horaEnvio": "15:51",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "14:20",
+    "actividad": "Revisión de impresoras y periféricos de atención",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "16:00",
+    "actividad": "Seguimiento de tiquetes y cierre del día",
+    "area": "Soporte",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": ""
+ },
+ {
+  "id": "BIT-2026-0071",
+  "fecha": "2026-09-22",
+  "direccion": "CUS",
+  "unidad": "Todo el departamento",
+  "responsable": "Carlos González",
+  "estado": "Enviada",
+  "horaEnvio": "15:38",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "14:20",
+    "actividad": "Revisión de impresoras y periféricos de atención",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "16:00",
+    "actividad": "Seguimiento de tiquetes y cierre del día",
+    "area": "Soporte",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": ""
+ },
+ {
+  "id": "BIT-2026-0072",
+  "fecha": "2026-09-22",
+  "direccion": "LIB",
+  "unidad": "Todo el departamento",
+  "responsable": "Carlos González",
+  "estado": "Enviada",
+  "horaEnvio": "16:02",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "14:20",
+    "actividad": "Revisión de impresoras y periféricos de atención",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "16:00",
+    "actividad": "Seguimiento de tiquetes y cierre del día",
+    "area": "Soporte",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": ""
+ },
+ {
+  "id": "BIT-2026-0073",
+  "fecha": "2026-09-22",
+  "direccion": "PAZ",
+  "unidad": "Todo el departamento",
+  "responsable": "Carlos González",
+  "estado": "Enviada",
+  "horaEnvio": "16:19",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "14:20",
+    "actividad": "Revisión de impresoras y periféricos de atención",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "16:00",
+    "actividad": "Seguimiento de tiquetes y cierre del día",
+    "area": "Soporte",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": ""
+ },
+ {
+  "id": "BIT-2026-0074",
+  "fecha": "2026-09-22",
+  "direccion": "SS",
+  "unidad": "Registro de la Propiedad Raíz e Hipotecas",
+  "responsable": "Mateo Martínez",
+  "estado": "Enviada",
+  "horaEnvio": "16:27",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "14:20",
+    "actividad": "Revisión de impresoras y periféricos de atención",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "16:00",
+    "actividad": "Seguimiento de tiquetes y cierre del día",
+    "area": "Soporte",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": ""
+ },
+ {
+  "id": "BIT-2026-0075",
+  "fecha": "2026-09-22",
+  "direccion": "SS",
+  "unidad": "Instituto Geográfico y del Catastro Nacional (IGCN)",
+  "responsable": "Mateo Martínez",
+  "estado": "Enviada",
+  "horaEnvio": "16:44",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "14:20",
+    "actividad": "Revisión de impresoras y periféricos de atención",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "16:00",
+    "actividad": "Seguimiento de tiquetes y cierre del día",
+    "area": "Soporte",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": ""
+ },
+ {
+  "id": "BIT-2026-0076",
+  "fecha": "2026-09-22",
+  "direccion": "SS",
+  "unidad": "Registro de Garantías Mobiliarias",
+  "responsable": "Diana Portillo",
+  "estado": "Enviada",
+  "horaEnvio": "15:51",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "14:20",
+    "actividad": "Revisión de impresoras y periféricos de atención",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "16:00",
+    "actividad": "Seguimiento de tiquetes y cierre del día",
+    "area": "Soporte",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": ""
+ },
+ {
+  "id": "BIT-2026-0077",
+  "fecha": "2026-09-22",
+  "direccion": "SS",
+  "unidad": "Registro de Comercio",
+  "responsable": "Wendy Carranza",
+  "estado": "Enviada",
+  "horaEnvio": "15:38",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "14:20",
+    "actividad": "Revisión de impresoras y periféricos de atención",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "16:00",
+    "actividad": "Seguimiento de tiquetes y cierre del día",
+    "area": "Soporte",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": ""
+ },
+ {
+  "id": "BIT-2026-0078",
+  "fecha": "2026-09-22",
+  "direccion": "SS",
+  "unidad": "Instituto Salvadoreño de la Propiedad Intelectual (ISPI)",
+  "responsable": "Wendy Carranza",
+  "estado": "Enviada",
+  "horaEnvio": "16:02",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "14:20",
+    "actividad": "Revisión de impresoras y periféricos de atención",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "16:00",
+    "actividad": "Seguimiento de tiquetes y cierre del día",
+    "area": "Soporte",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": ""
+ },
+ {
+  "id": "BIT-2026-0079",
+  "fecha": "2026-09-22",
+  "direccion": "SV",
+  "unidad": "Todo el departamento",
+  "responsable": "Diana Portillo",
+  "estado": "Enviada",
+  "horaEnvio": "16:19",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "14:20",
+    "actividad": "Revisión de impresoras y periféricos de atención",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "16:00",
+    "actividad": "Seguimiento de tiquetes y cierre del día",
+    "area": "Soporte",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": ""
+ },
+ {
+  "id": "BIT-2026-0080",
+  "fecha": "2026-09-22",
+  "direccion": "MOR",
+  "unidad": "Todo el departamento",
+  "responsable": "Diana Portillo",
+  "estado": "Enviada",
+  "horaEnvio": "16:44",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "14:20",
+    "actividad": "Revisión de impresoras y periféricos de atención",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "16:00",
+    "actividad": "Seguimiento de tiquetes y cierre del día",
+    "area": "Soporte",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": ""
+ },
+ {
+  "id": "BIT-2026-0081",
+  "fecha": "2026-09-22",
+  "direccion": "SM",
+  "unidad": "Todo el departamento",
+  "responsable": "Diana Portillo",
+  "estado": "Enviada",
+  "horaEnvio": "15:51",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "14:20",
+    "actividad": "Revisión de impresoras y periféricos de atención",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "16:00",
+    "actividad": "Seguimiento de tiquetes y cierre del día",
+    "area": "Soporte",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": ""
+ },
+ {
+  "id": "BIT-2026-0082",
+  "fecha": "2026-09-22",
+  "direccion": "USU",
+  "unidad": "Todo el departamento",
+  "responsable": "Diana Portillo",
+  "estado": "Enviada",
+  "horaEnvio": "15:38",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "14:20",
+    "actividad": "Revisión de impresoras y periféricos de atención",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "16:00",
+    "actividad": "Seguimiento de tiquetes y cierre del día",
+    "area": "Soporte",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": ""
+ },
+ {
+  "id": "BIT-2026-0083",
+  "fecha": "2026-09-23",
+  "direccion": "AHU",
+  "unidad": "Todo el departamento",
+  "responsable": "Wendy Carranza",
+  "estado": "Enviada",
+  "horaEnvio": "16:19",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "14:20",
+    "actividad": "Revisión de impresoras y periféricos de atención",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "16:00",
+    "actividad": "Seguimiento de tiquetes y cierre del día",
+    "area": "Soporte",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": ""
+ },
+ {
+  "id": "BIT-2026-0084",
+  "fecha": "2026-09-23",
+  "direccion": "STA",
+  "unidad": "Todo el departamento",
+  "responsable": "Wendy Carranza",
+  "estado": "Enviada",
+  "horaEnvio": "16:27",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Presenta falla",
+    "descripcionFalla": "El kiosko de autoconsulta no responde al tacto en la zona inferior de la pantalla.",
+    "accionRealizada": "Se recalibró la pantalla y se limpió el sensor; quedó operando con normalidad.",
+    "estadoFinal": "Resuelto",
+    "evidencia": "foto-kiosko-autoconsulta.jpg"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "14:20",
+    "actividad": "Revisión de impresoras y periféricos de atención",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "16:00",
+    "actividad": "Seguimiento de tiquetes y cierre del día",
+    "area": "Soporte",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": ""
+ },
+ {
+  "id": "BIT-2026-0085",
+  "fecha": "2026-09-23",
+  "direccion": "SON",
+  "unidad": "Todo el departamento",
+  "responsable": "Mateo Martínez",
+  "estado": "Enviada",
+  "horaEnvio": "16:44",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "14:20",
+    "actividad": "Revisión de impresoras y periféricos de atención",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "16:00",
+    "actividad": "Seguimiento de tiquetes y cierre del día",
+    "area": "Soporte",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": ""
+ },
+ {
+  "id": "BIT-2026-0086",
+  "fecha": "2026-09-23",
+  "direccion": "CAB",
+  "unidad": "Todo el departamento",
+  "responsable": "Mateo Martínez",
+  "estado": "Enviada",
+  "horaEnvio": "15:51",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "14:20",
+    "actividad": "Revisión de impresoras y periféricos de atención",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "16:00",
+    "actividad": "Seguimiento de tiquetes y cierre del día",
+    "area": "Soporte",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": ""
+ },
+ {
+  "id": "BIT-2026-0087",
+  "fecha": "2026-09-23",
+  "direccion": "CHA",
+  "unidad": "Todo el departamento",
+  "responsable": "Mateo Martínez",
+  "estado": "Enviada",
+  "horaEnvio": "15:38",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "14:20",
+    "actividad": "Revisión de impresoras y periféricos de atención",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "16:00",
+    "actividad": "Seguimiento de tiquetes y cierre del día",
+    "area": "Soporte",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": ""
+ },
+ {
+  "id": "BIT-2026-0088",
+  "fecha": "2026-09-23",
+  "direccion": "CUS",
+  "unidad": "Todo el departamento",
+  "responsable": "Carlos González",
+  "estado": "Enviada",
+  "horaEnvio": "16:02",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "14:20",
+    "actividad": "Revisión de impresoras y periféricos de atención",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "16:00",
+    "actividad": "Seguimiento de tiquetes y cierre del día",
+    "area": "Soporte",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": ""
+ },
+ {
+  "id": "BIT-2026-0089",
+  "fecha": "2026-09-23",
+  "direccion": "LIB",
+  "unidad": "Todo el departamento",
+  "responsable": "Carlos González",
+  "estado": "Enviada",
+  "horaEnvio": "16:19",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "14:20",
+    "actividad": "Revisión de impresoras y periféricos de atención",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "16:00",
+    "actividad": "Seguimiento de tiquetes y cierre del día",
+    "area": "Soporte",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": ""
+ },
+ {
+  "id": "BIT-2026-0090",
+  "fecha": "2026-09-23",
+  "direccion": "PAZ",
+  "unidad": "Todo el departamento",
+  "responsable": "Carlos González",
+  "estado": "Enviada",
+  "horaEnvio": "16:27",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "14:20",
+    "actividad": "Revisión de impresoras y periféricos de atención",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "16:00",
+    "actividad": "Seguimiento de tiquetes y cierre del día",
+    "area": "Soporte",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": ""
+ },
+ {
+  "id": "BIT-2026-0091",
+  "fecha": "2026-09-23",
+  "direccion": "SS",
+  "unidad": "Registro de la Propiedad Raíz e Hipotecas",
+  "responsable": "Mateo Martínez",
+  "estado": "Enviada",
+  "horaEnvio": "16:44",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "14:20",
+    "actividad": "Revisión de impresoras y periféricos de atención",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "16:00",
+    "actividad": "Seguimiento de tiquetes y cierre del día",
+    "area": "Soporte",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": ""
+ },
+ {
+  "id": "BIT-2026-0092",
+  "fecha": "2026-09-23",
+  "direccion": "SS",
+  "unidad": "Instituto Geográfico y del Catastro Nacional (IGCN)",
+  "responsable": "Mateo Martínez",
+  "estado": "Enviada",
+  "horaEnvio": "15:51",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "14:20",
+    "actividad": "Revisión de impresoras y periféricos de atención",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "16:00",
+    "actividad": "Seguimiento de tiquetes y cierre del día",
+    "area": "Soporte",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": ""
+ },
+ {
+  "id": "BIT-2026-0093",
+  "fecha": "2026-09-23",
+  "direccion": "SS",
+  "unidad": "Registro de Garantías Mobiliarias",
+  "responsable": "Diana Portillo",
+  "estado": "Enviada",
+  "horaEnvio": "15:38",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "14:20",
+    "actividad": "Revisión de impresoras y periféricos de atención",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "16:00",
+    "actividad": "Seguimiento de tiquetes y cierre del día",
+    "area": "Soporte",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": ""
+ },
+ {
+  "id": "BIT-2026-0094",
+  "fecha": "2026-09-23",
+  "direccion": "SS",
+  "unidad": "Registro de Comercio",
+  "responsable": "Wendy Carranza",
+  "estado": "Enviada",
+  "horaEnvio": "16:02",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "14:20",
+    "actividad": "Revisión de impresoras y periféricos de atención",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "16:00",
+    "actividad": "Seguimiento de tiquetes y cierre del día",
+    "area": "Soporte",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": ""
+ },
+ {
+  "id": "BIT-2026-0095",
+  "fecha": "2026-09-23",
+  "direccion": "SS",
+  "unidad": "Instituto Salvadoreño de la Propiedad Intelectual (ISPI)",
+  "responsable": "Wendy Carranza",
+  "estado": "Enviada",
+  "horaEnvio": "16:19",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "14:20",
+    "actividad": "Revisión de impresoras y periféricos de atención",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "16:00",
+    "actividad": "Seguimiento de tiquetes y cierre del día",
+    "area": "Soporte",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": ""
+ },
+ {
+  "id": "BIT-2026-0096",
+  "fecha": "2026-09-23",
+  "direccion": "SV",
+  "unidad": "Todo el departamento",
+  "responsable": "Diana Portillo",
+  "estado": "Enviada",
+  "horaEnvio": "16:27",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "14:20",
+    "actividad": "Revisión de impresoras y periféricos de atención",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "16:00",
+    "actividad": "Seguimiento de tiquetes y cierre del día",
+    "area": "Soporte",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": ""
+ },
+ {
+  "id": "BIT-2026-0097",
+  "fecha": "2026-09-23",
+  "direccion": "MOR",
+  "unidad": "Todo el departamento",
+  "responsable": "Diana Portillo",
+  "estado": "Enviada",
+  "horaEnvio": "15:51",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "14:20",
+    "actividad": "Revisión de impresoras y periféricos de atención",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "16:00",
+    "actividad": "Seguimiento de tiquetes y cierre del día",
+    "area": "Soporte",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": ""
+ },
+ {
+  "id": "BIT-2026-0098",
+  "fecha": "2026-09-23",
+  "direccion": "SM",
+  "unidad": "Todo el departamento",
+  "responsable": "Diana Portillo",
+  "estado": "Enviada",
+  "horaEnvio": "15:38",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "14:20",
+    "actividad": "Revisión de impresoras y periféricos de atención",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "16:00",
+    "actividad": "Seguimiento de tiquetes y cierre del día",
+    "area": "Soporte",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": ""
+ },
+ {
+  "id": "BIT-2026-0099",
+  "fecha": "2026-09-23",
+  "direccion": "USU",
+  "unidad": "Todo el departamento",
+  "responsable": "Diana Portillo",
+  "estado": "Enviada",
+  "horaEnvio": "16:02",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "14:20",
+    "actividad": "Revisión de impresoras y periféricos de atención",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "16:00",
+    "actividad": "Seguimiento de tiquetes y cierre del día",
+    "area": "Soporte",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": ""
+ },
+ {
+  "id": "BIT-2026-0100",
+  "fecha": "2026-09-24",
+  "direccion": "AHU",
+  "unidad": "Todo el departamento",
+  "responsable": "Wendy Carranza",
+  "estado": "Enviada",
+  "horaEnvio": "16:27",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "14:20",
+    "actividad": "Revisión de impresoras y periféricos de atención",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "16:00",
+    "actividad": "Seguimiento de tiquetes y cierre del día",
+    "area": "Soporte",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": ""
+ },
+ {
+  "id": "BIT-2026-0101",
+  "fecha": "2026-09-24",
+  "direccion": "STA",
+  "unidad": "Todo el departamento",
+  "responsable": "Wendy Carranza",
+  "estado": "Enviada",
+  "horaEnvio": "16:44",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "14:20",
+    "actividad": "Revisión de impresoras y periféricos de atención",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "16:00",
+    "actividad": "Seguimiento de tiquetes y cierre del día",
+    "area": "Soporte",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": ""
+ },
+ {
+  "id": "BIT-2026-0102",
+  "fecha": "2026-09-24",
+  "direccion": "SON",
+  "unidad": "Todo el departamento",
+  "responsable": "Mateo Martínez",
+  "estado": "Enviada",
+  "horaEnvio": "15:51",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "14:20",
+    "actividad": "Revisión de impresoras y periféricos de atención",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "16:00",
+    "actividad": "Seguimiento de tiquetes y cierre del día",
+    "area": "Soporte",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": ""
+ },
+ {
+  "id": "BIT-2026-0103",
+  "fecha": "2026-09-24",
+  "direccion": "CAB",
+  "unidad": "Todo el departamento",
+  "responsable": "Mateo Martínez",
+  "estado": "Enviada",
+  "horaEnvio": "15:38",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "14:20",
+    "actividad": "Revisión de impresoras y periféricos de atención",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "16:00",
+    "actividad": "Seguimiento de tiquetes y cierre del día",
+    "area": "Soporte",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": ""
+ },
+ {
+  "id": "BIT-2026-0104",
+  "fecha": "2026-09-24",
+  "direccion": "CHA",
+  "unidad": "Todo el departamento",
+  "responsable": "Mateo Martínez",
+  "estado": "Enviada",
+  "horaEnvio": "16:02",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "14:20",
+    "actividad": "Revisión de impresoras y periféricos de atención",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "16:00",
+    "actividad": "Seguimiento de tiquetes y cierre del día",
+    "area": "Soporte",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": ""
+ },
+ {
+  "id": "BIT-2026-0105",
+  "fecha": "2026-09-24",
+  "direccion": "CUS",
+  "unidad": "Todo el departamento",
+  "responsable": "Carlos González",
+  "estado": "Enviada",
+  "horaEnvio": "16:19",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "14:20",
+    "actividad": "Revisión de impresoras y periféricos de atención",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "16:00",
+    "actividad": "Seguimiento de tiquetes y cierre del día",
+    "area": "Soporte",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": ""
+ },
+ {
+  "id": "BIT-2026-0106",
+  "fecha": "2026-09-24",
+  "direccion": "LIB",
+  "unidad": "Todo el departamento",
+  "responsable": "Carlos González",
+  "estado": "Enviada",
+  "horaEnvio": "16:27",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "14:20",
+    "actividad": "Revisión de impresoras y periféricos de atención",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "16:00",
+    "actividad": "Seguimiento de tiquetes y cierre del día",
+    "area": "Soporte",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": ""
+ },
+ {
+  "id": "BIT-2026-0107",
+  "fecha": "2026-09-24",
+  "direccion": "PAZ",
+  "unidad": "Todo el departamento",
+  "responsable": "Carlos González",
+  "estado": "Enviada",
+  "horaEnvio": "16:44",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "14:20",
+    "actividad": "Revisión de impresoras y periféricos de atención",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "16:00",
+    "actividad": "Seguimiento de tiquetes y cierre del día",
+    "area": "Soporte",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": ""
+ },
+ {
+  "id": "BIT-2026-0108",
+  "fecha": "2026-09-24",
+  "direccion": "SS",
+  "unidad": "Registro de la Propiedad Raíz e Hipotecas",
+  "responsable": "Mateo Martínez",
+  "estado": "Enviada",
+  "horaEnvio": "15:51",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "14:20",
+    "actividad": "Revisión de impresoras y periféricos de atención",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "16:00",
+    "actividad": "Seguimiento de tiquetes y cierre del día",
+    "area": "Soporte",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": ""
+ },
+ {
+  "id": "BIT-2026-0109",
+  "fecha": "2026-09-24",
+  "direccion": "SS",
+  "unidad": "Instituto Geográfico y del Catastro Nacional (IGCN)",
+  "responsable": "Mateo Martínez",
+  "estado": "Enviada",
+  "horaEnvio": "15:38",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "14:20",
+    "actividad": "Revisión de impresoras y periféricos de atención",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "16:00",
+    "actividad": "Seguimiento de tiquetes y cierre del día",
+    "area": "Soporte",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": ""
+ },
+ {
+  "id": "BIT-2026-0110",
+  "fecha": "2026-09-24",
+  "direccion": "SS",
+  "unidad": "Registro de Garantías Mobiliarias",
+  "responsable": "Diana Portillo",
+  "estado": "Enviada",
+  "horaEnvio": "16:02",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "14:20",
+    "actividad": "Revisión de impresoras y periféricos de atención",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "16:00",
+    "actividad": "Seguimiento de tiquetes y cierre del día",
+    "area": "Soporte",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": ""
+ },
+ {
+  "id": "BIT-2026-0111",
+  "fecha": "2026-09-24",
+  "direccion": "SS",
+  "unidad": "Registro de Comercio",
+  "responsable": "Wendy Carranza",
+  "estado": "Enviada",
+  "horaEnvio": "16:19",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "14:20",
+    "actividad": "Revisión de impresoras y periféricos de atención",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "16:00",
+    "actividad": "Seguimiento de tiquetes y cierre del día",
+    "area": "Soporte",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": ""
+ },
+ {
+  "id": "BIT-2026-0112",
+  "fecha": "2026-09-24",
+  "direccion": "SS",
+  "unidad": "Instituto Salvadoreño de la Propiedad Intelectual (ISPI)",
+  "responsable": "Wendy Carranza",
+  "estado": "Enviada",
+  "horaEnvio": "16:27",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "14:20",
+    "actividad": "Revisión de impresoras y periféricos de atención",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "16:00",
+    "actividad": "Seguimiento de tiquetes y cierre del día",
+    "area": "Soporte",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": ""
+ },
+ {
+  "id": "BIT-2026-0113",
+  "fecha": "2026-09-24",
+  "direccion": "SV",
+  "unidad": "Todo el departamento",
+  "responsable": "Diana Portillo",
+  "estado": "Enviada",
+  "horaEnvio": "16:44",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "14:20",
+    "actividad": "Revisión de impresoras y periféricos de atención",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "16:00",
+    "actividad": "Seguimiento de tiquetes y cierre del día",
+    "area": "Soporte",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": ""
+ },
+ {
+  "id": "BIT-2026-0114",
+  "fecha": "2026-09-24",
+  "direccion": "MOR",
+  "unidad": "Todo el departamento",
+  "responsable": "Diana Portillo",
+  "estado": "Enviada",
+  "horaEnvio": "15:38",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "14:20",
+    "actividad": "Revisión de impresoras y periféricos de atención",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "16:00",
+    "actividad": "Seguimiento de tiquetes y cierre del día",
+    "area": "Soporte",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": ""
+ },
+ {
+  "id": "BIT-2026-0115",
+  "fecha": "2026-09-24",
+  "direccion": "SM",
+  "unidad": "Todo el departamento",
+  "responsable": "Diana Portillo",
+  "estado": "Enviada",
+  "horaEnvio": "16:02",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "14:20",
+    "actividad": "Revisión de impresoras y periféricos de atención",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "16:00",
+    "actividad": "Seguimiento de tiquetes y cierre del día",
+    "area": "Soporte",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": ""
+ },
+ {
+  "id": "BIT-2026-0116",
+  "fecha": "2026-09-24",
+  "direccion": "USU",
+  "unidad": "Todo el departamento",
+  "responsable": "Diana Portillo",
+  "estado": "Enviada",
+  "horaEnvio": "16:19",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "14:20",
+    "actividad": "Revisión de impresoras y periféricos de atención",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "16:00",
+    "actividad": "Seguimiento de tiquetes y cierre del día",
+    "area": "Soporte",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": ""
+ },
+ {
+  "id": "BIT-2026-0117",
+  "fecha": "2026-09-25",
+  "direccion": "AHU",
+  "unidad": "Todo el departamento",
+  "responsable": "Wendy Carranza",
+  "estado": "Enviada",
+  "horaEnvio": "16:12",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "14:20",
+    "actividad": "Revisión de impresoras y periféricos de atención",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "16:00",
+    "actividad": "Seguimiento de tiquetes y cierre del día",
+    "area": "Soporte",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": ""
+ },
+ {
+  "id": "BIT-2026-0118",
+  "fecha": "2026-09-25",
+  "direccion": "SON",
+  "unidad": "Todo el departamento",
+  "responsable": "Mateo Martínez",
+  "estado": "Enviada tarde",
+  "horaEnvio": "17:34",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "14:20",
+    "actividad": "Revisión de impresoras y periféricos de atención",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "16:00",
+    "actividad": "Seguimiento de tiquetes y cierre del día",
+    "area": "Soporte",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": "Envío fuera de las 5:00 p. m. por atención de falla en el tomaturno."
+ },
+ {
+  "id": "BIT-2026-0119",
+  "fecha": "2026-09-25",
+  "direccion": "CAB",
+  "unidad": "Todo el departamento",
+  "responsable": "Mateo Martínez",
+  "estado": "Observada",
+  "horaEnvio": "16:55",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "14:20",
+    "actividad": "Revisión de impresoras y periféricos de atención",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "16:00",
+    "actividad": "Seguimiento de tiquetes y cierre del día",
+    "area": "Soporte",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": "Devuelta por el Encargado: la falla del kiosko quedó sin estado final."
+ },
+ {
+  "id": "BIT-2026-0120",
+  "fecha": "2026-09-25",
+  "direccion": "CHA",
+  "unidad": "Todo el departamento",
+  "responsable": "Mateo Martínez",
+  "estado": "Vencida",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": ""
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": ""
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": ""
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": ""
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": ""
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": ""
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": ""
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": ""
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": ""
+   }
+  ],
+  "actividades": [],
+  "observaciones": "El día hábil cerró sin envío de la bitácora."
+ },
+ {
+  "id": "BIT-2026-0121",
+  "fecha": "2026-09-25",
+  "direccion": "CUS",
+  "unidad": "Todo el departamento",
+  "responsable": "Carlos González",
+  "estado": "Enviada",
+  "horaEnvio": "16:30",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "14:20",
+    "actividad": "Revisión de impresoras y periféricos de atención",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "16:00",
+    "actividad": "Seguimiento de tiquetes y cierre del día",
+    "area": "Soporte",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": ""
+ },
+ {
+  "id": "BIT-2026-0122",
+  "fecha": "2026-09-25",
+  "direccion": "LIB",
+  "unidad": "Todo el departamento",
+  "responsable": "Carlos González",
+  "estado": "Observada",
+  "horaEnvio": "16:48",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "14:20",
+    "actividad": "Revisión de impresoras y periféricos de atención",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "16:00",
+    "actividad": "Seguimiento de tiquetes y cierre del día",
+    "area": "Soporte",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": "Devuelta por el Encargado: falta detalle de la acción sobre las impresoras de atención al público."
+ },
+ {
+  "id": "BIT-2026-0123",
+  "fecha": "2026-09-25",
+  "direccion": "PAZ",
+  "unidad": "Todo el departamento",
+  "responsable": "Carlos González",
+  "estado": "Cerrada",
+  "horaEnvio": "15:40",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "14:20",
+    "actividad": "Revisión de impresoras y periféricos de atención",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "16:00",
+    "actividad": "Seguimiento de tiquetes y cierre del día",
+    "area": "Soporte",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": "Revisada y cerrada por el Encargado de Soporte."
+ },
+ {
+  "id": "BIT-2026-0124",
+  "fecha": "2026-09-25",
+  "direccion": "SS",
+  "unidad": "Instituto Geográfico y del Catastro Nacional (IGCN)",
+  "responsable": "Mateo Martínez",
+  "estado": "Enviada",
+  "horaEnvio": "16:05",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Presenta falla",
+    "descripcionFalla": "El kiosko de autoconsulta no responde al tacto en la zona inferior de la pantalla.",
+    "accionRealizada": "Se recalibró la pantalla y se limpió el sensor; quedó operando con normalidad.",
+    "estadoFinal": "Resuelto",
+    "evidencia": "foto-kiosko-autoconsulta.jpg"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "14:20",
+    "actividad": "Revisión de impresoras y periféricos de atención",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "16:00",
+    "actividad": "Seguimiento de tiquetes y cierre del día",
+    "area": "Soporte",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": ""
+ },
+ {
+  "id": "BIT-2026-0125",
+  "fecha": "2026-09-25",
+  "direccion": "SS",
+  "unidad": "Registro de Garantías Mobiliarias",
+  "responsable": "Diana Portillo",
+  "estado": "Vencida",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": ""
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": ""
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": ""
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": ""
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": ""
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": ""
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": ""
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": ""
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": ""
+   }
+  ],
+  "actividades": [],
+  "observaciones": "El día hábil cerró sin envío de la bitácora."
+ },
+ {
+  "id": "BIT-2026-0126",
+  "fecha": "2026-09-25",
+  "direccion": "SS",
+  "unidad": "Registro de Comercio",
+  "responsable": "Wendy Carranza",
+  "estado": "Enviada",
+  "horaEnvio": "15:52",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "14:20",
+    "actividad": "Revisión de impresoras y periféricos de atención",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "16:00",
+    "actividad": "Seguimiento de tiquetes y cierre del día",
+    "area": "Soporte",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": ""
+ },
+ {
+  "id": "BIT-2026-0127",
+  "fecha": "2026-09-25",
+  "direccion": "SS",
+  "unidad": "Instituto Salvadoreño de la Propiedad Intelectual (ISPI)",
+  "responsable": "Wendy Carranza",
+  "estado": "Enviada",
+  "horaEnvio": "16:20",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "14:20",
+    "actividad": "Revisión de impresoras y periféricos de atención",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "16:00",
+    "actividad": "Seguimiento de tiquetes y cierre del día",
+    "area": "Soporte",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": ""
+ },
+ {
+  "id": "BIT-2026-0128",
+  "fecha": "2026-09-25",
+  "direccion": "SV",
+  "unidad": "Todo el departamento",
+  "responsable": "Diana Portillo",
+  "estado": "Enviada",
+  "horaEnvio": "16:18",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "14:20",
+    "actividad": "Revisión de impresoras y periféricos de atención",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "16:00",
+    "actividad": "Seguimiento de tiquetes y cierre del día",
+    "area": "Soporte",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": ""
+ },
+ {
+  "id": "BIT-2026-0129",
+  "fecha": "2026-09-25",
+  "direccion": "MOR",
+  "unidad": "Todo el departamento",
+  "responsable": "Diana Portillo",
+  "estado": "Vencida",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": ""
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": ""
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": ""
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": ""
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": ""
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": ""
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": ""
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": ""
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": ""
+   }
+  ],
+  "actividades": [],
+  "observaciones": "El día hábil cerró sin envío de la bitácora."
+ },
+ {
+  "id": "BIT-2026-0130",
+  "fecha": "2026-09-25",
+  "direccion": "SM",
+  "unidad": "Todo el departamento",
+  "responsable": "Diana Portillo",
+  "estado": "Enviada",
+  "horaEnvio": "15:58",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "14:20",
+    "actividad": "Revisión de impresoras y periféricos de atención",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "16:00",
+    "actividad": "Seguimiento de tiquetes y cierre del día",
+    "area": "Soporte",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": ""
+ },
+ {
+  "id": "BIT-2026-0131",
+  "fecha": "2026-09-25",
+  "direccion": "USU",
+  "unidad": "Todo el departamento",
+  "responsable": "Diana Portillo",
+  "estado": "Enviada",
+  "horaEnvio": "16:41",
+  "revision": [
+   {
+    "elemento": "Equipos de técnicos",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Equipos de consulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Pantallas informativas",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Kioskos de autoconsulta",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Audio de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Sistema de tomaturno",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Impresoras de atención al público",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Red y conectividad básica",
+    "estado": "Funciona correctamente"
+   },
+   {
+    "elemento": "Periféricos relevantes",
+    "estado": "Funciona correctamente"
+   }
+  ],
+  "actividades": [
+   {
+    "hora": "08:15",
+    "actividad": "Verificación de arranque de equipos de atención al público",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "10:30",
+    "actividad": "Atención a usuarios y soporte en sitio",
+    "area": "Ventanillas",
+    "resultado": "Atendido",
+    "observaciones": ""
+   },
+   {
+    "hora": "14:20",
+    "actividad": "Revisión de impresoras y periféricos de atención",
+    "area": "Salas de atención",
+    "resultado": "Sin novedades",
+    "observaciones": ""
+   },
+   {
+    "hora": "16:00",
+    "actividad": "Seguimiento de tiquetes y cierre del día",
+    "area": "Soporte",
+    "resultado": "Al día",
+    "observaciones": ""
+   }
+  ],
+  "observaciones": ""
  }
 ]

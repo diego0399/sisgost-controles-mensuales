@@ -13,6 +13,7 @@ export const routes: Routes = [
       { path: 'panel', canActivate: [roleGuard], loadComponent: () => import('./features/panel/panel.component').then((m) => m.PanelComponent) },
       { path: 'calendario', canActivate: [roleGuard], loadComponent: () => import('./features/calendario/calendario.component').then((m) => m.CalendarioComponent) },
       { path: 'historial', canActivate: [roleGuard], loadComponent: () => import('./features/historial/historial.component').then((m) => m.HistorialComponent) },
+      { path: 'mapa-bitacoras', canActivate: [roleGuard], loadComponent: () => import('./features/mapa-bitacoras/mapa-bitacoras.component').then((m) => m.MapaBitacorasComponent) },
       { path: 'controles', canActivate: [roleGuard], loadComponent: () => import('./features/controles/controles.component').then((m) => m.ControlesComponent) },
       // La ruta del detalle por Dirección va ANTES que `controles/:id`: si no, `:id` la capturaría.
       { path: 'controles/direccion/:direccion/:unidad', canActivate: [roleGuard], loadComponent: () => import('./features/controles/direccion-detalle.component').then((m) => m.DireccionDetalleComponent) },
