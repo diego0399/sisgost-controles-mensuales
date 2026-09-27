@@ -1,12 +1,9 @@
 /**
- * Módulos del ecosistema SISGOST. Los dos prototipos son sistemas Angular independientes que
- * comparten datos base (usuarios, Direcciones/Registros, distribución de soportes y equipos),
- * así que la navegación entre ellos es un enlace: si Gestión de Equipos está levantado en su
- * puerto, el enlace abre ese módulo; si no, el enlace queda como muestra de la integración.
- *
- * `URL_GESTION_EQUIPOS` es lo único que hay que cambiar para apuntar a otro despliegue.
+ * Módulos del ecosistema SISGOST.
+ * Ambos prototipos son aplicaciones Angular independientes desplegadas en Vercel.
+ * Los botones de Gestión de Equipos redirigen al despliegue principal de SISGOST.
  */
-export const URL_GESTION_EQUIPOS = 'http://localhost:4200/';
+export const URL_GESTION_EQUIPOS = 'https://prototipo-angular-three.vercel.app/';
 
 export interface ModuloSisgost {
   clave: 'equipos' | 'controles';
