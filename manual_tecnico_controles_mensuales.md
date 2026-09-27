@@ -379,9 +379,9 @@ Gestión de Equipos):
 
 | ID | Forma | Ejemplo |
 |---|---|---|
-| `tecnicoId` | slug del nombre | `wendy-carranza` |
+| `tecnicoId` | slug del nombre | `laura-mendez` |
 | `direccionId` | id del catálogo | `SS` |
-| `unidadId` | `<direccionId>::<slug(unidad)>` | `SS::SS-RC` |
+| `unidadId` | `<direccionId>::<slug(unidad)>` | `SS::SS-DLG` |
 
 `idDireccion()` acepta el id, la forma corta o el nombre institucional, de modo que quien consulta
 puede seguir pasando lo que tenga a mano; lo que se **guarda y se compara** es siempre el id.
@@ -498,7 +498,7 @@ configuración; el resto es la flota histórica de las mismas Direcciones/Regist
 responsable resuelto por la distribución compartida. Cada equipo activo lleva su **IP** y su
 **MAC**, con un segmento de red por Dirección/Registro: es lo que el F0387 verifica cada semana.
 
-La unidad **Dirección de Registros / Archivo Registral** queda sin soporte asignado a propósito
+La unidad **Dirección de Servicios / Archivo Central** queda sin soporte asignado a propósito
 (su asignación se desactivó el 31/07/2026): así el panel muestra la alerta de Dirección/Registro sin
 responsable y de equipos activos sin soporte.
 

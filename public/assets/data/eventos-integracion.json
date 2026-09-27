@@ -16,14 +16,14 @@
    "marca": "Dell",
    "modelo": "OptiPlex 7020",
    "serie": "SER-CPU-7020-029",
-   "nombreEquipo": "CNR-Instituto Geográfico y del Catastro Nacional (IGCN)-D0954",
+   "nombreEquipo": "EQ-Dirección Operativa (DOP)-D0954",
    "usuarioFinal": "J. Portillo",
    "carne": "04655",
-   "correoInstitucional": "jportillo@cnr.gob.sv",
+   "correoInstitucional": "jportillo@sisgost.demo",
    "direccion": "SS",
-   "unidad": "Instituto Geográfico y del Catastro Nacional (IGCN)",
-   "tecnicoConfiguracion": "Wendy Carranza — Técnico de Soporte",
-   "soporteResponsable": "Mateo Martínez — Técnico de Soporte",
+   "unidad": "Dirección Operativa (DOP)",
+   "tecnicoConfiguracion": "Laura Méndez — Técnico de Soporte",
+   "soporteResponsable": "Diego Ramos — Técnico de Soporte",
    "fechaAceptacion": "2026-08-12",
    "expediente": "SOL-2026-0141",
    "expedienteUnico": "EXP-2026-0002",
@@ -34,7 +34,7 @@
    "mac": "00:1B:B8:6A:D6:D1",
    "zonaId": "ZCEN",
    "departamentoId": "SS",
-   "direccionRegistroId": "SS-IGCN"
+   "direccionRegistroId": "SS-DOP"
   }
  },
  {
@@ -54,14 +54,14 @@
    "marca": "HP",
    "modelo": "EliteBook 840 G11",
    "serie": "SER-LT-840G11-035",
-   "nombreEquipo": "CNR-GT-L1201",
+   "nombreEquipo": "EQ-GT-L1201",
    "usuarioFinal": "K. Rivas",
    "carne": "05301",
-   "correoInstitucional": "krivas@cnr.gob.sv",
+   "correoInstitucional": "krivas@sisgost.demo",
    "direccion": "SS",
-   "unidad": "Registro de Garantías Mobiliarias",
-   "tecnicoConfiguracion": "Wendy Carranza — Técnico de Soporte",
-   "soporteResponsable": "Wendy Carranza — Técnico de Soporte",
+   "unidad": "Unidad de Servicios Institucionales",
+   "tecnicoConfiguracion": "Laura Méndez — Técnico de Soporte",
+   "soporteResponsable": "Laura Méndez — Técnico de Soporte",
    "fechaAceptacion": "2026-08-14",
    "expediente": "SOL-2026-0155",
    "expedienteUnico": "EXP-2026-0004",
@@ -72,7 +72,7 @@
    "mac": "00:1B:81:ED:54:81",
    "zonaId": "ZCEN",
    "departamentoId": "SS",
-   "direccionRegistroId": "SS-RGM"
+   "direccionRegistroId": "SS-USI"
   }
  },
  {
@@ -92,13 +92,13 @@
    "marca": "HP",
    "modelo": "ProDesk 400 G4",
    "serie": "SER-CPU-HP400-019",
-   "nombreEquipo": "CNR-AR-D0470",
+   "nombreEquipo": "EQ-AR-D0470",
    "usuarioFinal": "Equipo de consulta — Archivo",
    "carne": "—",
    "correoInstitucional": "",
    "direccion": "CAB",
-   "unidad": "Instituto Geográfico y del Catastro Nacional (IGCN)",
-   "tecnicoConfiguracion": "Wendy Carranza — Técnico de Soporte",
+   "unidad": "Dirección Operativa (DOP)",
+   "tecnicoConfiguracion": "Laura Méndez — Técnico de Soporte",
    "soporteResponsable": "",
    "fechaAceptacion": "2023-07-18",
    "expediente": "SOL-2023-0130",
@@ -110,7 +110,7 @@
    "mac": "00:1B:49:9E:69:2D",
    "zonaId": "ZCEN",
    "departamentoId": "CAB",
-   "direccionRegistroId": "CAB-IGCN"
+   "direccionRegistroId": "CAB-DOP"
   }
  },
  {
@@ -130,14 +130,14 @@
    "marca": "Dell",
    "modelo": "OptiPlex 7010",
    "serie": "SER-CPU-7010-040",
-   "nombreEquipo": "CNR-RP-D1300",
+   "nombreEquipo": "EQ-RP-D1300",
    "usuarioFinal": "L. Vaquerano",
    "carne": "05288",
-   "correoInstitucional": "lvaquerano@cnr.gob.sv",
+   "correoInstitucional": "lvaquerano@sisgost.demo",
    "direccion": "SS",
-   "unidad": "Registro de la Propiedad Raíz e Hipotecas",
-   "tecnicoConfiguracion": "Diana Portillo — Técnico de Soporte",
-   "soporteResponsable": "Diana Portillo — Técnico de Soporte",
+   "unidad": "Dirección Administrativa",
+   "tecnicoConfiguracion": "Sofía Rivera — Técnico de Soporte",
+   "soporteResponsable": "Sofía Rivera — Técnico de Soporte",
    "fechaAceptacion": "2026-08-15",
    "expediente": "SOL-2026-0163",
    "expedienteUnico": "EXP-2026-0023",
@@ -148,7 +148,7 @@
    "mac": "00:1B:C1:41:81:E7",
    "zonaId": "ZCEN",
    "departamentoId": "SS",
-   "direccionRegistroId": "SS-RPRH"
+   "direccionRegistroId": "SS-DAD"
   }
  },
  {
@@ -168,14 +168,14 @@
    "marca": "Dell",
    "modelo": "OptiPlex 7010",
    "serie": "SER-CPU-7010-040",
-   "nombreEquipo": "CNR-DR-D1300",
+   "nombreEquipo": "EQ-DR-D1300",
    "usuarioFinal": "J. Ramírez",
    "carne": "05155",
-   "correoInstitucional": "jramírez@cnr.gob.sv",
+   "correoInstitucional": "jramírez@sisgost.demo",
    "direccion": "STA",
-   "unidad": "Registro de la Propiedad Raíz e Hipotecas",
-   "tecnicoConfiguracion": "Wendy Carranza — Técnico de Soporte",
-   "soporteResponsable": "Mateo Martínez — Técnico de Soporte",
+   "unidad": "Dirección Administrativa",
+   "tecnicoConfiguracion": "Laura Méndez — Técnico de Soporte",
+   "soporteResponsable": "Diego Ramos — Técnico de Soporte",
    "fechaAceptacion": "2026-06-25",
    "expediente": "SOL-2026-0150",
    "expedienteUnico": "EXP-2026-0021",
@@ -186,7 +186,7 @@
    "mac": "00:1B:C1:41:81:E7",
    "zonaId": "ZOC",
    "departamentoId": "STA",
-   "direccionRegistroId": "STA-RPRH"
+   "direccionRegistroId": "STA-DAD"
   }
  },
  {
@@ -206,14 +206,14 @@
    "marca": "Lenovo",
    "modelo": "ThinkPad E14",
    "serie": "PF3XK8LM",
-   "nombreEquipo": "CNR-RC-L0871",
+   "nombreEquipo": "EQ-DLG-L0871",
    "usuarioFinal": "C. Escobar",
    "carne": "02901",
-   "correoInstitucional": "cescobar@cnr.gob.sv",
+   "correoInstitucional": "cescobar@sisgost.demo",
    "direccion": "SS",
-   "unidad": "Registro de Comercio",
-   "tecnicoConfiguracion": "Wendy Carranza — Técnico de Soporte",
-   "soporteResponsable": "Wendy Carranza — Técnico de Soporte",
+   "unidad": "Dirección Legal",
+   "tecnicoConfiguracion": "Laura Méndez — Técnico de Soporte",
+   "soporteResponsable": "Laura Méndez — Técnico de Soporte",
    "fechaAceptacion": "2026-06-30",
    "expediente": "SOL-2026-0139",
    "expedienteUnico": "EXP-2026-0001",
@@ -224,7 +224,7 @@
    "mac": "00:1B:7F:2A:A3:CE",
    "zonaId": "ZCEN",
    "departamentoId": "SS",
-   "direccionRegistroId": "SS-RC"
+   "direccionRegistroId": "SS-DLG"
   }
  },
  {
@@ -247,11 +247,11 @@
    "nombreEquipo": "",
    "usuarioFinal": "L. Chacón",
    "carne": "04773",
-   "correoInstitucional": "lchacon@cnr.gob.sv",
+   "correoInstitucional": "lchacon@sisgost.demo",
    "direccion": "SS",
-   "unidad": "Instituto Salvadoreño de la Propiedad Intelectual (ISPI)",
-   "tecnicoConfiguracion": "Mateo Martínez — Técnico de Soporte",
-   "soporteResponsable": "Mateo Martínez — Técnico de Soporte",
+   "unidad": "Dirección de Atención al Usuario (DAU)",
+   "tecnicoConfiguracion": "Diego Ramos — Técnico de Soporte",
+   "soporteResponsable": "Diego Ramos — Técnico de Soporte",
    "fechaAceptacion": "2026-05-21",
    "expediente": "SOL-2026-0132",
    "expedienteUnico": "",
@@ -262,7 +262,7 @@
    "mac": "00:1B:C7:80:2B:85",
    "zonaId": "ZCEN",
    "departamentoId": "SS",
-   "direccionRegistroId": "SS-ISPI"
+   "direccionRegistroId": "SS-DAU"
   }
  }
 ]

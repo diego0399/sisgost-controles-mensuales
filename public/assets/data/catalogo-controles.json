@@ -1,7 +1,7 @@
 [
  {
   "codigo": "F0234",
-  "nombre": "Control de ingreso a los cuartos de servidores del CNR",
+  "nombre": "Control de ingreso a los cuartos de servidores de la institución",
   "version": "V4",
   "frecuencia": "Mensual",
   "aplicacion": {
@@ -51,9 +51,9 @@
       "Otro (detallar en la observación)"
      ],
      "tiposPersonal": [
-      "Personal técnico DTI",
-      "Personal interno CNR",
-      "Personal externo al CNR"
+      "Personal técnico de TI",
+      "Personal interno de la institución",
+      "Personal externo a la institución"
      ],
      "ayuda": "El ingreso individual lo hace solo el Técnico de Soporte; con acompañante se piden además sus datos. La hora de salida no puede ser anterior a la de entrada."
     }
@@ -717,11 +717,11 @@
    "unidades": [
     {
      "direccion": "SS",
-     "unidad": "Registro de la Propiedad Raíz e Hipotecas"
+     "unidad": "Dirección Administrativa"
     },
     {
      "direccion": "SS",
-     "unidad": "Registro de Comercio"
+     "unidad": "Dirección Legal"
     },
     {
      "direccion": "STA",
@@ -733,11 +733,11 @@
     },
     {
      "direccion": "SS",
-     "unidad": "Instituto Geográfico y del Catastro Nacional (IGCN)"
+     "unidad": "Dirección Operativa (DOP)"
     },
     {
      "direccion": "SS",
-     "unidad": "Registro de Garantías Mobiliarias"
+     "unidad": "Unidad de Servicios Institucionales"
     }
    ],
    "area": "",
@@ -1035,11 +1035,11 @@
    "unidades": [
     {
      "direccion": "SS",
-     "unidad": "Registro de Garantías Mobiliarias"
+     "unidad": "Unidad de Servicios Institucionales"
     },
     {
      "direccion": "SS",
-     "unidad": "Registro de la Propiedad Raíz e Hipotecas"
+     "unidad": "Dirección Administrativa"
     }
    ],
    "area": "",
@@ -1480,11 +1480,11 @@
    "unidades": [
     {
      "direccion": "SS",
-     "unidad": "Registro de la Propiedad Raíz e Hipotecas"
+     "unidad": "Dirección Administrativa"
     },
     {
      "direccion": "SS",
-     "unidad": "Registro de Comercio"
+     "unidad": "Dirección Legal"
     },
     {
      "direccion": "STA",
@@ -1496,11 +1496,11 @@
     },
     {
      "direccion": "SS",
-     "unidad": "Instituto Geográfico y del Catastro Nacional (IGCN)"
+     "unidad": "Dirección Operativa (DOP)"
     },
     {
      "direccion": "SS",
-     "unidad": "Instituto Salvadoreño de la Propiedad Intelectual (ISPI)"
+     "unidad": "Dirección de Atención al Usuario (DAU)"
     }
    ],
    "area": "",

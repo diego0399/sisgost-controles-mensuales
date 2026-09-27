@@ -41,16 +41,16 @@ export interface DireccionOrganizacion {
  *
  * · En los departamentos marcados `porDireccion` en el catálogo (hoy, **San Salvador**) cada
  *   asignación es de una **Dirección/Registro** concreta: quien responde por el Registro de
- *   Comercio no responde por el IGCN.
+ *   Comercio no responde por el DOP.
  * · En **los demás departamentos** la asignación es del **departamento completo**: quien responde
  *   por Santa Ana atiende sus cuatro Direcciones/Registros, y no se le asigna ninguna una por una.
  *
- * De ahí que `deDireccionUnidad('Santa Ana', 'ISPI')` devuelva al responsable departamental
- * aunque nadie lo haya asignado nunca al ISPI: es exactamente lo que el negocio pide, y es lo que
+ * De ahí que `deDireccionUnidad('Santa Ana', 'DAU')` devuelva al responsable departamental
+ * aunque nadie lo haya asignado nunca al DAU: es exactamente lo que el negocio pide, y es lo que
  * hace que Gestión de Equipos ofrezca el Técnico de Configuración correcto sin lógica propia.
  *
  * **Todo se compara por ID, nunca por el texto visible.** Cada asignación guarda `tecnicoId`,
- * `departamentoId`, `direccionRegistroId` y el `unidadId` del ámbito (`SS::SS-RC`, `STA::*`); los
+ * `departamentoId`, `direccionRegistroId` y el `unidadId` del ámbito (`SS::SS-DLG`, `STA::*`); los
  * nombres se conservan solo para mostrarlos y para poder migrar los registros anteriores.
  *
  * Aquí viven únicamente las consultas y las escrituras planas; las reglas de negocio de cada
@@ -85,7 +85,7 @@ export class SupportDistributionService {
   soloNombre(tecnico: string): string { return (tecnico ?? '').split('—')[0].trim(); }
 
   /**
-   * ID estable del Técnico de Soporte: el slug de su nombre (`wendy-carranza`). Acepta el ID ya
+   * ID estable del Técnico de Soporte: el slug de su nombre (`laura-mendez`). Acepta el ID ya
    * hecho, el nombre suelto o el «Nombre — Rol» con el que viaja entre módulos.
    */
   idTecnico(tecnico: string): string { return this.slug(this.soloNombre(tecnico)); }
@@ -96,13 +96,13 @@ export class SupportDistributionService {
    */
   idDireccion(departamento: string): string { return this.territorio.idDepartamento(departamento); }
 
-  /** ID estable de la Dirección/Registro dentro de su departamento (`SS-RC`); '' si no aplica. */
+  /** ID estable de la Dirección/Registro dentro de su departamento (`SS-DLG`); '' si no aplica. */
   idRegistro(departamento: string, registro: string): string {
     return this.territorio.idRegistro(departamento, registro);
   }
 
   /**
-   * ID del **ámbito**: `SS::SS-RC` cuando es una Dirección/Registro y `STA::*` cuando es el
+   * ID del **ámbito**: `SS::SS-DLG` cuando es una Dirección/Registro y `STA::*` cuando es el
    * departamento completo. Es la clave con la que se comparan controles, bitácoras e inventario.
    */
   idUnidad(departamento: string, registro: string): string {
@@ -119,12 +119,12 @@ export class SupportDistributionService {
     return this.territorio.departamento(departamento)?.corta ?? this.nombreDireccion(departamento);
   }
 
-  /** «San Salvador / Registro de Comercio» o «Santa Ana / Todo el departamento». */
+  /** «San Salvador / Dirección Legal» o «Santa Ana / Todo el departamento». */
   etiqueta(departamento: string, registro: string): string {
     return this.territorio.etiqueta(departamento, registro);
   }
 
-  /** «Zona Central · San Salvador · Registro de Comercio». */
+  /** «Zona Central · San Salvador · Dirección Legal». */
   ruta(departamento: string, registro: string): string {
     return this.territorio.ruta(departamento, registro);
   }

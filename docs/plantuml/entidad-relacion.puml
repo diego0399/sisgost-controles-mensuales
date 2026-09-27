@@ -35,7 +35,7 @@ entity USUARIO_SISTEMA <<compartida con Gestión de Equipos>> {
   nombre, iniciales, cargo
   rol : texto
   clave : admin | enc-soporte | tec-soporte | coordinador
-  unidad organizativa : Soporte | DTI
+  unidad organizativa : Soporte | Tecnología
   estado : Activo | Inactivo
   moduloControles : booleano
   ..

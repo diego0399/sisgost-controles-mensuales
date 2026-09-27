@@ -12,9 +12,9 @@ skinparam usecase {
 skinparam packageStyle rectangle
 
 actor "Administrador" as ADM
-actor "Encargado de Soporte\n(Carlos González — jefe del área)" as ENC
-actor "Técnico de Soporte\n(Wendy Carranza · Mateo Martínez · Diana Portillo)" as TEC
-actor "Coordinador\n(Carlos Durán — consulta y seguimiento)" as COO
+actor "Encargado de Soporte\n(Andrés Molina — jefe del área)" as ENC
+actor "Técnico de Soporte\n(Laura Méndez · Diego Ramos · Sofía Rivera)" as TEC
+actor "Coordinador\n(Roberto Herrera — consulta y seguimiento)" as COO
 actor "SISGOST — Gestión de Equipos" as GE <<sistema>>
 
 rectangle "SISGOST — Controles Mensuales" {
@@ -126,7 +126,7 @@ note as N1
   · El **Técnico de Soporte** solo ve las Direcciones/Unidades
     que la distribución le asigna; en UC20 solo consulta.
   · El **Encargado de Soporte** ve toda la operatividad.
-  · El **Coordinador (Carlos Durán)** solo consulta y da seguimiento.
+  · El **Coordinador (Roberto Herrera)** solo consulta y da seguimiento.
   · **No hay usuarios de Hardware** en este módulo.
   · UC25, UC26 y UC27 **no tienen botón**: ocurren solas.
 end note

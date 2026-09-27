@@ -81,7 +81,7 @@ entrar a un mes se listen solo sus controles aplicables con acción **Completar*
 documento** / **No aplica**, sin ocultar nunca un pendiente; que el **F0387** sea un solo control
 mensual con secciones por semana y un único documento consolidado; usar los usuarios de Gestión de
 Equipos **excepto los de Hardware**; que el Encargado de Soporte represente al jefe; y reemplazar
-«Jefatura» por **Coordinador**, con el usuario **Carlos Durán**.
+«Jefatura» por **Coordinador**, con el usuario **Roberto Herrera**.
 
 **Quedó hecho**
 
@@ -89,8 +89,8 @@ Equipos **excepto los de Hardware**; que el Encargado de Soporte represente al j
   a un clic, y controles del mes con **Completar / Continuar / Ver documento**.
 - Nueva frecuencia `Semanal con entrega mensual consolidada`, estados internos de semana y estado
   de control **Listo para entregar**; un solo documento del mes y reporte consolidado del F0387.
-- Directorio del módulo sin personal de Hardware; `jefatura` → `coordinador` (Carlos Durán, solo
-  consulta); Carlos González pasa a Jefe del Departamento de Soporte Técnico. Las cartas las firman
+- Directorio del módulo sin personal de Hardware; `jefatura` → `coordinador` (Roberto Herrera, solo
+  consulta); Andrés Molina pasa a Jefe del Departamento de Soporte Técnico. Las cartas las firman
   técnico → Coordinador → Jefe.
 - **Defecto real corregido:** `ngModel` sobre `<input type="number">` devuelve un número y
   `(valor ?? '').trim()` reventaba al entregar cualquier control con campo numérico.
@@ -236,8 +236,8 @@ clasificar al acompañante y exigir la imagen del documento de respaldo cuando s
 
 **Quedó hecho**
 
-- **Tipo de personal del acompañante**: tres botones de opción —Personal DTI, interno CNR, externo
-  al CNR— que aparecen en cuanto hay acompañante y son obligatorios. No es texto libre.
+- **Tipo de personal del acompañante**: tres botones de opción —Personal Tecnología, interno Institución Pública Demo, externo
+  a la institución— que aparecen en cuanto hay acompañante y son obligatorios. No es texto libre.
 - **Casilla «¿Anexa documento de respaldo?»**: sin marcar no se pide nada; marcada, la imagen es
   obligatoria y solo se admiten PNG, JPG, JPEG o WEBP. Un archivo vacío o de otro tipo se rechaza
   al elegirlo, la imagen se reduce a 900 px y **sale impresa en el documento**, que declara
@@ -301,7 +301,7 @@ suficientes solicitudes de CPU y Laptop para demostrar la integración.
 **Quedó hecho**
 
 - **IDs estables en el servicio compartido.** Cada asignación guarda `tecnicoId`
-  (`wendy-carranza`), `direccionId` (`DIR-REGS`) y `unidadId`
+  (`laura-mendez`), `direccionId` (`DIR-REGS`) y `unidadId`
   (`DIR-REGS::registro-de-la-propiedad`), y todas las consultas comparan por ellos. Los dos
   módulos cargan el mismo catálogo organizacional (`direcciones.json`, publicado ahora también en
   Gestión de Equipos), que es quien resuelve nombre → ID. `normalizar()` completa los registros
@@ -342,7 +342,7 @@ Verificación: batería **571/0**, once suites de navegador sin avisos ni errore
 
 ## Ronda 85 — la distribución de soportes llega de verdad al otro módulo
 
-**Se reportó** una falla concreta: al agregar a Wendy Carranza como responsable de una
+**Se reportó** una falla concreta: al agregar a Laura Méndez como responsable de una
 Dirección/Unidad en Controles Mensuales y guardar, Gestión de Equipos seguía sin ofrecerla como
 Técnico de Configuración.
 
@@ -374,7 +374,7 @@ no se veía nunca desde el otro. Gestión de Equipos trabajaba con la copia de s
 - **El mensaje del bloqueo dice dónde arreglarlo** y se escribe una sola vez, en el servicio:
   «…Debe configurar la Distribución de Soportes en Controles Mensuales antes de crear el
   Expediente único.»
-- **El caso de bloqueo es demostrable**: `SOL-2026-0161` quedó en el Archivo Registral —la unidad
+- **El caso de bloqueo es demostrable**: `SOL-2026-0161` quedó en el Archivo Central —la unidad
   sin soporte vigente— con equipo asignado. No es un callejón sin salida: asignarle un soporte en
   Controles Mensuales lo desbloquea sin recargar nada.
 

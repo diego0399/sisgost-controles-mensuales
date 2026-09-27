@@ -2,7 +2,7 @@
  * CATÁLOGO TERRITORIAL COMPARTIDO del ecosistema SISGOST — **este archivo es el mismo en los dos
  * proyectos** (Controles Mensuales y Gestión de Equipos) y no debe divergir.
  *
- * La organización territorial del CNR tiene tres niveles:
+ * La organización territorial de la institución tiene tres niveles:
  *
  *     Zona  →  Departamento  →  Dirección/Registro
  *
@@ -10,7 +10,7 @@
  * Técnicos de Soporte**.
  *
  * · En **San Salvador** la distribución es por **Dirección/Registro**: un soporte responde solo
- *   por el Registro de Comercio, o solo por el IGCN, y así.
+ *   por el Dirección Legal, o solo por el DOP, y así.
  * · En **los demás departamentos** la distribución es por **Departamento**: quien responde por
  *   Santa Ana atiende todas las Direcciones/Registros de Santa Ana, sin asignarse una por una.
  *
@@ -48,7 +48,7 @@ export interface DireccionRegistro {
   id: string;
   departamentoId: string;
   nombre: string;
-  /** Sigla institucional: IGCN, RPRH, RC, ISPI, RGM. */
+  /** Sigla institucional: DOP, DAD, DLG, DAU, USI. */
   corta: string;
   orden: number;
   activa: boolean;
@@ -69,7 +69,7 @@ export type TipoAsignacion = 'DEPARTAMENTO' | 'DIRECCION_REGISTRO';
 
 /**
  * Marca del alcance «todo el departamento» dentro de un identificador de ámbito. Un ámbito
- * departamental se escribe `STA::*` y uno por registro, `SS::SS-RC`: son IDs estables, y por
+ * departamental se escribe `STA::*` y uno por registro, `SS::SS-DLG`: son IDs estables, y por
  * ellos —nunca por el nombre visible— se compara en todo el ecosistema.
  */
 export const ALCANCE_DEPARTAMENTO = '*';

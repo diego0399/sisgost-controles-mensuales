@@ -1,5 +1,6 @@
 import { Component, ElementRef, inject, input, output } from '@angular/core';
 import { IconComponent } from './icon';
+import { APP_DEMO_LABEL, APP_INSTITUTION_NAME, APP_LOGO, APP_SYSTEM_DESCRIPTION, APP_SYSTEM_NAME } from '../core/config/institucion';
 
 /** Dato con etiqueta de una sección del documento («Dirección: Oficina Departamental de Usulután»). */
 export interface CampoDoc {
@@ -119,10 +120,11 @@ const POSITIVOS = new Set(['Realizada', 'Realizado', 'Verificado', 'Sí', 'Si', 
         <div class="visor-area">
           <article class="hoja">
             <header class="hoja-cab">
-              <img src="assets/logos/LogoCNR.png" alt="Centro Nacional de Registros" />
+              <img [src]="logoInstitucion" [alt]="institucion" />
               <div class="hoja-inst">
-                <div class="h-org">Centro Nacional de Registros</div>
-                <div class="h-sis">SISGOST — Sistema de Gestión y Seguimiento de Soporte Técnico</div>
+                <div class="h-org">{{ institucion }}</div>
+                <div class="h-sis">{{ sistema }} — {{ descripcionSistema }}</div>
+                <div class="h-mod">{{ etiquetaDemo }}</div>
                 <div class="h-mod">Controles Mensuales</div>
               </div>
               <div class="hoja-ref">
@@ -279,7 +281,7 @@ const POSITIVOS = new Set(['Realizada', 'Realizado', 'Verificado', 'Sí', 'Si', 
 
             <footer class="hoja-pie">
               <div class="p-txt">
-                Centro Nacional de Registros · SISGOST — Controles Mensuales<br />
+                {{ institucion }} · {{ sistema }} — Controles Mensuales · {{ etiquetaDemo }}<br />
                 {{ notaPie() || 'Documento generado por el sistema. Las firmas electrónicas son simuladas: este es un prototipo de demostración.' }}
               </div>
               @if (huella()) { <div class="p-huella">Huella de integridad<br />{{ huella() }}</div> }
@@ -291,6 +293,11 @@ const POSITIVOS = new Set(['Realizada', 'Realizado', 'Verificado', 'Sí', 'Si', 
   `
 })
 export class VisorDocumentoComponent {
+  protected readonly institucion = APP_INSTITUTION_NAME;
+  protected readonly sistema = APP_SYSTEM_NAME;
+  protected readonly descripcionSistema = APP_SYSTEM_DESCRIPTION;
+  protected readonly etiquetaDemo = APP_DEMO_LABEL;
+  protected readonly logoInstitucion = APP_LOGO;
   private readonly host = inject(ElementRef<HTMLElement>);
 
   readonly abierto = input(false);

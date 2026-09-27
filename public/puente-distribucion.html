@@ -20,6 +20,10 @@
   No hay backend: solo se lee `localStorage` del propio origen.
 -->
 <script>
+  // Versión neutral para oferta: misma limpieza única que main.ts, por si el puente se abre antes que la app.
+  try { if (localStorage.getItem("sisgost_demo_anonimizado_v1") !== "1") { Object.keys(localStorage).filter(function (k) { return k.indexOf("sisgost") === 0; }).forEach(function (k) { localStorage.removeItem(k); }); localStorage.setItem("sisgost_demo_anonimizado_v1", "1"); } } catch (e) { /* sin localStorage */ }
+</script>
+<script>
   (function () {
     var CLAVE = 'sisgost_support_distribution';
     var CLAVE_FECHA = 'sisgost_support_distribution_updated_at';

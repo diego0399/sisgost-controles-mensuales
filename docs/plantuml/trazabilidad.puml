@@ -28,7 +28,7 @@ box "SISGOST — Controles Mensuales" #FBFCFE
 end box
 actor "Técnico\nde Soporte" as TEC
 actor "Encargado\nde Soporte" as ENC
-actor "Coordinador\n(Carlos Durán)" as COO
+actor "Coordinador\n(Roberto Herrera)" as COO
 
 == Quién atiende cada Dirección/Unidad ==
 ENC -> KDIS : guarda la distribución de soportes\n(alta / baja con motivo obligatorio)

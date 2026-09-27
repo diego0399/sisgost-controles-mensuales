@@ -9,6 +9,7 @@ import { IconComponent } from '../../shared/icon';
 import { NAVEGACION, NavGrupo } from '../config/permisos';
 import { MODULOS, URL_GESTION_EQUIPOS } from '../config/modulos';
 import { RolSistema, nombreRol } from '../models/roles';
+import { APP_DEMO_LABEL, APP_INSTITUTION_NAME, APP_LOGO_WHITE, APP_TECH_UNIT } from '../config/institucion';
 
 /**
  * Layout principal: barra lateral con el menú por rol y barra superior con el usuario
@@ -21,7 +22,7 @@ import { RolSistema, nombreRol } from '../models/roles';
   template: `
     <aside class="side">
       <div class="brand">
-        <img src="assets/logos/LogoCNR_white.png" alt="Centro Nacional de Registros" />
+        <img [src]="logoInstitucion" [alt]="institucion" />
         <div class="b-txt">
           <div class="b-name">SISGO<span class="gold">ST</span></div>
           <div class="b-sub">Controles Mensuales<br />Sistema de Gestión y Seguimiento de Soporte Técnico</div>
@@ -59,10 +60,10 @@ import { RolSistema, nombreRol } from '../models/roles';
       </nav>
 
       <div class="side-foot">
-        <b>Prototipo institucional</b>
+        <b>{{ etiquetaDemo }}</b>
         Datos simulados (JSON) · sin backend<br />
         Conectado con SISGOST — Gestión de Equipos<br />
-        Centro Nacional de Registros · DTI
+        {{ institucion }} · {{ unidadTi }}
       </div>
     </aside>
 
@@ -123,6 +124,10 @@ import { RolSistema, nombreRol } from '../models/roles';
   `
 })
 export class ShellComponent {
+  protected readonly institucion = APP_INSTITUTION_NAME;
+  protected readonly unidadTi = APP_TECH_UNIT;
+  protected readonly etiquetaDemo = APP_DEMO_LABEL;
+  protected readonly logoInstitucion = APP_LOGO_WHITE;
   protected readonly auth = inject(AuthService);
   protected readonly data = inject(DataService);
   private readonly toast = inject(ToastService);

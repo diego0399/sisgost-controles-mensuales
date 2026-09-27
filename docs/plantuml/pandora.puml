@@ -14,7 +14,7 @@ skinparam component {
 skinparam packageFontSize 15
 skinparam noteFontSize 12
 
-package "Red del CNR" #FFFDF5 {
+package "Red de la institución" #FFFDF5 {
   [Equipos de las\nDirecciones/Unidades] as EQ
 }
 

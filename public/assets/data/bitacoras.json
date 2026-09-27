@@ -3,8 +3,8 @@
   "id": "BIT-2026-0001",
   "fecha": "2026-07-24",
   "direccion": "SS",
-  "unidad": "Registro de la Propiedad Raíz e Hipotecas",
-  "responsable": "Wendy Carranza",
+  "unidad": "Dirección Administrativa",
+  "responsable": "Laura Méndez",
   "estado": "Enviada",
   "horaEnvio": "16:26",
   "revision": [
@@ -75,8 +75,8 @@
   "id": "BIT-2026-0002",
   "fecha": "2026-07-24",
   "direccion": "SS",
-  "unidad": "Registro de Comercio",
-  "responsable": "Wendy Carranza",
+  "unidad": "Dirección Legal",
+  "responsable": "Laura Méndez",
   "estado": "Enviada",
   "horaEnvio": "16:38",
   "revision": [
@@ -148,7 +148,7 @@
   "fecha": "2026-07-24",
   "direccion": "STA",
   "unidad": "Todo el departamento",
-  "responsable": "Mateo Martínez",
+  "responsable": "Diego Ramos",
   "estado": "Enviada",
   "horaEnvio": "16:44",
   "revision": [
@@ -219,8 +219,8 @@
   "id": "BIT-2026-0004",
   "fecha": "2026-07-24",
   "direccion": "SS",
-  "unidad": "Instituto Geográfico y del Catastro Nacional (IGCN)",
-  "responsable": "Mateo Martínez",
+  "unidad": "Dirección Operativa (DOP)",
+  "responsable": "Diego Ramos",
   "estado": "Enviada",
   "horaEnvio": "16:51",
   "revision": [
@@ -302,8 +302,8 @@
   "id": "BIT-2026-0005",
   "fecha": "2026-07-27",
   "direccion": "SS",
-  "unidad": "Registro de la Propiedad Raíz e Hipotecas",
-  "responsable": "Wendy Carranza",
+  "unidad": "Dirección Administrativa",
+  "responsable": "Laura Méndez",
   "estado": "Enviada",
   "horaEnvio": "16:12",
   "revision": [
@@ -374,8 +374,8 @@
   "id": "BIT-2026-0006",
   "fecha": "2026-07-27",
   "direccion": "SS",
-  "unidad": "Registro de Comercio",
-  "responsable": "Wendy Carranza",
+  "unidad": "Dirección Legal",
+  "responsable": "Laura Méndez",
   "estado": "Enviada tarde",
   "horaEnvio": "17:18",
   "revision": [
@@ -447,7 +447,7 @@
   "fecha": "2026-07-27",
   "direccion": "STA",
   "unidad": "Todo el departamento",
-  "responsable": "Mateo Martínez",
+  "responsable": "Diego Ramos",
   "estado": "Enviada",
   "horaEnvio": "16:38",
   "revision": [
@@ -518,8 +518,8 @@
   "id": "BIT-2026-0008",
   "fecha": "2026-07-27",
   "direccion": "SS",
-  "unidad": "Instituto Geográfico y del Catastro Nacional (IGCN)",
-  "responsable": "Mateo Martínez",
+  "unidad": "Dirección Operativa (DOP)",
+  "responsable": "Diego Ramos",
   "estado": "Enviada",
   "horaEnvio": "16:44",
   "revision": [
@@ -590,8 +590,8 @@
   "id": "BIT-2026-0009",
   "fecha": "2026-07-28",
   "direccion": "SS",
-  "unidad": "Registro de la Propiedad Raíz e Hipotecas",
-  "responsable": "Wendy Carranza",
+  "unidad": "Dirección Administrativa",
+  "responsable": "Laura Méndez",
   "estado": "Enviada",
   "horaEnvio": "16:51",
   "revision": [
@@ -662,8 +662,8 @@
   "id": "BIT-2026-0010",
   "fecha": "2026-07-28",
   "direccion": "SS",
-  "unidad": "Registro de Comercio",
-  "responsable": "Wendy Carranza",
+  "unidad": "Dirección Legal",
+  "responsable": "Laura Méndez",
   "estado": "Enviada",
   "horaEnvio": "16:12",
   "revision": [
@@ -735,7 +735,7 @@
   "fecha": "2026-07-28",
   "direccion": "STA",
   "unidad": "Todo el departamento",
-  "responsable": "Mateo Martínez",
+  "responsable": "Diego Ramos",
   "estado": "Enviada",
   "horaEnvio": "16:26",
   "revision": [
@@ -806,8 +806,8 @@
   "id": "BIT-2026-0012",
   "fecha": "2026-07-28",
   "direccion": "SS",
-  "unidad": "Instituto Geográfico y del Catastro Nacional (IGCN)",
-  "responsable": "Mateo Martínez",
+  "unidad": "Dirección Operativa (DOP)",
+  "responsable": "Diego Ramos",
   "estado": "Enviada",
   "horaEnvio": "16:38",
   "revision": [
@@ -878,8 +878,8 @@
   "id": "BIT-2026-0013",
   "fecha": "2026-07-29",
   "direccion": "SS",
-  "unidad": "Registro de la Propiedad Raíz e Hipotecas",
-  "responsable": "Wendy Carranza",
+  "unidad": "Dirección Administrativa",
+  "responsable": "Laura Méndez",
   "estado": "Enviada",
   "horaEnvio": "16:44",
   "revision": [
@@ -961,8 +961,8 @@
   "id": "BIT-2026-0014",
   "fecha": "2026-07-29",
   "direccion": "SS",
-  "unidad": "Registro de Comercio",
-  "responsable": "Wendy Carranza",
+  "unidad": "Dirección Legal",
+  "responsable": "Laura Méndez",
   "estado": "Enviada",
   "horaEnvio": "16:51",
   "revision": [
@@ -1034,7 +1034,7 @@
   "fecha": "2026-07-29",
   "direccion": "STA",
   "unidad": "Todo el departamento",
-  "responsable": "Mateo Martínez",
+  "responsable": "Diego Ramos",
   "estado": "Enviada",
   "horaEnvio": "16:12",
   "revision": [
@@ -1105,8 +1105,8 @@
   "id": "BIT-2026-0016",
   "fecha": "2026-07-29",
   "direccion": "SS",
-  "unidad": "Instituto Geográfico y del Catastro Nacional (IGCN)",
-  "responsable": "Mateo Martínez",
+  "unidad": "Dirección Operativa (DOP)",
+  "responsable": "Diego Ramos",
   "estado": "Enviada",
   "horaEnvio": "16:26",
   "revision": [
@@ -1177,8 +1177,8 @@
   "id": "BIT-2026-0017",
   "fecha": "2026-07-30",
   "direccion": "SS",
-  "unidad": "Registro de la Propiedad Raíz e Hipotecas",
-  "responsable": "Wendy Carranza",
+  "unidad": "Dirección Administrativa",
+  "responsable": "Laura Méndez",
   "estado": "Enviada",
   "horaEnvio": "16:38",
   "revision": [
@@ -1249,8 +1249,8 @@
   "id": "BIT-2026-0018",
   "fecha": "2026-07-30",
   "direccion": "SS",
-  "unidad": "Registro de Comercio",
-  "responsable": "Wendy Carranza",
+  "unidad": "Dirección Legal",
+  "responsable": "Laura Méndez",
   "estado": "Enviada",
   "horaEnvio": "16:44",
   "revision": [
@@ -1322,7 +1322,7 @@
   "fecha": "2026-07-30",
   "direccion": "STA",
   "unidad": "Todo el departamento",
-  "responsable": "Mateo Martínez",
+  "responsable": "Diego Ramos",
   "estado": "Enviada tarde",
   "horaEnvio": "17:31",
   "revision": [
@@ -1393,8 +1393,8 @@
   "id": "BIT-2026-0020",
   "fecha": "2026-07-30",
   "direccion": "SS",
-  "unidad": "Instituto Geográfico y del Catastro Nacional (IGCN)",
-  "responsable": "Mateo Martínez",
+  "unidad": "Dirección Operativa (DOP)",
+  "responsable": "Diego Ramos",
   "estado": "Enviada",
   "horaEnvio": "16:12",
   "revision": [
@@ -1465,8 +1465,8 @@
   "id": "BIT-2026-0021",
   "fecha": "2026-07-31",
   "direccion": "SS",
-  "unidad": "Registro de la Propiedad Raíz e Hipotecas",
-  "responsable": "Wendy Carranza",
+  "unidad": "Dirección Administrativa",
+  "responsable": "Laura Méndez",
   "estado": "Enviada",
   "horaEnvio": "16:26",
   "revision": [
@@ -1537,8 +1537,8 @@
   "id": "BIT-2026-0022",
   "fecha": "2026-07-31",
   "direccion": "SS",
-  "unidad": "Registro de Comercio",
-  "responsable": "Wendy Carranza",
+  "unidad": "Dirección Legal",
+  "responsable": "Laura Méndez",
   "estado": "Enviada",
   "horaEnvio": "16:38",
   "revision": [
@@ -1621,7 +1621,7 @@
   "fecha": "2026-07-31",
   "direccion": "STA",
   "unidad": "Todo el departamento",
-  "responsable": "Mateo Martínez",
+  "responsable": "Diego Ramos",
   "estado": "Enviada",
   "horaEnvio": "16:44",
   "revision": [
@@ -1692,8 +1692,8 @@
   "id": "BIT-2026-0024",
   "fecha": "2026-07-31",
   "direccion": "SS",
-  "unidad": "Instituto Geográfico y del Catastro Nacional (IGCN)",
-  "responsable": "Mateo Martínez",
+  "unidad": "Dirección Operativa (DOP)",
+  "responsable": "Diego Ramos",
   "estado": "Enviada",
   "horaEnvio": "16:51",
   "revision": [
@@ -1764,8 +1764,8 @@
   "id": "BIT-2026-0025",
   "fecha": "2026-08-07",
   "direccion": "SS",
-  "unidad": "Registro de la Propiedad Raíz e Hipotecas",
-  "responsable": "Wendy Carranza",
+  "unidad": "Dirección Administrativa",
+  "responsable": "Laura Méndez",
   "estado": "Enviada",
   "horaEnvio": "16:12",
   "revision": [
@@ -1836,8 +1836,8 @@
   "id": "BIT-2026-0026",
   "fecha": "2026-08-07",
   "direccion": "SS",
-  "unidad": "Registro de Comercio",
-  "responsable": "Wendy Carranza",
+  "unidad": "Dirección Legal",
+  "responsable": "Laura Méndez",
   "estado": "Enviada",
   "horaEnvio": "16:26",
   "revision": [
@@ -1909,7 +1909,7 @@
   "fecha": "2026-08-07",
   "direccion": "STA",
   "unidad": "Todo el departamento",
-  "responsable": "Mateo Martínez",
+  "responsable": "Diego Ramos",
   "estado": "Enviada",
   "horaEnvio": "16:38",
   "revision": [
@@ -1980,8 +1980,8 @@
   "id": "BIT-2026-0028",
   "fecha": "2026-08-07",
   "direccion": "SS",
-  "unidad": "Instituto Geográfico y del Catastro Nacional (IGCN)",
-  "responsable": "Mateo Martínez",
+  "unidad": "Dirección Operativa (DOP)",
+  "responsable": "Diego Ramos",
   "estado": "Enviada",
   "horaEnvio": "16:44",
   "revision": [
@@ -2052,8 +2052,8 @@
   "id": "BIT-2026-0029",
   "fecha": "2026-08-10",
   "direccion": "SS",
-  "unidad": "Registro de la Propiedad Raíz e Hipotecas",
-  "responsable": "Wendy Carranza",
+  "unidad": "Dirección Administrativa",
+  "responsable": "Laura Méndez",
   "estado": "Enviada",
   "horaEnvio": "16:51",
   "revision": [
@@ -2124,8 +2124,8 @@
   "id": "BIT-2026-0030",
   "fecha": "2026-08-10",
   "direccion": "SS",
-  "unidad": "Registro de Comercio",
-  "responsable": "Wendy Carranza",
+  "unidad": "Dirección Legal",
+  "responsable": "Laura Méndez",
   "estado": "Enviada",
   "horaEnvio": "16:12",
   "revision": [
@@ -2197,7 +2197,7 @@
   "fecha": "2026-08-10",
   "direccion": "STA",
   "unidad": "Todo el departamento",
-  "responsable": "Mateo Martínez",
+  "responsable": "Diego Ramos",
   "estado": "Enviada",
   "horaEnvio": "16:26",
   "revision": [
@@ -2279,8 +2279,8 @@
   "id": "BIT-2026-0032",
   "fecha": "2026-08-10",
   "direccion": "SS",
-  "unidad": "Instituto Geográfico y del Catastro Nacional (IGCN)",
-  "responsable": "Mateo Martínez",
+  "unidad": "Dirección Operativa (DOP)",
+  "responsable": "Diego Ramos",
   "estado": "Enviada tarde",
   "horaEnvio": "17:44",
   "revision": [
@@ -2351,8 +2351,8 @@
   "id": "BIT-2026-0033",
   "fecha": "2026-08-11",
   "direccion": "SS",
-  "unidad": "Registro de la Propiedad Raíz e Hipotecas",
-  "responsable": "Wendy Carranza",
+  "unidad": "Dirección Administrativa",
+  "responsable": "Laura Méndez",
   "estado": "Enviada",
   "horaEnvio": "16:44",
   "revision": [
@@ -2423,8 +2423,8 @@
   "id": "BIT-2026-0034",
   "fecha": "2026-08-11",
   "direccion": "SS",
-  "unidad": "Registro de Comercio",
-  "responsable": "Wendy Carranza",
+  "unidad": "Dirección Legal",
+  "responsable": "Laura Méndez",
   "estado": "Enviada",
   "horaEnvio": "16:51",
   "revision": [
@@ -2496,7 +2496,7 @@
   "fecha": "2026-08-11",
   "direccion": "STA",
   "unidad": "Todo el departamento",
-  "responsable": "Mateo Martínez",
+  "responsable": "Diego Ramos",
   "estado": "Enviada",
   "horaEnvio": "16:12",
   "revision": [
@@ -2567,8 +2567,8 @@
   "id": "BIT-2026-0036",
   "fecha": "2026-08-11",
   "direccion": "SS",
-  "unidad": "Instituto Geográfico y del Catastro Nacional (IGCN)",
-  "responsable": "Mateo Martínez",
+  "unidad": "Dirección Operativa (DOP)",
+  "responsable": "Diego Ramos",
   "estado": "Vencida",
   "revision": [
    {
@@ -2637,8 +2637,8 @@
   "id": "BIT-2026-0037",
   "fecha": "2026-08-12",
   "direccion": "SS",
-  "unidad": "Registro de la Propiedad Raíz e Hipotecas",
-  "responsable": "Wendy Carranza",
+  "unidad": "Dirección Administrativa",
+  "responsable": "Laura Méndez",
   "estado": "Enviada",
   "horaEnvio": "16:38",
   "revision": [
@@ -2709,8 +2709,8 @@
   "id": "BIT-2026-0038",
   "fecha": "2026-08-12",
   "direccion": "SS",
-  "unidad": "Registro de Comercio",
-  "responsable": "Wendy Carranza",
+  "unidad": "Dirección Legal",
+  "responsable": "Laura Méndez",
   "estado": "Enviada",
   "horaEnvio": "16:44",
   "revision": [
@@ -2782,7 +2782,7 @@
   "fecha": "2026-08-12",
   "direccion": "STA",
   "unidad": "Todo el departamento",
-  "responsable": "Mateo Martínez",
+  "responsable": "Diego Ramos",
   "estado": "Enviada",
   "horaEnvio": "16:51",
   "revision": [
@@ -2853,8 +2853,8 @@
   "id": "BIT-2026-0040",
   "fecha": "2026-08-12",
   "direccion": "SS",
-  "unidad": "Instituto Geográfico y del Catastro Nacional (IGCN)",
-  "responsable": "Mateo Martínez",
+  "unidad": "Dirección Operativa (DOP)",
+  "responsable": "Diego Ramos",
   "estado": "Enviada",
   "horaEnvio": "16:12",
   "revision": [
@@ -2936,8 +2936,8 @@
   "id": "BIT-2026-0041",
   "fecha": "2026-08-13",
   "direccion": "SS",
-  "unidad": "Registro de la Propiedad Raíz e Hipotecas",
-  "responsable": "Wendy Carranza",
+  "unidad": "Dirección Administrativa",
+  "responsable": "Laura Méndez",
   "estado": "Enviada",
   "horaEnvio": "16:26",
   "revision": [
@@ -3008,8 +3008,8 @@
   "id": "BIT-2026-0042",
   "fecha": "2026-08-13",
   "direccion": "SS",
-  "unidad": "Registro de Comercio",
-  "responsable": "Wendy Carranza",
+  "unidad": "Dirección Legal",
+  "responsable": "Laura Méndez",
   "estado": "Enviada",
   "horaEnvio": "16:38",
   "revision": [
@@ -3081,7 +3081,7 @@
   "fecha": "2026-08-13",
   "direccion": "STA",
   "unidad": "Todo el departamento",
-  "responsable": "Mateo Martínez",
+  "responsable": "Diego Ramos",
   "estado": "Enviada",
   "horaEnvio": "16:44",
   "revision": [
@@ -3152,8 +3152,8 @@
   "id": "BIT-2026-0044",
   "fecha": "2026-08-13",
   "direccion": "SS",
-  "unidad": "Instituto Geográfico y del Catastro Nacional (IGCN)",
-  "responsable": "Mateo Martínez",
+  "unidad": "Dirección Operativa (DOP)",
+  "responsable": "Diego Ramos",
   "estado": "Enviada",
   "horaEnvio": "16:51",
   "revision": [
@@ -3224,8 +3224,8 @@
   "id": "BIT-2026-0045",
   "fecha": "2026-08-14",
   "direccion": "SS",
-  "unidad": "Registro de la Propiedad Raíz e Hipotecas",
-  "responsable": "Wendy Carranza",
+  "unidad": "Dirección Administrativa",
+  "responsable": "Laura Méndez",
   "estado": "Enviada tarde",
   "horaEnvio": "17:17",
   "revision": [
@@ -3296,8 +3296,8 @@
   "id": "BIT-2026-0046",
   "fecha": "2026-08-14",
   "direccion": "SS",
-  "unidad": "Registro de Comercio",
-  "responsable": "Wendy Carranza",
+  "unidad": "Dirección Legal",
+  "responsable": "Laura Méndez",
   "estado": "Enviada",
   "horaEnvio": "16:26",
   "revision": [
@@ -3369,7 +3369,7 @@
   "fecha": "2026-08-14",
   "direccion": "STA",
   "unidad": "Todo el departamento",
-  "responsable": "Mateo Martínez",
+  "responsable": "Diego Ramos",
   "estado": "Enviada",
   "horaEnvio": "16:38",
   "revision": [
@@ -3440,8 +3440,8 @@
   "id": "BIT-2026-0048",
   "fecha": "2026-08-14",
   "direccion": "SS",
-  "unidad": "Instituto Geográfico y del Catastro Nacional (IGCN)",
-  "responsable": "Mateo Martínez",
+  "unidad": "Dirección Operativa (DOP)",
+  "responsable": "Diego Ramos",
   "estado": "Enviada",
   "horaEnvio": "16:44",
   "revision": [
@@ -3513,7 +3513,7 @@
   "fecha": "2026-09-21",
   "direccion": "AHU",
   "unidad": "Todo el departamento",
-  "responsable": "Wendy Carranza",
+  "responsable": "Laura Méndez",
   "estado": "Enviada",
   "horaEnvio": "15:38",
   "revision": [
@@ -3591,7 +3591,7 @@
   "fecha": "2026-09-21",
   "direccion": "STA",
   "unidad": "Todo el departamento",
-  "responsable": "Wendy Carranza",
+  "responsable": "Laura Méndez",
   "estado": "Enviada",
   "horaEnvio": "16:02",
   "revision": [
@@ -3669,7 +3669,7 @@
   "fecha": "2026-09-21",
   "direccion": "SON",
   "unidad": "Todo el departamento",
-  "responsable": "Mateo Martínez",
+  "responsable": "Diego Ramos",
   "estado": "Enviada",
   "horaEnvio": "16:19",
   "revision": [
@@ -3747,7 +3747,7 @@
   "fecha": "2026-09-21",
   "direccion": "CAB",
   "unidad": "Todo el departamento",
-  "responsable": "Mateo Martínez",
+  "responsable": "Diego Ramos",
   "estado": "Enviada",
   "horaEnvio": "16:27",
   "revision": [
@@ -3825,7 +3825,7 @@
   "fecha": "2026-09-21",
   "direccion": "CHA",
   "unidad": "Todo el departamento",
-  "responsable": "Mateo Martínez",
+  "responsable": "Diego Ramos",
   "estado": "Enviada",
   "horaEnvio": "16:44",
   "revision": [
@@ -3903,7 +3903,7 @@
   "fecha": "2026-09-21",
   "direccion": "CUS",
   "unidad": "Todo el departamento",
-  "responsable": "Carlos González",
+  "responsable": "Andrés Molina",
   "estado": "Enviada",
   "horaEnvio": "15:51",
   "revision": [
@@ -3981,7 +3981,7 @@
   "fecha": "2026-09-21",
   "direccion": "LIB",
   "unidad": "Todo el departamento",
-  "responsable": "Carlos González",
+  "responsable": "Andrés Molina",
   "estado": "Enviada",
   "horaEnvio": "15:38",
   "revision": [
@@ -4059,7 +4059,7 @@
   "fecha": "2026-09-21",
   "direccion": "PAZ",
   "unidad": "Todo el departamento",
-  "responsable": "Carlos González",
+  "responsable": "Andrés Molina",
   "estado": "Enviada",
   "horaEnvio": "16:02",
   "revision": [
@@ -4136,8 +4136,8 @@
   "id": "BIT-2026-0057",
   "fecha": "2026-09-21",
   "direccion": "SS",
-  "unidad": "Registro de la Propiedad Raíz e Hipotecas",
-  "responsable": "Mateo Martínez",
+  "unidad": "Dirección Administrativa",
+  "responsable": "Diego Ramos",
   "estado": "Enviada",
   "horaEnvio": "16:19",
   "revision": [
@@ -4214,8 +4214,8 @@
   "id": "BIT-2026-0058",
   "fecha": "2026-09-21",
   "direccion": "SS",
-  "unidad": "Instituto Geográfico y del Catastro Nacional (IGCN)",
-  "responsable": "Mateo Martínez",
+  "unidad": "Dirección Operativa (DOP)",
+  "responsable": "Diego Ramos",
   "estado": "Enviada",
   "horaEnvio": "16:27",
   "revision": [
@@ -4292,8 +4292,8 @@
   "id": "BIT-2026-0059",
   "fecha": "2026-09-21",
   "direccion": "SS",
-  "unidad": "Registro de Garantías Mobiliarias",
-  "responsable": "Diana Portillo",
+  "unidad": "Unidad de Servicios Institucionales",
+  "responsable": "Sofía Rivera",
   "estado": "Enviada",
   "horaEnvio": "16:44",
   "revision": [
@@ -4370,8 +4370,8 @@
   "id": "BIT-2026-0060",
   "fecha": "2026-09-21",
   "direccion": "SS",
-  "unidad": "Registro de Comercio",
-  "responsable": "Wendy Carranza",
+  "unidad": "Dirección Legal",
+  "responsable": "Laura Méndez",
   "estado": "Enviada",
   "horaEnvio": "15:51",
   "revision": [
@@ -4448,8 +4448,8 @@
   "id": "BIT-2026-0061",
   "fecha": "2026-09-21",
   "direccion": "SS",
-  "unidad": "Instituto Salvadoreño de la Propiedad Intelectual (ISPI)",
-  "responsable": "Wendy Carranza",
+  "unidad": "Dirección de Atención al Usuario (DAU)",
+  "responsable": "Laura Méndez",
   "estado": "Enviada",
   "horaEnvio": "15:38",
   "revision": [
@@ -4527,7 +4527,7 @@
   "fecha": "2026-09-21",
   "direccion": "SV",
   "unidad": "Todo el departamento",
-  "responsable": "Diana Portillo",
+  "responsable": "Sofía Rivera",
   "estado": "Enviada",
   "horaEnvio": "16:02",
   "revision": [
@@ -4605,7 +4605,7 @@
   "fecha": "2026-09-21",
   "direccion": "MOR",
   "unidad": "Todo el departamento",
-  "responsable": "Diana Portillo",
+  "responsable": "Sofía Rivera",
   "estado": "Enviada",
   "horaEnvio": "16:27",
   "revision": [
@@ -4683,7 +4683,7 @@
   "fecha": "2026-09-21",
   "direccion": "SM",
   "unidad": "Todo el departamento",
-  "responsable": "Diana Portillo",
+  "responsable": "Sofía Rivera",
   "estado": "Enviada",
   "horaEnvio": "16:44",
   "revision": [
@@ -4761,7 +4761,7 @@
   "fecha": "2026-09-21",
   "direccion": "USU",
   "unidad": "Todo el departamento",
-  "responsable": "Diana Portillo",
+  "responsable": "Sofía Rivera",
   "estado": "Enviada",
   "horaEnvio": "15:51",
   "revision": [
@@ -4839,7 +4839,7 @@
   "fecha": "2026-09-22",
   "direccion": "AHU",
   "unidad": "Todo el departamento",
-  "responsable": "Wendy Carranza",
+  "responsable": "Laura Méndez",
   "estado": "Enviada",
   "horaEnvio": "16:02",
   "revision": [
@@ -4917,7 +4917,7 @@
   "fecha": "2026-09-22",
   "direccion": "STA",
   "unidad": "Todo el departamento",
-  "responsable": "Wendy Carranza",
+  "responsable": "Laura Méndez",
   "estado": "Enviada",
   "horaEnvio": "16:19",
   "revision": [
@@ -4995,7 +4995,7 @@
   "fecha": "2026-09-22",
   "direccion": "SON",
   "unidad": "Todo el departamento",
-  "responsable": "Mateo Martínez",
+  "responsable": "Diego Ramos",
   "estado": "Enviada",
   "horaEnvio": "16:27",
   "revision": [
@@ -5073,7 +5073,7 @@
   "fecha": "2026-09-22",
   "direccion": "CAB",
   "unidad": "Todo el departamento",
-  "responsable": "Mateo Martínez",
+  "responsable": "Diego Ramos",
   "estado": "Enviada tarde",
   "horaEnvio": "17:21",
   "revision": [
@@ -5151,7 +5151,7 @@
   "fecha": "2026-09-22",
   "direccion": "CHA",
   "unidad": "Todo el departamento",
-  "responsable": "Mateo Martínez",
+  "responsable": "Diego Ramos",
   "estado": "Enviada",
   "horaEnvio": "15:51",
   "revision": [
@@ -5229,7 +5229,7 @@
   "fecha": "2026-09-22",
   "direccion": "CUS",
   "unidad": "Todo el departamento",
-  "responsable": "Carlos González",
+  "responsable": "Andrés Molina",
   "estado": "Enviada",
   "horaEnvio": "15:38",
   "revision": [
@@ -5307,7 +5307,7 @@
   "fecha": "2026-09-22",
   "direccion": "LIB",
   "unidad": "Todo el departamento",
-  "responsable": "Carlos González",
+  "responsable": "Andrés Molina",
   "estado": "Enviada",
   "horaEnvio": "16:02",
   "revision": [
@@ -5385,7 +5385,7 @@
   "fecha": "2026-09-22",
   "direccion": "PAZ",
   "unidad": "Todo el departamento",
-  "responsable": "Carlos González",
+  "responsable": "Andrés Molina",
   "estado": "Enviada",
   "horaEnvio": "16:19",
   "revision": [
@@ -5462,8 +5462,8 @@
   "id": "BIT-2026-0074",
   "fecha": "2026-09-22",
   "direccion": "SS",
-  "unidad": "Registro de la Propiedad Raíz e Hipotecas",
-  "responsable": "Mateo Martínez",
+  "unidad": "Dirección Administrativa",
+  "responsable": "Diego Ramos",
   "estado": "Enviada",
   "horaEnvio": "16:27",
   "revision": [
@@ -5540,8 +5540,8 @@
   "id": "BIT-2026-0075",
   "fecha": "2026-09-22",
   "direccion": "SS",
-  "unidad": "Instituto Geográfico y del Catastro Nacional (IGCN)",
-  "responsable": "Mateo Martínez",
+  "unidad": "Dirección Operativa (DOP)",
+  "responsable": "Diego Ramos",
   "estado": "Enviada",
   "horaEnvio": "16:44",
   "revision": [
@@ -5618,8 +5618,8 @@
   "id": "BIT-2026-0076",
   "fecha": "2026-09-22",
   "direccion": "SS",
-  "unidad": "Registro de Garantías Mobiliarias",
-  "responsable": "Diana Portillo",
+  "unidad": "Unidad de Servicios Institucionales",
+  "responsable": "Sofía Rivera",
   "estado": "Enviada",
   "horaEnvio": "15:51",
   "revision": [
@@ -5696,8 +5696,8 @@
   "id": "BIT-2026-0077",
   "fecha": "2026-09-22",
   "direccion": "SS",
-  "unidad": "Registro de Comercio",
-  "responsable": "Wendy Carranza",
+  "unidad": "Dirección Legal",
+  "responsable": "Laura Méndez",
   "estado": "Enviada",
   "horaEnvio": "15:38",
   "revision": [
@@ -5774,8 +5774,8 @@
   "id": "BIT-2026-0078",
   "fecha": "2026-09-22",
   "direccion": "SS",
-  "unidad": "Instituto Salvadoreño de la Propiedad Intelectual (ISPI)",
-  "responsable": "Wendy Carranza",
+  "unidad": "Dirección de Atención al Usuario (DAU)",
+  "responsable": "Laura Méndez",
   "estado": "Enviada",
   "horaEnvio": "16:02",
   "revision": [
@@ -5853,7 +5853,7 @@
   "fecha": "2026-09-22",
   "direccion": "SV",
   "unidad": "Todo el departamento",
-  "responsable": "Diana Portillo",
+  "responsable": "Sofía Rivera",
   "estado": "Enviada",
   "horaEnvio": "16:19",
   "revision": [
@@ -5931,7 +5931,7 @@
   "fecha": "2026-09-22",
   "direccion": "MOR",
   "unidad": "Todo el departamento",
-  "responsable": "Diana Portillo",
+  "responsable": "Sofía Rivera",
   "estado": "Enviada",
   "horaEnvio": "16:44",
   "revision": [
@@ -6009,7 +6009,7 @@
   "fecha": "2026-09-22",
   "direccion": "SM",
   "unidad": "Todo el departamento",
-  "responsable": "Diana Portillo",
+  "responsable": "Sofía Rivera",
   "estado": "Enviada",
   "horaEnvio": "15:51",
   "revision": [
@@ -6087,7 +6087,7 @@
   "fecha": "2026-09-22",
   "direccion": "USU",
   "unidad": "Todo el departamento",
-  "responsable": "Diana Portillo",
+  "responsable": "Sofía Rivera",
   "estado": "Enviada",
   "horaEnvio": "15:38",
   "revision": [
@@ -6165,7 +6165,7 @@
   "fecha": "2026-09-23",
   "direccion": "AHU",
   "unidad": "Todo el departamento",
-  "responsable": "Wendy Carranza",
+  "responsable": "Laura Méndez",
   "estado": "Enviada",
   "horaEnvio": "16:19",
   "revision": [
@@ -6243,7 +6243,7 @@
   "fecha": "2026-09-23",
   "direccion": "STA",
   "unidad": "Todo el departamento",
-  "responsable": "Wendy Carranza",
+  "responsable": "Laura Méndez",
   "estado": "Enviada",
   "horaEnvio": "16:27",
   "revision": [
@@ -6325,7 +6325,7 @@
   "fecha": "2026-09-23",
   "direccion": "SON",
   "unidad": "Todo el departamento",
-  "responsable": "Mateo Martínez",
+  "responsable": "Diego Ramos",
   "estado": "Enviada",
   "horaEnvio": "16:44",
   "revision": [
@@ -6403,7 +6403,7 @@
   "fecha": "2026-09-23",
   "direccion": "CAB",
   "unidad": "Todo el departamento",
-  "responsable": "Mateo Martínez",
+  "responsable": "Diego Ramos",
   "estado": "Enviada",
   "horaEnvio": "15:51",
   "revision": [
@@ -6481,7 +6481,7 @@
   "fecha": "2026-09-23",
   "direccion": "CHA",
   "unidad": "Todo el departamento",
-  "responsable": "Mateo Martínez",
+  "responsable": "Diego Ramos",
   "estado": "Enviada",
   "horaEnvio": "15:38",
   "revision": [
@@ -6559,7 +6559,7 @@
   "fecha": "2026-09-23",
   "direccion": "CUS",
   "unidad": "Todo el departamento",
-  "responsable": "Carlos González",
+  "responsable": "Andrés Molina",
   "estado": "Enviada",
   "horaEnvio": "16:02",
   "revision": [
@@ -6637,7 +6637,7 @@
   "fecha": "2026-09-23",
   "direccion": "LIB",
   "unidad": "Todo el departamento",
-  "responsable": "Carlos González",
+  "responsable": "Andrés Molina",
   "estado": "Enviada",
   "horaEnvio": "16:19",
   "revision": [
@@ -6715,7 +6715,7 @@
   "fecha": "2026-09-23",
   "direccion": "PAZ",
   "unidad": "Todo el departamento",
-  "responsable": "Carlos González",
+  "responsable": "Andrés Molina",
   "estado": "Enviada",
   "horaEnvio": "16:27",
   "revision": [
@@ -6792,8 +6792,8 @@
   "id": "BIT-2026-0091",
   "fecha": "2026-09-23",
   "direccion": "SS",
-  "unidad": "Registro de la Propiedad Raíz e Hipotecas",
-  "responsable": "Mateo Martínez",
+  "unidad": "Dirección Administrativa",
+  "responsable": "Diego Ramos",
   "estado": "Enviada",
   "horaEnvio": "16:44",
   "revision": [
@@ -6870,8 +6870,8 @@
   "id": "BIT-2026-0092",
   "fecha": "2026-09-23",
   "direccion": "SS",
-  "unidad": "Instituto Geográfico y del Catastro Nacional (IGCN)",
-  "responsable": "Mateo Martínez",
+  "unidad": "Dirección Operativa (DOP)",
+  "responsable": "Diego Ramos",
   "estado": "Enviada",
   "horaEnvio": "15:51",
   "revision": [
@@ -6948,8 +6948,8 @@
   "id": "BIT-2026-0093",
   "fecha": "2026-09-23",
   "direccion": "SS",
-  "unidad": "Registro de Garantías Mobiliarias",
-  "responsable": "Diana Portillo",
+  "unidad": "Unidad de Servicios Institucionales",
+  "responsable": "Sofía Rivera",
   "estado": "Enviada",
   "horaEnvio": "15:38",
   "revision": [
@@ -7026,8 +7026,8 @@
   "id": "BIT-2026-0094",
   "fecha": "2026-09-23",
   "direccion": "SS",
-  "unidad": "Registro de Comercio",
-  "responsable": "Wendy Carranza",
+  "unidad": "Dirección Legal",
+  "responsable": "Laura Méndez",
   "estado": "Enviada",
   "horaEnvio": "16:02",
   "revision": [
@@ -7104,8 +7104,8 @@
   "id": "BIT-2026-0095",
   "fecha": "2026-09-23",
   "direccion": "SS",
-  "unidad": "Instituto Salvadoreño de la Propiedad Intelectual (ISPI)",
-  "responsable": "Wendy Carranza",
+  "unidad": "Dirección de Atención al Usuario (DAU)",
+  "responsable": "Laura Méndez",
   "estado": "Enviada",
   "horaEnvio": "16:19",
   "revision": [
@@ -7183,7 +7183,7 @@
   "fecha": "2026-09-23",
   "direccion": "SV",
   "unidad": "Todo el departamento",
-  "responsable": "Diana Portillo",
+  "responsable": "Sofía Rivera",
   "estado": "Enviada",
   "horaEnvio": "16:27",
   "revision": [
@@ -7261,7 +7261,7 @@
   "fecha": "2026-09-23",
   "direccion": "MOR",
   "unidad": "Todo el departamento",
-  "responsable": "Diana Portillo",
+  "responsable": "Sofía Rivera",
   "estado": "Enviada",
   "horaEnvio": "15:51",
   "revision": [
@@ -7339,7 +7339,7 @@
   "fecha": "2026-09-23",
   "direccion": "SM",
   "unidad": "Todo el departamento",
-  "responsable": "Diana Portillo",
+  "responsable": "Sofía Rivera",
   "estado": "Enviada",
   "horaEnvio": "15:38",
   "revision": [
@@ -7417,7 +7417,7 @@
   "fecha": "2026-09-23",
   "direccion": "USU",
   "unidad": "Todo el departamento",
-  "responsable": "Diana Portillo",
+  "responsable": "Sofía Rivera",
   "estado": "Enviada",
   "horaEnvio": "16:02",
   "revision": [
@@ -7495,7 +7495,7 @@
   "fecha": "2026-09-24",
   "direccion": "AHU",
   "unidad": "Todo el departamento",
-  "responsable": "Wendy Carranza",
+  "responsable": "Laura Méndez",
   "estado": "Enviada",
   "horaEnvio": "16:27",
   "revision": [
@@ -7573,7 +7573,7 @@
   "fecha": "2026-09-24",
   "direccion": "STA",
   "unidad": "Todo el departamento",
-  "responsable": "Wendy Carranza",
+  "responsable": "Laura Méndez",
   "estado": "Enviada",
   "horaEnvio": "16:44",
   "revision": [
@@ -7651,7 +7651,7 @@
   "fecha": "2026-09-24",
   "direccion": "SON",
   "unidad": "Todo el departamento",
-  "responsable": "Mateo Martínez",
+  "responsable": "Diego Ramos",
   "estado": "Enviada",
   "horaEnvio": "15:51",
   "revision": [
@@ -7729,7 +7729,7 @@
   "fecha": "2026-09-24",
   "direccion": "CAB",
   "unidad": "Todo el departamento",
-  "responsable": "Mateo Martínez",
+  "responsable": "Diego Ramos",
   "estado": "Enviada",
   "horaEnvio": "15:38",
   "revision": [
@@ -7807,7 +7807,7 @@
   "fecha": "2026-09-24",
   "direccion": "CHA",
   "unidad": "Todo el departamento",
-  "responsable": "Mateo Martínez",
+  "responsable": "Diego Ramos",
   "estado": "Enviada",
   "horaEnvio": "16:02",
   "revision": [
@@ -7885,7 +7885,7 @@
   "fecha": "2026-09-24",
   "direccion": "CUS",
   "unidad": "Todo el departamento",
-  "responsable": "Carlos González",
+  "responsable": "Andrés Molina",
   "estado": "Enviada",
   "horaEnvio": "16:19",
   "revision": [
@@ -7963,7 +7963,7 @@
   "fecha": "2026-09-24",
   "direccion": "LIB",
   "unidad": "Todo el departamento",
-  "responsable": "Carlos González",
+  "responsable": "Andrés Molina",
   "estado": "Enviada",
   "horaEnvio": "16:27",
   "revision": [
@@ -8041,7 +8041,7 @@
   "fecha": "2026-09-24",
   "direccion": "PAZ",
   "unidad": "Todo el departamento",
-  "responsable": "Carlos González",
+  "responsable": "Andrés Molina",
   "estado": "Enviada",
   "horaEnvio": "16:44",
   "revision": [
@@ -8118,8 +8118,8 @@
   "id": "BIT-2026-0108",
   "fecha": "2026-09-24",
   "direccion": "SS",
-  "unidad": "Registro de la Propiedad Raíz e Hipotecas",
-  "responsable": "Mateo Martínez",
+  "unidad": "Dirección Administrativa",
+  "responsable": "Diego Ramos",
   "estado": "Enviada",
   "horaEnvio": "15:51",
   "revision": [
@@ -8196,8 +8196,8 @@
   "id": "BIT-2026-0109",
   "fecha": "2026-09-24",
   "direccion": "SS",
-  "unidad": "Instituto Geográfico y del Catastro Nacional (IGCN)",
-  "responsable": "Mateo Martínez",
+  "unidad": "Dirección Operativa (DOP)",
+  "responsable": "Diego Ramos",
   "estado": "Enviada",
   "horaEnvio": "15:38",
   "revision": [
@@ -8274,8 +8274,8 @@
   "id": "BIT-2026-0110",
   "fecha": "2026-09-24",
   "direccion": "SS",
-  "unidad": "Registro de Garantías Mobiliarias",
-  "responsable": "Diana Portillo",
+  "unidad": "Unidad de Servicios Institucionales",
+  "responsable": "Sofía Rivera",
   "estado": "Enviada",
   "horaEnvio": "16:02",
   "revision": [
@@ -8352,8 +8352,8 @@
   "id": "BIT-2026-0111",
   "fecha": "2026-09-24",
   "direccion": "SS",
-  "unidad": "Registro de Comercio",
-  "responsable": "Wendy Carranza",
+  "unidad": "Dirección Legal",
+  "responsable": "Laura Méndez",
   "estado": "Enviada",
   "horaEnvio": "16:19",
   "revision": [
@@ -8430,8 +8430,8 @@
   "id": "BIT-2026-0112",
   "fecha": "2026-09-24",
   "direccion": "SS",
-  "unidad": "Instituto Salvadoreño de la Propiedad Intelectual (ISPI)",
-  "responsable": "Wendy Carranza",
+  "unidad": "Dirección de Atención al Usuario (DAU)",
+  "responsable": "Laura Méndez",
   "estado": "Enviada",
   "horaEnvio": "16:27",
   "revision": [
@@ -8509,7 +8509,7 @@
   "fecha": "2026-09-24",
   "direccion": "SV",
   "unidad": "Todo el departamento",
-  "responsable": "Diana Portillo",
+  "responsable": "Sofía Rivera",
   "estado": "Enviada",
   "horaEnvio": "16:44",
   "revision": [
@@ -8587,7 +8587,7 @@
   "fecha": "2026-09-24",
   "direccion": "MOR",
   "unidad": "Todo el departamento",
-  "responsable": "Diana Portillo",
+  "responsable": "Sofía Rivera",
   "estado": "Enviada",
   "horaEnvio": "15:38",
   "revision": [
@@ -8665,7 +8665,7 @@
   "fecha": "2026-09-24",
   "direccion": "SM",
   "unidad": "Todo el departamento",
-  "responsable": "Diana Portillo",
+  "responsable": "Sofía Rivera",
   "estado": "Enviada",
   "horaEnvio": "16:02",
   "revision": [
@@ -8743,7 +8743,7 @@
   "fecha": "2026-09-24",
   "direccion": "USU",
   "unidad": "Todo el departamento",
-  "responsable": "Diana Portillo",
+  "responsable": "Sofía Rivera",
   "estado": "Enviada",
   "horaEnvio": "16:19",
   "revision": [
@@ -8821,7 +8821,7 @@
   "fecha": "2026-09-25",
   "direccion": "AHU",
   "unidad": "Todo el departamento",
-  "responsable": "Wendy Carranza",
+  "responsable": "Laura Méndez",
   "estado": "Enviada",
   "horaEnvio": "16:12",
   "revision": [
@@ -8899,7 +8899,7 @@
   "fecha": "2026-09-25",
   "direccion": "SON",
   "unidad": "Todo el departamento",
-  "responsable": "Mateo Martínez",
+  "responsable": "Diego Ramos",
   "estado": "Enviada tarde",
   "horaEnvio": "17:34",
   "revision": [
@@ -8977,7 +8977,7 @@
   "fecha": "2026-09-25",
   "direccion": "CAB",
   "unidad": "Todo el departamento",
-  "responsable": "Mateo Martínez",
+  "responsable": "Diego Ramos",
   "estado": "Observada",
   "horaEnvio": "16:55",
   "revision": [
@@ -9055,7 +9055,7 @@
   "fecha": "2026-09-25",
   "direccion": "CHA",
   "unidad": "Todo el departamento",
-  "responsable": "Mateo Martínez",
+  "responsable": "Diego Ramos",
   "estado": "Vencida",
   "revision": [
    {
@@ -9103,7 +9103,7 @@
   "fecha": "2026-09-25",
   "direccion": "CUS",
   "unidad": "Todo el departamento",
-  "responsable": "Carlos González",
+  "responsable": "Andrés Molina",
   "estado": "Enviada",
   "horaEnvio": "16:30",
   "revision": [
@@ -9181,7 +9181,7 @@
   "fecha": "2026-09-25",
   "direccion": "LIB",
   "unidad": "Todo el departamento",
-  "responsable": "Carlos González",
+  "responsable": "Andrés Molina",
   "estado": "Observada",
   "horaEnvio": "16:48",
   "revision": [
@@ -9259,7 +9259,7 @@
   "fecha": "2026-09-25",
   "direccion": "PAZ",
   "unidad": "Todo el departamento",
-  "responsable": "Carlos González",
+  "responsable": "Andrés Molina",
   "estado": "Cerrada",
   "horaEnvio": "15:40",
   "revision": [
@@ -9336,8 +9336,8 @@
   "id": "BIT-2026-0124",
   "fecha": "2026-09-25",
   "direccion": "SS",
-  "unidad": "Instituto Geográfico y del Catastro Nacional (IGCN)",
-  "responsable": "Mateo Martínez",
+  "unidad": "Dirección Operativa (DOP)",
+  "responsable": "Diego Ramos",
   "estado": "Enviada",
   "horaEnvio": "16:05",
   "revision": [
@@ -9418,8 +9418,8 @@
   "id": "BIT-2026-0125",
   "fecha": "2026-09-25",
   "direccion": "SS",
-  "unidad": "Registro de Garantías Mobiliarias",
-  "responsable": "Diana Portillo",
+  "unidad": "Unidad de Servicios Institucionales",
+  "responsable": "Sofía Rivera",
   "estado": "Vencida",
   "revision": [
    {
@@ -9466,8 +9466,8 @@
   "id": "BIT-2026-0126",
   "fecha": "2026-09-25",
   "direccion": "SS",
-  "unidad": "Registro de Comercio",
-  "responsable": "Wendy Carranza",
+  "unidad": "Dirección Legal",
+  "responsable": "Laura Méndez",
   "estado": "Enviada",
   "horaEnvio": "15:52",
   "revision": [
@@ -9544,8 +9544,8 @@
   "id": "BIT-2026-0127",
   "fecha": "2026-09-25",
   "direccion": "SS",
-  "unidad": "Instituto Salvadoreño de la Propiedad Intelectual (ISPI)",
-  "responsable": "Wendy Carranza",
+  "unidad": "Dirección de Atención al Usuario (DAU)",
+  "responsable": "Laura Méndez",
   "estado": "Enviada",
   "horaEnvio": "16:20",
   "revision": [
@@ -9623,7 +9623,7 @@
   "fecha": "2026-09-25",
   "direccion": "SV",
   "unidad": "Todo el departamento",
-  "responsable": "Diana Portillo",
+  "responsable": "Sofía Rivera",
   "estado": "Enviada",
   "horaEnvio": "16:18",
   "revision": [
@@ -9701,7 +9701,7 @@
   "fecha": "2026-09-25",
   "direccion": "MOR",
   "unidad": "Todo el departamento",
-  "responsable": "Diana Portillo",
+  "responsable": "Sofía Rivera",
   "estado": "Vencida",
   "revision": [
    {
@@ -9749,7 +9749,7 @@
   "fecha": "2026-09-25",
   "direccion": "SM",
   "unidad": "Todo el departamento",
-  "responsable": "Diana Portillo",
+  "responsable": "Sofía Rivera",
   "estado": "Enviada",
   "horaEnvio": "15:58",
   "revision": [
@@ -9827,7 +9827,7 @@
   "fecha": "2026-09-25",
   "direccion": "USU",
   "unidad": "Todo el departamento",
-  "responsable": "Diana Portillo",
+  "responsable": "Sofía Rivera",
   "estado": "Enviada",
   "horaEnvio": "16:41",
   "revision": [

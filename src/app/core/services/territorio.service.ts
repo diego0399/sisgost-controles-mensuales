@@ -10,7 +10,7 @@ import {
  *
  * Es la única fuente que resuelve territorio en los dos módulos: la distribución de soportes, las
  * solicitudes, el inventario operativo, los controles, los KPIs, el historial y la trazabilidad
- * preguntan aquí y comparan siempre por **ID estable** (`SS`, `SS-RC`, `ZCEN`), nunca por el
+ * preguntan aquí y comparan siempre por **ID estable** (`SS`, `SS-DLG`, `ZCEN`), nunca por el
  * nombre visible.
  *
  * La regla de negocio que sostiene —dónde la distribución es por Dirección/Registro y dónde por
@@ -100,7 +100,7 @@ export class TerritorioService {
   }
 
   /**
-   * Identificador de ámbito con el que se compara en todo el ecosistema: `SS::SS-RC` para un
+   * Identificador de ámbito con el que se compara en todo el ecosistema: `SS::SS-DLG` para un
    * alcance por Dirección/Registro y `STA::*` para uno departamental.
    */
   idAmbito(departamento: string, registro: string): string {
@@ -186,7 +186,7 @@ export class TerritorioService {
 
   // ------------------------------------------------------------------ etiquetas
 
-  /** «San Salvador / Registro de Comercio» o «Santa Ana / Todo el departamento». */
+  /** «San Salvador / Dirección Legal» o «Santa Ana / Todo el departamento». */
   etiqueta(departamento: string, registro = ''): string {
     const dep = this.nombreDepartamento(this.idDepartamento(departamento));
     const reg = this.idRegistro(departamento, registro);
@@ -200,7 +200,7 @@ export class TerritorioService {
       : `${this.nombreDepartamento(a.departamentoId)} / ${ETIQUETA_TODO_EL_DEPARTAMENTO}`;
   }
 
-  /** «Zona Central · San Salvador · Registro de Comercio», para encabezados y documentos. */
+  /** «Zona Central · San Salvador · Dirección Legal», para encabezados y documentos. */
   ruta(departamento: string, registro = ''): string {
     const dep = this.idDepartamento(departamento);
     const reg = this.idRegistro(dep, registro);

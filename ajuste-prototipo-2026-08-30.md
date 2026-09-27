@@ -63,7 +63,7 @@ código que hablaba de «Dirección/Unidad» siguió compilando y solo cambió d
 ### La regla de distribución
 
 - En **San Salvador** la distribución es por **Dirección/Registro**: quien responde por el
-  Registro de Comercio no responde por el IGCN.
+  Dirección Legal no responde por el DOP.
 - En **los demás departamentos** es por **Departamento**: quien responde por Santa Ana atiende
   sus cuatro Direcciones/Registros y no se le asigna ninguna una por una.
 
@@ -81,8 +81,8 @@ Nada se compara por texto visible:
 
 - Zona: `ZOC`, `ZCEN`, `ZOR`
 - Departamento: `SS`, `STA`, `SON`, `SM`…
-- Dirección/Registro: `SS-RC`, `STA-IGCN`, `SM-RPRH`…
-- Ámbito: `SS::SS-RC` (por Dirección/Registro) · `STA::*` (departamento completo)
+- Dirección/Registro: `SS-DLG`, `STA-DOP`, `SM-DAD`…
+- Ámbito: `SS::SS-DLG` (por Dirección/Registro) · `STA::*` (departamento completo)
 
 ---
 
@@ -104,8 +104,8 @@ Nada se compara por texto visible:
 
 - Las **solicitudes** registran Zona, Departamento y Dirección/Registro. Siguen pidiendo un CPU o
   una Laptop: nuevo/usado pertenece al equipo asignado, no al requerimiento.
-- El **Técnico de Configuración** se filtra con la regla territorial. En Santa Ana / ISPI aparece
-  el responsable de Santa Ana aunque no esté asignado al ISPI; en San Salvador / Registro de
+- El **Técnico de Configuración** se filtra con la regla territorial. En Santa Ana / DAU aparece
+  el responsable de Santa Ana aunque no esté asignado al DAU; en San Salvador / Registro de
   Comercio aparece solo quien responde por ese Registro.
 - Si **no hay responsable**, se bloquea la creación del Expediente Único con el mensaje acordado y
   no se ofrece a nadie más como respaldo.

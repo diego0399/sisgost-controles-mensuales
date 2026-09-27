@@ -37,7 +37,7 @@ export interface Direccion {
   zonaId?: string;
   /** `true` = la distribución de este departamento se lleva por Dirección/Registro. */
   porDireccion?: boolean;
-  /** Direcciones/Registros del departamento (IGCN, RPRH, Registro de Comercio, ISPI, RGM). */
+  /** Direcciones/Registros del departamento (DOP, DAD, Dirección Legal, DAU, USI). */
   unidades: string[];
   /** Departamentos sin soporte asignado generan alerta en el panel ejecutivo. */
   activa: boolean;
@@ -63,7 +63,7 @@ export interface UsuarioSistema {
    * duplica la cuenta ni se crea una por rol. `rol` y `clave` reflejan cuál está activo.
    */
   roles: RolSistema[];
-  /** Unidad organizativa a la que pertenece (Soporte, Hardware, DTI…). */
+  /** Unidad organizativa a la que pertenece (Soporte, Hardware, Tecnología…). */
   unidad: string;
   cargo: string;
   estado: 'Activo' | 'Inactivo';
@@ -87,7 +87,7 @@ export interface DistribucionSoporte {
    * escriben de más de una forma y compararlos era el origen de las desincronizaciones.
    *
    * `direccionId` es el **departamento** (`SS`, `STA`) y `unidadId`, el **ámbito** completo
-   * (`SS::SS-RC` para una Dirección/Registro; `STA::*` para el departamento entero).
+   * (`SS::SS-DLG` para una Dirección/Registro; `STA::*` para el departamento entero).
    */
   tecnicoId: string;
   direccionId: string;
@@ -236,8 +236,8 @@ export interface ChecklistEquiposPlantilla {
 /**
  * Bitácora de ingresos al cuarto de servidores (F0234). El formato físico es una hoja por
  * quincena con una fila por visita: fecha, hora de entrada y de salida (E/S), carné y nombre del
- * personal autorizado, carné y nombre del acompañante, si es personal técnico de la DTI, interno
- * del CNR o externo, si anexa documento, la actividad o motivo y las firmas.
+ * personal autorizado, carné y nombre del acompañante, si es personal técnico de Tecnología, interno
+ * de la institución o externo, si anexa documento, la actividad o motivo y las firmas.
  */
 export interface IngresosPlantilla {
   /** Motivos frecuentes que ofrece el formulario; el técnico puede escribir otro. */
@@ -409,7 +409,7 @@ export interface RespuestaIngreso {
   nombre: string;
   /** Cargo del Técnico de Soporte que ingresa. */
   cargo: string;
-  /** Personal técnico DTI · Personal interno CNR · Personal externo al CNR. */
+  /** Personal técnico de TI · Personal interno de la institución · Personal externo a la institución. */
   tipoPersonal: string;
   acompanante: string;
   carneAcompanante: string;

@@ -1,7 +1,7 @@
 # SISGOST — Controles Mensuales
 
 Prototipo navegable del módulo **Controles Mensuales** de SISGOST (Sistema de Gestión y
-Seguimiento de Soporte Técnico) del Centro Nacional de Registros, conectado conceptualmente
+Seguimiento de Soporte Técnico) del Institución Pública Demo, conectado conceptualmente
 con el módulo **SISGOST — Gestión de Equipos**.
 
 Controla, da seguimiento, completa, justifica, genera y consulta los **controles mensuales**
@@ -50,14 +50,14 @@ rol: no existe un directorio paralelo.
 |---|---|---|
 | `sadmin` | Administrador | Usuarios, catálogo, aplicación de controles, feriados y datos de demostración |
 | `demo.admin` | Administrador | Usuario de demostración: restablece los datos |
-| `cgonzalez` | Encargado de Soporte (**jefe del área**) | Ve todas las Direcciones/Registros, la operatividad, pendientes, vencidos, historial y reportes |
-| `cduran` | **Coordinador** | Consulta y seguimiento: panel, operatividad, historial, reportes, documentos y trazabilidad |
-| `wcarranza` | Técnico de Soporte | Registro de la Propiedad, Registro de Comercio, RPRH y Gerencia de Tecnología |
-| `mmartinez` | Técnico de Soporte | Registro de la Propiedad, Dirección de Registro, IGN e ISPI |
-| `dportillo` | Técnico de Soporte | Registro de la Propiedad, Dirección de Registro, IGN, RPRH y Gerencia de Tecnología |
+| `amolina` | Encargado de Soporte (**jefe del área**) | Ve todas las Direcciones/Registros, la operatividad, pendientes, vencidos, historial y reportes |
+| `rherrera` | **Coordinador** | Consulta y seguimiento: panel, operatividad, historial, reportes, documentos y trazabilidad |
+| `lmendez` | Técnico de Soporte | Dirección Administrativa, Dirección Legal, DAD y Gerencia de Tecnología |
+| `dramos` | Técnico de Soporte | Dirección Administrativa, Dirección de Servicios, DOP e DAU |
+| `srivera` | Técnico de Soporte | Dirección Administrativa, Dirección de Servicios, DOP, DAD y Gerencia de Tecnología |
 
 El personal de **Hardware no participa en este módulo**: opera solo en Gestión de Equipos y no
-figura en este directorio. Diana Portillo sí aparece porque la distribución compartida le asigna
+figura en este directorio. Sofía Rivera sí aparece porque la distribución compartida le asigna
 Direcciones/Registros en ambos módulos.
 
 La contraseña es libre (prototipo). **Dirección/Registro no es un rol del sistema**: es el dato
@@ -74,8 +74,8 @@ una a una con motivo obligatorio. Las mismas responsabilidades pueden verse por 
 en la tabla completa.
 
 **Todo se compara por IDs estables**, no por el texto visible: cada asignación guarda
-`tecnicoId` (`wendy-carranza`), `direccionId` (`SS`) y `unidadId`
-(`SS::SS-RC`). Comparar nombres era el origen real de las
+`tecnicoId` (`laura-mendez`), `direccionId` (`SS`) y `unidadId`
+(`SS::SS-DLG`). Comparar nombres era el origen real de las
 desincronizaciones —«Santa Ana» contra «SANTA ANA»— y una asignación mal
 comparada deja a un técnico sin ver sus controles o le abre los de otra Dirección.
 
@@ -255,7 +255,7 @@ en [docs/bitacora-sesion-2026-08-16-17.md](docs/bitacora-sesion-2026-08-16-17.md
 
 El **F0234** se llena como el formato controlado V4: una entrada por cada visita al cuarto de
 servidores, con fecha, hora de entrada y de salida, carné y nombre del personal autorizado, carné y
-nombre del acompañante, si es personal técnico de la DTI, interno del CNR o externo, si anexa
+nombre del acompañante, si es personal técnico de Tecnología, interno de la institución o externo, si anexa
 documento y la actividad o motivo de la visita.
 
 **No siempre hay acompañante.** Cada registro empieza declarando su **tipo de ingreso**:
@@ -292,8 +292,8 @@ todas sus letras: *«Durante el periodo evaluado no se registraron ingresos al c
 servidores.»* El control nunca queda simplemente vacío.
 
 **El acompañante también se clasifica.** El formato clasifica a todo el que entra, no solo a quien
-firma: en el ingreso acompañado aparecen los tres botones de opción —Personal técnico DTI, Personal
-interno CNR, Personal externo al CNR— y son obligatorios. No es texto libre.
+firma: en el ingreso acompañado aparecen los tres botones de opción —Personal técnico de TI, Personal
+interno Institución Pública Demo, Personal externo a la institución— y son obligatorios. No es texto libre.
 
 **Documento de respaldo.** Vale igual para los dos tipos de ingreso. Una casilla —«Sí, se anexa
 documento de respaldo»— decide si se pide archivo. Sin marcar, no se exige nada. Marcada, la imagen es **obligatoria** y solo se admiten

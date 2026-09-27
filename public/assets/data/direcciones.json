@@ -6,8 +6,8 @@
   "zonaId": "ZOC",
   "porDireccion": false,
   "unidades": [
-   "Instituto Geográfico y del Catastro Nacional (IGCN)",
-   "Registro de la Propiedad Raíz e Hipotecas"
+   "Dirección Operativa (DOP)",
+   "Dirección Administrativa"
   ],
   "activa": true
  },
@@ -18,10 +18,10 @@
   "zonaId": "ZOC",
   "porDireccion": false,
   "unidades": [
-   "Instituto Geográfico y del Catastro Nacional (IGCN)",
-   "Registro de la Propiedad Raíz e Hipotecas",
-   "Registro de Comercio",
-   "Instituto Salvadoreño de la Propiedad Intelectual (ISPI)"
+   "Dirección Operativa (DOP)",
+   "Dirección Administrativa",
+   "Dirección Legal",
+   "Dirección de Atención al Usuario (DAU)"
   ],
   "activa": true
  },
@@ -32,10 +32,10 @@
   "zonaId": "ZOC",
   "porDireccion": false,
   "unidades": [
-   "Instituto Geográfico y del Catastro Nacional (IGCN)",
-   "Registro de la Propiedad Raíz e Hipotecas",
-   "Registro de Comercio",
-   "Instituto Salvadoreño de la Propiedad Intelectual (ISPI)"
+   "Dirección Operativa (DOP)",
+   "Dirección Administrativa",
+   "Dirección Legal",
+   "Dirección de Atención al Usuario (DAU)"
   ],
   "activa": true
  },
@@ -46,8 +46,8 @@
   "zonaId": "ZCEN",
   "porDireccion": false,
   "unidades": [
-   "Instituto Geográfico y del Catastro Nacional (IGCN)",
-   "Registro de la Propiedad Raíz e Hipotecas"
+   "Dirección Operativa (DOP)",
+   "Dirección Administrativa"
   ],
   "activa": true
  },
@@ -58,9 +58,9 @@
   "zonaId": "ZCEN",
   "porDireccion": false,
   "unidades": [
-   "Instituto Geográfico y del Catastro Nacional (IGCN)",
-   "Registro de Comercio",
-   "Registro de la Propiedad Raíz e Hipotecas"
+   "Dirección Operativa (DOP)",
+   "Dirección Legal",
+   "Dirección Administrativa"
   ],
   "activa": true
  },
@@ -71,8 +71,8 @@
   "zonaId": "ZCEN",
   "porDireccion": false,
   "unidades": [
-   "Instituto Geográfico y del Catastro Nacional (IGCN)",
-   "Registro de la Propiedad Raíz e Hipotecas"
+   "Dirección Operativa (DOP)",
+   "Dirección Administrativa"
   ],
   "activa": true
  },
@@ -83,8 +83,8 @@
   "zonaId": "ZCEN",
   "porDireccion": false,
   "unidades": [
-   "Instituto Geográfico y del Catastro Nacional (IGCN)",
-   "Registro de la Propiedad Raíz e Hipotecas"
+   "Dirección Operativa (DOP)",
+   "Dirección Administrativa"
   ],
   "activa": true
  },
@@ -95,10 +95,10 @@
   "zonaId": "ZCEN",
   "porDireccion": false,
   "unidades": [
-   "Instituto Geográfico y del Catastro Nacional (IGCN)",
-   "Registro de la Propiedad Raíz e Hipotecas",
-   "Registro de Comercio",
-   "Instituto Salvadoreño de la Propiedad Intelectual (ISPI)"
+   "Dirección Operativa (DOP)",
+   "Dirección Administrativa",
+   "Dirección Legal",
+   "Dirección de Atención al Usuario (DAU)"
   ],
   "activa": true
  },
@@ -109,11 +109,11 @@
   "zonaId": "ZCEN",
   "porDireccion": true,
   "unidades": [
-   "Registro de la Propiedad Raíz e Hipotecas",
-   "Instituto Geográfico y del Catastro Nacional (IGCN)",
-   "Registro de Garantías Mobiliarias",
-   "Registro de Comercio",
-   "Instituto Salvadoreño de la Propiedad Intelectual (ISPI)"
+   "Dirección Administrativa",
+   "Dirección Operativa (DOP)",
+   "Unidad de Servicios Institucionales",
+   "Dirección Legal",
+   "Dirección de Atención al Usuario (DAU)"
   ],
   "activa": true
  },
@@ -124,8 +124,8 @@
   "zonaId": "ZCEN",
   "porDireccion": false,
   "unidades": [
-   "Instituto Geográfico y del Catastro Nacional (IGCN)",
-   "Registro de la Propiedad Raíz e Hipotecas"
+   "Dirección Operativa (DOP)",
+   "Dirección Administrativa"
   ],
   "activa": true
  },
@@ -136,8 +136,8 @@
   "zonaId": "ZOR",
   "porDireccion": false,
   "unidades": [
-   "Instituto Geográfico y del Catastro Nacional (IGCN)",
-   "Registro de la Propiedad Raíz e Hipotecas"
+   "Dirección Operativa (DOP)",
+   "Dirección Administrativa"
   ],
   "activa": true
  },
@@ -148,8 +148,8 @@
   "zonaId": "ZOR",
   "porDireccion": false,
   "unidades": [
-   "Instituto Geográfico y del Catastro Nacional (IGCN)",
-   "Registro de la Propiedad Raíz e Hipotecas"
+   "Dirección Operativa (DOP)",
+   "Dirección Administrativa"
   ],
   "activa": true
  },
@@ -160,10 +160,10 @@
   "zonaId": "ZOR",
   "porDireccion": false,
   "unidades": [
-   "Instituto Geográfico y del Catastro Nacional (IGCN)",
-   "Registro de la Propiedad Raíz e Hipotecas",
-   "Registro de Comercio",
-   "Instituto Salvadoreño de la Propiedad Intelectual (ISPI)"
+   "Dirección Operativa (DOP)",
+   "Dirección Administrativa",
+   "Dirección Legal",
+   "Dirección de Atención al Usuario (DAU)"
   ],
   "activa": true
  },
@@ -174,8 +174,8 @@
   "zonaId": "ZOR",
   "porDireccion": false,
   "unidades": [
-   "Instituto Geográfico y del Catastro Nacional (IGCN)",
-   "Registro de la Propiedad Raíz e Hipotecas"
+   "Dirección Operativa (DOP)",
+   "Dirección Administrativa"
   ],
   "activa": true
  }

@@ -13,7 +13,7 @@ skinparam node {
   BorderColor #2F5597
 }
 
-node "Estación de trabajo del CNR" {
+node "Estación de trabajo de la institución" {
 
   node "Navegador · origen http://localhost:4300" as NAV43 {
     package "SISGOST — Controles Mensuales\nAngular 21 · standalone · zoneless · signals" {

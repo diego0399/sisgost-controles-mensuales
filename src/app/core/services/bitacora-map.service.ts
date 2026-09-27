@@ -26,7 +26,7 @@ import { ColorMapa } from '../../shared/mapa-salvador';
  *
  * Qué departamento va de una forma u otra sale del catálogo (`Departamento.porDireccion`), nunca de
  * comparar el texto «San Salvador». Y todo el emparejamiento se hace por **id de ámbito**
- * (`SS::SS-RC`, `STA::*`), nunca por el nombre visible del registro.
+ * (`SS::SS-DLG`, `STA::*`), nunca por el nombre visible del registro.
  *
  * ## Estado visual ≠ estado del registro
  *
@@ -75,7 +75,7 @@ export interface TotalesBitacora {
 
 /** Estado de la bitácora de un ámbito territorial en el período consultado. */
 export interface EstadoAmbitoBitacora {
-  /** Id del ámbito: `SS::SS-RC` o `STA::*`. Es la clave de comparación de todo el ecosistema. */
+  /** Id del ámbito: `SS::SS-DLG` o `STA::*`. Es la clave de comparación de todo el ecosistema. */
   clave: string;
   zonaId: string;
   zona: string;
@@ -340,8 +340,8 @@ export class BitacoraMapService {
         .map((p) => this.estadoAmbito(p, f));
 
       // Con un técnico elegido, el departamento se reduce a SUS ámbitos. Importa en San Salvador,
-      // donde cada Registro tiene su responsable: quien cubre el Registro de Comercio y el ISPI no
-      // responde por el IGCN, así que ni el color ni la tabla deben contarle esos tres. Fuera de
+      // donde cada Registro tiene su responsable: quien cubre el Dirección Legal y el DAU no
+      // responde por el DOP, así que ni el color ni la tabla deben contarle esos tres. Fuera de
       // San Salvador no cambia nada, porque el ámbito es el departamento entero.
       const ambitos = nombreTecnico
         ? todos.filter((a) => a.responsables.includes(nombreTecnico))

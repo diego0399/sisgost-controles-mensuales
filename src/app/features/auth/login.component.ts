@@ -5,6 +5,7 @@ import { AuthService } from '../../core/services/auth.service';
 import { DataService } from '../../core/services/data.service';
 import { ToastService } from '../../core/services/toast.service';
 import { HelpTipComponent } from '../../shared/ui';
+import { APP_DEMO_LABEL, APP_INSTITUTION_NAME, APP_LOGO_WHITE, APP_TECH_UNIT } from '../../core/config/institucion';
 
 @Component({
   selector: 'app-login',
@@ -104,8 +105,8 @@ import { HelpTipComponent } from '../../shared/ui';
   template: `
     <section class="hero">
       <div class="hero-top">
-        <img src="assets/logos/LogoCNR_white.png" alt="CNR" />
-        <div class="inst">Centro Nacional de Registros<br />Dirección de Tecnologías de la Información</div>
+        <img [src]="logoInstitucion" [alt]="institucion" />
+        <div class="inst">{{ institucion }}<br />{{ unidadTi }}</div>
       </div>
 
       <div class="hero-mid">
@@ -175,11 +176,15 @@ import { HelpTipComponent } from '../../shared/ui';
         </div>
       </div>
 
-      <div class="acc-foot">Centro Nacional de Registros · Dirección de Tecnologías de la Información</div>
+      <div class="acc-foot">{{ institucion }} · {{ unidadTi }} · {{ etiquetaDemo }}</div>
     </section>
   `
 })
 export class LoginComponent {
+  protected readonly institucion = APP_INSTITUTION_NAME;
+  protected readonly unidadTi = APP_TECH_UNIT;
+  protected readonly etiquetaDemo = APP_DEMO_LABEL;
+  protected readonly logoInstitucion = APP_LOGO_WHITE;
   protected readonly data = inject(DataService);
   private readonly auth = inject(AuthService);
   private readonly toast = inject(ToastService);

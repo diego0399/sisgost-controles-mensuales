@@ -1,7 +1,7 @@
 # Manual de usuario — SISGOST · Controles Mensuales
 
 Este manual describe, pantalla por pantalla, el uso del prototipo para el personal de
-Soporte Técnico del CNR. La contraseña es libre: seleccione su usuario y presione
+Soporte Técnico de la institución. La contraseña es libre: seleccione su usuario y presione
 **Ingresar a SISGOST**. El selector **Ver como** de la barra superior permite cambiar de rol
 durante una demostración.
 
@@ -170,7 +170,7 @@ algo, el formulario lo enumera y no deja guardar; tampoco admite una hora de sal
 de entrada.
 
 En el ingreso **acompañado** hay que marcar una de las tres opciones de tipo de personal —Personal
-técnico DTI, Personal interno CNR, Personal externo al CNR—: sin ella el registro no se guarda.
+técnico Tecnología, Personal interno de la institución, Personal externo a la institución—: sin ella el registro no se guarda.
 
 Si la visita trae papel de respaldo, marque **«Sí, se anexa documento de respaldo»**. Entonces se
 habilita la carga de la imagen y es obligatoria: solo se admiten fotografías o escaneos en PNG,

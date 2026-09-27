@@ -1,12 +1,12 @@
 [
  {
   "usuario": "sadmin",
-  "nombre": "Administrador SISGOST",
-  "iniciales": "AS",
+  "nombre": "Administrador Demo",
+  "iniciales": "AD",
   "roles": [
    "ADMINISTRADOR"
   ],
-  "unidad": "DTI",
+  "unidad": "Tecnología",
   "cargo": "Administración del sistema SISGOST",
   "estado": "Activo",
   "rol": "Administrador",
@@ -20,7 +20,7 @@
   "roles": [
    "ADMINISTRADOR"
   ],
-  "unidad": "DTI",
+  "unidad": "Tecnología",
   "cargo": "Restablecimiento de datos de demostración",
   "estado": "Activo",
   "rol": "Administrador",
@@ -28,9 +28,9 @@
   "moduloControles": true
  },
  {
-  "usuario": "cgonzalez",
-  "nombre": "Carlos González",
-  "iniciales": "CG",
+  "usuario": "amolina",
+  "nombre": "Andrés Molina",
+  "iniciales": "AM",
   "roles": [
    "ENCARGADO_SOPORTE",
    "TECNICO_SOPORTE"
@@ -43,9 +43,9 @@
   "moduloControles": true
  },
  {
-  "usuario": "cduran",
-  "nombre": "Carlos Durán",
-  "iniciales": "CD",
+  "usuario": "rherrera",
+  "nombre": "Roberto Herrera",
+  "iniciales": "RH",
   "roles": [
    "COORDINADOR"
   ],
@@ -57,9 +57,9 @@
   "moduloControles": true
  },
  {
-  "usuario": "wcarranza",
-  "nombre": "Wendy Carranza",
-  "iniciales": "WC",
+  "usuario": "lmendez",
+  "nombre": "Laura Méndez",
+  "iniciales": "LM",
   "roles": [
    "TECNICO_SOPORTE"
   ],
@@ -71,9 +71,9 @@
   "moduloControles": true
  },
  {
-  "usuario": "mmartinez",
-  "nombre": "Mateo Martínez",
-  "iniciales": "MM",
+  "usuario": "dramos",
+  "nombre": "Diego Ramos",
+  "iniciales": "DR",
   "roles": [
    "TECNICO_SOPORTE"
   ],
@@ -85,9 +85,9 @@
   "moduloControles": true
  },
  {
-  "usuario": "dportillo",
-  "nombre": "Diana Portillo",
-  "iniciales": "DP",
+  "usuario": "srivera",
+  "nombre": "Sofía Rivera",
+  "iniciales": "SR",
   "roles": [
    "TECNICO_SOPORTE"
   ],
@@ -99,9 +99,9 @@
   "moduloControles": true
  },
  {
-  "usuario": "scruz",
-  "nombre": "Samuel Cruz",
-  "iniciales": "SC",
+  "usuario": "mcastillo",
+  "nombre": "Mario Castillo",
+  "iniciales": "MC",
   "roles": [
    "ENCARGADO_HARDWARE"
   ],
@@ -113,9 +113,9 @@
   "moduloControles": false
  },
  {
-  "usuario": "bmejia",
-  "nombre": "Balmore Mejía",
-  "iniciales": "BM",
+  "usuario": "flopez",
+  "nombre": "Fernando López",
+  "iniciales": "FL",
   "roles": [
    "TECNICO_HARDWARE"
   ],
@@ -127,9 +127,9 @@
   "moduloControles": false
  },
  {
-  "usuario": "jramirez",
-  "nombre": "José Ramírez",
-  "iniciales": "JR",
+  "usuario": "jnavarro",
+  "nombre": "Julio Navarro",
+  "iniciales": "JN",
   "roles": [
    "TECNICO_HARDWARE"
   ],
@@ -141,9 +141,9 @@
   "moduloControles": false
  },
  {
-  "usuario": "lhernandez",
-  "nombre": "Luis Hernández",
-  "iniciales": "LH",
+  "usuario": "laguirre",
+  "nombre": "Luis Aguirre",
+  "iniciales": "LA",
   "roles": [
    "TECNICO_HARDWARE"
   ],
@@ -155,9 +155,9 @@
   "moduloControles": false
  },
  {
-  "usuario": "mlopez",
-  "nombre": "Mario López",
-  "iniciales": "ML",
+  "usuario": "mduarte",
+  "nombre": "Marcos Duarte",
+  "iniciales": "MD",
   "roles": [
    "TECNICO_HARDWARE"
   ],
@@ -169,9 +169,9 @@
   "moduloControles": false
  },
  {
-  "usuario": "evasquez",
-  "nombre": "Erick Vásquez",
-  "iniciales": "EV",
+  "usuario": "epineda",
+  "nombre": "Eduardo Pineda",
+  "iniciales": "EP",
   "roles": [
    "TECNICO_HARDWARE"
   ],
@@ -183,9 +183,9 @@
   "moduloControles": false
  },
  {
-  "usuario": "rmartinez",
-  "nombre": "Rafael Martínez",
-  "iniciales": "RM",
+  "usuario": "rsolis",
+  "nombre": "Ricardo Solís",
+  "iniciales": "RS",
   "roles": [
    "TECNICO_HARDWARE"
   ],
@@ -197,9 +197,9 @@
   "moduloControles": false
  },
  {
-  "usuario": "dmorales",
-  "nombre": "Daniel Morales",
-  "iniciales": "DM",
+  "usuario": "dquintero",
+  "nombre": "Daniel Quintero",
+  "iniciales": "DQ",
   "roles": [
    "TECNICO_HARDWARE"
   ],
@@ -211,9 +211,9 @@
   "moduloControles": false
  },
  {
-  "usuario": "oreyes",
-  "nombre": "Óscar Reyes",
-  "iniciales": "OR",
+  "usuario": "ovillalta",
+  "nombre": "Óscar Villalta",
+  "iniciales": "OV",
   "roles": [
    "TECNICO_HARDWARE"
   ],
@@ -225,9 +225,9 @@
   "moduloControles": false
  },
  {
-  "usuario": "fcastro",
-  "nombre": "Fernando Castro",
-  "iniciales": "FC",
+  "usuario": "gsalazar",
+  "nombre": "Gerardo Salazar",
+  "iniciales": "GS",
   "roles": [
    "TECNICO_HARDWARE"
   ],

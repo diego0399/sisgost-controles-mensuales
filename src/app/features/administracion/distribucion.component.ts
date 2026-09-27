@@ -68,7 +68,7 @@ interface FichaSoporte {
         <span class="alert-ico">i</span>
         <span>
           <b>La regla territorial.</b> En <b>San Salvador</b> la distribución es por Dirección/Registro:
-          un soporte responde por el Registro de Comercio, o por el IGCN, y por ninguno más. En
+          un soporte responde por el Dirección Legal, o por el DOP, y por ninguno más. En
           <b>los demás departamentos</b> es por Departamento: quien responde por Santa Ana atiende
           todas sus Direcciones/Registros sin asignarse una por una.
           <br />

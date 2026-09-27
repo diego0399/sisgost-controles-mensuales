@@ -62,7 +62,7 @@ export interface AsignacionSoporteCompartida {
   /** Departamento; se conserva el nombre heredado del campo para no romper a quien ya lo leía. */
   direccionId: string;
   direccionNombre: string;
-  /** Ámbito completo: `SS::SS-RC` o `STA::*`. */
+  /** Ámbito completo: `SS::SS-DLG` o `STA::*`. */
   unidadId: string;
   /** Nombre de la Dirección/Registro, o «Todo el departamento». */
   unidadNombre: string;

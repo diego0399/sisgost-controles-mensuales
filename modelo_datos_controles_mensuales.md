@@ -13,9 +13,9 @@ relacional están en `docs/plantuml/` (ver `diagramas_controles_mensuales.md`).
 ### DIRECCION
 | Campo | Tipo | Nota |
 |---|---|---|
-| id | PK | `SS`, `DIR-RPRH`… |
-| nombre, corta | texto | Dirección de Registros / `REGS` — el mismo texto que usa Gestión de Equipos |
-| unidades | lista | Registro de la Propiedad, Registro de Comercio, IGN, RPRH… |
+| id | PK | `SS`, `DIR-DAD`… |
+| nombre, corta | texto | Dirección de Servicios / `REGS` — el mismo texto que usa Gestión de Equipos |
+| unidades | lista | Dirección Administrativa, Dirección Legal, DOP, DAD… |
 | activa | bool | inactivas no generan controles |
 
 **No es un rol del sistema**: es el dato organizacional al que pertenecen controles,
@@ -24,7 +24,7 @@ bitácoras, inventario y distribución.
 ### USUARIO_SISTEMA
 | Campo | Tipo | Nota |
 |---|---|---|
-| usuario | PK | `wcarranza` — mismo identificador que en Gestión de Equipos |
+| usuario | PK | `lmendez` — mismo identificador que en Gestión de Equipos |
 | nombre, iniciales, cargo, unidad, estado | texto | |
 | rol / clave | catálogo | `admin`, `enc-soporte` (jefe del área), `tec-soporte`, `coordinador` — **sin roles de Hardware** |
 | moduloControles | bool | false = usuario del ecosistema que opera solo en Gestión de Equipos |
@@ -33,9 +33,9 @@ bitácoras, inventario y distribución.
 | Campo | Tipo | Nota |
 |---|---|---|
 | id | PK | `DIST-2026-0001` |
-| **tecnicoId** | FK estable | `wendy-carranza` — slug del nombre; con él se compara, no con el texto |
+| **tecnicoId** | FK estable | `laura-mendez` — slug del nombre; con él se compara, no con el texto |
 | **direccionId** | FK estable | `SS` — id del catálogo organizacional |
-| **unidadId** | FK estable | `SS::SS-RC` — la unidad cuelga de su Dirección |
+| **unidadId** | FK estable | `SS::SS-DLG` — la unidad cuelga de su Dirección |
 | direccion, unidad | texto | Dirección/Registro atendida, para mostrar |
 | tecnico | texto | «Nombre — Rol», resuelve a USUARIO_SISTEMA |
 | asignadoPor, fecha, hora | | quién la registró · `fecha` es la **fecha de inicio**, que decide quien asigna |

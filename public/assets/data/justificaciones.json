@@ -6,24 +6,24 @@
   "mes": 4,
   "direccion": "CAB",
   "unidad": "Todo el departamento",
-  "responsable": "Wendy Carranza",
+  "responsable": "Laura Méndez",
   "motivo": "Sin actividad mensual asociada al control",
-  "texto": "Se informa que en el mes de abril de 2026 no se registraron tiquetes GLPI aplicables en San Salvador / Instituto Geográfico y del Catastro Nacional (IGCN), debido a que no hubo ningún incidente reportado por los usuarios de la unidad; por tanto, no se generó reporte mensual de incidentes.",
+  "texto": "Se informa que en el mes de abril de 2026 no se registraron tiquetes GLPI aplicables en San Salvador / Dirección Operativa (DOP), debido a que no hubo ningún incidente reportado por los usuarios de la unidad; por tanto, no se generó reporte mensual de incidentes.",
   "fecha": "2026-05-05",
   "estado": "Aceptada",
   "firmas": [
    {
-    "nombre": "Wendy Carranza",
+    "nombre": "Laura Méndez",
     "cargo": "Técnico de Soporte Técnico",
     "estado": "Registrada"
    },
    {
-    "nombre": "Carlos Durán",
+    "nombre": "Roberto Herrera",
     "cargo": "Coordinador de Soporte Técnico",
     "estado": "Registrada"
    },
    {
-    "nombre": "Carlos González",
+    "nombre": "Andrés Molina",
     "cargo": "Jefe del Departamento de Soporte Técnico",
     "estado": "Registrada"
    }
@@ -36,25 +36,25 @@
   "anio": 2026,
   "mes": 6,
   "direccion": "SS",
-  "unidad": "Instituto Salvadoreño de la Propiedad Intelectual (ISPI)",
-  "responsable": "Mateo Martínez",
+  "unidad": "Dirección de Atención al Usuario (DAU)",
+  "responsable": "Diego Ramos",
   "motivo": "Sin actividad mensual asociada al control",
-  "texto": "Se informa que en el mes de junio de 2026 no se registraron tiquetes GLPI aplicables en San Salvador / Instituto Salvadoreño de la Propiedad Intelectual (ISPI), debido a que no hubo ningún incidente reportado por los usuarios de la unidad; por tanto, no se generó reporte mensual de incidentes.",
+  "texto": "Se informa que en el mes de junio de 2026 no se registraron tiquetes GLPI aplicables en San Salvador / Dirección de Atención al Usuario (DAU), debido a que no hubo ningún incidente reportado por los usuarios de la unidad; por tanto, no se generó reporte mensual de incidentes.",
   "fecha": "2026-07-02",
   "estado": "Aceptada",
   "firmas": [
    {
-    "nombre": "Mateo Martínez",
+    "nombre": "Diego Ramos",
     "cargo": "Técnico de Soporte Técnico",
     "estado": "Registrada"
    },
    {
-    "nombre": "Carlos Durán",
+    "nombre": "Roberto Herrera",
     "cargo": "Coordinador de Soporte Técnico",
     "estado": "Registrada"
    },
    {
-    "nombre": "Carlos González",
+    "nombre": "Andrés Molina",
     "cargo": "Jefe del Departamento de Soporte Técnico",
     "estado": "Registrada"
    }
@@ -67,25 +67,25 @@
   "anio": 2026,
   "mes": 7,
   "direccion": "SS",
-  "unidad": "Registro de Garantías Mobiliarias",
-  "responsable": "Wendy Carranza",
+  "unidad": "Unidad de Servicios Institucionales",
+  "responsable": "Laura Méndez",
   "motivo": "No hubo traslado de cintas en el mes",
   "texto": "Se informa que en el mes de julio de 2026 no se realizó el control F0386 Control para el traslado de cintas de respaldo, debido a que en la San Salvador no hubo visita del técnico del Departamento de Operaciones. Sin embargo, los respaldos fueron realizados a disco.",
   "fecha": "2026-08-10",
   "estado": "Emitida",
   "firmas": [
    {
-    "nombre": "Wendy Carranza",
+    "nombre": "Laura Méndez",
     "cargo": "Técnico de Soporte Técnico",
     "estado": "Registrada"
    },
    {
-    "nombre": "Carlos Durán",
+    "nombre": "Roberto Herrera",
     "cargo": "Coordinador de Soporte Técnico",
     "estado": "Registrada"
    },
    {
-    "nombre": "Carlos González",
+    "nombre": "Andrés Molina",
     "cargo": "Jefe del Departamento de Soporte Técnico",
     "estado": "Pendiente"
    }

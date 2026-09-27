@@ -348,13 +348,13 @@ export class DataService {
 
   /**
    * «Dirección / Unidad» para mostrar. Cuando la unidad se llama igual que la Dirección
-   * (Gerencia de Tecnología, Dirección de Registro) se escribe una sola vez.
+   * (Gerencia de Tecnología, Dirección de Servicios) se escribe una sola vez.
    */
   dirUnidad(direccionId: string, unidad: string): string {
     return this.territorio.etiqueta(direccionId, unidad);
   }
 
-  /** «Zona Central · San Salvador · Registro de Comercio», para encabezados y documentos. */
+  /** «Zona Central · San Salvador · Dirección Legal», para encabezados y documentos. */
   rutaTerritorial(direccionId: string, unidad = ''): string {
     return this.territorio.ruta(direccionId, unidad);
   }
@@ -2015,7 +2015,7 @@ export class DataService {
   /**
    * Deja constancia de lo ocurrido. Además de quién y cuándo, todo evento guarda el **rol activo**
    * con el que se actuó y **todos los roles** que la persona tenía en ese momento: con usuarios
-   * multirrol, saber que actuó «Carlos González» ya no basta para auditar, hay que saber si lo
+   * multirrol, saber que actuó «Andrés Molina» ya no basta para auditar, hay que saber si lo
    * hizo como Encargado o como Técnico.
    */
   registrarEvento(u: UsuarioSistema | null, e: Partial<EventoTrazabilidad> & { accion: string }): void {
