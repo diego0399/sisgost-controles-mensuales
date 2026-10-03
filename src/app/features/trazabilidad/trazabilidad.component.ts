@@ -73,6 +73,12 @@ import { MESES, formateaFecha } from '../../core/models/models';
                   {{ e.usuario }} ({{ e.rol }})
                   @if (e.estadoAnterior || e.estadoNuevo) { · {{ e.estadoAnterior || '—' }} → <b>{{ e.estadoNuevo || '—' }}</b> }
                 </div>
+                @if (e.tipoAplicacion) {
+                  <div class="tl-mod">
+                    <span class="badge plain">{{ e.tipoAplicacion === 'DIRECCION_UNIDAD' ? 'Dirección/Unidad' : 'Departamento completo' }}</span>
+                    {{ e.nombreControl }} · {{ e.zona || '—' }} · {{ e.departamento || '—' }}@if (e.direccionRegistro) { · {{ e.direccionRegistro }} }
+                  </div>
+                }
                 @if (e.moduloDestino || e.inventario) {
                   <div class="tl-mod">
                     @if (e.moduloDestino) {

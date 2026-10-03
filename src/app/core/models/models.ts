@@ -283,6 +283,11 @@ export interface AreaTecnica {
   pares: { direccion: string; unidad: string }[];
 }
 
+/**
+ * Modos de la configuración **anterior** de «Aplica a». Ya no se editan: solo se conservan para
+ * migrar una semilla o una foto de localStorage guardadas antes de la configuración por
+ * Departamento (ver `AplicacionDepartamento`).
+ */
 export type ModoAplicacion =
   | 'Todas las direcciones'
   | 'Direcciones específicas'
@@ -290,20 +295,46 @@ export type ModoAplicacion =
   | 'Área técnica específica';
 
 /**
+ * Cómo aplica un control dentro de un Departamento. Lo decide la regla territorial
+ * (`Departamento.porDireccion`), nunca el nombre visible: en los Departamentos que se distribuyen
+ * por Dirección/Registro (San Salvador) se eligen las Direcciones/Unidades; en los demás el control
+ * aplica al Departamento completo.
+ */
+export type TipoAplicacionControl = 'DEPARTAMENTO' | 'DIRECCION_UNIDAD';
+
+/** Una línea de la configuración de un control: un Departamento y, si corresponde, sus Direcciones/Unidades. */
+export interface AplicacionDepartamento {
+  id: string;
+  codigoControl: string;
+  zonaId: string;
+  departamentoId: string;
+  tipoAplicacion: TipoAplicacionControl;
+  /** IDs estables de Dirección/Registro (`SS-DOP`). Siempre vacío cuando el tipo es DEPARTAMENTO. */
+  direccionesUnidadesIds: string[];
+  activo: boolean;
+  observaciones?: string;
+}
+
+/**
  * Dónde aplica un control. Es configurable desde el catálogo porque **no todos los controles se
- * trabajan en todas las Direcciones/Registros**: el calendario solo programa un control en las
- * Direcciones/Registros que resultan de esta configuración.
+ * trabajan en todos los Departamentos**: el calendario solo programa un control en los ámbitos que
+ * resultan de esta configuración —uno por Dirección/Unidad elegida en San Salvador, uno por
+ * Departamento completo en el resto—.
  */
 export interface AplicacionControl {
-  modo: ModoAplicacion;
-  /** Ids de Dirección (modo «Direcciones específicas»). */
-  direcciones: string[];
-  /** Pares Dirección/Registro (modo «Unidades específicas»). */
-  unidades: { direccion: string; unidad: string }[];
-  /** Id del área técnica (modo «Área técnica específica»). */
-  area: string;
+  aplicaciones: AplicacionDepartamento[];
   /** Motivo institucional de la aplicación; se muestra en el catálogo. */
   observaciones: string;
+}
+
+/** Forma heredada de `AplicacionControl`, tal como la traen semillas y fotos anteriores. */
+export interface AplicacionControlHeredada {
+  modo?: ModoAplicacion;
+  direcciones?: string[];
+  unidades?: { direccion: string; unidad: string }[];
+  area?: string;
+  aplicaciones?: AplicacionDepartamento[];
+  observaciones?: string;
 }
 
 export interface ControlCatalogo {
@@ -681,6 +712,10 @@ export interface EventoTrazabilidad {
   direccionRegistro?: string;
   /** `DEPARTAMENTO` o `DIRECCION_REGISTRO`, en los eventos de distribución territorial. */
   tipoAsignacion?: string;
+  /** `DEPARTAMENTO` o `DIRECCION_UNIDAD`, en los eventos de configuración de controles. */
+  tipoAplicacion?: string;
+  /** Nombre del control, en los eventos del catálogo. */
+  nombreControl?: string;
   /** Departamento afectado, en la nomenclatura heredada de las pantallas. */
   direccion?: string;
   /** Dirección/Registro afectada, o «Todo el departamento». */

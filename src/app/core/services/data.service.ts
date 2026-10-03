@@ -1,10 +1,10 @@
 import { Injectable, computed, inject, signal } from '@angular/core';
 import {
-  ActividadDia, AplicacionControl, AreaTecnica, BitacoraDiaria, ControlCatalogo, ControlMes,
+  ActividadDia, AplicacionControl, AplicacionControlHeredada, AplicacionDepartamento, AreaTecnica, BitacoraDiaria, ControlCatalogo, ControlMes,
   Direccion, DistribucionSoporte, DocumentoGenerado, EquipoOperativo, ESTADOS_ACTIVOS,
   EstadoControl, EventoIntegracion, EventoTrazabilidad, Frecuencia, Justificacion, RespuestaSeccion,
   ItemSeguridad, RespuestaEquipoChecklist, RespuestaIngreso, RespuestaItemSeguridad, RevisionAtencion,
-  ResumenMuestra, SeccionPlantilla, UsuarioSistema, isoLocal, nombreMes
+  ResumenMuestra, SeccionPlantilla, TipoAplicacionControl, UsuarioSistema, isoLocal, nombreMes
 } from '../models/models';
 import {
   RolSistema, ROLES, ROL_RESPONSABLE_SOPORTE, claveDeRol, esRolHardware, etiquetaRoles, nombreRol,
@@ -140,7 +140,7 @@ export class DataService {
     // resuelve el nombre de una Dirección/Registro a su ID estable.
     this.soportes.cargarOrganizacion(direcciones);
     this.areas.set(areas);
-    this.catalogo.set(catalogo);
+    this.catalogo.set(this.normalizarCatalogo(catalogo));
 
     const guardado = this.leerSnapshot();
     if (guardado) {
@@ -155,9 +155,11 @@ export class DataService {
       if (guardado.usuarios?.length) this.usuarios.set(guardado.usuarios.map((x) => this.normalizaUsuario(x)));
       this.soportes.cargar(guardado.distribucion);
       this.alinearDistribucionCompartida();
-      // Una foto anterior a la aplicación configurable no trae catálogo: entonces manda el JSON.
-      if (guardado.catalogo?.length && guardado.catalogo.every((c) => !!c.aplicacion)) {
-        this.catalogo.set(guardado.catalogo);
+      // Una foto anterior a la configuración por Departamento (sin `aplicaciones`) no manda: entonces
+      // rige la semilla del JSON, que ya trae la configuración por Departamento.
+      if (guardado.catalogo?.length
+        && guardado.catalogo.every((c) => Array.isArray((c.aplicacion as AplicacionControlHeredada | undefined)?.aplicaciones))) {
+        this.catalogo.set(this.normalizarCatalogo(guardado.catalogo));
       }
     } else {
       const [controles, bitacoras, justificaciones, inventario, eventos, documentos, trazas, distribucion] = await Promise.all([
@@ -440,33 +442,59 @@ export class DataService {
   areaDe(id: string): AreaTecnica | undefined { return this.areas().find((a) => a.id === id); }
 
   /**
-   * Direcciones/Registros donde **aplica** un control, según su configuración del catálogo.
-   * El calendario solo programa el control en estos pares: no todos los controles se trabajan en
-   * todas las Direcciones/Registros. Los controles que revisan equipos se limitan además a los
-   * pares que tienen inventario operativo activo.
+   * Ámbitos donde **aplica** un control, según su configuración por Departamento. El calendario
+   * solo programa el control en estos ámbitos: en San Salvador, uno por cada Dirección/Unidad
+   * elegida; en el resto, uno solo por el Departamento completo (nunca uno por Dirección/Registro).
+   * Los controles que revisan equipos se limitan además a los ámbitos con inventario operativo activo.
    */
   paresAplicables(codigo: string): { direccion: string; unidad: string }[] {
     const c = this.catalogoDe(codigo);
     if (!c) return [];
-    const a = c.aplicacion;
-    let pares: { direccion: string; unidad: string }[];
-    switch (a.modo) {
-      case 'Todas las direcciones':
-        pares = this.pares();
-        break;
-      case 'Direcciones específicas':
-        pares = this.pares().filter((p) => a.direcciones.includes(p.direccion));
-        break;
-      case 'Unidades específicas':
-        pares = this.pares().filter((p) => a.unidades.some((u) => u.direccion === p.direccion && u.unidad === p.unidad));
-        break;
-      default: {
-        const area = this.areaDe(a.area);
-        pares = this.pares().filter((p) => (area?.pares ?? []).some((u) => u.direccion === p.direccion && u.unidad === p.unidad));
-      }
-    }
+    return this.paresDeLineas(c, c.aplicacion.aplicaciones);
+  }
+
+  /** Ámbitos que programa una sola línea de la configuración (vista previa del catálogo). */
+  paresDeLinea(c: ControlCatalogo, linea: AplicacionDepartamento): { direccion: string; unidad: string }[] {
+    return this.paresDeLineas(c, [linea]);
+  }
+
+  private paresDeLineas(c: ControlCatalogo, lineas: AplicacionDepartamento[]): { direccion: string; unidad: string }[] {
+    // Se cruza contra `pares()` para quedarse solo con ámbitos activos del catálogo territorial.
+    const claves = new Set(lineas.flatMap((l) => this.ambitosDeLinea(l)).map((p) => `${p.direccion}|${p.unidad}`));
+    let pares = this.pares().filter((p) => claves.has(`${p.direccion}|${p.unidad}`));
     if (this.requiereEquipos(c)) pares = pares.filter((p) => this.equiposActivosDe(p.direccion, p.unidad).length > 0);
     return pares;
+  }
+
+  /** Ámbitos de una línea activa: sus Direcciones/Unidades, o el Departamento completo. */
+  ambitosDeLinea(l: AplicacionDepartamento): { direccion: string; unidad: string }[] {
+    if (!l.activo || !l.departamentoId) return [];
+    if (l.tipoAplicacion === 'DIRECCION_UNIDAD') {
+      return l.direccionesUnidadesIds.map((id) => ({ direccion: l.departamentoId, unidad: this.territorio.nombreRegistro(id) }));
+    }
+    return [{ direccion: l.departamentoId, unidad: ETIQUETA_TODO_EL_DEPARTAMENTO }];
+  }
+
+  /**
+   * Tipo de aplicación que la regla territorial impone a un Departamento. Se decide por el ID y su
+   * marca `porDireccion` (hoy, solo San Salvador), nunca por el nombre visible.
+   */
+  tipoAplicacionDe(departamentoId: string): TipoAplicacionControl {
+    return this.territorio.distribuyePorDireccion(departamentoId) ? 'DIRECCION_UNIDAD' : 'DEPARTAMENTO';
+  }
+
+  /** Líneas de la configuración ordenadas por Departamento, para tablas y documentos. */
+  lineasAplicacion(c: ControlCatalogo): AplicacionDepartamento[] {
+    const orden = (id: string) => this.territorio.departamento(id)?.orden ?? 99;
+    return [...c.aplicacion.aplicaciones].sort((a, b) => orden(a.departamentoId) - orden(b.departamentoId));
+  }
+
+  /** «San Salvador / Dirección Operativa, Dirección Legal» o «Santa Ana / Departamento completo». */
+  etiquetaLinea(l: AplicacionDepartamento, corta = false): string {
+    const dep = corta ? this.cortaDireccion(l.departamentoId) : this.territorio.nombreDepartamento(l.departamentoId);
+    if (l.tipoAplicacion === 'DEPARTAMENTO') return `${dep} / Departamento completo`;
+    const regs = l.direccionesUnidadesIds.map((id) => (corta ? this.territorio.cortaRegistro(id) : this.territorio.nombreRegistro(id)));
+    return `${dep} / ${regs.join(', ') || 'sin Direcciones/Unidades'}`;
   }
 
   /** ¿El control trabaja sobre los equipos del inventario operativo? */
@@ -491,13 +519,8 @@ export class DataService {
 
   /** Texto corto de la aplicación de un control, para tablas y documentos. */
   resumenAplicacion(c: ControlCatalogo): string {
-    const a = c.aplicacion;
-    switch (a.modo) {
-      case 'Todas las direcciones': return 'Todas las Direcciones/Registros';
-      case 'Direcciones específicas': return a.direcciones.map((d) => this.cortaDireccion(d)).join(' · ') || 'Sin configurar';
-      case 'Unidades específicas': return a.unidades.map((u) => `${this.cortaDireccion(u.direccion)} / ${u.unidad}`).join(' · ') || 'Sin configurar';
-      default: return this.areaDe(a.area)?.nombre ?? 'Sin configurar';
-    }
+    const lineas = this.lineasAplicacion(c).filter((l) => l.activo);
+    return lineas.length ? lineas.map((l) => this.etiquetaLinea(l, true)).join(' · ') : 'Sin configurar';
   }
 
   /**
@@ -2474,51 +2497,240 @@ export class DataService {
   }
 
   actualizarCatalogo(c: ControlCatalogo, u: UsuarioSistema): string | null {
-    const error = this.validarAplicacion(c.aplicacion);
-    if (c.activo && error) return `No es posible activar el control sin configurar su aplicación. ${error}`;
+    if (c.activo && !c.aplicacion.aplicaciones.some((l) => l.activo)) {
+      return 'No es posible activar el control sin configurar al menos un Departamento donde aplica.';
+    }
     this.catalogo.update((l) => l.map((x) => (x.codigo === c.codigo ? c : x)));
     this.persistir();
-    this.registrarEvento(u, { tipoControl: c.codigo, accion: 'Catálogo de controles actualizado', observacion: `${c.codigo}: frecuencia ${c.frecuencia.toLowerCase()}, ${c.activo ? 'activo' : 'inactivo'}.` });
-    return null;
-  }
-
-  /** Una aplicación vacía no se guarda: el control quedaría sin ninguna Dirección/Registro donde correr. */
-  validarAplicacion(a: AplicacionControl): string | null {
-    if (a.modo === 'Todas las direcciones') return null;
-    if (a.modo === 'Direcciones específicas' && !a.direcciones.length) {
-      return 'Debe seleccionar al menos una Dirección, Unidad o área donde aplica este control.';
-    }
-    if (a.modo === 'Unidades específicas' && !a.unidades.length) {
-      return 'Debe seleccionar al menos una Dirección, Unidad o área donde aplica este control.';
-    }
-    if (a.modo === 'Área técnica específica' && !a.area) {
-      return 'Debe seleccionar al menos una Dirección, Unidad o área donde aplica este control.';
-    }
-    return null;
-  }
-
-  /**
-   * Guarda dónde aplica un control. Cambiar la aplicación cambia qué Direcciones/Registros verán
-   * ese control en el calendario del próximo período; los controles ya programados no se tocan,
-   * porque pertenecen a un período cerrado.
-   */
-  actualizarAplicacion(codigo: string, aplicacion: AplicacionControl, u: UsuarioSistema): string | null {
-    const c = this.catalogoDe(codigo);
-    if (!c) return 'El control no existe en el catálogo.';
-    const error = this.validarAplicacion(aplicacion);
-    if (error) return error;
-    const antes = this.resumenAplicacion(c);
-    this.catalogo.update((l) => l.map((x) => (x.codigo === codigo ? { ...x, aplicacion } : x)));
-    this.persistir();
-    const despues = this.resumenAplicacion(this.catalogoDe(codigo)!);
-    this.registrarEvento(u, {
-      tipoControl: codigo, accion: 'Aplicación del control actualizada',
-      estadoAnterior: antes, estadoNuevo: despues,
-      observacion: `${codigo}: ${aplicacion.modo.toLowerCase()}. ${aplicacion.observaciones}`.trim()
-    });
-    // El período se recalcula aquí mismo: guardar la configuración YA sincroniza los controles.
+    this.registrarEvento(u, { tipoControl: c.codigo, nombreControl: c.nombre, accion: 'Catálogo de controles actualizado', observacion: `${c.codigo}: frecuencia ${c.frecuencia.toLowerCase()}, ${c.activo ? 'activo' : 'inactivo'}.` });
+    // Frecuencia y estado deciden qué se programa: el período se recalcula en el mismo guardado.
     const p = this.plazos.periodoActivo();
     this.autoSyncControls(p.anio, p.mes, u);
     return null;
   }
+
+  // ------------------------------------------------------------------ configuración por Departamento
+
+  readonly MSG_APL_ZONA = 'Debe seleccionar una Zona.';
+  readonly MSG_APL_DEPARTAMENTO = 'Debe seleccionar un Departamento.';
+  readonly MSG_APL_ZONA_DEPARTAMENTO = 'El Departamento seleccionado no pertenece a la Zona elegida.';
+  readonly MSG_APL_UNIDADES = 'Debe seleccionar al menos una Dirección/Unidad para San Salvador.';
+  readonly MSG_APL_DEPTO_COMPLETO = 'En este Departamento el control aplica al Departamento completo.';
+  readonly MSG_APL_DUP_DEPARTAMENTO = 'Ya existe una configuración activa para este control en el Departamento seleccionado.';
+  readonly MSG_APL_DUP_UNIDAD = 'Ya existe una configuración activa para esta Dirección/Unidad de San Salvador.';
+  readonly MSG_APL_ULTIMA = 'Un control activo debe conservar al menos un Departamento donde aplica. Desactive primero el control en el catálogo.';
+
+  /** Lo que de verdad se guarda de una línea: zona y tipo según el Departamento, y sin Direcciones/Unidades fuera de San Salvador. */
+  private normalizarLinea(codigo: string, l: Partial<AplicacionDepartamento>): AplicacionDepartamento {
+    const departamentoId = l.departamentoId ?? '';
+    const tipoAplicacion = departamentoId ? this.tipoAplicacionDe(departamentoId) : 'DEPARTAMENTO';
+    const validos = new Set(this.territorio.registrosDe(departamentoId).map((r) => r.id));
+    return {
+      id: l.id || this.idNuevo('APL'),
+      codigoControl: codigo,
+      zonaId: (departamentoId && this.territorio.zonaDe(departamentoId)) || l.zonaId || '',
+      departamentoId,
+      tipoAplicacion,
+      direccionesUnidadesIds: tipoAplicacion === 'DEPARTAMENTO'
+        ? [] : [...new Set(l.direccionesUnidadesIds ?? [])].filter((id) => validos.has(id)),
+      activo: l.activo ?? true,
+      observaciones: l.observaciones ?? ''
+    };
+  }
+
+  private normalizarCatalogo(lista: ControlCatalogo[]): ControlCatalogo[] {
+    return lista.map((c) => ({ ...c, aplicacion: this.normalizarAplicacion(c.codigo, c.aplicacion as AplicacionControlHeredada) }));
+  }
+
+  /**
+   * Deja la aplicación de un control en la forma por Departamento. Una semilla o una foto
+   * anteriores traen los modos heredados («Todas las direcciones», «Unidades específicas», «Área
+   * técnica específica»…): se traducen a líneas por Departamento que programan exactamente los
+   * mismos ámbitos.
+   */
+  private normalizarAplicacion(codigo: string, h: AplicacionControlHeredada | undefined): AplicacionControl {
+    const observaciones = h?.observaciones ?? '';
+    if (Array.isArray(h?.aplicaciones)) {
+      return { observaciones, aplicaciones: h.aplicaciones.map((l) => this.normalizarLinea(codigo, l)).filter((l) => !!l.departamentoId) };
+    }
+    const porDep = new Map<string, Set<string>>();
+    const todoElDepartamento = (dep: string) => {
+      if (!dep) return;
+      const set = porDep.get(dep) ?? new Set<string>();
+      this.territorio.registrosDe(dep).forEach((r) => set.add(r.id));
+      porDep.set(dep, set);
+    };
+    const par = (direccion: string, unidad: string) => {
+      const dep = this.territorio.idDepartamento(direccion);
+      if (!dep) return;
+      const reg = this.territorio.idRegistro(dep, unidad);
+      if (!this.territorio.distribuyePorDireccion(dep) || !reg) { todoElDepartamento(dep); return; }
+      porDep.set(dep, (porDep.get(dep) ?? new Set<string>()).add(reg));
+    };
+    switch (h?.modo) {
+      case 'Todas las direcciones': this.territorio.departamentosActivos().forEach((d) => todoElDepartamento(d.id)); break;
+      case 'Direcciones específicas': (h.direcciones ?? []).forEach((d) => todoElDepartamento(this.territorio.idDepartamento(d))); break;
+      case 'Unidades específicas': (h.unidades ?? []).forEach((p) => par(p.direccion, p.unidad)); break;
+      default: (this.areaDe(h?.area ?? '')?.pares ?? []).forEach((p) => par(p.direccion, p.unidad));
+    }
+    const aplicaciones = [...porDep].map(([dep, regs]) => this.normalizarLinea(codigo, {
+      id: `APL-${codigo}-${dep}`, departamentoId: dep, direccionesUnidadesIds: [...regs], activo: true
+    }));
+    return { observaciones, aplicaciones };
+  }
+
+  /**
+   * Valida una línea contra la regla territorial y contra las demás líneas activas del control.
+   * `tipo` distingue una configuración incompleta de un duplicado: cada uno deja su propio evento.
+   */
+  validarLineaAplicacion(c: ControlCatalogo, l: Partial<AplicacionDepartamento>):
+    { error: string; tipo: 'incompleta' | 'duplicado' } | null {
+    if (!l.zonaId) return { error: this.MSG_APL_ZONA, tipo: 'incompleta' };
+    if (!l.departamentoId) return { error: this.MSG_APL_DEPARTAMENTO, tipo: 'incompleta' };
+    if (this.territorio.zonaDe(l.departamentoId) !== l.zonaId) return { error: this.MSG_APL_ZONA_DEPARTAMENTO, tipo: 'incompleta' };
+    const tipo = this.tipoAplicacionDe(l.departamentoId);
+    const ids = tipo === 'DIRECCION_UNIDAD' ? (l.direccionesUnidadesIds ?? []) : [];
+    if (tipo === 'DIRECCION_UNIDAD' && !ids.length) return { error: this.MSG_APL_UNIDADES, tipo: 'incompleta' };
+    if (l.activo === false) return null; // una línea inactiva no compite con nadie
+    const otras = c.aplicacion.aplicaciones
+      .filter((o) => o.activo && o.id !== l.id && o.departamentoId === l.departamentoId);
+    if (tipo === 'DEPARTAMENTO' && otras.length) return { error: this.MSG_APL_DUP_DEPARTAMENTO, tipo: 'duplicado' };
+    if (tipo === 'DIRECCION_UNIDAD' && otras.some((o) => o.direccionesUnidadesIds.some((id) => ids.includes(id)))) {
+      return { error: this.MSG_APL_DUP_UNIDAD, tipo: 'duplicado' };
+    }
+    return null;
+  }
+
+  /** Campos de trazabilidad comunes a todos los eventos de una línea de configuración. */
+  private trazaLinea(c: ControlCatalogo, l: Partial<AplicacionDepartamento>): Partial<EventoTrazabilidad> {
+    const dep = l.departamentoId ?? '';
+    const tipo = dep ? this.tipoAplicacionDe(dep) : undefined;
+    return {
+      tipoControl: c.codigo, nombreControl: c.nombre,
+      zona: l.zonaId ? this.territorio.nombreZona(l.zonaId) : '',
+      departamento: dep ? this.territorio.nombreDepartamento(dep) : '',
+      direccion: dep || undefined,
+      direccionRegistro: tipo === 'DIRECCION_UNIDAD'
+        ? (l.direccionesUnidadesIds ?? []).map((id) => this.territorio.nombreRegistro(id)).join(', ')
+        : '',
+      tipoAplicacion: tipo
+    };
+  }
+
+  /**
+   * Guarda una línea de la configuración (nueva o editada). Guardar **ya** recalcula el período:
+   * controles, vista por Departamento, perfil del Técnico de Soporte, KPIs, historial y mapa leen
+   * de las mismas señales, así que no existe ningún botón de sincronizar.
+   *
+   * `limpiadas` son las Direcciones/Unidades que el formulario descartó al cambiar de San
+   * Salvador a otro Departamento; se trazan junto con las que la línea guardada tenía antes.
+   */
+  guardarLineaAplicacion(codigo: string, linea: Partial<AplicacionDepartamento>, u: UsuarioSistema,
+    limpiadas: string[] = []): string | null {
+    const c = this.catalogoDe(codigo);
+    if (!c) return 'El control no existe en el catálogo.';
+    const fallo = this.validarLineaAplicacion(c, linea);
+    if (fallo) {
+      this.registrarEvento(u, {
+        ...this.trazaLinea(c, linea),
+        accion: fallo.tipo === 'duplicado' ? 'Duplicado bloqueado' : 'Intento de guardar configuración incompleta',
+        estadoNuevo: 'No guardado', observacion: fallo.error
+      });
+      return fallo.error;
+    }
+    const nueva = this.normalizarLinea(codigo, linea);
+    const anterior = c.aplicacion.aplicaciones.find((l) => l.id === nueva.id);
+    const aplicaciones = anterior
+      ? c.aplicacion.aplicaciones.map((l) => (l.id === nueva.id ? nueva : l))
+      : [...c.aplicacion.aplicaciones, nueva];
+    if (c.activo && !aplicaciones.some((l) => l.activo)) return this.MSG_APL_ULTIMA;
+    this.catalogo.update((l) => l.map((x) => (x.codigo === codigo ? { ...x, aplicacion: { ...x.aplicacion, aplicaciones } } : x)));
+    this.persistir();
+
+    const traza = this.trazaLinea(c, nueva);
+    this.registrarEvento(u, {
+      ...traza,
+      accion: anterior ? 'Configuración de control modificada' : 'Configuración de control creada',
+      estadoAnterior: anterior ? `${this.etiquetaLinea(anterior)} (${anterior.activo ? 'activa' : 'inactiva'})` : '—',
+      estadoNuevo: `${this.etiquetaLinea(nueva)} (${nueva.activo ? 'activa' : 'inactiva'})`,
+      observacion: nueva.observaciones || `${codigo} configurado en ${this.etiquetaLinea(nueva)}.`
+    });
+    const cambioDepartamento = !anterior || anterior.departamentoId !== nueva.departamentoId;
+    if (cambioDepartamento) {
+      this.registrarEvento(u, {
+        ...traza, accion: 'Departamento asignado al control',
+        estadoAnterior: anterior ? this.territorio.nombreDepartamento(anterior.departamentoId) : '—',
+        estadoNuevo: this.territorio.nombreDepartamento(nueva.departamentoId),
+        observacion: `${codigo} aplica ahora en ${this.territorio.nombreDepartamento(nueva.departamentoId)}.`
+      });
+    }
+    const quitadas = new Set(limpiadas);
+    if (anterior?.tipoAplicacion === 'DIRECCION_UNIDAD' && nueva.tipoAplicacion === 'DEPARTAMENTO') {
+      anterior.direccionesUnidadesIds.forEach((id) => quitadas.add(id));
+    }
+    if (quitadas.size && nueva.tipoAplicacion === 'DEPARTAMENTO') {
+      const nombres = [...quitadas].map((id) => this.territorio.nombreRegistro(id)).join(', ');
+      this.registrarEvento(u, {
+        ...traza, direccionRegistro: nombres, accion: 'Dirección/Unidad limpiada por cambio de Departamento',
+        estadoAnterior: nombres, estadoNuevo: 'Departamento completo',
+        observacion: `Al pasar a ${this.territorio.nombreDepartamento(nueva.departamentoId)} se limpiaron las Direcciones/Unidades seleccionadas (${nombres}). ${this.MSG_APL_DEPTO_COMPLETO}`
+      });
+    }
+    if (nueva.tipoAplicacion === 'DIRECCION_UNIDAD') {
+      const previas = anterior && !cambioDepartamento ? anterior.direccionesUnidadesIds : [];
+      for (const id of nueva.direccionesUnidadesIds.filter((x) => !previas.includes(x))) {
+        this.registrarEvento(u, {
+          ...traza, direccionRegistro: this.territorio.nombreRegistro(id),
+          accion: `Dirección/Unidad asignada al control en ${this.territorio.nombreDepartamento(nueva.departamentoId)}`,
+          estadoNuevo: this.territorio.nombreRegistro(id),
+          observacion: `${codigo} se programará en ${this.territorio.etiqueta(nueva.departamentoId, id)}.`
+        });
+      }
+    } else if (cambioDepartamento || anterior?.tipoAplicacion !== 'DEPARTAMENTO') {
+      this.registrarEvento(u, {
+        ...traza, accion: 'Control configurado por Departamento completo',
+        estadoNuevo: 'Departamento completo',
+        observacion: `${codigo} se programa una sola vez para ${this.territorio.nombreDepartamento(nueva.departamentoId)} completo, no por Dirección/Registro.`
+      });
+    }
+    this.recalcularTrasConfiguracion(c, u);
+    return null;
+  }
+
+  /** Activa o desactiva una línea. Activar vuelve a validar duplicados; desactivar no deja al control sin ámbitos. */
+  cambiarEstadoLineaAplicacion(codigo: string, id: string, activo: boolean, u: UsuarioSistema): string | null {
+    const c = this.catalogoDe(codigo);
+    const l = c?.aplicacion.aplicaciones.find((x) => x.id === id);
+    if (!c || !l) return 'La configuración ya no existe.';
+    if (l.activo === activo) return null;
+    const fallo = activo ? this.validarLineaAplicacion(c, { ...l, activo: true }) : null;
+    if (fallo) {
+      this.registrarEvento(u, { ...this.trazaLinea(c, l), accion: 'Duplicado bloqueado', estadoNuevo: 'No guardado', observacion: fallo.error });
+      return fallo.error;
+    }
+    if (!activo && c.activo && !c.aplicacion.aplicaciones.some((x) => x.activo && x.id !== id)) return this.MSG_APL_ULTIMA;
+    this.catalogo.update((lst) => lst.map((x) => (x.codigo === codigo
+      ? { ...x, aplicacion: { ...x.aplicacion, aplicaciones: x.aplicacion.aplicaciones.map((y) => (y.id === id ? { ...y, activo } : y)) } }
+      : x)));
+    this.persistir();
+    this.registrarEvento(u, {
+      ...this.trazaLinea(c, l), accion: 'Configuración de control modificada',
+      estadoAnterior: activo ? 'Inactiva' : 'Activa', estadoNuevo: activo ? 'Activa' : 'Inactiva',
+      observacion: `${codigo} ${activo ? 'vuelve a aplicar' : 'deja de aplicar'} en ${this.etiquetaLinea(l)}.`
+    });
+    this.recalcularTrasConfiguracion(c, u);
+    return null;
+  }
+
+  /** Recalcula el período activo y deja constancia: es la «sincronización» que nunca pide un botón. */
+  private recalcularTrasConfiguracion(c: ControlCatalogo, u: UsuarioSistema): void {
+    const p = this.plazos.periodoActivo();
+    const r = this.autoSyncControls(p.anio, p.mes, u);
+    this.registrarEvento(u, {
+      tipoControl: c.codigo, nombreControl: c.nombre, mes: p.mes, anio: p.anio,
+      accion: 'Controles del período recalculados automáticamente',
+      observacion: `${nombreMes(p.mes)} ${p.anio}: ${r.creados} creado(s), ${r.reabiertos} reabierto(s), ${r.noAplica} marcado(s) «No aplica» y ${r.responsables} con responsable actualizado. La vista por Departamento, el perfil del Técnico de Soporte, los KPIs, el historial y el mapa leen ya la configuración nueva. Se programa en: ${this.resumenAplicacion(this.catalogoDe(c.codigo)!)}.`
+    });
+  }
+
 }

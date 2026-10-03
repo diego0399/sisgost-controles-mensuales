@@ -5,10 +5,20 @@
   "version": "V4",
   "frecuencia": "Mensual",
   "aplicacion": {
-   "modo": "Área técnica específica",
-   "direcciones": [],
-   "unidades": [],
-   "area": "AREA-CSOD",
+   "aplicaciones": [
+    {
+     "id": "APL-F0234-SS",
+     "codigoControl": "F0234",
+     "zonaId": "ZCEN",
+     "departamentoId": "SS",
+     "tipoAplicacion": "DIRECCION_UNIDAD",
+     "direccionesUnidadesIds": [
+      "SS-USI",
+      "SS-DOP"
+     ],
+     "activo": true
+    }
+   ],
    "observaciones": "No todas las Direcciones tienen cuarto de servidores: el control se lleva donde existe CSOD."
   },
   "requiereEvidencia": true,
@@ -154,10 +164,28 @@
   "version": "V2",
   "frecuencia": "Semanal con entrega mensual consolidada",
   "aplicacion": {
-   "modo": "Área técnica específica",
-   "direcciones": [],
-   "unidades": [],
-   "area": "AREA-CSOD",
+   "aplicaciones": [
+    {
+     "id": "APL-F0389-SS",
+     "codigoControl": "F0389",
+     "zonaId": "ZCEN",
+     "departamentoId": "SS",
+     "tipoAplicacion": "DIRECCION_UNIDAD",
+     "direccionesUnidadesIds": [
+      "SS-USI"
+     ],
+     "activo": true
+    },
+    {
+     "id": "APL-F0389-SON",
+     "codigoControl": "F0389",
+     "zonaId": "ZOC",
+     "departamentoId": "SON",
+     "tipoAplicacion": "DEPARTAMENTO",
+     "direccionesUnidadesIds": [],
+     "activo": true
+    }
+   ],
    "observaciones": "Revisión semanal de las condiciones del cuarto de servidores; solo aplica donde hay CSOD."
   },
   "requiereEvidencia": true,
@@ -712,35 +740,37 @@
   "version": "V3",
   "frecuencia": "Mensual",
   "aplicacion": {
-   "modo": "Unidades específicas",
-   "direcciones": [],
-   "unidades": [
+   "aplicaciones": [
     {
-     "direccion": "SS",
-     "unidad": "Dirección Administrativa"
+     "id": "APL-F0382-SS",
+     "codigoControl": "F0382",
+     "zonaId": "ZCEN",
+     "departamentoId": "SS",
+     "tipoAplicacion": "DIRECCION_UNIDAD",
+     "direccionesUnidadesIds": [
+      "SS-DOP"
+     ],
+     "activo": true
     },
     {
-     "direccion": "SS",
-     "unidad": "Dirección Legal"
+     "id": "APL-F0382-STA",
+     "codigoControl": "F0382",
+     "zonaId": "ZOC",
+     "departamentoId": "STA",
+     "tipoAplicacion": "DEPARTAMENTO",
+     "direccionesUnidadesIds": [],
+     "activo": true
     },
     {
-     "direccion": "STA",
-     "unidad": "Todo el departamento"
-    },
-    {
-     "direccion": "SON",
-     "unidad": "Todo el departamento"
-    },
-    {
-     "direccion": "SS",
-     "unidad": "Dirección Operativa (DOP)"
-    },
-    {
-     "direccion": "SS",
-     "unidad": "Unidad de Servicios Institucionales"
+     "id": "APL-F0382-SM",
+     "codigoControl": "F0382",
+     "zonaId": "ZOR",
+     "departamentoId": "SM",
+     "tipoAplicacion": "DEPARTAMENTO",
+     "direccionesUnidadesIds": [],
+     "activo": true
     }
    ],
-   "area": "",
    "observaciones": "Verificación de políticas de seguridad de TIC en las unidades con equipos de usuario y atención al público."
   },
   "requiereEvidencia": false,
@@ -856,10 +886,28 @@
   "version": "V1",
   "frecuencia": "Mensual",
   "aplicacion": {
-   "modo": "Área técnica específica",
-   "direcciones": [],
-   "unidades": [],
-   "area": "AREA-RESP",
+   "aplicaciones": [
+    {
+     "id": "APL-F0384-SS",
+     "codigoControl": "F0384",
+     "zonaId": "ZCEN",
+     "departamentoId": "SS",
+     "tipoAplicacion": "DIRECCION_UNIDAD",
+     "direccionesUnidadesIds": [
+      "SS-USI"
+     ],
+     "activo": true
+    },
+    {
+     "id": "APL-F0384-SON",
+     "codigoControl": "F0384",
+     "zonaId": "ZOC",
+     "departamentoId": "SON",
+     "tipoAplicacion": "DEPARTAMENTO",
+     "direccionesUnidadesIds": [],
+     "activo": true
+    }
+   ],
    "observaciones": "Solo se realiza donde existe gestión de cintas de respaldo."
   },
   "requiereEvidencia": false,
@@ -932,10 +980,28 @@
   "version": "V1",
   "frecuencia": "Eventual",
   "aplicacion": {
-   "modo": "Área técnica específica",
-   "direcciones": [],
-   "unidades": [],
-   "area": "AREA-RESP",
+   "aplicaciones": [
+    {
+     "id": "APL-F0386-SS",
+     "codigoControl": "F0386",
+     "zonaId": "ZCEN",
+     "departamentoId": "SS",
+     "tipoAplicacion": "DIRECCION_UNIDAD",
+     "direccionesUnidadesIds": [
+      "SS-USI"
+     ],
+     "activo": true
+    },
+    {
+     "id": "APL-F0386-SON",
+     "codigoControl": "F0386",
+     "zonaId": "ZOC",
+     "departamentoId": "SON",
+     "tipoAplicacion": "DEPARTAMENTO",
+     "direccionesUnidadesIds": [],
+     "activo": true
+    }
+   ],
    "observaciones": "Solo se realiza donde existe gestión de cintas de respaldo y visita del Departamento de Operaciones."
   },
   "requiereEvidencia": true,
@@ -1030,19 +1096,28 @@
   "version": "V1",
   "frecuencia": "Semanal con entrega mensual consolidada",
   "aplicacion": {
-   "modo": "Unidades específicas",
-   "direcciones": [],
-   "unidades": [
+   "aplicaciones": [
     {
-     "direccion": "SS",
-     "unidad": "Unidad de Servicios Institucionales"
+     "id": "APL-F0387-SS",
+     "codigoControl": "F0387",
+     "zonaId": "ZCEN",
+     "departamentoId": "SS",
+     "tipoAplicacion": "DIRECCION_UNIDAD",
+     "direccionesUnidadesIds": [
+      "SS-USI"
+     ],
+     "activo": true
     },
     {
-     "direccion": "SS",
-     "unidad": "Dirección Administrativa"
+     "id": "APL-F0387-LIB",
+     "codigoControl": "F0387",
+     "zonaId": "ZCEN",
+     "departamentoId": "LIB",
+     "tipoAplicacion": "DEPARTAMENTO",
+     "direccionesUnidadesIds": [],
+     "activo": true
     }
    ],
-   "area": "",
    "observaciones": "Verificación de sincronización de hora en las unidades con equipos y dispositivos con IP administrada."
   },
   "requiereEvidencia": false,
@@ -1381,10 +1456,37 @@
   "version": "V1",
   "frecuencia": "Mensual",
   "aplicacion": {
-   "modo": "Todas las direcciones",
-   "direcciones": [],
-   "unidades": [],
-   "area": "",
+   "aplicaciones": [
+    {
+     "id": "APL-F0422-SS",
+     "codigoControl": "F0422",
+     "zonaId": "ZCEN",
+     "departamentoId": "SS",
+     "tipoAplicacion": "DIRECCION_UNIDAD",
+     "direccionesUnidadesIds": [
+      "SS-DAD"
+     ],
+     "activo": true
+    },
+    {
+     "id": "APL-F0422-AHU",
+     "codigoControl": "F0422",
+     "zonaId": "ZOC",
+     "departamentoId": "AHU",
+     "tipoAplicacion": "DEPARTAMENTO",
+     "direccionesUnidadesIds": [],
+     "activo": true
+    },
+    {
+     "id": "APL-F0422-SON",
+     "codigoControl": "F0422",
+     "zonaId": "ZOC",
+     "departamentoId": "SON",
+     "tipoAplicacion": "DEPARTAMENTO",
+     "direccionesUnidadesIds": [],
+     "activo": true
+    }
+   ],
    "observaciones": "Cada Dirección/Registro puede tener equipos activos asignados en el inventario operativo."
   },
   "requiereEvidencia": false,
@@ -1475,35 +1577,40 @@
   "version": "V8",
   "frecuencia": "Mensual",
   "aplicacion": {
-   "modo": "Unidades específicas",
-   "direcciones": [],
-   "unidades": [
+   "aplicaciones": [
     {
-     "direccion": "SS",
-     "unidad": "Dirección Administrativa"
+     "id": "APL-F0174-SS",
+     "codigoControl": "F0174",
+     "zonaId": "ZCEN",
+     "departamentoId": "SS",
+     "tipoAplicacion": "DIRECCION_UNIDAD",
+     "direccionesUnidadesIds": [
+      "SS-DAD",
+      "SS-DLG",
+      "SS-DOP",
+      "SS-DAU"
+     ],
+     "activo": true
     },
     {
-     "direccion": "SS",
-     "unidad": "Dirección Legal"
+     "id": "APL-F0174-STA",
+     "codigoControl": "F0174",
+     "zonaId": "ZOC",
+     "departamentoId": "STA",
+     "tipoAplicacion": "DEPARTAMENTO",
+     "direccionesUnidadesIds": [],
+     "activo": true
     },
     {
-     "direccion": "STA",
-     "unidad": "Todo el departamento"
-    },
-    {
-     "direccion": "SON",
-     "unidad": "Todo el departamento"
-    },
-    {
-     "direccion": "SS",
-     "unidad": "Dirección Operativa (DOP)"
-    },
-    {
-     "direccion": "SS",
-     "unidad": "Dirección de Atención al Usuario (DAU)"
+     "id": "APL-F0174-SON",
+     "codigoControl": "F0174",
+     "zonaId": "ZOC",
+     "departamentoId": "SON",
+     "tipoAplicacion": "DEPARTAMENTO",
+     "direccionesUnidadesIds": [],
+     "activo": true
     }
    ],
-   "area": "",
    "observaciones": "Mantenimiento preventivo según el calendario anual de las unidades con equipos de usuario."
   },
   "requiereEvidencia": true,
@@ -1605,10 +1712,140 @@
   "version": "V8",
   "frecuencia": "Eventual",
   "aplicacion": {
-   "modo": "Todas las direcciones",
-   "direcciones": [],
-   "unidades": [],
-   "area": "",
+   "aplicaciones": [
+    {
+     "id": "APL-F0288-AHU",
+     "codigoControl": "F0288",
+     "zonaId": "ZOC",
+     "departamentoId": "AHU",
+     "tipoAplicacion": "DEPARTAMENTO",
+     "direccionesUnidadesIds": [],
+     "activo": true
+    },
+    {
+     "id": "APL-F0288-STA",
+     "codigoControl": "F0288",
+     "zonaId": "ZOC",
+     "departamentoId": "STA",
+     "tipoAplicacion": "DEPARTAMENTO",
+     "direccionesUnidadesIds": [],
+     "activo": true
+    },
+    {
+     "id": "APL-F0288-SON",
+     "codigoControl": "F0288",
+     "zonaId": "ZOC",
+     "departamentoId": "SON",
+     "tipoAplicacion": "DEPARTAMENTO",
+     "direccionesUnidadesIds": [],
+     "activo": true
+    },
+    {
+     "id": "APL-F0288-CAB",
+     "codigoControl": "F0288",
+     "zonaId": "ZCEN",
+     "departamentoId": "CAB",
+     "tipoAplicacion": "DEPARTAMENTO",
+     "direccionesUnidadesIds": [],
+     "activo": true
+    },
+    {
+     "id": "APL-F0288-CHA",
+     "codigoControl": "F0288",
+     "zonaId": "ZCEN",
+     "departamentoId": "CHA",
+     "tipoAplicacion": "DEPARTAMENTO",
+     "direccionesUnidadesIds": [],
+     "activo": true
+    },
+    {
+     "id": "APL-F0288-CUS",
+     "codigoControl": "F0288",
+     "zonaId": "ZCEN",
+     "departamentoId": "CUS",
+     "tipoAplicacion": "DEPARTAMENTO",
+     "direccionesUnidadesIds": [],
+     "activo": true
+    },
+    {
+     "id": "APL-F0288-LIB",
+     "codigoControl": "F0288",
+     "zonaId": "ZCEN",
+     "departamentoId": "LIB",
+     "tipoAplicacion": "DEPARTAMENTO",
+     "direccionesUnidadesIds": [],
+     "activo": true
+    },
+    {
+     "id": "APL-F0288-PAZ",
+     "codigoControl": "F0288",
+     "zonaId": "ZCEN",
+     "departamentoId": "PAZ",
+     "tipoAplicacion": "DEPARTAMENTO",
+     "direccionesUnidadesIds": [],
+     "activo": true
+    },
+    {
+     "id": "APL-F0288-SS",
+     "codigoControl": "F0288",
+     "zonaId": "ZCEN",
+     "departamentoId": "SS",
+     "tipoAplicacion": "DIRECCION_UNIDAD",
+     "direccionesUnidadesIds": [
+      "SS-DAD",
+      "SS-DOP",
+      "SS-USI",
+      "SS-DLG",
+      "SS-DAU"
+     ],
+     "activo": true
+    },
+    {
+     "id": "APL-F0288-SV",
+     "codigoControl": "F0288",
+     "zonaId": "ZCEN",
+     "departamentoId": "SV",
+     "tipoAplicacion": "DEPARTAMENTO",
+     "direccionesUnidadesIds": [],
+     "activo": true
+    },
+    {
+     "id": "APL-F0288-UNI",
+     "codigoControl": "F0288",
+     "zonaId": "ZOR",
+     "departamentoId": "UNI",
+     "tipoAplicacion": "DEPARTAMENTO",
+     "direccionesUnidadesIds": [],
+     "activo": true
+    },
+    {
+     "id": "APL-F0288-MOR",
+     "codigoControl": "F0288",
+     "zonaId": "ZOR",
+     "departamentoId": "MOR",
+     "tipoAplicacion": "DEPARTAMENTO",
+     "direccionesUnidadesIds": [],
+     "activo": true
+    },
+    {
+     "id": "APL-F0288-SM",
+     "codigoControl": "F0288",
+     "zonaId": "ZOR",
+     "departamentoId": "SM",
+     "tipoAplicacion": "DEPARTAMENTO",
+     "direccionesUnidadesIds": [],
+     "activo": true
+    },
+    {
+     "id": "APL-F0288-USU",
+     "codigoControl": "F0288",
+     "zonaId": "ZOR",
+     "departamentoId": "USU",
+     "tipoAplicacion": "DEPARTAMENTO",
+     "direccionesUnidadesIds": [],
+     "activo": true
+    }
+   ],
    "observaciones": "El mantenimiento correctivo puede ocurrir en cualquier Dirección/Registro atendida; sin atenciones, se justifica."
   },
   "requiereEvidencia": true,
@@ -1667,10 +1904,140 @@
   "version": "—",
   "frecuencia": "Mensual",
   "aplicacion": {
-   "modo": "Todas las direcciones",
-   "direcciones": [],
-   "unidades": [],
-   "area": "",
+   "aplicaciones": [
+    {
+     "id": "APL-GLPI-AHU",
+     "codigoControl": "GLPI",
+     "zonaId": "ZOC",
+     "departamentoId": "AHU",
+     "tipoAplicacion": "DEPARTAMENTO",
+     "direccionesUnidadesIds": [],
+     "activo": true
+    },
+    {
+     "id": "APL-GLPI-STA",
+     "codigoControl": "GLPI",
+     "zonaId": "ZOC",
+     "departamentoId": "STA",
+     "tipoAplicacion": "DEPARTAMENTO",
+     "direccionesUnidadesIds": [],
+     "activo": true
+    },
+    {
+     "id": "APL-GLPI-SON",
+     "codigoControl": "GLPI",
+     "zonaId": "ZOC",
+     "departamentoId": "SON",
+     "tipoAplicacion": "DEPARTAMENTO",
+     "direccionesUnidadesIds": [],
+     "activo": true
+    },
+    {
+     "id": "APL-GLPI-CAB",
+     "codigoControl": "GLPI",
+     "zonaId": "ZCEN",
+     "departamentoId": "CAB",
+     "tipoAplicacion": "DEPARTAMENTO",
+     "direccionesUnidadesIds": [],
+     "activo": true
+    },
+    {
+     "id": "APL-GLPI-CHA",
+     "codigoControl": "GLPI",
+     "zonaId": "ZCEN",
+     "departamentoId": "CHA",
+     "tipoAplicacion": "DEPARTAMENTO",
+     "direccionesUnidadesIds": [],
+     "activo": true
+    },
+    {
+     "id": "APL-GLPI-CUS",
+     "codigoControl": "GLPI",
+     "zonaId": "ZCEN",
+     "departamentoId": "CUS",
+     "tipoAplicacion": "DEPARTAMENTO",
+     "direccionesUnidadesIds": [],
+     "activo": true
+    },
+    {
+     "id": "APL-GLPI-LIB",
+     "codigoControl": "GLPI",
+     "zonaId": "ZCEN",
+     "departamentoId": "LIB",
+     "tipoAplicacion": "DEPARTAMENTO",
+     "direccionesUnidadesIds": [],
+     "activo": true
+    },
+    {
+     "id": "APL-GLPI-PAZ",
+     "codigoControl": "GLPI",
+     "zonaId": "ZCEN",
+     "departamentoId": "PAZ",
+     "tipoAplicacion": "DEPARTAMENTO",
+     "direccionesUnidadesIds": [],
+     "activo": true
+    },
+    {
+     "id": "APL-GLPI-SS",
+     "codigoControl": "GLPI",
+     "zonaId": "ZCEN",
+     "departamentoId": "SS",
+     "tipoAplicacion": "DIRECCION_UNIDAD",
+     "direccionesUnidadesIds": [
+      "SS-DAD",
+      "SS-DOP",
+      "SS-USI",
+      "SS-DLG",
+      "SS-DAU"
+     ],
+     "activo": true
+    },
+    {
+     "id": "APL-GLPI-SV",
+     "codigoControl": "GLPI",
+     "zonaId": "ZCEN",
+     "departamentoId": "SV",
+     "tipoAplicacion": "DEPARTAMENTO",
+     "direccionesUnidadesIds": [],
+     "activo": true
+    },
+    {
+     "id": "APL-GLPI-UNI",
+     "codigoControl": "GLPI",
+     "zonaId": "ZOR",
+     "departamentoId": "UNI",
+     "tipoAplicacion": "DEPARTAMENTO",
+     "direccionesUnidadesIds": [],
+     "activo": true
+    },
+    {
+     "id": "APL-GLPI-MOR",
+     "codigoControl": "GLPI",
+     "zonaId": "ZOR",
+     "departamentoId": "MOR",
+     "tipoAplicacion": "DEPARTAMENTO",
+     "direccionesUnidadesIds": [],
+     "activo": true
+    },
+    {
+     "id": "APL-GLPI-SM",
+     "codigoControl": "GLPI",
+     "zonaId": "ZOR",
+     "departamentoId": "SM",
+     "tipoAplicacion": "DEPARTAMENTO",
+     "direccionesUnidadesIds": [],
+     "activo": true
+    },
+    {
+     "id": "APL-GLPI-USU",
+     "codigoControl": "GLPI",
+     "zonaId": "ZOR",
+     "departamentoId": "USU",
+     "tipoAplicacion": "DEPARTAMENTO",
+     "direccionesUnidadesIds": [],
+     "activo": true
+    }
+   ],
    "observaciones": "Direcciones/Registros atendidas por Soporte Técnico: se revisan los tiquetes del mes o se justifica si no hubo actividad."
   },
   "requiereEvidencia": false,
@@ -1741,13 +2108,32 @@
   "version": "—",
   "frecuencia": "Mensual",
   "aplicacion": {
-   "modo": "Direcciones específicas",
-   "direcciones": [
-    "SS",
-    "STA"
+   "aplicaciones": [
+    {
+     "id": "APL-VULN-SS",
+     "codigoControl": "VULN",
+     "zonaId": "ZCEN",
+     "departamentoId": "SS",
+     "tipoAplicacion": "DIRECCION_UNIDAD",
+     "direccionesUnidadesIds": [
+      "SS-DAD",
+      "SS-DOP",
+      "SS-USI",
+      "SS-DLG",
+      "SS-DAU"
+     ],
+     "activo": true
+    },
+    {
+     "id": "APL-VULN-STA",
+     "codigoControl": "VULN",
+     "zonaId": "ZOC",
+     "departamentoId": "STA",
+     "tipoAplicacion": "DEPARTAMENTO",
+     "direccionesUnidadesIds": [],
+     "activo": true
+    }
    ],
-   "unidades": [],
-   "area": "",
    "observaciones": "Análisis mensual de vulnerabilidades en las Direcciones incluidas en el ciclo de escaneo."
   },
   "requiereEvidencia": false,
@@ -1805,10 +2191,19 @@
   "version": "V2",
   "frecuencia": "Programado",
   "aplicacion": {
-   "modo": "Área técnica específica",
-   "direcciones": [],
-   "unidades": [],
-   "area": "AREA-INFRA",
+   "aplicaciones": [
+    {
+     "id": "APL-F0206-SS",
+     "codigoControl": "F0206",
+     "zonaId": "ZCEN",
+     "departamentoId": "SS",
+     "tipoAplicacion": "DIRECCION_UNIDAD",
+     "direccionesUnidadesIds": [
+      "SS-USI"
+     ],
+     "activo": true
+    }
+   ],
    "observaciones": "Mantenimiento de servidores ejecutado por la Gerencia de Infraestructura y recibido por el técnico de la oficina."
   },
   "requiereEvidencia": true,
@@ -1927,10 +2322,19 @@
   "version": "V2",
   "frecuencia": "Programado",
   "aplicacion": {
-   "modo": "Área técnica específica",
-   "direcciones": [],
-   "unidades": [],
-   "area": "AREA-INFRA",
+   "aplicaciones": [
+    {
+     "id": "APL-F0204-SS",
+     "codigoControl": "F0204",
+     "zonaId": "ZCEN",
+     "departamentoId": "SS",
+     "tipoAplicacion": "DIRECCION_UNIDAD",
+     "direccionesUnidadesIds": [
+      "SS-USI"
+     ],
+     "activo": true
+    }
+   ],
    "observaciones": "Mantenimiento de equipo de telecomunicaciones ejecutado por la Gerencia de Infraestructura."
   },
   "requiereEvidencia": true,
@@ -2034,10 +2438,19 @@
   "version": "ISO/IEC 27001",
   "frecuencia": "Programado",
   "aplicacion": {
-   "modo": "Área técnica específica",
-   "direcciones": [],
-   "unidades": [],
-   "area": "AREA-SEG",
+   "aplicaciones": [
+    {
+     "id": "APL-SEGTIC-SS",
+     "codigoControl": "SEGTIC",
+     "zonaId": "ZCEN",
+     "departamentoId": "SS",
+     "tipoAplicacion": "DIRECCION_UNIDAD",
+     "direccionesUnidadesIds": [
+      "SS-USI"
+     ],
+     "activo": true
+    }
+   ],
    "observaciones": "Verificación documental del cumplimiento de los controles de seguridad informática."
   },
   "requiereEvidencia": false,
